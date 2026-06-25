@@ -29,7 +29,8 @@ def group_screens(index: dict) -> dict:
         path = s.get("path") or []
         name = path[0] if path else OVERVIEW
         b = buckets.setdefault(name, {"screen_ids": [], "screen_files": []})
-        b["screen_ids"].append(s.get("id"))
+        if s.get("id") is not None:
+            b["screen_ids"].append(s["id"])
         if s.get("txt"):
             b["screen_files"].append(s["txt"])
 

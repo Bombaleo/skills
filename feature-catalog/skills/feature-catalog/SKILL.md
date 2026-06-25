@@ -136,6 +136,8 @@ to the cataloger.
 ### Stage 3 — Module fan-out (parallel)
 Print: `⟳ S3 — <N> module catalogers running in parallel; no live output until all return`.
 
+Note: in source-only mode (no walk; the stub module has empty `screen_files`), the module-cataloger relies entirely on `src_dir` as its input.
+
 For each module in `groups.json`, delegate **module-cataloger** (in parallel) with:
 - `module_name`, `module_slug` (from the module entry)
 - `screen_files`: the module's `screen_files`
@@ -152,6 +154,8 @@ Delegate **catalog-synthesizer** with:
 - `catalog_dir`: `.specwork/catalog/`
 - `app_name`, `app_slug`
 - `prototype_source`: the resolved URL or path
+- `module_order`: the ordered list of module `slug` values taken from `.specwork/catalog/groups.json`
+  in the order they appear there (Overview-first ordering is already established by group_screens.py)
 - `unverified`: true only in source-only mode
 - `context_path`: `.specwork/context.md` (mention if absent)
 - `catalog_md_path`: `.specwork/catalog/catalog.md`

@@ -107,10 +107,10 @@ If `resources_path` exists, gather a light terminology digest → `.specwork/con
 `spec-pipeline`'s `context-gatherer`). Skip silently otherwise.
 
 ### Stage 2 — Module fan-out
-Read `/tmp/proto-walk/inventory.json`; group screens by **top-level nav** label. Dispatch
-one `module-cataloger` per module **in parallel**, passing the module name and its screen
-ids / walk file paths, `walk_dir`, `src_dir`, and `context_path` (if present). Each writes
-`.specwork/catalog/mod_<slug>.json`. Wait for all; confirm every module produced its file.
+Read `/tmp/proto-walk/index.json` (via `group_screens.py`); group screens by **top-level nav**
+label. Dispatch one `module-cataloger` per module **in parallel**, passing the module name and
+its screen ids / walk file paths, `walk_dir`, `src_dir`, and `context_path` (if present). Each
+writes `.specwork/catalog/mod_<slug>.json`. Wait for all; confirm every module produced its file.
 
 ### Stage 3 — Synthesis
 Dispatch `catalog-synthesizer`: read all `mod_*.json`, dedup cross-cutting features

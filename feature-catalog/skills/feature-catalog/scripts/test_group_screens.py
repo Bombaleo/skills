@@ -33,6 +33,18 @@ class TestGroupScreens(unittest.TestCase):
     def test_empty_screens(self):
         self.assertEqual(group_screens({"screens": []}), {"modules": []})
 
+    def test_none_id_is_excluded(self):
+        """Screens without an id should not append None to screen_ids."""
+        index = {"screens": [
+            {"title": "Home", "path": [], "txt": "000.txt"},  # no "id" key
+            {"id": None, "title": "Also Home", "path": [], "txt": "001.txt"},  # explicit None
+            {"id": 2, "title": "Vendors", "path": ["Vendors"], "txt": "002.txt"},
+        ]}
+        out = group_screens(index)
+        mods = {m["name"]: m for m in out["modules"]}
+        self.assertNotIn(None, mods["Overview"]["screen_ids"])
+        self.assertEqual(mods["Vendors"]["screen_ids"], [2])
+
 
 if __name__ == "__main__":
     unittest.main()

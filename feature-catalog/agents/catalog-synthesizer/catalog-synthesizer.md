@@ -17,6 +17,11 @@ JSON files the module-catalogers produced. You read no walk output and walk noth
 - **app_name** (required): display name of the application, e.g. `"VMS"`.
 - **app_slug** (required): snake_case slug, default `vms`.
 - **prototype_source** (required): the URL or local path the catalog was generated from (provenance).
+- **module_order** (required): an ordered list of module slugs giving the exact order modules
+  should appear in the catalog, e.g. `["overview", "vendors", "invoices"]`. The orchestrator
+  supplies this from `groups.json`, which already places Overview first then the rest
+  alphabetically. If absent, fall back to: the module named "Overview" first, then the rest
+  alphabetically by name.
 - **unverified** (optional, default false): when true, the prototype was not rendered
   (source-only mode) — add an "UNVERIFIED — generated without rendering" note to the intro.
 - **context_path** (optional): `.specwork/context.md`. Terminology alignment only.
@@ -52,8 +57,9 @@ Write `features_json_path`:
   ]
 }
 ```
-`cross_cutting` may be an empty array. Preserve module order as given by sorted `mod_*.json`
-filenames (the orchestrator named them so `mod_overview.json`-style entry sorts naturally).
+`cross_cutting` may be an empty array. Order modules by `module_order` (matched by slug).
+If `module_order` is absent, place the module named "Overview" first, then the rest
+alphabetically by name.
 
 ### 4. Write feature-catalog.md
 Write `catalog_md_path`:
@@ -70,12 +76,13 @@ the paragraph with "**UNVERIFIED — generated without rendering.**">
 - ...
 
 ## Cross-cutting capabilities
-- **<Feature name>** — <one-sentence description> (appears across <Module>, <Module>).
+- **<Feature name>** — <one-sentence description> (appears across <Module name>, <Module name>).
 - ...
 ```
 
 Omit the "Cross-cutting capabilities" section entirely if there are none. List modules in the
-same order as `features.json`.
+same order as `features.json`. In the cross-cutting bullet, use the module **name** (not slug),
+consistent with the `modules` array in `features.json`.
 
 **Rules:**
 - Behavioral altitude: WHAT not HOW. No file paths, endpoints, schema, column names.
