@@ -77,8 +77,9 @@ Write `output_path` exactly:
 - `states.observed` ⊆ `states.expected`; `states.missing` = `expected` minus `observed`.
 - `capabilities[].category` ∈ create | read | update | delete | archive | list_search |
   state_transition | other.
-- `coverage`: count capabilities by status; `expected_total` == number of capabilities ==
-  `present + partial + missing`.
+- `coverage`: count capabilities by status; `expected_total` == number of capabilities.
+  (Normally `present + partial + missing == expected_total`; they differ only if a capability
+  carries a status outside present/partial/missing, which you should avoid.)
 - A deterministic downstream step recomputes `coverage` from your capability `status` values, so
   your responsibility is accurate per-capability `status` — still emit `coverage`, but it is not
   the authoritative tally.
