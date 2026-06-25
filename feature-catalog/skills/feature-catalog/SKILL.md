@@ -27,7 +27,7 @@ This pipeline is **self-contained**: it uses only its own scripts under
   local path to a downloaded prototype project (a standalone `.html` or a directory holding one).
   If neither given, default to `./project`; if that does not exist, **stop and ask**.
 - **app_slug** (optional): snake_case output dir name. Default `vms`. Derive `app_name` as a
-  display version.
+  display version, e.g. `vms → VMS`.
 - **resources_path** (optional): directory for terminology context. Default `./resources/`. Used
   only to align names; never adds entities. Skipped silently if absent.
 
