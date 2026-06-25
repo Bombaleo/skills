@@ -107,9 +107,14 @@ If `resources_path` exists, gather a light terminology digest → `.specwork/con
 `spec-pipeline`'s `context-gatherer`). Skip silently otherwise.
 
 ### Stage 2 — Module fan-out
-Read `/tmp/proto-walk/index.json` (via `group_screens.py`); group screens by **top-level nav**
-label. Dispatch one `module-cataloger` per module **in parallel**, passing the module name and
-its screen ids / walk file paths, `walk_dir`, `src_dir`, and `context_path` (if present). Each
+Identify the app's top-level navigation labels from `/tmp/proto-walk/inventory.json` (the
+persistent primary menu — product areas, not dashboard content/widgets/pagination/search/help
+chrome), then group `/tmp/proto-walk/index.json` by those nav labels via
+`group_screens.py --nav-labels` (a screen's module = the first nav label in its click path;
+content-only screens fold into `Overview`). This nav-allowlist step is essential: on a
+dashboard-rooted app, grouping by raw first-click (`path[0]`) turns content links into dozens of
+junk modules. Dispatch one `module-cataloger` per module **in parallel**, passing the module name
+and its screen ids / walk file paths, `walk_dir`, `src_dir`, and `context_path` (if present). Each
 writes `.specwork/catalog/mod_<slug>.json`. Wait for all; confirm every module produced its file.
 
 ### Stage 3 — Synthesis

@@ -124,10 +124,26 @@ terminology digest to `.specwork/context.md` (entity/feature naming the project 
 delegate to any spec-pipeline agent. Skip silently if `resources_path` is absent or empty.
 
 ### Stage 2 — Group screens into modules
+
+**First, identify the app's top-level navigation labels.** Read
+`/tmp/proto-walk/inventory.json` (the clickables on the entry screen) and pick out the
+**persistent primary navigation** — the sidebar/top menu items that represent product areas
+(e.g. `Home, Analytics, Requisitions, Schedule, Timesheets, Invoices, Workforce, Clients,
+Settings`). **Exclude** non-navigation clickables: dashboard widgets and content rows, calendar
+cells, pagination (`Next month`), the user/avatar menu, global search, notifications, and
+help/chat chrome. This is a judgment call — the inventory labels make the nav block obvious
+(it is a contiguous run of short product-area names). Pass that allowlist to `group_screens.py`
+so modules track real navigation instead of arbitrary first clicks (without it, a
+dashboard-rooted app produces dozens of junk "modules" from content links):
+
 ```bash
 python3 "$SCRIPTS/group_screens.py" /tmp/proto-walk/index.json \
+  --nav-labels "Home,Analytics,Requisitions,…" \
   --out .specwork/catalog/groups.json
 ```
+(Use the JSON-array form for `--nav-labels` if any label contains a comma.) Screens not reached
+through any nav label fold into the `Overview` module.
+
 Read `.specwork/catalog/groups.json`. Confirm it has a non-empty `modules` array; if empty,
 stop and report (the walk produced no usable screens). In source-only mode (no walk), instead
 derive a single module `{"slug":"app","name":"App","screen_files":[]}` and pass the source dir
