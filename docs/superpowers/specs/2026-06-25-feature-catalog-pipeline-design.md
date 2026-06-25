@@ -11,8 +11,10 @@ application — framed as a VMS (Vendor Management System). Where `spec-pipeline
 **deep on one feature** (scoped by `target_scope`), this pipeline goes **broad across
 the whole app**: every user-facing feature, grouped by module, one line each.
 
-It reuses the existing prototype walk machinery (`prototype-to-spec/scripts/walk_prototype.py`
-and `extract_bundle.py`) — no new walk code.
+The pipeline is **fully self-contained**: it ships its own copies of the prototype walk
+scripts (`walk_prototype.py`, `extract_bundle.py`) and depends on nothing from
+`spec-pipeline`. The scripts originate as copies of the `prototype-to-spec` versions but
+live inside this pipeline so it can be installed and run on its own.
 
 ## Decisions (from brainstorming)
 
@@ -33,7 +35,11 @@ New top-level folder mirroring `spec-pipeline/`:
 feature-catalog/
   README.md
   skills/
-    feature-catalog/SKILL.md        # the orchestrator skill
+    feature-catalog/
+      SKILL.md                      # the orchestrator skill
+      scripts/
+        walk_prototype.py           # copy, owned by this pipeline
+        extract_bundle.py           # copy, owned by this pipeline
   agents/
     module-cataloger/
       module-cataloger.md
@@ -43,10 +49,11 @@ feature-catalog/
       README.md
 ```
 
-The walk scripts are **not** duplicated — the pipeline locates and runs the existing
-`prototype-to-spec/scripts/walk_prototype.py` and `extract_bundle.py` (searched under
-`.claude/skills/prototype-to-spec/scripts` and `~/.claude/skills/prototype-to-spec/scripts`,
-same as `spec-pipeline`).
+The walk scripts are **duplicated into this pipeline** so it is fully independent of
+`spec-pipeline`. They are copied from `prototype-to-spec/scripts/` at build time. Pre-flight
+and Stage 1 locate them under this pipeline's own `skills/feature-catalog/scripts/`
+(searched at `.claude/skills/feature-catalog/scripts` and
+`~/.claude/skills/feature-catalog/scripts`) — never under `prototype-to-spec`.
 
 ## Inputs
 
@@ -67,7 +74,7 @@ and source live in `/tmp/`, produced once.
 |---|---|---|
 | `/tmp/proto-walk/` (walk output) | orchestrator (Stage 1, via walk script) | module-cataloger |
 | `/tmp/proto-src/` (extracted source; may be absent) | orchestrator (Stage 1) | module-cataloger |
-| `.specwork/context.md` (optional) | context-gather (Stage 1.5, if resources) | module-cataloger, catalog-synthesizer |
+| `.specwork/context.md` (optional) | orchestrator (inline, Stage 1.5, if resources) | module-cataloger, catalog-synthesizer |
 | `.specwork/catalog/mod_<slug>.json` | module-cataloger (one per module) | catalog-synthesizer |
 | `.specwork/catalog/catalog.md` | catalog-synthesizer | orchestrator (publish) |
 | `.specwork/catalog/features.json` | catalog-synthesizer | orchestrator (publish) |
@@ -95,9 +102,9 @@ Verify `/tmp/proto-walk/index.json` is non-empty. Source-only mode (no renderabl
 proceeds with the "UNVERIFIED — generated without rendering" caveat carried forward.
 
 ### Stage 1.5 — Context (optional)
-If `resources_path` exists, gather a light terminology digest → `.specwork/context.md`.
-Skip silently otherwise. (May reuse the existing `context-gatherer` agent or a thin
-inline gather — to be decided in the plan; reuse preferred.)
+If `resources_path` exists, gather a light terminology digest → `.specwork/context.md`
+**inline in the orchestrator** (Read/Glob/Grep over the resources dir — no dependency on
+`spec-pipeline`'s `context-gatherer`). Skip silently otherwise.
 
 ### Stage 2 — Module fan-out
 Read `/tmp/proto-walk/inventory.json`; group screens by **top-level nav** label. Dispatch
@@ -182,11 +189,14 @@ new agent is required.
 - A `module-cataloger` produces no output file → stop, report which module.
 - Synthesizer produces no `catalog.md`/`features.json` → stop, report.
 
-## Reuse notes
-- `walk_prototype.py`, `extract_bundle.py`: reused as-is.
+## Independence & provenance
+- The pipeline depends on **nothing** in `spec-pipeline` at runtime.
+- `walk_prototype.py`, `extract_bundle.py`: copied into
+  `feature-catalog/skills/feature-catalog/scripts/` (provenance: `prototype-to-spec`).
+  They drift independently after copy.
 - Pre-flight, prototype-source-resolution, and "silent stage" notice patterns: adapted
-  from `spec-pipeline/skills/spec-pipeline/SKILL.md`.
-- `context-gatherer`: reused for the optional terminology gather if practical.
+  (text reused), but re-implemented inside this pipeline's own SKILL.md.
+- Optional terminology gather is done inline — no shared `context-gatherer` agent.
 
 ## Out of scope
 - Per-feature acceptance criteria, use cases, scenarios (that is `spec-pipeline`'s job).
