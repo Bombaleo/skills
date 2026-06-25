@@ -31,7 +31,8 @@ capabilities, coverage`. Skip any file that fails to parse and note it in your r
 
 ### 2. Compute overall coverage
 Sum each entity's `coverage` into `overall_coverage` (`present`, `partial`, `missing`,
-`expected_total`).
+`expected_total`). Each entity's `coverage` block has already been normalized deterministically upstream — trust and
+sum these blocks; do not re-tally capabilities yourself.
 
 ### 3. Order entities
 Order entities by **descending missing count** (the biggest lifecycle gaps first), tie-break

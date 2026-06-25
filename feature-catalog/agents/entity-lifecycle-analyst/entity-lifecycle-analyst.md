@@ -79,6 +79,9 @@ Write `output_path` exactly:
   state_transition | other.
 - `coverage`: count capabilities by status; `expected_total` == number of capabilities ==
   `present + partial + missing`.
+- A deterministic downstream step recomputes `coverage` from your capability `status` values, so
+  your responsibility is accurate per-capability `status` — still emit `coverage`, but it is not
+  the authoritative tally.
 
 **Rules:** every `missing` carries a justifying `note`. Behavioral altitude (WHAT not HOW). No
 acceptance criteria. Valid JSON. English only.

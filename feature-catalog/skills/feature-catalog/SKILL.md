@@ -150,6 +150,16 @@ For each entity in `entities.json`, delegate **entity-lifecycle-analyst** (in pa
 Wait for all. Confirm each `.specwork/catalog/ent_<slug>.json` exists. If any worker produced
 nothing, stop and name the entity.
 
+### Stage 3.5 — Normalize coverage (deterministic)
+LLM-tallied coverage is unreliable, so recompute it from the capability statuses before
+synthesis. This is the source of truth for all coverage numbers:
+```bash
+python3 "$SCRIPTS/compute_coverage.py" .specwork/catalog
+```
+It rewrites each `.specwork/catalog/ent_<slug>.json`'s `coverage` block from its `capabilities`
+statuses and prints the overall coverage. A stderr warning naming out-of-set statuses means an
+analyst used a status outside present/partial/missing — re-delegate that entity's analyst if so.
+
 ### Stage 4 — Synthesis
 Delegate **gap-synthesizer** with:
 - `catalog_dir`: `.specwork/catalog/`
