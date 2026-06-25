@@ -1,40 +1,45 @@
 # feature-catalog
 
 A self-contained pipeline that turns a **Claude Design prototype** — a design URL
-or a local prototype path (default `./project`) — into a **breadth-first feature
-catalog** of the whole application, framed as a VMS (Vendor Management System):
-every user-facing feature, grouped by module, one line each.
+or a local prototype path (default `./project`) — into a **VMS entity-lifecycle
+gap analysis**. It discovers the domain entities the prototype works with and,
+for each, lays out the lifecycle a Vendor Management System is commonly expected
+to support (states + create/update/delete/archive and operation capabilities),
+marking each capability **Present**, **Partial**, or **Missing** against the
+prototype.
 
-Where `spec-pipeline` goes **deep on one feature**, this goes **broad across the
-whole app**. It depends on nothing in `spec-pipeline` — it ships its own walk
-scripts.
+Where `spec-pipeline` goes **deep on one feature**, this analyses **every entity's
+lifecycle across the whole app**. It depends on nothing in `spec-pipeline` — it
+ships its own walk scripts.
 
 ## Skill (`skills/`)
 
 | Skill | Purpose |
 |-------|---------|
-| `feature-catalog` | Orchestrator: walk → group → catalog → synthesize → publish. |
+| `feature-catalog` | Orchestrator: walk → discover entities → analyse each → synthesize → publish. |
 
 Scripts under `skills/feature-catalog/scripts/`:
 - `walk_prototype.py` — render-walk the prototype in headless Chrome (own copy).
 - `extract_bundle.py` — extract source assets from a standalone export (own copy).
-- `group_screens.py` — group walked screens into top-level-nav modules.
 
 ## Agents (`agents/`)
 
 | Agent | Role |
 |-------|------|
-| `module-cataloger` | Catalog one module's features → `mod_<slug>.json` (parallel, one per module). |
-| `catalog-synthesizer` | Merge module files → `feature-catalog.md` + `features.json`. |
+| `entity-discoverer` | Discover the prototype's domain entities → `entities.json`. |
+| `entity-lifecycle-analyst` | Per entity: expected VMS lifecycle vs prototype, Present/Partial/Missing → `ent_<slug>.json` (parallel, one per entity). |
+| `gap-synthesizer` | Merge per-entity analyses → `entity-catalog.md` + `entities.json`. |
 
 ## Pipeline flow
 
 ```
-walk (once) → group_screens → module-cataloger (per module)
-   → catalog-synthesizer → publish to catalog/<app_slug>/
+walk (once) → entity-discoverer → entity-lifecycle-analyst (per entity)
+   → gap-synthesizer → publish to catalog/<app_slug>/
 ```
 
 ## Output
 
-- `catalog/<app_slug>/feature-catalog.md` — human-readable catalog (default `app_slug=vms`).
-- `catalog/<app_slug>/features.json` — structured index.
+- `catalog/<app_slug>/entity-catalog.md` — per-entity lifecycle catalog with
+  Present/Partial/Missing capabilities and coverage (default `app_slug=vms`).
+- `catalog/<app_slug>/entities.json` — structured report with per-entity and
+  overall coverage.
