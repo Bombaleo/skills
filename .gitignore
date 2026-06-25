@@ -1,2 +1,4 @@
 .DS_Store
 .specwork/
+__pycache__/
+*.pyc
