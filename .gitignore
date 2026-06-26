@@ -2,3 +2,5 @@
 .specwork/
 __pycache__/
 *.pyc
+catalog/
+tmp/
