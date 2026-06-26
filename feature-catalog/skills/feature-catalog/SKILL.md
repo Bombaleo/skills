@@ -1,31 +1,31 @@
 ---
 name: feature-catalog
 description: >
-  Orchestrates a self-contained pipeline that walks a whole Claude Design prototype — a design
-  URL or a local prototype path (default ./project) — and produces a VMS entity-lifecycle gap
-  analysis: every domain entity the prototype works with, each with its expected VMS lifecycle
-  (states + create/update/delete/archive and operation capabilities) marked Present / Partial /
-  Missing against the prototype. Use when the user wants to know, per object, what a VMS should do
-  with it and what this prototype actually does — "analyse the entity lifecycles", "what's missing
-  per object", "build an entity gap analysis from this prototype". Delegates to three workers:
-  entity-discoverer, entity-lifecycle-analyst (one per entity, in parallel), and gap-synthesizer.
+  Orchestrates a self-contained pipeline that maps a whole Claude Design prototype — a design URL
+  or a local prototype path (default ./project) — from its SOURCE first, then confirms each feature
+  by walking it, producing a VMS entity-lifecycle gap analysis (every entity's expected lifecycle
+  marked Present / Partial / Missing) plus an implemented-features list. Use when the user wants to
+  know, per object, what a VMS should do with it and what this prototype actually does — "analyse
+  the entity lifecycles", "what's missing per object", "list the implemented features", "build an
+  entity gap analysis from this prototype". Delegates to three workers: source-mapper,
+  entity-lifecycle-analyst (one per entity, in parallel), and gap-synthesizer.
 ---
 
-# Feature-catalog orchestrator (entity-lifecycle gap analysis)
+# Feature-catalog orchestrator (source-first, entity-lifecycle gap analysis)
 
-You are the **orchestrator**. You map a prototype into a per-entity VMS lifecycle gap analysis.
-You run the prototype walk yourself (inline, via this pipeline's own scripts), discover the
-domain entities, fan out one analyst per entity, then a single synthesizer. Keep your context
-lean — workers return short summaries and file paths.
+You are the **orchestrator**. You map a prototype from its extracted source (the authority for
+what exists), then walk each feature surgically to confirm reachability, fan out one analyst per
+entity, synthesize the catalog, and render an implemented-feature list. Keep your context lean —
+workers return short summaries and file paths.
 
 This pipeline is **self-contained**: it uses only its own scripts under
 `skills/feature-catalog/scripts/` and never reads from `spec-pipeline` or `prototype-to-spec`.
 
 ## Inputs
 
-- **prototype** (required): a Claude Design URL (`https://api.anthropic.com/v1/design/...`) or a
-  local path to a downloaded prototype project (a standalone `.html` or a directory holding one).
-  If neither given, default to `./project`; if that does not exist, **stop and ask**.
+- **prototype** (required): a Claude Design URL or a local path to a downloaded prototype project
+  (standalone `.html` or a directory holding one). If neither given, default to `./project`; if
+  that does not exist, **stop and ask**.
 - **app_slug** (optional): snake_case output dir name. Default `vms`. Derive `app_name` as a
   display version, e.g. `vms → VMS`.
 - **resources_path** (optional): directory for terminology context. Default `./resources/`. Used
@@ -34,19 +34,20 @@ This pipeline is **self-contained**: it uses only its own scripts under
 ## Artifact contract
 
 Intermediate work lives in `.specwork/catalog/` (create if absent; gitignore `.specwork/`). The
-walk and source live in `/tmp/`, produced once.
+source and walk live in `/tmp/`.
 
 | File | Written by | Read by |
 |---|---|---|
-| `/tmp/proto-walk/` (walk output) | orchestrator (Stage 1) | entity-discoverer, entity-lifecycle-analyst |
-| `/tmp/proto-src/` (extracted source; may be absent) | orchestrator (Stage 1) | entity-discoverer, entity-lifecycle-analyst |
+| `/tmp/proto-src/` (extracted source) | orchestrator (Stage 1) | source-mapper, entity-lifecycle-analyst |
+| `.specwork/catalog/map.json` | source-mapper | orchestrator (Stage 3), entity-lifecycle-analyst |
+| `/tmp/proto-walk/` (scoped-walk output) | orchestrator (Stage 3) | entity-lifecycle-analyst |
 | `.specwork/context.md` (optional) | orchestrator (Stage 1.5) | all workers |
-| `.specwork/catalog/entities.json` | entity-discoverer | orchestrator, entity-lifecycle-analyst |
-| `.specwork/catalog/ent_<slug>.json` | entity-lifecycle-analyst | gap-synthesizer |
+| `.specwork/catalog/ent_<slug>.json` | entity-lifecycle-analyst | compute_coverage, gap-synthesizer |
 | `.specwork/catalog/entity-catalog.md` | gap-synthesizer | orchestrator (publish) |
-| `.specwork/catalog/entities-report.json` | gap-synthesizer | orchestrator (publish) |
+| `.specwork/catalog/entities-report.json` (has `group` per entity) | gap-synthesizer | feature_list.py, publish |
+| `.specwork/catalog/features.md` | feature_list.py | publish |
 
-Final output: `catalog/<app_slug>/entity-catalog.md` + `catalog/<app_slug>/entities.json`.
+Final output: `catalog/<app_slug>/{entity-catalog.md, entities.json, features.md}`.
 
 ## Pipeline
 
@@ -69,114 +70,134 @@ esac
 python3 -c "import sys; assert sys.version_info >= (3,9); print('Python OK', sys.version.split()[0])"
 ```
 
-**Chrome** (needed unless the local project has no renderable HTML):
+**Chrome** (needed for the confirmation walks unless the project has no renderable HTML):
 ```bash
 ls "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" 2>/dev/null \
   || which google-chrome 2>/dev/null || which chromium 2>/dev/null || echo "CHROME_NOT_FOUND"
 ```
 If `CHROME_NOT_FOUND`: stop and tell the user to install Chrome or set `CHROME_PATH`.
 
-**Locate this pipeline's scripts** (own copies only):
+**Locate this pipeline's scripts:**
 ```bash
 find .claude/skills/feature-catalog/scripts ~/.claude/skills/feature-catalog/scripts \
      feature-catalog/skills/feature-catalog/scripts \
      -name "walk_prototype.py" 2>/dev/null | head -1
 ```
 If nothing is found, stop: "feature-catalog scripts not found — ensure
-`skills/feature-catalog/scripts/walk_prototype.py` and `extract_bundle.py` are present." Set
-`SCRIPTS` to that directory.
+`skills/feature-catalog/scripts/{walk_prototype.py,extract_bundle.py,compute_coverage.py,feature_list.py}`
+are present." Set `SCRIPTS` to that directory.
 
 **Scratch dir:** `mkdir -p .specwork/catalog`
 
 Print one confirmation line, then proceed:
 > Pre-flight OK — Python ✓ Chrome ✓ scripts ✓ source=<url|local:\<path\>> ✓ Starting feature-catalog…
 
-### Stage 1 — Walk the whole app (once)
-Print first (this is the long, silent stage):
-> ⟳ S1 — walking the full prototype in headless Chrome. Each screen is a full reload (~15–25 s),
-> so a whole-app walk takes a while. **No live output appears until the walk finishes.**
-
+### Stage 1 — Resolve & extract source
 1. Obtain the HTML at `/tmp/prototype.html`:
    - **URL mode:** WebFetch the URL; if not a success status, stop and report it. Then
      `curl -L -o /tmp/prototype.html "<url>"`.
    - **Local mode:** resolve a standalone `.html` (prefer `*standalone*.html`, else an HTML
-     carrying `__bundler/manifest`, else the largest `.html`, skipping `node_modules`) and copy
-     it to `/tmp/prototype.html`. If none exists but unpacked source does
-     (`_template.html`/`manifest.json`/`.js`), use **source-only mode**: skip the walk, set
-     `unverified=true`, and `cp -R "<path>" /tmp/proto-src`.
-2. Extract source (skip in source-only mode):
+     carrying `__bundler/manifest`, else the largest `.html`, skipping `node_modules`) and copy to
+     `/tmp/prototype.html`. If none exists but unpacked source does, copy that to `/tmp/proto-src`.
+2. Extract source:
    ```bash
    python3 "$SCRIPTS/extract_bundle.py" /tmp/prototype.html /tmp/proto-src
    ```
-   Exit 2 → walk-only mode (no `/tmp/proto-src`); any other non-zero → stop and report.
-3. Deep walk the whole app (skip in source-only mode):
-   ```bash
-   python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk --inventory
-   python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk \
-     --max-screens 200 --depth 8 --per-screen 50
-   ```
-   (No `--nav` — the whole app is in scope.) Verify `/tmp/proto-walk/index.json` exists and has
-   at least one screen; if not, stop and report. In source-only mode there is no walk — carry the
-   "UNVERIFIED" caveat to the synthesizer. (Walk coverage bounds present/missing accuracy: the
-   richer the walk, the fewer false "missing" verdicts.)
+   - Exit 0 → source available (normal **source-first** path).
+   - Exit 2 → **not a bundler export**: no source. Set `FALLBACK=1` (see Stage 3 fallback) — the
+     pipeline will discover from a blind walk instead.
+   - Any other non-zero → stop and report.
 
 ### Stage 1.5 — Context (optional, inline)
-If `resources_path` exists and is non-empty, skim it (Read/Glob/Grep) and write a short
-terminology digest to `.specwork/context.md` (entity naming the project uses). Do **not** delegate
-to any spec-pipeline agent. Skip silently if absent or empty.
+If `resources_path` exists and is non-empty, write a short terminology digest to
+`.specwork/context.md` inline (Read/Glob/Grep). No dependency on any other pipeline. Skip silently
+otherwise.
 
-### Stage 2 — Discover entities
-Delegate **entity-discoverer** with:
-- `walk_dir`: `/tmp/proto-walk` (in source-only mode there is no walk — say so; it works from src)
-- `src_dir`: `/tmp/proto-src` (mention if absent)
+### Stage 2 — Source map
+Delegate **source-mapper** with:
+- `src_dir`: `/tmp/proto-src` (say if absent / `FALLBACK=1`)
+- `walk_dir`: `/tmp/proto-walk` (used only in fallback)
 - `context_path`: `.specwork/context.md` (mention if absent)
-- `output_path`: `.specwork/catalog/entities.json`
+- `output_path`: `.specwork/catalog/map.json`
 
-Read `.specwork/catalog/entities.json`. Confirm it is valid JSON and a non-empty array, each
-entry having `slug`, `name`, `role`, `evidence_screens`. If empty/invalid, stop and report (no
-entities discovered).
+**If `FALLBACK=1`** (no source): first do a blind walk so the mapper has something to read —
+```bash
+python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk --inventory
+python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk \
+  --max-screens 200 --depth 8 --per-screen 50
+```
+then run source-mapper in fallback mode (it sets `"unmapped": true`). Carry an "UNMAPPED —
+discovered without source" caveat into the final report.
 
-### Stage 3 — Per-entity lifecycle analysis (parallel)
-Print: `⟳ S3 — <N> entity analysts running in parallel; no live output until all return`.
+Read `.specwork/catalog/map.json`. Confirm it is valid JSON with a non-empty `entities` array
+(each entity having `slug`, `name`, `role`, `features`). If empty/invalid, stop and report.
 
-For each entity in `entities.json`, delegate **entity-lifecycle-analyst** (in parallel) with:
+### Stage 3 — Targeted confirmation walks
+**Skip this stage entirely if `unmapped: true`** (the fallback already walked in Stage 2). Print:
+> ⟳ S3 — confirming features with scoped walks (one short headless-Chrome walk per entry point).
+> No live output appears until each walk returns.
+
+Collect the distinct `entry_hint` paths from `map.json` (`entities[].features[].entry_hint`),
+dedupe, and drop empties. For each distinct entry-hint, run a **scoped** walk that accumulates
+into `/tmp/proto-walk`:
+```bash
+python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk \
+  --nav "<comma-joined entry_hint labels>" --max-screens 40 --depth 4 --per-screen 30
+```
+- A walk whose `--nav` path is not clickable prints an error and exits non-zero — record that
+  entry-hint as **unreached** (its features stay Partial) and continue; do not stop the pipeline.
+- Cap total scoped walks at the number of distinct entry-hints; if that exceeds ~30, walk the 30
+  covering the most features and **log** which entry-hints were skipped.
+- Confirm `/tmp/proto-walk/index.json` exists with at least one screen after the batch.
+
+### Stage 4 — Per-entity lifecycle analysis (parallel)
+Print: `⟳ S4 — <N> entity analysts running in parallel; no live output until all return`.
+For each entity in `map.json`, delegate **entity-lifecycle-analyst** (in parallel) with:
 - `entity_name`, `entity_slug`, `role` (from the entity entry)
-- `evidence_screens`: the entity's `evidence_screens`
-- `walk_dir`: `/tmp/proto-walk` (omit in source-only mode)
+- `map_path`: `.specwork/catalog/map.json`
+- `evidence_screens`: the walk `.txt` files relevant to this entity (from `/tmp/proto-walk/index.json`
+  — match by the entity's `entry_hint` paths / titles; pass all if unsure)
+- `walk_dir`: `/tmp/proto-walk`
 - `src_dir`: `/tmp/proto-src` (mention if absent)
 - `context_path`: `.specwork/context.md` (mention if absent)
 - `output_path`: `.specwork/catalog/ent_<entity_slug>.json`
 
-Wait for all. Confirm each `.specwork/catalog/ent_<slug>.json` exists. If any worker produced
-nothing, stop and name the entity.
+Wait for all. Confirm each `ent_<slug>.json` exists. If any worker produced nothing, stop and name
+the entity.
 
-### Stage 3.5 — Normalize coverage (deterministic)
-LLM-tallied coverage is unreliable, so recompute it from the capability statuses before
-synthesis. This is the source of truth for all coverage numbers:
+### Stage 4.5 — Normalize coverage (deterministic)
 ```bash
 python3 "$SCRIPTS/compute_coverage.py" .specwork/catalog
 ```
-It rewrites each `.specwork/catalog/ent_<slug>.json`'s `coverage` block from its `capabilities`
-statuses and prints the overall coverage. A stderr warning naming out-of-set statuses means an
-analyst used a status outside present/partial/missing — re-delegate that entity's analyst if so.
+Source of truth for all coverage numbers; rewrites each `ent_<slug>.json`'s `coverage` from its
+capability statuses. A stderr warning about out-of-set statuses means re-delegate that analyst.
 
-### Stage 4 — Synthesis
+### Stage 5 — Synthesis
 Delegate **gap-synthesizer** with:
 - `catalog_dir`: `.specwork/catalog/`
 - `app_name`, `app_slug`
 - `prototype_source`: the resolved URL or path
-- `unverified`: true only in source-only mode
+- `unverified`: true only if `unmapped` (no source) — carry the caveat
 - `context_path`: `.specwork/context.md` (mention if absent)
 - `catalog_md_path`: `.specwork/catalog/entity-catalog.md`
 - `report_json_path`: `.specwork/catalog/entities-report.json`
 
-Confirm both files exist.
+It writes the catalog + report and assigns each entity a logical `group`. Confirm both files exist.
 
-### Stage 5 — Publish
+### Stage 5.5 — Feature list (deterministic)
+```bash
+python3 "$SCRIPTS/feature_list.py" .specwork/catalog/entities-report.json \
+  .specwork/catalog/features.md
+```
+Renders the implemented-feature list (present + partial, grouped by logical group). Confirm
+`features.md` exists.
+
+### Stage 6 — Publish
 ```bash
 mkdir -p catalog/<app_slug>
 cp .specwork/catalog/entity-catalog.md     catalog/<app_slug>/entity-catalog.md
 cp .specwork/catalog/entities-report.json  catalog/<app_slug>/entities.json
+cp .specwork/catalog/features.md           catalog/<app_slug>/features.md
 ```
 
 ## Progress reporting
@@ -184,25 +205,29 @@ After each stage, print a compact progress block:
 ```
 ━━ feature-catalog: <app_slug> ━━━━━━━━━━━━━━━━━━━━━━━━━━
   <s0>  S0   Pre-flight
-  <s1>  S1   Walked — <N> screens, source <extracted|walk-only|source-only>
-  <s2>  S2   Entities discovered — <M>
-  <s3>  S3   Entity analysts <done>/<M> ✓
-  <s4>  S4   Synthesized — coverage <present>/<expected_total>
-  <s5>  S5   Published
+  <s1>  S1   Source extracted (<source|no-source fallback>)
+  <s2>  S2   Mapped — <N> entities, <F> features
+  <s3>  S3   Confirmation walks <done>/<hints> ✓ | skipped (fallback)
+  <s4>  S4   Entity analysts <done>/<N> ✓
+  <s45> S4.5 Coverage normalized
+  <s5>  S5   Synthesized — coverage <present>/<expected_total>
+  <s55> S5.5 Feature list
+  <s6>  S6   Published
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-Symbols: `✓` done `⟳` in progress `○` pending `✗` failed. Stage 1 and Stage 3 are silent across
-the Task boundary — set that expectation before each (notices above).
+Symbols: `✓` done `⟳` in progress `○` pending `✗` failed. Stages 3 and 4 are silent across the
+Task boundary — set that expectation before each.
 
 ## Stop rules
 - No prototype and `./project` absent → stop, ask for a URL or path.
-- URL fetch error / no renderable HTML and no unpacked source → stop and report.
-- Walk produced no screens → stop and report (`/tmp/proto-walk`).
-- `entities.json` empty / invalid → stop and report (no entities discovered).
+- URL fetch error → stop and report.
+- `extract_bundle.py` non-zero other than exit 2 → stop and report.
+- `map.json` empty / invalid → stop and report (nothing mapped).
+- Confirmation walks produced no screens AND not in fallback → stop and report.
 - A worker produced no output file → stop, name the worker/entity.
 
 ## Reporting
-When done: the output dir (`catalog/<app_slug>/`), the files produced, entity count, overall
-coverage (present / partial / missing of expected_total), the entities with the biggest gaps,
-whether the run was UNVERIFIED (source-only), and any entities/files that failed. One short
-paragraph plus those numbers.
+When done: the output dir, the three files produced, entity count, overall coverage
+(present/partial/missing of expected_total), entities with the biggest gaps, the count of
+implemented features in `features.md`, whether the run was UNMAPPED (no source), and any
+unreached entry-hints / failed workers. One short paragraph plus those numbers.
