@@ -2,44 +2,48 @@
 
 A self-contained pipeline that turns a **Claude Design prototype** — a design URL
 or a local prototype path (default `./project`) — into a **VMS entity-lifecycle
-gap analysis**. It discovers the domain entities the prototype works with and,
-for each, lays out the lifecycle a Vendor Management System is commonly expected
-to support (states + create/update/delete/archive and operation capabilities),
-marking each capability **Present**, **Partial**, or **Missing** against the
-prototype.
+gap analysis** plus an **implemented-features list**.
 
-Where `spec-pipeline` goes **deep on one feature**, this analyses **every entity's
-lifecycle across the whole app**. It depends on nothing in `spec-pipeline` — it
-ships its own walk scripts.
+It maps the app from its extracted **source first** (the authority for what
+exists), then drives the walker **surgically per feature** to confirm what is
+actually reachable: render-confirmed → Present, in-source-but-unreached →
+Partial, VMS-expected-but-absent → Missing. If the prototype has no extractable
+source, it falls back to a blind walk and flags the run UNMAPPED.
+
+Where `spec-pipeline` goes **deep on one feature**, this analyses **every
+entity's lifecycle across the whole app**. It depends on nothing in
+`spec-pipeline` — it ships its own scripts.
 
 ## Skill (`skills/`)
 
 | Skill | Purpose |
 |-------|---------|
-| `feature-catalog` | Orchestrator: walk → discover entities → analyse each → synthesize → publish. |
+| `feature-catalog` | Orchestrator: extract source → map → scoped confirmation walks → analyse each entity → normalize coverage → synthesize → feature list → publish. |
 
 Scripts under `skills/feature-catalog/scripts/`:
-- `walk_prototype.py` — render-walk the prototype in headless Chrome (own copy).
-- `extract_bundle.py` — extract source assets from a standalone export (own copy).
+- `extract_bundle.py` — extract source assets from a standalone export.
+- `walk_prototype.py` — render-walk the prototype in headless Chrome (used scoped, per feature).
+- `compute_coverage.py` — deterministically recompute per-entity coverage.
+- `feature_list.py` — render the implemented-features markdown, grouped by logical entity group.
 
 ## Agents (`agents/`)
 
 | Agent | Role |
 |-------|------|
-| `entity-discoverer` | Discover the prototype's domain entities → `entities.json`. |
-| `entity-lifecycle-analyst` | Per entity: expected VMS lifecycle vs prototype, Present/Partial/Missing → `ent_<slug>.json` (parallel, one per entity). |
-| `gap-synthesizer` | Merge per-entity analyses → `entity-catalog.md` + `entities.json`. |
+| `source-mapper` | Read extracted source → `map.json` (nav, entities, per-feature entry-hints, states). Authority for what exists; falls back to walk-based discovery with no source. |
+| `entity-lifecycle-analyst` | Per entity: source map = exists; walk confirms reachability → Present/Partial/Missing → `ent_<slug>.json` (parallel, one per entity). |
+| `gap-synthesizer` | Merge per-entity analyses → `entity-catalog.md` + `entities.json`; assign each entity a logical group. |
 
 ## Pipeline flow
 
 ```
-walk (once) → entity-discoverer → entity-lifecycle-analyst (per entity)
-   → gap-synthesizer → publish to catalog/<app_slug>/
+extract source → source-mapper (map.json) → scoped confirmation walks (per entry-hint)
+   → entity-lifecycle-analyst (per entity) → compute_coverage → gap-synthesizer
+   → feature_list → publish to catalog/<app_slug>/
 ```
 
 ## Output
 
-- `catalog/<app_slug>/entity-catalog.md` — per-entity lifecycle catalog with
-  Present/Partial/Missing capabilities and coverage (default `app_slug=vms`).
-- `catalog/<app_slug>/entities.json` — structured report with per-entity and
-  overall coverage.
+- `catalog/<app_slug>/entity-catalog.md` — per-entity lifecycle catalog (Present/Partial/Missing).
+- `catalog/<app_slug>/entities.json` — structured report with per-entity + overall coverage and logical groups.
+- `catalog/<app_slug>/features.md` — implemented features (present + partial), grouped by logical entity group.
