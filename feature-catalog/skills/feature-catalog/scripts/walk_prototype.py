@@ -317,6 +317,18 @@ def parse_labels(arg):
     return [l.strip() for l in arg.split(",") if l.strip()]
 
 
+def seed_existing(out, walker):
+    """When appending, pre-load prior screens so new screen ids continue and the
+    final index.json merges old + new. Returns the number of pre-existing screens."""
+    idx = out / "index.json"
+    if not idx.exists():
+        return 0
+    data = json.loads(idx.read_text())
+    walker.screens = data.get("screens", [])
+    walker.aliases = data.get("aliases", [])
+    return len(walker.screens)
+
+
 class Walker:
     def __init__(self, cdp, file_url, out, args):
         self.cdp, self.file_url, self.out, self.args = cdp, file_url, out, args
@@ -480,6 +492,7 @@ def main():
     ap.add_argument("html")
     ap.add_argument("--out", required=True)
     ap.add_argument("--inventory", action="store_true")
+    ap.add_argument("--append", action="store_true")
     ap.add_argument("--nav", default="")
     ap.add_argument("--only", default="")
     ap.add_argument("--max-screens", type=int, default=40)
@@ -502,6 +515,8 @@ def main():
         cdp.cmd("Emulation.setDeviceMetricsOverride", width=1440, height=900,
                 deviceScaleFactor=1, mobile=False)
         walker = Walker(cdp, html.as_uri(), out, args)
+        if args.append:
+            seed_existing(out, walker)
         t0 = time.time()
         walker.run(prefix)
         (out / "index.json").write_text(json.dumps(

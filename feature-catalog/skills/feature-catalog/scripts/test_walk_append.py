@@ -1,0 +1,39 @@
+import argparse
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+import walk_prototype
+
+
+def _make_walker(out):
+    # cdp/file_url unused by seed_existing; construct a bare Walker
+    return walk_prototype.Walker(None, "file:///x.html", out, argparse.Namespace())
+
+
+class TestAppend(unittest.TestCase):
+    def test_seed_existing_loads_prior_screens(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d)
+            (out / "index.json").write_text(json.dumps({
+                "screens": [{"id": 0, "title": "A", "path": [], "txt": "000_a.txt"},
+                            {"id": 1, "title": "B", "path": ["X"], "txt": "001_b.txt"}],
+                "aliases": [{"path": ["Y"], "same_as": 0}]}))
+            w = _make_walker(out)
+            n = walk_prototype.seed_existing(out, w)
+            self.assertEqual(n, 2)
+            self.assertEqual(len(w.screens), 2)          # next sid = len = 2 (continues, no collision)
+            self.assertEqual(w.aliases, [{"path": ["Y"], "same_as": 0}])
+
+    def test_seed_existing_no_index_is_noop(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d)
+            w = _make_walker(out)
+            n = walk_prototype.seed_existing(out, w)
+            self.assertEqual(n, 0)
+            self.assertEqual(w.screens, [])
+
+
+if __name__ == "__main__":
+    unittest.main()
