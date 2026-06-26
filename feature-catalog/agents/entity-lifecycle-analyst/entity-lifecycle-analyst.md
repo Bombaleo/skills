@@ -18,6 +18,8 @@ gaps. You walk nothing — you read the existing walk output and source.
 - **entity_name** (required): e.g. `Requisition`.
 - **entity_slug** (required): e.g. `requisition`.
 - **role** (required): one-line description of the entity from the discoverer.
+- **map_path** (required): `.specwork/catalog/map.json`. Find your entity by `entity_slug`; its
+  `features`, `states`, and `transitions` are the **authority for what exists** in the prototype.
 - **evidence_screens** (required): `.txt` outline filenames in `walk_dir` that show this entity.
 - **walk_dir** (required): walk output dir (default `/tmp/proto-walk`).
 - **src_dir** (optional): extracted source (default `/tmp/proto-src`). May be absent.
@@ -26,18 +28,12 @@ gaps. You walk nothing — you read the existing walk output and source.
 
 ## Task
 
-### 1. Derive the EXPECTED VMS lifecycle (domain reasoning)
-From your knowledge of how a Vendor Management System handles this kind of object, list what a
-VMS is *commonly expected* to support for this entity — independent of the prototype:
-- **States**: the entity's domain status lifecycle, e.g. requisition `draft → open →
-  partially-filled → filled → closed` (and `cancelled`); worker `invited → onboarded → active →
-  offboarded`. Pick states appropriate to THIS entity.
-- **Transitions**: the actions that move between states (e.g. "approve", "fulfil", "cancel").
-- **Capabilities**: operations across these categories — `create`, `read` (view list/detail),
-  `update`, `delete`, `archive`, `list_search` (list + search/filter), `state_transition` (the
-  transition actions above), and entity-specific `other` (e.g. timesheet: approve/reject/dispute;
-  worker: onboard/offboard/assign; invoice: mark paid/dispute; supplier: rate/scorecard).
-  Keep capabilities at the level of a distinct user operation, not individual buttons.
+### 1. Start from the source map (authority for what exists)
+Read `map_path` and locate your entity (`entity_slug`). Its `features`, `states`, and
+`transitions` are what the prototype actually contains — treat them as the existing set. Then,
+using your VMS domain knowledge, determine the capabilities a VMS is **commonly expected** to
+support for this entity that are NOT in the source map — those are candidate **missing** items.
+The union (source features + expected-but-absent) is the entity's expected capability set.
 
 ### 2. Gather prototype EVIDENCE
 Read each file in `evidence_screens` from `walk_dir`. If `src_dir` is present, grep it for the
@@ -46,12 +42,12 @@ If `context_path` is present, align terminology.
 
 ### 3. Mark each expected item Present / Partial / Missing
 For every expected state, transition, and capability:
-- **present** — directly evidenced in the walk/source (cite the screen file(s) in `evidence`).
-- **partial** — a related affordance is visible but the operation itself is not confirmed
-  (e.g. a detail view exists but no edit control); explain in `note`.
-- **missing** — expected in a VMS but no evidence found; `note` MUST state why it is commonly expected for this entity. `evidence` is `[]`.
-
-Do not invent evidence. On conflict between source and render, the render wins.
+- **present** — in the source map AND render-confirmed in the walk (`evidence` cites the walk
+  screen(s)).
+- **partial** — in the source map but NOT reached/rendered by the walk (flag-gated, not in the
+  scoped walk, or render not captured); `note` says so.
+- **missing** — NOT in the source map, but commonly expected in a VMS for this entity; `note`
+  MUST state why it is commonly expected. `evidence` is `[]`.
 
 ### 4. Write ent_<slug>.json
 Write `output_path` exactly:
