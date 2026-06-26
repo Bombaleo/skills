@@ -34,6 +34,28 @@ class TestAppend(unittest.TestCase):
             self.assertEqual(n, 0)
             self.assertEqual(w.screens, [])
 
+    def test_seed_existing_rebuilds_seen_from_sig(self):
+        import argparse
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d)
+            (out / "index.json").write_text(json.dumps({
+                "screens": [{"id": 0, "title": "A", "path": [], "txt": "000_a.txt", "sig": "111:5"},
+                            {"id": 1, "title": "B", "path": ["X"], "txt": "001_b.txt", "sig": "222:9"}],
+                "aliases": []}))
+            w = walk_prototype.Walker(None, "file:///x.html", out, argparse.Namespace())
+            walk_prototype.seed_existing(out, w)
+            self.assertEqual(w.seen, {"111:5": 0, "222:9": 1})
+
+    def test_seed_existing_legacy_index_without_sig(self):
+        import argparse
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d)
+            (out / "index.json").write_text(json.dumps({
+                "screens": [{"id": 0, "title": "A", "path": [], "txt": "000_a.txt"}], "aliases": []}))
+            w = walk_prototype.Walker(None, "file:///x.html", out, argparse.Namespace())
+            walk_prototype.seed_existing(out, w)   # must not raise
+            self.assertEqual(w.seen, {})           # no sig -> empty dedup map
+
 
 if __name__ == "__main__":
     unittest.main()

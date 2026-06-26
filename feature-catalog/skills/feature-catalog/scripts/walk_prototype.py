@@ -326,6 +326,7 @@ def seed_existing(out, walker):
     data = json.loads(idx.read_text())
     walker.screens = data.get("screens", [])
     walker.aliases = data.get("aliases", [])
+    walker.seen = {s["sig"]: s["id"] for s in walker.screens if "sig" in s}
     return len(walker.screens)
 
 
@@ -394,7 +395,8 @@ class Walker:
         self.screens.append({"id": sid, "title": title,
                              "path": [p[0] for p in path],
                              "png": f"{name}.png", "txt": f"{name}.txt",
-                             "n_clickables": len(cands), "truncated_expand": False})
+                             "n_clickables": len(cands), "truncated_expand": False,
+                             "sig": sig})
         self.seen[sig] = sid
         print(f"  [{sid:03d}] {' > '.join(p[0] for p in path) or '(initial)'} "
               f"({len(cands)} clickables)")
