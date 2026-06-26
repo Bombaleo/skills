@@ -29,6 +29,11 @@ per-entity analyses. You read no walk output and walk nothing.
 Read every `ent_*.json` in `catalog_dir`. Each has `slug, name, role, states, transitions,
 capabilities, coverage`. Skip any file that fails to parse and note it in your return.
 
+### 1b. Assign each entity a logical group
+Group related entities into a small set of logical domain groups using their roles — e.g.
+"Sourcing & Demand", "Workforce & Compliance", "Financials", "Supply", "Configuration". Add a
+`group` string to each entity object. Use 3–6 groups total; keep names short and domain-meaningful.
+
 ### 2. Compute overall coverage
 Sum each entity's `coverage` into `overall_coverage` (`present`, `partial`, `missing`,
 `expected_total`). Each entity's `coverage` block has already been normalized deterministically upstream — trust and
@@ -44,8 +49,11 @@ Write `report_json_path`:
 ```json
 { "app": "<app_slug>", "generated_from": "<prototype_source>",
   "overall_coverage": { "present": 0, "partial": 0, "missing": 0, "expected_total": 0 },
-  "entities": [ <each ent_*.json object, unchanged, in the chosen order> ] }
+  "entities": [ <each ent_*.json object plus an added "group" string (the logical group from
+                 step 1b), in the chosen order> ] }
 ```
+
+Add a `group` string to each entity object (from step 1b) when writing it into `entities`.
 
 ### 5. Write entity-catalog.md
 Write `catalog_md_path`:
