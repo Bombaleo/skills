@@ -1,0 +1,83 @@
+﻿,Instructions,
+,Rate Card Creation Tool,
+,,
+,,
+Creating Rate Cards,,
+,,
+,1,"On the control panel tab, set the file name you would like for the new rate card in cell E3"
+,,
+,2,Set the file path for where the new rate card should be saved in cell E4
+,,You can find the file path by opening the folder you would like to save the file in and clicking the bar at the top of the screen with all the folders you have clicked through to get there
+,,This should be in a file path format such as C:\Users\username\Documents
+,,You should make sure not to add a backslash at the end of the file path
+,,
+,3,If you want to include any markers such as the date of file creation or time you can do this in cells E5 and E6 on the Control panel
+,,This is optional - you can change or delete these markers if you want to
+,,
+,4,"In column E of the supplier list table enter ""Y"" against any suppliers you want to be included in the rate card"
+,,The tool will create one rate card containing all suppliers so be careful not to send out rate cards to a supplier if they contain information for others
+,,
+,5,Similarly select the locations and Job types you would like included in the rate card in the other tables on the control panel
+,,
+,6,Once you are happy with the options selected then press the Create Rate Card button
+,,This will create a rate card file and save it in the folder you indicated in Cell E4 (the file will be saved and closed by default)
+,,This may take a few minutes if a lot of suppliers and locations have been selected
+,,
+Updating Net Pay,,
+,,
+,1,If only a simple update is required the relevant cells can be edited directly in the Net Pay Table tab
+,,It is important to remember that most rates have a row for both a post parity and pre parity (make sure both are updated as needed)
+,,
+,2,"To add a new row to the Net Pay Table simply add the relevant data at the bottom of the table leaving no gaps in the ""Rate to be Included?"" column"
+,,At minimum your new rate information must include the following fields to be picked up by the tool for the rate card
+,,-Location (exactly matching a location from the list on the control panel)
+,,-Job Title
+,,-Rate to be Included?
+,,-Job Type Match (exactly matching a job type from the list on the control panel)
+,,-Parity Status
+,,-At least one net pay rate
+,,
+,3,To add a new site or job type on the control panel simply insert a new row before the final row of the relevant table
+,,It is important that the new row is included in the table range (an easy way to tell if the row is in the table range is to select one of the cells from the new row and
+,,"look for the ""Table Design"" tab on the ribbon at the top of the screen)"
+,,"To ensure that there are no issues it is recommended you check the ""Position References"" table on the Reference Tables tab shows the correct start and end rows for all tables"
+,,
+Updating Rate Card Structure,,
+,,
+,1,Due to the format of the calculations provided by the suppliers the rate card column format should not be changed
+,,Supplier charge rate formulas are imported and calculated on the basis of the net pay used
+,,
+,2,"To change the net pay used simply update the column reference in the ""Net Pay Reference"" table on the Control Panel tab"
+,,"The tool will import all values from the selected columns and give them the name specified in the ""Net Pay Type Name"" column"
+,,"You can add a new net pay type by adding a column to the Net Pay Table containing the new net pay type for each job and referencing this in the ""Net Pay Reference"" table on the Control Panel tab"
+,,
+,3,"To update any other formatting (such as font, colours, or styles) simply update the Rate Card Template tab which is used as the basis for the rate cards"
+,,
+Adding a New Supplier,,
+,,
+,1,"To add a new supplier first insert a new row in the ""Supplier List"" table on the control panel tab, making sure that the row is included in the range of the named table"
+,,It is important that the new row is included in the table range (an easy way to tell if the row is in the table range is to select one of the cells from the new row and
+,,"look for the ""Table Design"" tab on the ribbon at the top of the screen)"
+,,
+,2,Then go to the Charge Rate Calculations tab to copy and paste the Generic supplier calculations structure at the bottom of the table (checking to make sure the table range automatically updates to include it)
+,,
+,3,"Update the Supplier Name column (ensuring it exactly matches the name entered in the ""Supplier List"" on the Control Panel tab) and the charge rate calculation fields (highlighted yellow)"
+,,The charge rate calculation fields must use valid excel formulas in order to update correctly when pulled into the rate card
+,,"If any of the fields use a fixed number, rather than a formula, then they will not update when put against a different net pay rate (if this is intentional, such as with the margin, then fixed values can be allowed)"
+,,
+,4,"Check that the information on the right side of the table is filled correctly, in particular that the lines with charge rate formulas have a ""Yes"" in the ""Valid Bid (Y/N)"" column and the lines without supplier charge rates have a ""No"" in this column"
+,,
+,5,"Return to the Control Panel tab and check that the ""Charge Rate Formulas Available (Y/N)"" column in the ""Supplier List"" table has updated correctly to ""Y"" for the new supplier"
+,,
+Adding a New Location,,
+,,
+,1,"To add a new location / site name first inset a new row in the ""Location"" table on the control panel. Make sure to put the location in column B (Site Name) and column C (Site Area)"
+,,It is important that the new row is included in the table range (an easy way to tell if the row is in the table range is to select one of the cells from the new row and
+,,"look for the ""Table Design"" tab on the ribbon at the top of the screen)"
+,,
+,2,"Then go to the Reference Tables tab and put the site name into the ""Areas Indicated"" Table. "
+,,"You can tell this has worked as when you select the location on the control table, it should reflect in the Areas Indicated table"
+,,
+,3,"Update the new site name on the Net Pay table, and associated pay rates"
+,,The new site name must be in column C
+,,

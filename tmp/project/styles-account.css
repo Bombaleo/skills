@@ -1,0 +1,635 @@
+/* =====================================================================
+   Flex Work — Account surfaces
+     · User profile (`pages/user-profile.jsx`)
+     · User settings (`pages/user-settings.jsx`)
+     · Login screen (`pages/login.jsx`)
+   Built strictly on Everest tokens, mirrors supplier/worker details DNA.
+   ===================================================================== */
+
+/* ---------- Shared profile page wrapper -------------------------------- */
+.acct-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+  padding-bottom: 56px;
+}
+
+/* ---------- Profile hero ---------------------------------------------- */
+.acct-hero {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 24px 32px;
+  align-items: center;
+}
+.acct-hero-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--evr-surface-decorative-default-purple);
+  color: var(--evr-content-decorative-purple);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 52px;
+  letter-spacing: -1px;
+  border: 4px solid var(--evr-surface-primary-default);
+  box-shadow: var(--evr-depth-02);
+}
+.acct-hero-info {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.acct-hero-pillrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.acct-hero-name {
+  font: var(--evr-h2);
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.acct-hero-role {
+  font: var(--evr-body1);
+  color: var(--evr-content-primary-default);
+  margin: 0;
+}
+.acct-hero-meta {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+.acct-hero-meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.acct-hero-meta .acct-meta-ico { color: var(--evr-content-primary-lowemp); }
+.acct-hero-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Online dot inside a status pill */
+.acct-pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--evr-content-status-success-default);
+  display: inline-block;
+}
+
+/* ---------- Generic account card -------------------------------------- */
+.acct-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  padding: 24px 28px;
+}
+.acct-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.acct-card-title {
+  font: var(--evr-h4);
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.acct-card-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 4px 0 0;
+}
+
+/* Two-col definition list used in profile/settings */
+.acct-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 32px;
+}
+.acct-dl .acct-row {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.acct-dl dt {
+  font: var(--evr-utility1);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--evr-content-primary-lowemp);
+}
+.acct-dl dd {
+  margin: 0;
+  font: var(--evr-body1);
+  color: var(--evr-content-primary-highemp);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.acct-dl dd .acct-mute { color: var(--evr-content-primary-lowemp); }
+.acct-dl dd a {
+  color: var(--evr-content-status-informative-default);
+  text-decoration: none;
+}
+.acct-dl dd a:hover { text-decoration: underline; }
+
+@media (max-width: 720px) {
+  .acct-hero {
+    grid-template-columns: 1fr;
+    text-align: left;
+    padding: 24px;
+  }
+  .acct-hero-avatar { width: 96px; height: 96px; font-size: 36px; }
+  .acct-dl { grid-template-columns: 1fr; }
+}
+
+/* Role chips on profile + login */
+.acct-rolechips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.acct-rolechip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  font: var(--evr-utility1);
+  color: var(--evr-content-primary-default);
+}
+.acct-rolechip--primary {
+  background: var(--evr-interactive-primary-decorative);
+  border-color: transparent;
+  color: var(--evr-content-status-informative-highemp);
+}
+
+/* ---------- Activity list (sessions / sign-ins) ----------------------- */
+.acct-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.acct-list-item {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.acct-list-item:last-child { border-bottom: none; }
+.acct-list-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-default);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.acct-list-icon--ok { background: var(--evr-surface-status-success-lowemp); color: var(--evr-content-status-success-default); }
+.acct-list-icon--info { background: var(--evr-interactive-primary-decorative); color: var(--evr-content-status-informative-default); }
+.acct-list-title {
+  font: var(--evr-body1);
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.acct-list-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 2px 0 0;
+}
+.acct-list-trail {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  text-align: right;
+  white-space: nowrap;
+}
+.acct-current-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font: var(--evr-utility2);
+  background: var(--evr-surface-status-success-lowemp);
+  color: var(--evr-content-status-success-default);
+  margin-left: 8px;
+}
+
+/* ---------- Settings: section / row layout ---------------------------- */
+.acct-settings-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .acct-settings-grid { grid-template-columns: 1fr; }
+}
+.acct-nav {
+  position: sticky;
+  top: 16px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  padding: 12px;
+  display: grid;
+  gap: 2px;
+}
+.acct-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: var(--evr-radius-2xs);
+  cursor: pointer;
+  font: var(--evr-body1);
+  color: var(--evr-content-primary-default);
+  text-align: left;
+  width: 100%;
+}
+.acct-nav-item:hover { background: var(--evr-surface-primary-hover); }
+.acct-nav-item--active {
+  background: var(--evr-interactive-primary-decorative);
+  color: var(--evr-content-status-informative-default);
+  font-weight: var(--evr-fw-demibold);
+}
+.acct-panels { display: grid; gap: 24px; }
+
+.acct-prefrow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.acct-prefrow:first-child { padding-top: 0; }
+.acct-prefrow:last-child { border-bottom: none; padding-bottom: 0; }
+.acct-prefrow-title {
+  font: var(--evr-body1);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  margin: 0 0 2px;
+}
+.acct-prefrow-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+  max-width: 56ch;
+}
+.acct-prefrow-ctrl { display: inline-flex; align-items: center; gap: 10px; }
+
+/* Toggle switch */
+.acct-toggle {
+  --w: 40px; --h: 24px;
+  position: relative;
+  display: inline-block;
+  width: var(--w);
+  height: var(--h);
+  flex-shrink: 0;
+}
+.acct-toggle input {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer; margin: 0;
+}
+.acct-toggle-track {
+  position: absolute; inset: 0;
+  background: var(--evr-neutral-80);
+  border-radius: 9999px;
+  transition: background 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.acct-toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--evr-surface-primary-default);
+  box-shadow: var(--evr-depth-02);
+  transition: transform 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.acct-toggle input:checked + .acct-toggle-track {
+  background: var(--evr-interactive-primary-default);
+}
+.acct-toggle input:checked + .acct-toggle-track + .acct-toggle-thumb {
+  transform: translateX(16px);
+}
+.acct-toggle input:focus-visible + .acct-toggle-track {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+/* Segmented radio */
+.acct-segmented {
+  display: inline-flex;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  padding: 3px;
+  gap: 2px;
+}
+.acct-segmented button {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: var(--evr-radius-3xs);
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+}
+.acct-segmented button.is-active {
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  box-shadow: var(--evr-depth-02);
+}
+
+/* Plain select (settings) */
+.acct-select {
+  appearance: none;
+  border: 1px solid var(--evr-border-primary-default);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  border-radius: var(--evr-radius-2xs);
+  height: 36px;
+  padding: 0 32px 0 12px;
+  font: var(--evr-body1);
+  background-image: url("assets/icons/ChevronDown.svg");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  min-width: 180px;
+}
+.acct-select:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Login screen ---------------------------------------------- */
+.login-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--evr-surface-root-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 48px 24px 32px;
+}
+.login-stage {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px 0;
+}
+.login-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-md);
+  padding: 48px 56px 56px;
+  display: grid;
+  gap: 32px;
+}
+@media (max-width: 640px) {
+  .login-card { padding: 32px 24px 36px; border-radius: var(--evr-radius-sm); }
+  .login-shell { padding: 24px 16px; }
+}
+.login-brand {
+  display: inline-flex;
+  align-items: center;
+}
+.login-brand img { height: 28px; width: auto; display: block; }
+.login-head {
+  display: grid;
+  gap: 12px;
+}
+.login-title {
+  font: var(--evr-h2);
+  margin: 0;
+  color: var(--evr-content-primary-highemp);
+  text-wrap: balance;
+}
+.login-sub {
+  font: var(--evr-body1);
+  color: var(--evr-content-primary-default);
+  margin: 0;
+  max-width: 50ch;
+  text-wrap: pretty;
+}
+
+/* ---- Email step --------------------------------------------------- */
+.login-form { display: grid; gap: 28px; }
+.login-field { display: grid; gap: 8px; }
+.login-field-label {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+}
+.login-field-required { color: var(--evr-content-status-error-default); }
+.login-input {
+  height: 56px;
+  border: 1px solid var(--evr-border-primary-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+  font: var(--evr-body1);
+  color: var(--evr-content-primary-highemp);
+  padding: 0 16px;
+  width: 100%;
+}
+.login-input::placeholder { color: var(--evr-content-primary-lowemp); }
+.login-input:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+  border-color: var(--evr-border-primary-pressed);
+}
+.login-input-error {
+  font: var(--evr-body2);
+  color: var(--evr-content-status-error-default);
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Primary pill button used in card */
+.login-btn {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: var(--evr-radius-circle);
+  background: var(--evr-interactive-primary-default);
+  color: var(--evr-neutral-100);
+  font: var(--evr-button-lg);
+  cursor: pointer;
+  transition: background 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.login-btn:hover  { background: var(--evr-interactive-primary-hover); }
+.login-btn:active { background: var(--evr-interactive-primary-pressed); }
+.login-btn:disabled {
+  background: var(--evr-inactive-surface);
+  color: var(--evr-inactive-content);
+  cursor: not-allowed;
+}
+.login-btn:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+/* ---- Org / role list rows ---------------------------------------- */
+.login-rows { display: grid; gap: 12px; }
+.login-row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 12px 12px 20px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-primary-default);
+}
+.login-row-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--evr-surface-secondary-default);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.login-row-logo img { width: 100%; height: 100%; object-fit: contain; }
+.login-row-logo--filled {
+  background: var(--evr-interactive-primary-default);
+  color: var(--evr-neutral-100);
+}
+.login-row-logo--brand {
+  background: var(--evr-surface-decorative-low-blue);
+  padding: 6px;
+}
+.login-row-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.login-row-name {
+  font: var(--evr-body1);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.login-row-meta {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+}
+.login-row-select {
+  height: 40px;
+  padding: 0 28px;
+  border: none;
+  border-radius: var(--evr-radius-circle);
+  background: var(--evr-interactive-primary-default);
+  color: var(--evr-neutral-100);
+  font: var(--evr-button-sm);
+  cursor: pointer;
+  transition: background 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.login-row-select:hover  { background: var(--evr-interactive-primary-hover); }
+.login-row-select:active { background: var(--evr-interactive-primary-pressed); }
+.login-row-select:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+/* ---- "Signing in as" pill (below card) --------------------------- */
+.login-asbar {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+.login-asbar-label {
+  font: var(--evr-body1);
+  color: var(--evr-content-primary-default);
+  margin: 0;
+}
+.login-aspill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-circle);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  font: var(--evr-body1);
+  cursor: pointer;
+  transition: background 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.login-aspill:hover { background: var(--evr-surface-primary-hover); }
+.login-aspill svg { color: var(--evr-content-status-informative-default); }
+.login-aspill:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+/* ---- Footer ------------------------------------------------------ */
+.login-footer {
+  flex-shrink: 0;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding-top: 24px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+.login-footer-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.login-footer-links a {
+  color: var(--evr-content-primary-highemp);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.login-footer-links a:hover { color: var(--evr-content-status-informative-default); }
+.login-footer-copy { margin: 0; }

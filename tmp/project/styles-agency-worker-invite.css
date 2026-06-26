@@ -1,0 +1,374 @@
+/* =====================================================================
+   Flex Work — Automatic worker invitations (Agency Pro)
+   Feature-flag-gated surfaces for staffing-agency tenants. Sets the
+   strategy by which an agency's bench workers are invited to fill a
+   requisition: all at once, one-by-one on a timeframe, or smart
+   allocation by worker score.
+
+   Everything is .awi-* and reuses Everest tokens + existing component
+   classes (SectionCard, Switch, banner, btn) wherever possible. Gated
+   to agency tenants in JS, so these styles never apply on buyer chrome.
+   ===================================================================== */
+
+/* ---------- Strategy picker (3 cards) — mirrors .dx-strategy -------- */
+.awi-strat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--evr-spacing-sm);
+  margin-top: var(--evr-spacing-sm);
+}
+@media (max-width: 860px) { .awi-strat-grid { grid-template-columns: 1fr; } }
+
+.awi-strat {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-primary-default);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+.awi-strat:hover {
+  border-color: var(--evr-border-primary-default);
+  background: var(--evr-surface-primary-hover);
+}
+.awi-strat:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+.awi-strat--active {
+  border-color: var(--evr-interactive-primary-default);
+  background: var(--evr-interactive-primary-decorative);
+  box-shadow: 0 0 0 1px var(--evr-interactive-primary-default);
+}
+
+.awi-strat-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.awi-strat-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-default);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.awi-strat--active .awi-strat-icon {
+  background: var(--evr-interactive-primary-default);
+  color: var(--evr-neutral-100);
+}
+.awi-strat-title {
+  flex: 1;
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--evr-content-primary-highemp);
+}
+.awi-strat-check {
+  width: 20px; height: 20px;
+  border-radius: var(--evr-radius-circle);
+  border: 1.5px solid var(--evr-border-decorative-default);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--evr-neutral-100);
+  flex-shrink: 0;
+}
+.awi-strat-check--on {
+  background: var(--evr-interactive-primary-default);
+  border-color: var(--evr-interactive-primary-default);
+}
+.awi-strat-blurb {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  line-height: 1.45;
+}
+
+/* ---------- Strategy diagram (decorative) -------------------------- */
+.awi-strat-diagram {
+  height: 64px;
+  border-radius: 10px;
+  background: var(--evr-surface-secondary-default);
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px 12px;
+  overflow: hidden;
+}
+.awi-strat--active .awi-strat-diagram { background: var(--evr-surface-primary-default); }
+
+/* simultaneous — hub + rays firing at once */
+.awi-diag-bc { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.awi-diag-hub { width: 14px; height: 14px; border-radius: 50%; background: var(--evr-content-decorative-orange); z-index: 1; }
+.awi-diag-ray {
+  position: absolute; left: 50%; top: 50%;
+  width: 18px; height: 2px; border-radius: 2px;
+  background: var(--evr-content-decorative-orange); opacity: 0.55;
+  transform-origin: left center;
+}
+
+/* staggered — lanes lighting up left→right */
+.awi-diag-stag { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.awi-diag-stag-lane { display: flex; align-items: center; gap: 6px; }
+.awi-diag-stag-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--evr-content-decorative-blue); flex-shrink: 0; }
+.awi-diag-stag-bar { height: 5px; border-radius: 3px; background: var(--evr-content-decorative-blue); opacity: 0.35; }
+
+/* smart — ranked descending bars */
+.awi-diag-smart { display: flex; align-items: flex-end; gap: 5px; height: 100%; padding: 6px 0; }
+.awi-diag-smart-bar { width: 9px; border-radius: 3px 3px 0 0; background: var(--evr-content-decorative-purple); }
+
+/* ---------- Strategy chip (inline brand pill) ---------------------- */
+.awi-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.awi-chip--simultaneous { background: var(--evr-surface-decorative-low-orange); color: var(--evr-content-decorative-orange); }
+.awi-chip--staggered    { background: var(--evr-surface-decorative-low-blue);   color: var(--evr-content-decorative-blue); }
+.awi-chip--smart        { background: var(--evr-surface-decorative-low-purple); color: var(--evr-content-decorative-purple); }
+
+/* ---------- Param rows (config controls) --------------------------- */
+.awi-blurb {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  margin: 0 0 var(--evr-spacing-xs);
+  line-height: 1.5;
+}
+.awi-params {
+  margin-top: var(--evr-spacing-sm);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  overflow: hidden;
+}
+.awi-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--evr-spacing-md);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.awi-row:last-child { border-bottom: 0; }
+.awi-row--disabled { opacity: 0.5; pointer-events: none; }
+.awi-row-text { min-width: 0; }
+.awi-row-label {
+  display: block;
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.awi-row-hint {
+  display: block;
+  margin-top: 2px;
+  font: var(--evr-utility2);
+  color: var(--evr-content-primary-lowemp);
+  line-height: 1.4;
+}
+.awi-row-control { flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+
+/* number stepper */
+.awi-num {
+  width: 64px;
+  font: var(--evr-body1);
+  font-family: var(--evr-font-text);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  padding: 7px 8px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+}
+.awi-num:focus { outline: var(--focus-ring); outline-offset: 1px; border-color: var(--evr-interactive-primary-default); }
+.awi-unit { font: var(--evr-body2); color: var(--evr-content-primary-lowemp); }
+
+/* inline pill select (mirrors dx-select-inline) */
+.awi-select {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 10px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-bold);
+  min-width: 96px;
+  justify-content: space-between;
+}
+.awi-select select {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+  font-family: inherit;
+}
+.awi-select svg { color: var(--evr-content-primary-default); flex-shrink: 0; }
+
+/* ---------- Smart allocation · ranked bench preview ---------------- */
+.awi-rank-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--evr-spacing-sm);
+  margin: var(--evr-spacing-sm) 0 6px;
+}
+.awi-rank-head-title {
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.awi-rank-head-meta { font: var(--evr-utility2); color: var(--evr-content-primary-lowemp); }
+.awi-rank {
+  list-style: none; margin: 0; padding: 0;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  overflow: hidden;
+}
+.awi-rank-row {
+  display: grid;
+  grid-template-columns: 34px 40px 1fr auto auto;
+  gap: var(--evr-spacing-sm);
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.awi-rank-row:last-child { border-bottom: 0; }
+.awi-rank-row--cut {
+  background: var(--evr-surface-secondary-default);
+  opacity: 0.62;
+}
+.awi-rank-order {
+  width: 26px; height: 26px;
+  border-radius: var(--evr-radius-circle);
+  background: var(--evr-surface-decorative-low-purple);
+  color: var(--evr-content-decorative-purple);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.awi-rank-row--cut .awi-rank-order {
+  background: var(--evr-neutral-95);
+  color: var(--evr-content-primary-lowemp);
+}
+.awi-rank-name {
+  display: block;
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.awi-rank-sub { display: block; font: var(--evr-utility2); color: var(--evr-content-primary-lowemp); }
+.awi-rank-wave {
+  font: var(--evr-utility2);
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-lowemp);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.awi-rank-score {
+  display: inline-flex; flex-direction: column; align-items: flex-end; gap: 3px;
+  min-width: 78px;
+}
+.awi-rank-score-val {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 17px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--evr-content-primary-highemp);
+}
+.awi-rank-score-val small { font-size: 11px; font-weight: var(--evr-fw-regular); color: var(--evr-content-primary-lowemp); }
+.awi-rank-meter { width: 78px; height: 5px; border-radius: 3px; background: var(--evr-neutral-95); overflow: hidden; }
+.awi-rank-meter > span { display: block; height: 100%; border-radius: 3px; background: var(--evr-content-decorative-purple); }
+.awi-rank-foot {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 2px 0;
+  font: var(--evr-utility2);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* ---------- Plan-gate notice (flag on, plan Free) ------------------ */
+.awi-gate {
+  display: flex; align-items: flex-start; gap: var(--evr-spacing-sm);
+  padding: 14px 16px;
+  border: 1px dashed var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-secondary-default);
+}
+.awi-gate-ic {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: var(--evr-radius-circle);
+  background: var(--evr-surface-decorative-low-purple);
+  color: var(--evr-content-decorative-purple);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.awi-gate-text { font: var(--evr-body2); color: var(--evr-content-primary-default); }
+.awi-gate-text strong { color: var(--evr-content-primary-highemp); }
+
+/* ---------- Per-requisition override bar (invite panel) ------------ */
+.awi-ovr {
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-secondary-default);
+  margin-bottom: var(--evr-spacing-sm);
+  overflow: hidden;
+}
+.awi-ovr-head {
+  display: flex; align-items: center; gap: var(--evr-spacing-sm);
+  padding: 12px 14px;
+}
+.awi-ovr-ic {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-default);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.awi-ovr-text { flex: 1; min-width: 0; }
+.awi-ovr-label {
+  font: var(--evr-utility2);
+  font-weight: var(--evr-fw-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+}
+.awi-ovr-value { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+.awi-ovr-source { font: var(--evr-utility2); color: var(--evr-content-primary-lowemp); }
+.awi-ovr-toggle {
+  flex-shrink: 0;
+  background: none; border: 0; cursor: pointer;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 13px;
+  color: var(--evr-interactive-primary-default);
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 8px; border-radius: var(--evr-radius-2xs);
+}
+.awi-ovr-toggle:hover { background: var(--evr-surface-primary-hover); }
+.awi-ovr-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+  padding-top: 12px;
+}
+.awi-ovr-body .awi-strat-grid { margin-top: 0; }
+.awi-ovr-reset {
+  margin-top: 10px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.awi-ovr-note { font: var(--evr-utility2); color: var(--evr-content-primary-lowemp); }
+
+/* compact strategy cards inside the override bar */
+.awi-ovr .awi-strat { padding: 12px; gap: 8px; }
+.awi-ovr .awi-strat-diagram { display: none; }
+.awi-ovr .awi-strat-blurb {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

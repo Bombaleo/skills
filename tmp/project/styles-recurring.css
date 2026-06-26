@@ -1,0 +1,518 @@
+/* =====================================================================
+   Recurring schedule panel — sections, summary chip, day pills,
+   segmented control, exception list, calendar preview, capacity rollup.
+   Lives inside <SidePanel>; consumes the same tokens as the rest of the app.
+   ===================================================================== */
+
+/* --------- Summary chip (top of panel) ------------------------------ */
+.recur-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 24px 16px;
+  background: var(--evr-surface-decorative-low-blue);
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  flex-shrink: 0;
+}
+.recur-summary-ic {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--evr-blue-400);
+  color: white;
+  display: inline-grid; place-items: center;
+  flex-shrink: 0;
+}
+.recur-summary-text {
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 0;
+}
+.recur-summary-pri {
+  font: var(--evr-body1-bold);
+  color: var(--evr-content-primary-highemp);
+  line-height: 1.2;
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+.recur-summary-sec {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  line-height: 1.3;
+}
+.recur-summary-tag {
+  padding: 1px 6px;
+  border-radius: var(--evr-radius-4xs);
+  font: var(--evr-utility2);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  background: var(--evr-purple-100);
+  color: var(--evr-purple-500);
+  font-weight: var(--evr-fw-demibold);
+  text-transform: uppercase;
+}
+
+/* --------- Section heading ------------------------------------------- */
+.recur-sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.recur-sec-aside {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* --------- Segmented control ---------------------------------------- */
+.recur-seg {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  gap: 2px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+.recur-seg-btn {
+  flex: 1;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--evr-radius-3xs);
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-default);
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.recur-seg-btn:hover { color: var(--evr-content-primary-highemp); }
+.recur-seg-btn[aria-pressed="true"] {
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  box-shadow: var(--evr-depth-02);
+}
+
+/* --------- Day pills ------------------------------------------------- */
+.recur-days {
+  display: flex;
+  gap: 8px;
+}
+.recur-day {
+  flex: 1;
+  height: 44px;
+  border-radius: var(--evr-radius-3xs);
+  border: 1px solid var(--evr-border-decorative-default);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-default);
+  font: var(--evr-body2-bold);
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.recur-day:hover { border-color: var(--evr-border-primary-hover); }
+.recur-day[aria-pressed="true"] {
+  border-color: var(--evr-interactive-primary-default);
+  background: var(--evr-interactive-primary-decorative);
+  color: var(--evr-content-primary-highemp);
+}
+
+/* --------- Chip row (presets) --------------------------------------- */
+.recur-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.recur-chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  color: var(--evr-content-primary-default);
+  font: var(--evr-body2);
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.recur-chip:hover { background: var(--evr-surface-secondary-hover); }
+.recur-chip[aria-pressed="true"] {
+  background: var(--evr-interactive-primary-decorative);
+  border-color: var(--evr-interactive-primary-default);
+  color: var(--evr-interactive-primary-default);
+  font-weight: var(--evr-fw-demibold);
+}
+
+/* --------- Days field — presets in label aside ---------------------- */
+.recur-day-presets {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+}
+.recur-day-presets .recur-chip {
+  height: 24px;
+  padding: 0 10px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+}
+
+/* --------- Toggle switch -------------------------------------------- */
+.recur-toggle {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+  user-select: none;
+}
+.recur-toggle-track {
+  width: 36px; height: 20px;
+  border-radius: 999px;
+  background: var(--evr-neutral-80);
+  position: relative;
+  transition: background 160ms ease;
+}
+.recur-toggle-thumb {
+  width: 16px; height: 16px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px; left: 2px;
+  transition: left 160ms ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+.recur-toggle--on .recur-toggle-track { background: var(--evr-interactive-primary-default); }
+.recur-toggle--on .recur-toggle-thumb { left: 18px; }
+
+/* --------- Computed pill (right side of section head) --------------- */
+.recur-computed {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-secondary-default);
+  border: 1px dashed var(--evr-border-decorative-default);
+  color: var(--evr-content-primary-default);
+  font: var(--evr-body2);
+  white-space: nowrap;
+}
+.recur-computed strong {
+  color: var(--evr-content-primary-highemp);
+  font: var(--evr-body2-bold);
+}
+
+/* --------- Grid helpers -------------------------------------------- */
+.recur-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.recur-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+/* --------- No-end-date placeholder field ----------------------------- */
+.recur-noend {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-lowemp);
+  font: var(--evr-body1);
+  display: flex; align-items: center;
+}
+
+/* --------- Bookings list (pill checkboxes) -------------------------- */
+.recur-bk-list {
+  display: flex; flex-direction: column;
+  gap: 8px;
+  list-style: none; margin: 0; padding: 0;
+}
+.recur-bk-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--evr-radius-3xs);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-primary-default);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.recur-bk-pill:hover { background: var(--evr-surface-secondary-hover); }
+.recur-bk-pill-check {
+  width: 18px; height: 18px;
+  border-radius: var(--evr-radius-4xs);
+  border: 1.5px solid var(--evr-border-decorative-default);
+  display: inline-grid; place-items: center;
+  flex-shrink: 0;
+  color: white;
+}
+.recur-bk-pill--on .recur-bk-pill-check {
+  background: var(--evr-interactive-primary-default);
+  border-color: var(--evr-interactive-primary-default);
+}
+.recur-bk-pill--on {
+  border-color: var(--evr-interactive-primary-default);
+  background: var(--evr-interactive-primary-decorative);
+}
+.recur-bk-pill-text { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.recur-bk-pill-pri { font: var(--evr-body2-bold); color: var(--evr-content-primary-highemp); }
+.recur-bk-pill-sec { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+.recur-bk-pill-cap {
+  font: var(--evr-utility2);
+  color: var(--evr-content-primary-default);
+  font-weight: var(--evr-fw-demibold);
+  white-space: nowrap;
+}
+
+.recur-roll {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-decorative-low-blue);
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  display: flex;
+  align-items: center; gap: 10px;
+}
+.recur-roll strong { color: var(--evr-content-primary-highemp); }
+.recur-roll--info { background: var(--evr-surface-decorative-low-purple); }
+.recur-roll--warn { background: var(--evr-surface-status-warning-lowemp); }
+
+/* --------- Exception action row ------------------------------------- */
+.recur-exc-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.recur-exc-action {
+  padding: 8px 12px;
+  border-radius: var(--evr-radius-3xs);
+  border: 1px solid var(--evr-border-decorative-default);
+  background: var(--evr-surface-primary-default);
+  font: var(--evr-body2-bold);
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+}
+.recur-exc-action:hover { background: var(--evr-surface-secondary-hover); }
+
+.recur-exc-list {
+  display: flex; flex-direction: column;
+  gap: 8px;
+  margin: 0; padding: 0; list-style: none;
+}
+.recur-exc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px 10px 14px;
+  border-radius: var(--evr-radius-3xs);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-primary-default);
+}
+.recur-exc-item-ic {
+  width: 28px; height: 28px;
+  border-radius: var(--evr-radius-3xs);
+  display: inline-grid; place-items: center;
+  flex-shrink: 0;
+}
+.recur-exc-item-ic--skip   { background: var(--evr-surface-status-error-lowemp);     color: var(--evr-content-status-error-default); }
+.recur-exc-item-ic--modify { background: var(--evr-surface-status-informative-lowemp); color: var(--evr-content-status-informative-default); }
+.recur-exc-item-ic--variant{ background: var(--evr-surface-decorative-low-purple);   color: var(--evr-content-decorative-purple); }
+
+.recur-exc-item-text {
+  flex: 1;
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 0;
+}
+.recur-exc-item-pri {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.recur-exc-item-sec {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+.recur-exc-item-actions { display: inline-flex; gap: 4px; }
+.recur-exc-empty {
+  padding: 14px;
+  border: 1px dashed var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-3xs);
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  text-align: center;
+}
+
+.recur-link {
+  font: var(--evr-body2);
+  color: var(--evr-interactive-primary-default);
+  background: transparent; border: 0;
+  padding: 8px 0 0;
+  cursor: pointer;
+  text-align: left;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.recur-link:hover { color: var(--evr-interactive-primary-hover); text-decoration: underline; }
+
+/* --------- Calendar preview ----------------------------------------- */
+.recur-preview {
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  padding: 14px 16px 16px;
+  background: var(--evr-surface-secondary-default);
+}
+.recur-preview-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.recur-preview-title { display: flex; flex-direction: column; gap: 2px; }
+.recur-preview-title-pri {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.recur-preview-title-sec {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+.recur-preview-legend {
+  display: flex; gap: 12px;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+.recur-preview-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.recur-pl-dot--shift { background: var(--evr-blue-400); }
+.recur-pl-dot--mod   { background: var(--evr-yellow-400); }
+.recur-pl-dot--skip  { background: var(--evr-red-400); }
+
+.recur-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.recur-mini-month {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-3xs);
+  padding: 8px 10px 10px;
+}
+.recur-mini-month-h {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.recur-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.recur-mini-dow {
+  font: var(--evr-caption);
+  font-size: 9px;
+  color: var(--evr-content-primary-lowemp);
+  text-align: center;
+  padding: 2px 0;
+  text-transform: uppercase;
+}
+.recur-mini-cell {
+  aspect-ratio: 1;
+  display: grid; place-items: center;
+  border-radius: 3px;
+  font: var(--evr-caption);
+  font-size: 9px;
+  color: var(--evr-content-primary-lowemp);
+}
+.recur-mini-cell--out { color: transparent; }
+.recur-mini-cell--shift {
+  background: var(--evr-blue-400);
+  color: white !important;
+  font-weight: 600;
+}
+.recur-mini-cell--mod {
+  background: var(--evr-yellow-400);
+  color: var(--evr-content-primary-highemp) !important;
+  font-weight: 600;
+}
+.recur-mini-cell--skip {
+  background: var(--evr-red-50);
+  color: var(--evr-red-500) !important;
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+/* --------- Inline iconbutton (edit/delete on exceptions) ----------- */
+.recur-iconbtn {
+  width: 28px; height: 28px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--evr-radius-3xs);
+  display: inline-grid; place-items: center;
+  color: var(--evr-content-primary-lowemp);
+  cursor: pointer;
+}
+.recur-iconbtn:hover {
+  background: var(--evr-surface-secondary-hover);
+  color: var(--evr-content-primary-default);
+}
+.recur-iconbtn--danger:hover { color: var(--evr-content-status-error-default); }
+
+/* --------- Exception editor (inline form when adding/editing) -------- */
+.recur-exc-editor {
+  border: 1px solid var(--evr-interactive-primary-default);
+  background: var(--evr-surface-primary-default);
+  border-radius: var(--evr-radius-3xs);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.recur-exc-editor-h {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+  margin: 0 0 4px;
+}
+.recur-exc-editor-foot {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+/* --------- Save-as-preset footer link ------------------------------- */
+.recur-foot-left {
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* --------- Validation pill -------------------------------------------- */
+.recur-validation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-status-warning-lowemp);
+  border: 1px solid var(--evr-border-status-warning);
+  color: var(--evr-content-status-warning-highemp);
+  font: var(--evr-body2);
+}
+.recur-validation strong { color: var(--evr-content-status-warning-highemp); font: var(--evr-body2-bold); }

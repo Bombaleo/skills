@@ -1,0 +1,1613 @@
+423 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 424 of 0
+Dayforce uses the daily efficiency score.
+BothServiceOutsideHOO: Dayforce uses both quarter hour and daily coverage
+scores. The quarter hour method is used for service activities and the daily method for
+non-service activities.
+6. In the Scheduling Method drop-down list, select how the Dayforce autofill feature creates
+schedules for the zone:
+Deployment Template: Dayforce follows a template that breaks up the zone's daily
+labor demand into multiple curves, one for each different activity specified.
+Manual or None: Dayforce doesn't autofill the zone’s schedule. If autofill is run for the
+location, Dayforce leaves the schedules of any zones configured with this option
+blank so that a manager can create the schedule for the zone manually.
+Note: Autofill doesn’t distinguish between selecting Manual or None. In both cases, it
+skips the zone and doesn’t schedule shifts to it.
+Optimization: Dayforce doesn't consider activities when creating a schedule. It
+considers one labor demand curve and attempts to fill the schedule so that the
+demand is met at every point in the curve.
+7. In the Priority Order field, enter the relative order in which the zone is staffed when autofill
+runs.
+8. In the Max Staffing Level field, enter the maximum demand level, in number of employees,
+the zone can reach at any time. When Dayforce distributes labor to the zone, it never
+exceeds this level at any time. For example, if there are five cash registers, set the value for
+the zone to 5, because the demand for cashiers shouldn't exceed the number of available
+registers.
+9. In the Sort Index field, enter a number that represents the sort order of this zone relative to
+other zones. This number is used to sort zones on schedules. For example, to configure a
+zone so that it is always shown first when schedules are sorted in ascending order by zone,
+enter 1. Zones without a Sort Index are shown last when sorted in ascending order, and first
+in descending order.
+10. Note: If none of the zones are assigned a Sort Index, Dayforce doesn’t sort schedules by
+zone. Instead, it either sorts by the next sort option (for example, if zone was the primary
+sort option, it would sort by the secondary one instead), or sorts by employee name in
+cases where zone was the tertiary sort option.
+10. (Optional) Enter a cross-reference code in the Reference Code field. This code must be
+unique and must not contain special characters.
+11. Click Save.
+Repeat these steps to create the different zones in your locations. You assign them to locations
+using zone packages, which are created after you configure all of your zones. See Create Zone
+Packages.
+Create Zone Packages
+
+-- 424 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 425 of 0
+Zone packages are a collection of departments and zones that are used to quickly assign zones
+and departments to new locations that you create in Dayforce.
+A zone package can be company wide, specific to a region, a district, or a single location.
+Dayforce applies default zone packages in such a manner that it takes the “closest” zone
+package on the organizational hierarchy. As Dayforce starts at the location and browses up the
+organizational hierarchy, the first zone package it “finds” is assigned to the location.
+For example, if you assign the “All Zones” package to the top of the hierarchy, but the “Specialty”
+zone package to the “Eastern” district of the organizational hierarchy, all of the locations in the
+“Eastern” district are assigned the “Specialty” zone package by default. The rest of the locations
+receive the “All Zones” package by default.
+Note: You can assign any zone package to any new location when you define locations. Where
+zone packages are assigned in your organizational hierarchy only impacts which package
+Dayforce assigns to a new location by default.
+Zone packages link departments to zones in the locations they are assigned to. For example, in a
+grocery chain, most of the locations have a butcher department, but smaller stores only sell
+prepackaged and sliced meat without a butcher on site, and as a result don’t employ butchers.
+In both cases, stores are configured with a “Deli” zone, but the smaller stores don’t have a
+butcher department linked to their Deli zone.
+You create as many zone packages as needed in Org Setup > Zones Configuration. The more
+locations with different combinations of zones and departments there are in your organization, the
+more zone packages you need to create.
+To create zone packages:
+1. Go to Org Setup > Zones Configuration and click the Zone Packages tab.
+2. Click Add.
+3. In the General section, enter a name and, optionally, a description for the zone package.
+4. In the Organization field, select the areas of your organization that are assigned the zone
+package.
+5. For the first zone package you create, select the Is Master checkbox.
+6. Note: You should configure only one zone package with the Is Master checkbox selected.
+6. (Optional) Enter a cross-reference code in the Reference Code field. This code must be
+unique and must not contain special characters.
+7. In the Zone Department Configuration section, Dayforce shows a list of departments. For
+each department you want to include in the zone package, select which zone it belongs to
+in the Zone drop-down list.
+Note: For the Is Master zone package, you should include every department.
+
+-- 425 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 426 of 0
+8. (Optional) Select the Hide Unassigned Departments checkbox to hide departments that
+aren’t assigned a zone in the Zone column.
+9. Click Save.
+Create Merchandising Departments
+In Dayforce, merchandising departments are used to track sales by assigning products to the
+appropriate department. Products in stores are often organized by departments. For example, an
+electronics store might have a computer department and a home theater department. When
+customer service puts through the sale of a television, the sale is linked in the Point-of-Sales (POS)
+system with the home theater department. Merchandising departments are used in Dayforce to
+link this POS data with the corresponding zone. As Dayforce uses zones for labor planning and
+scheduling, it’s important to link the two so that accurate data can be used for labor planning.
+Note: Although a retail company’s use of merchandising departments is a common example,
+departments can be configured for organizations in other industries to track drivers for the labor
+budget as well. For example, the number of transactions in a bank branch, tied to different areas
+of the branch, can be used to set up merchandising departments which track the transactions
+and link them to appropriate zones in the bank.
+You create as many merchandising departments as you need in Org Setup > Zones Configuration.
+The higher the number of departments locations track their sales against, the more merchandising
+departments you'll need to set up.
+To define a merchandising department:
+1. Go to Org Setup > Zones Configuration and click the MDSE Departments tab.
+2. Click Add.
+3. Enter a name and, optionally, a description of the merchandising department.
+4. Enter a reference code in the Reference Code field. This code must be unique and must not
+contain special characters.
+5. Important: If you are linking the merchandising department in Dayforce with a department
+tracked by your POS system, this needs to be the same code the POS system uses to mark
+sales from the department. That way, sales data is correctly attributed to the merchandising
+department in Dayforce.
+5. Click Save.
+Next, you need to link it to a zone in the Zone MDSE Department tab.
+Link Merchandising Departments to Zones
+After you've created the merchandising departments your organization uses to track its location's
+performance (commonly sales), you need to link the merchandising departments to the
+appropriate zones. Typically, this is the zone that earns the merchandising department's sales. For
+
+-- 426 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 427 of 0
+example, say you've defined several merchandising departments that divide music sales by
+genre:
+Rock - CD
+Rap HipHop - CD
+Country, Blues - CD
+International - CD
+Alternative - CD
+These merchandising departments correspond to codes in the store's POS system.
+Because stores plan their labor and schedule employees based, in part, on their CD sales in
+general and not on the sale of one particular genre, all of these merchandising departments are
+linked to one zone. This way, the sales data from any CD sale drives the labor budget for the
+CD zone, which in turn gives managers more labor hours to spend in the CD zone when creating
+schedules.
+You can create as many merchandising departments to zone links as you need in Org Setup,
+although typically you wouldn’t link one merchandising department to more than one zone. This
+would result in the sales from that department being counted twice by Dayforce. Any number of
+merchandising departments can link to a single zone, though.
+Additionally, the same zone in different zone packages can be linked to different merchandising
+departments. The links are specific to each zone package. Continuing the example above, in the
+East Region zone package, the CD zone contains all of the CD merchandising departments.
+However, in the Central Region zone package, the International - CD merchandising department
+isn’t linked to the CD zone because stores in that region don’t carry any products from the
+International - CD merchandising department.
+To link merchandising departments to zones:
+1. Go to Org Setup > Zones Configuration and click the Zone MDSE Department tab.
+2. In the left side panel, select the zone package and zone you want to link to a merchandising
+department.
+3. The application shows zone packages and zones hierarchically. The top-level items in the
+list are zone packages. Click a zone package to expand the list, and Dayforce shows the
+zones linked to the zone package.
+3. Select the Include checkboxes next to the merchandising departments that you want to link
+to the selected zone.
+4. Click Save.
+Configure Locations
+To create a location:
+
+-- 427 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 428 of 0
+1. Go to Org Setup > Organization and click the Organization tab.
+2. In the Manage Locations drop-down list, click Add Locations to open the wizard.
+3. Enter a name and, optionally, a description for the new location.
+4. Enter the effective from date to specify when the location becomes a part of your
+organization; locations can be added to your organization before they’re open.
+5. Enter the opening date to specify when the location opens.
+6. In the Ledger Code field, enter the code you want to represent the location in payroll
+records. This code is used when Dayforce exports the payroll information; Dayforce tracks
+the hours worked in each location and it represents where the labor cost of your
+organization is being spent by using the ledger codes of each location.
+7. In the Parent Location field, specify the org unit the location belongs to.
+8. Click Next.
+9. Select a zone package from the drop-down list. This creates org units based on selected
+package’s template.
+10. Click Next.
+11. Click Finish.
+12. Dayforce creates the location, adds it to the org unit you selected as the location's parent,
+and then adds all of the departments linked to the zones you assigned to the location.
+Note: While the wizard performs the bulk of the configuration, there is additional information to
+define for new locations, as described below.
+Finalize Location Configurations
+To finalize location configurations:
+1. Select the location in the organization hierarchy.
+2. Click the Opening Date calendar icon and select the date the new location opens. By
+default, Dayforce uses today’s date.
+3. (Optional) Select when the location closes using the Closing Date calendar. By default, this
+field is blank and the location will stay open until you edit the location and specify a closing
+date.
+4. Note: When you add locations to the organizational tree in Dayforce, it’s important to select
+an appropriate opening and closing date, because Dayforce treats open locations
+differently from closed locations.
+4. (Optional) Enter a cross-reference code in the Reference Code field.
+5. Cross-reference codes are used to export data from Dayforce to other applications. See
+Cross-Reference Codes.
+5. Enter the code you want to represent the location on Dayforce clocks in the Clock Code
+field.
+6. Depending on your Dayforce configuration, the hardware clocks upon which employees
+clock in and out for work can be used to record location transfers. Location transfers are
+required when an employee spends time working outside of their primary location. The
+
+-- 428 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 429 of 0
+clock code is the number an employee types on the clock’s number pad when transferring
+to that location.
+6. Select what time zone the location is in from the Time Zone drop-down list. Dayforce might
+use this information in Work > Time Clock (if available) to calculate the time employees are
+clocking in or out, instead of relying on the time and time zone of their local machine.
+7. Select which weekday is considered the start of the week, if it’s different for this location
+than your organization’s default, in the Start Day of Week drop-down list.
+If a value is specified, when users view information for the location, such as its timesheet or
+schedule, Dayforce shows the week starting on the selected day. If blank, Dayforce uses
+the default week start day for the location.
+Note: When the Start Day of Week setting hasn't been specified in the org setup for a user’s
+primary location, Dayforce uses the configuration specified in the First Day of Week setting
+in Site Setup > Client.
+8. Click Save.
+Dayforce can track additional information as you add locations to your organizational tree in Org
+Setup. With a location selected, you can:
+Enter the location’s address: Click the Address tab and specify the location’s address in the
+provided fields.
+Note: These fields should be set for organizational units at the On-Site Department level if
+minimum wage rates have been defined for the organization. See Minimum Wage
+Configuration.
+Enter the location’s contact information: Click the Contact tab and specify the location’s
+contact information in the provided fields.
+Dayforce also provides a history of changes made to the location (click the History tab to
+view) and a chart of where the org unit sits in your organizational hierarchy (click the Chart tab to
+view).
+It also shows a summary of the employees assigned to work in and manage the location. Click the
+Authority tab to review a list of employees assigned to manage the location. A location’s manager
+is responsible for approving or denying any requests, such as time away from work requests,
+made by employees working at that location. The list of employees assigned to work at a location
+is shown when you click the Employee tab.
+Edit the Organization
+After your organizational hierarchy is configured in Dayforce, and the relevant jobs, zones, and
+locations are added, you might need to edit the organization setup when changes occur to the
+organization.
+
+-- 429 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 430 of 0
+This section describes how to edit the organization configuration to keep it current and ensure it
+matches your organization's actual hierarchy. From Org Setup, you can:
+Add Departments to a Location
+Remove Departments from a Location
+Edit Locations and Org Units
+Add Departments to a Location
+To add departments to a location:
+1. Go to Org Setup > Organization and select the relevant location in the organizational
+hierarchy.
+2. Click Add.
+3. In the General tab of the slide-out panel, enter a name and description for the new
+department. By default, the department's parent org unit is set to your selected location.
+4. Click the Effective From calendar icon and select when the department becomes a part of
+the location.
+5. If the department is only open in the store for a limited time, select when it is no longer a
+part of the location from the Effective To calendar. By default, this field is blank and the new
+department won’t be removed from your organizational chart in Dayforce unless you delete
+it.
+6. In the Level drop-down list, click Department.
+7. In the Department drop-down list, select which department you want to add.
+8. Dayforce shows the departments already configured in the Department drop-down list. See
+Configure Departments.
+8. In the Zone drop-down list, select which zone the department belongs to.
+9. It’s important to select a zone that matches how zones are configured in Dayforce. See
+Create Zones.
+9. (Optional) In the Reference Code field, enter a cross-reference code. Cross-reference
+codes are used to export data from Dayforce to other applications and must be unique
+across all org units.
+10. Important: Don’t use special characters such as hyphens in cross-reference codes. This
+can cause in issue where employees are unable to record time in Work > Timesheet.
+Dayforce validates the location reference code value against existing values and won’t let
+you save duplicate values when you edit an existing location or create a location.
+10. In the Ledger Code field, enter the code that you want to represent the location in payroll
+records.
+11. This code is used when Dayforce exports the payroll information; Dayforce tracks the hours
+worked in each location and it represents where the labor cost of your organization is being
+spent by using the ledger codes of each location.
+11. In the Clock Code field, enter the code that you want to represent the location on clocks.
+
+-- 430 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 431 of 0
+16. Depending on your Dayforce configuration, the hardware clocks upon which employees
+clock in and out for work on can be used to record location transfers. Location transfers are
+required when an employee spends time working outside of their primary location. The
+clock code is the number an employee types on the clock’s number pad when transferring
+to that location.
+12. Click Save.
+Remove Departments from a Location
+To remove departments from a location:
+1. Go to Org Setup > Organization and select the relevant department from a location in the
+organizational hierarchy.
+2. Click Delete.
+3. Click Save.
+Edit Locations and Org Units
+This section describes how to move or close locations or org units, such as regions or districts, in
+your organizational hierarchy. You can move and close locations and org units that were
+previously configured, as outlined below:
+Move Locations and Org Units
+Close Locations and Org Units
+Close Location Validation
+When you enter a date in the Effective To field in the Open and Close Location dialog box,
+Dayforce uses validation which prevents you from end dating the organization when any of the
+following situations apply:
+The organization has open employee work assignments where the effective to date occurs
+after the organization's effective to date.
+The child organizations have open employee work assignments where the effective to date
+occurs after the organization's effective to date.
+Some organizations are scheduled to become children of the selected organization at a
+future date (effective from is in the future). These organizations have open employee work
+assignments with an effective to date that occurs after the selected organization's effective
+to date.
+In the validation error message, Dayforce shows the name of the org and its navigational path in
+the org tree so that you can identify the org unit that’s causing the validation error. In addition to
+the validation message, Dayforce shows an export button so that you can export the list of
+validation messages.
+
+-- 431 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 432 of 0
+Move Locations and Org Units
+To move locations or org units:
+1. Go to Org Setup > Organization and select the relevant location in the organizational
+hierarchy.
+2. In the Manage Locations drop-down list, click Move Location.
+3. Dayforce opens the Move Location dialog box.
+3. Click the org icon to select a parent location.
+4. Dayforce opens the dialog box for you to search for and select an organization.
+4. Specify the effective from date.
+5. Click Save.
+Close Locations and Org Units
+To close locations or org units:
+1. Go to Org Setup > Organization and select the relevant location in the organizational
+hierarchy.
+2. In the Manage Locations drop-down list, click Open and Close Location.
+3. Dayforce opens the Open and Close Location dialog box.
+3. Specify the following dates, as necessary:
+Opening Date
+Closing Date
+Effective To
+4. Locations that are closed aren’t open for business, but Dayforce stores active records for
+them. You can assign employees to closed locations in People, but they aren’t included in
+the Dayforce planning and forecasting features.
+5. Locations that have been end dated aren’t open for business, and Dayforce doesn’t store
+active records for them. Employees can’t be assigned to them, and they aren’t shown in the
+organizational hierarchy.
+6. Both closed and end-dated org units (where these dates are in the past) aren’t shown in the
+hierarchy when the Active/All switch is set to Active. They are both shown when the switch is
+set to All.
+4. Click Save.
+Create Dockets
+Dayforce uses dockets to track logged time against a quantity of produced work. Typically, this
+quantity represents a number of “pieces” made in the docket, like the number of windshields
+installed in a car assembly line. This information is helpful for paying employees bonuses or
+premiums for their production. Dayforce can be configured to pay employees extra based on their
+output. It multiplies the docket’s piece rate by the number of pieces an employee produced
+
+-- 432 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 433 of 0
+during their shift. Before employees can enter their time against a particular docket or work order,
+you need to create the docket in Org Setup > Docket.
+You can also configure and import dockets in Org Setup using CSV (comma-separated
+values) files. The information can be quickly created or updated, using the Import and Export
+functions. See Org Setup Import and Export Configuration.
+Important:
+The Ledger Code field in this task (see step 6) can be used only if Dayforce is configured to
+use the Payroll features. When running as a standalone Workforce Management application,
+Dayforce doesn’t use this field.
+Dayforce supports only whole numbers in fields where employees specify their quantity of
+completed docket pieces.
+To create a docket:
+1. Go to Org Setup > Docket and click Add.
+2. Enter the name and, optionally, a description of the new docket.
+3. In the Organization field, select which levels or locations the docket applies to.
+4. In the Piece Rate field, enter the amount (in dollars) that employees are paid, over and
+above their hourly rate, for completing each piece of work in the docket. You can specify a
+decimal amount in this field to represent cents.
+5. In the Clock Code field, enter a code to represent the docket on Dayforce clocks.
+6. The hardware clocks which employees clock in and out on can be used to enter docket
+transfers, which occur when an employee spends time working outside of their primary or
+normal docket. The clock code is the number that an employee enters on the clock's
+number pad when transferring to that docket.
+6. In the Ledger Code field, enter the ledger account associated with this job so that Dayforce
+associates the pay amounts for each job with the appropriate general ledger account. This
+information can be exported with the Payroll GL Export background job.
+7. (Optional) Enter a cross-reference code in the Reference Code field. This code must be
+unique and must not contain special characters.
+8. Click Save.
+Define Comparable Locations
+This section describes how to define comparable locations for some locations, typically newly
+opened ones, to be used with forecasting; when configured, Dayforce uses actual historical data
+from a location’s comparable location for a specified period of time when forecasting. Comparable
+locations are configured in Org Setup > Organization.
+Typically, comparable locations are used in forecasting for the times when locations don’t have
+enough historical data to generate a forecast. A common example occurs when an organization
+
+-- 433 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 434 of 0
+opens a new location; this new location wouldn’t have enough historical data to base a forecast off
+of, often for longer than the location’s first year.
+The amount of historical data Dayforce needs at a location to generate a forecast depends on
+how Dayforce forecasting is configured. For example, a forecast that uses a trend of historical
+average where the past 8 weeks are compared to the same 8 weeks from last year needs 14
+months' worth of historical data to properly generate a forecast.
+In this example, the location needs to use historical data from its comparable location for the first
+14 months it’s open; after that, Dayforce can examine the location’s own historical data to generate
+the forecast.
+Comparable locations can be specified for the overall location and for each zone within a location;
+Dayforce can be configured so that different comparable location can be specified for each.
+To configure comparable locations:
+1. Go to Org Setup > Organization and select a location.
+2. Click the Comparable Site tab.
+3. Click Add.
+4. Select the comparable location in the Location drop-down list.
+5. Select options in the Source Zone and Target Zone drop-down lists.
+6. Typically, each zone from one location is compared to the same zone in the comparable
+location, but this isn’t required.
+6. Enter a number that represents the expected deviation, in percentage, from the comparable
+location's historical data in the Deviation (%) field.
+7. With a value specified, Dayforce adjusts the comparable location's data values up or down
+by the specified percentage; specify a positive or negative percentage value in the
+Deviation (%) field and Dayforce adjusts the values accordingly.
+8. For example, when configuring a comparable location that performed an estimated 15%
+better than the new location, specify -15 in the Deviation (%) field and Dayforce reduces
+the historical data from the comparable location by 15% before generating a forecast from
+it.
+7. Enter the effective date range of historical data that Dayforce uses in place of any historical
+data that Dayforce has for the location, when generating forecasts. This date range doesn’t
+define the forecasted dates during which Dayforce uses the comparable location’s historical
+data; it defines the dates of the historical data that Dayforce uses.
+8. For example, a new location opens June 1, 2011. When Dayforce generates a forecast for
+this location in Plan, it examines the last eight weeks and compares it to the same eight
+weeks from the previous year. Because the new location doesn’t have any actual results to
+make this comparison, it uses a comparable location’s historical data. The time period of the
+historical data it uses from the comparable location runs from April 6, 2010 to June 1, 2011.
+9. On June 1, 2011, to generate a forecast, Dayforce needs historical data from the previous
+eight weeks of last year; this dictates the April 6, 2010 start date. Because the location
+
+-- 434 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 435 of 0
+starts recording results starting June 1, 2011, any forecast that requires historical data from
+June 1, 2011 or later can use the location’s actual historical data. As a result, the end date is
+set to June 1, 2011.
+8. Click Save.
+Configure Temporary Site Closures
+You can define periods where a site in your organization is temporarily closed in the Closures
+subtab of the Organization tab in Org Setup > Organization. For example, if your organization is
+temporarily closing a site to renovate, you can define the duration of the closure and Dayforce
+marks the site as closed during those dates in some features.
+Before You Begin: This functionality is available only for site-level org units. Further, the Closures
+subtab is available only for users assigned access to the Location Property Values or Location
+Type Values role features under Org Setup > Org Setup > Organization > Organization in the
+Features tab of System Admin > Roles.
+To configure a temporary site closure:
+1. Go to Org Setup > Organization.
+2. Click the Organization tab. Dayforce shows your organizational hierarchy.
+3. Expand the hierarchy and click a site name. Dayforce shows the site details in a slide-out
+panel.
+4. Click the Closures subtab.
+5. Click Add.
+6. Enter a name and description for the temporary closure.
+7. Enter the effective date range for the closure.
+8. If you’re configuring an open-ended closure, you don’t need to enter an end date.
+8. Enter a reference code. This code must be unique and must not contain special characters.
+9. (Optional) Repeat steps through 8 to add another temporary closure for the site.
+10. Click Save.
+Configure Compliance Properties for Sites
+Before You Begin: The Compliance Properties tab is shown only for sites and is applicable only for
+the United States.
+You can provide or override some values for compliance properties that are used for reporting in
+the Compliance Properties tab in Org Setup > Organization. For more information, see the
+following topics in the HR Administration Guide:
+For EEO-1, see Configure Establishment Details.
+For VETS-4212, see Configure Hiring Locations.
+
+-- 435 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 436 of 0
+Configure Location Properties
+Dayforce retains information or attributes about your organization’s locations for use in task
+management and labor deployment. This information can be used by management to compare
+locations. For example, in the Task Management and Task Setup > Task Templates features, you
+can cater the budget of ad hoc tasks and task templates to suit the properties of your locations,
+such as square footage. To do this, you’d create a “Size in Square Feet” location property.
+After you configure the different attributes you want to track in Dayforce, you need to provide
+values for each location, the process for which is also described below.
+You can add as many location properties in Org Setup as your organization tracks.
+To configure a location property:
+1. Go to Org Setup > Locations and click the Location Properties tab.
+2. Click Add.
+3. Enter a name and description for the location property.
+4. In the Default Value field, enter the value Dayforce uses for the property, by default.
+5. (Optional) Enter a reference code for the location property in the Reference Code field. This
+code must be unique and must not contain special characters.
+6. Click Save.
+Configure Location Daily Properties
+Location daily properties are similar to location properties in that they are measurable properties
+of locations within an organization that can be created for specific locations and used with task
+management and labor planning. They are helpful in situations where activity demand times vary
+from location to location.
+For example, location managers can use location daily properties in certain labor deployment
+rules to allow the rule's start and end times to reference the location daily property. Managers
+have access to all of the location daily properties for their locations and have the ability to change
+the default values or create exceptions.
+You can configure as many location daily properties in Org Setup as your organization tracks.
+To configure a location daily property:
+1. Go to Org Setup > Locations and click the Location Daily Properties tab.
+2. Click Add.
+3. Enter a name and, optionally, a description for the location daily property.
+4. In the Data Type drop-down list, select a data type for the property:
+
+-- 436 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 437 of 0
+Time Range: Select this option to configure the property with a time range value. This
+allows you to use the location daily property when configuring several labor
+deployment rules in Plan Setup > Labor Deployment. See Labor Deployment
+Rules.This also allows you to specify fixed or offset times when you add values to the
+location daily property.
+Numeric: Select this option to configure the property with a numerical value. If you are
+tracking a productivity value for use with performance-based scheduling, you must
+select a numeric value.
+5. Select the Secured checkbox to restrict editing and access of this location daily property to
+one store in the Location Daily Properties tab of Schedules.
+6. Click Save.
+Configure Location Daily Property Values
+After you've defined the different location daily properties you want to track in Dayforce, you'll
+need to provide values for each location daily property in the Location Daily Property Values tab.
+Depending on the data type of the location daily property you configured, Dayforce shows a
+different set of parameters. Consult the following procedures for defining numeric or time range
+location daily properties based on your organization’s needs, as well as an example configuration:
+Configure Numeric Location Daily Property Values
+Configure Time Range Location Daily Property Values
+Location Daily Property Value Example
+Note: You can also import and export location daily property values in CSV format using the
+Export and Import buttons.
+Configure Numeric Location Daily Property Values
+To configure a numeric location daily property value:
+1. Go to the Location Daily Property Values tab in Org Setup > Locations:
+2. Click Add.
+3. In the Organization drop-down list, select the organization you want to add location daily
+property values for.
+4. In the Location Daily Property drop-down list, select the location daily property you want to
+associate with the organization.
+5. (Optional) Use the Effective Start and Effective End fields to specify when the location daily
+property value is available.
+6. Select the Default checkbox to configure the location daily property value as your default
+value for the location daily property you specified earlier.
+7. Click the arrow to expand the record. The application shows additional parameters:
+
+-- 437 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 438 of 0
+8.
+9. Note: You cannot edit the values in the Day of the Week column.
+8. In the Numeric Value field, enter how many of the selected properties are needed on the
+selected day. For example, in the screenshot above, 3 tills are needed for Fridays and
+Saturdays.
+9. Select the Active checkbox to activate the property. To disable the property, clear the
+checkbox.
+10. Click Save.
+Configure Time Range Location Daily Property Values
+To configure a time range location daily property value:
+1. Go to Org Setup > Locations.
+2. Click the Location Daily Property Values tab and then click Add.
+3. In the Organization drop-down list, select the organization you want to add location daily
+property values for.
+4. In the Location Daily Property drop-down list, select the location daily property you want to
+associate with the organization.
+5. Use the Effective Start field and, optionally, the Effective End field to specify when the
+location daily property value is available.
+6. Select the Default checkbox to configure the location daily property value as your default
+value for the location daily property you specified earlier.
+7. Click the arrow to expand the record and then complete the additional settings. The
+following parameters are available in both the Start Time and End Time sections:
+Fixed Time/Offset: Specify whether this property will use fixed times, offset times, or
+whether to disable it by choosing one of the following options from this drop-down list:
+Fixed: Select this option to use a fixed start or end time for this property.
+
+-- 438 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 439 of 0
+Offset: Select this option to use an offset start or end time for this property.
+Offset times allow you to start an activity relative to a store's opening hours. For
+example, in a large store, the baking activity might start three hours before the
+store opens to customers. In a small store, the baking activity might start two
+hours before the store opens to customers. Offsets allow you to configure your
+location daily properties to meet these demands.
+Disabled: Select this option to disable the start or end time of the property for
+this day.
+Start Time/End Time: If you selected Fixed in the Fixed Time/Offset drop-down list,
+enter the time the property starts in the Start Time field and, optionally, enter the time
+the property ends in the End Time field.
+Offset (minutes): If you selected Offset in the Fixed Time/Offset drop-down list, enter
+the number of minutes to offset the property here. For example, enter 30 to have the
+property start or end 30 minutes before or after opening or closing.
+Before/After: If you selected Offset in the Fixed Time/Offset drop-down list, select
+Before or After depending on whether the offset will be before or after the value in the
+Start Basis column.
+Start Basis: If you selected Offset in the Fixed Time/Offset drop-down list, select Close
+or Open.
+8. Click Save.
+Location Daily Property Value Example
+On Wednesdays, you want the baking activity to begin an hour and a half before the store opens,
+and end an hour and a half before it closes. As such, you update the Bakeoff 2 property for
+Wednesday as follows:
+1. In Org Setup > Locations, in the Location Daily Property Values tab, select the location daily
+property whose value you want to modify. Dayforce expands the record and shows
+additional configuration settings:
+2.
+2. In the Day of the Week column, click Wed.
+3. In the Start Time section, do the following:
+In the Fixed Time/Offset drop-down list, select Offset.
+
+-- 439 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 440 of 0
+In the Offset (minutes) field, enter 90.
+In the Before/After drop-down list, select Before.
+In the Start Basis drop-down list, select Open.
+4. In the End Time section, do the following:
+In the Fixed Time/Offset drop-down list, select Offset.
+In the Offset (minutes) field, enter 90.
+In the Before/After drop-down list, select Before.
+In the Start Basis drop-down list, select Close.
+5. Click Save.
+The Wednesday configuration of the Bakeoff 2 location daily property should appear as follows:
+Record Location Property Values
+For each location in your organization, you need to specify its values for the various location
+properties and attributes being tracked in Dayforce.
+To record location property values:
+1. Go to Org Setup > Organization and, in the Organization tab, select the relevant location.
+2. Click the Location subtab.
+3. The application shows any location property values already recorded for the selected
+location in the Property Values section.
+3. Click Add.
+4. Select the relevant property in the Property drop-down list.
+5. The application shows the property's description and default value (if any).
+5. If the location property has an effective date range, meaning the value is only valid during a
+specified time period, define that date range using the Effective From and Effective To
+fields.
+6. Enter values in the Value field.
+7. Select the Is Filter checkbox next to the location properties you want configured as filter
+options. Managers can only filter information in Dayforce based on the location properties
+
+-- 440 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 441 of 0
+configured if the Is Filter checkbox is selected.
+8. Click Save.
+Configure Location Types
+This topic describes the optional configuration of location types for sites in the organizational
+hierarchy. A location type can represent any physical area in a location, such as different stations
+in an assembly line, desks, booths, or ticket windows. After configuration, managers can schedule
+employees to work in physical locations in their location by assigning a location type to their shifts.
+For example, employees working on assembly lines need to be scheduled to specific stations on
+their line. Although Dayforce tracks the different lines with existing functionality, each assembly
+line is configured as a zone, each with its own labor demand. This functionality allows
+organizations to specify more granular information, such that the body assembly line has eight
+different stations.
+To configure location types:
+1. Go to Org Setup > Locations and click the Location Types tab.
+2. Click Add.
+3. Enter a name and description of the location type.
+4. The location type’s name is shown in Schedules when users schedule employees to that
+location.
+4. (Optional) In the Reference Code field, enter a cross-reference code. This code must be
+unique and must not contain special characters.
+5. Click Save.
+After you configure location types, you must assign them to locations in Org Setup > Organization,
+in the Location subtab.
+To assign location types:
+1. Go to Org Setup > Organization and click the Organization tab.
+2. Select the relevant location. A slide-out panel opens.
+3. Note: You can assign location types only to locations with Site selected in the Level drop-
+down list in the General subtab of the Organization tab in Org Setup > Organization.
+3. Click the Location subtab.
+4. In the Location Type drop-down list, select the location types you want to assign to the
+location.
+5. Click Save.
+When assigned, the location type drop-down list appears in Schedules when you add or edit
+shifts. The location of this drop-down list varies, depending on which view you use in Schedules:
+Bar View: Shift details slide-out panel.
+
+-- 441 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 442 of 0
+Grid View: Add Schedule or Edit Schedule dialog boxes:
+If employees are scheduled to a location type, it’s shown in Schedules and in schedule reports:
+The location type is also shown during the shift trading process. This allows you to see where in
+the site a shift is located before you accept it. The Location Type column appears in the following
+panels in Work > Calendar:
+Offer shift to everyone
+Offer shift to a coworker
+Revoke shift trade
+Shift Trades
+Swap shifts with a coworker
+View shift details
+View shift trade history
+Configure User-Defined Labor Metrics
+User-defined labor metric fields appear throughout Dayforce and can be used to add specific
+work details on timesheets and schedules for the purpose of labor tracking in your organization.
+Role feature access:
+Org Setup > Labor Metrics > Labor Metric Codes
+Org Setup > Labor Metrics > Labor Metric Types
+For example, you can create a set of labor metric codes to track information such as PO#, Client
+ID, or Job Title. You can configure a number of different labor metric types and codes to meet
+
+-- 442 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 443 of 0
+your organization’s needs.
+Configuring user-defined labor metrics involves the following tasks:
+1. Configure Labor Metric Types
+2. Configure Labor Metric Codes
+After you configure labor metric types and codes, you can do the following:
+Labor Metrics
+Configure Default Labor Metrics in the HR Administration Guide
+Configure Labor Metrics for Shift Rotations
+Configure Labor Metric Types
+Labor metric types are groups of similar labor metric codes in Dayforce. These labor metric types
+are available throughout Dayforce in drop-down lists from which you can select specific labor
+metric codes. The following screenshot of the Labor Metric Types tab in Org Setup > Labor
+Metrics shows three labor metric types set up:
+When you configure user-defined labor metric types in Org Setup > Labor Metrics, you have to
+include a reference code in the Reference Code field in the Labor Metric Types tab for the labor
+metrics info to appear in the Employee Preview slide-out panel in the GL Preview tab and on
+earning statements.
+To configure a labor metric type:
+1. Go to Org Setup > Labor Metrics and click the Labor Metrics Types tab.
+2. Click Add.
+3. In the Name field, enter a descriptive name.
+4. In the Reference Code field, enter a reference code. This code must be unique and must
+not contain special characters.
+5. (Optional) Enter a description and clock code in the corresponding fields.
+6. In the Icon field, select an icon in the drop-down list (if you don’t select an icon, Dayforce
+shows a blue book icon on the timesheet):
+
+-- 443 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 444 of 0
+7. Click Save.
+To remove a labor metric type from the list, select it and then click Delete. If a labor metric type
+has multiple labor metric codes associated with it, you must delete them first. Also, if the labor
+metric type is included in a time entry policy or default labor, you must remove the reference prior
+to deletion.
+To create a copy of an existing labor metric type, select the type in the list and then click Copy.
+Configure Labor Metric Codes
+After you configure a labor metric type, you can configure associated codes that can be selected
+to track work details for a particular shift.
+Any labor metric types configured in the Labor Metrics Types tab of Org Setup > Labor Metrics
+appear as subtabs in the Labor Metric Codes tab. For example, in the following screenshot, you
+can see the labor metric types Department, PO #, and Training as subtabs in the Labor Metrics
+Codes tab:
+
+-- 444 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 445 of 0
+Important: When creating user-defined labor metric codes, you must include the reference code
+and ledger code in the Reference Code and Ledger Code fields so that the labor metrics
+information appears in the Employee Preview slide-out panel in the GL Preview tab and on
+employee earning statements.
+To configure a user-defined labor metric code:
+1. Go to Org Setup > Labor Metrics and click the Labor Metrics Codes tab.
+2. Select an org level in the left-side panel.
+3. Select one of the labor metric type tabs shown at the top of the screen.
+4. Click Add.
+5. Enter a name, a cross-reference code, and a ledger code. Cross-reference codes must be
+unique and must not contain special characters.
+6. (Optional) Enter a description and a clock code.
+7. Enter an effective from date and, optionally, an effective end date.
+8. Click Save.
+You can select a code and click Delete to remove it from the labor metric type. However, if the
+code has already been applied to shifts in Dayforce, these references must be removed before
+you can delete the code.
+To create a copy of an existing labor metric code, select the code and then click Copy.
+Job Assignment Qualifications
+Job assignment qualifications are the links that you can create between a job assignment and its
+required skills and certifications. This allows you to ensure that certain job assignments are
+performed by employees with specific skills or qualifications. You can also assign locations as a
+qualifier for assigning skills or certifications.
+You create job assignment qualifications in Org Setup > Job Assignment Qualifications:
+Add Skill Requirements for Job Assignments
+Add Certification Requirements for Job Assignment
+Dayforce uses associations between job assignments and skills or certifications when determining
+qualification for some schedule rules that run in Schedule Setup > Schedule Rule Policy. See
+Position Certification Rule and Position Skill Rule.
+Add Skill Requirements for Job Assignments
+To create a skill requirement for a job assignment:
+1. Go to Org Setup > Job Assignment Qualifications and open the Skills tab.
+2. Click Add.
+
+-- 445 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 446 of 0
+3. In the Job Assignment drop-down list, select the job assignment that you want to add a skill
+requirement to.
+4. In the Locations drop-down list, specify the locations where the job assignment and skill
+association is required.
+5. In the Skills drop-down list, select the skills that you want to link to the selected job
+assignment.
+6. (Optional) In the Skill Level drop-down list, select the skill’s level that you want to link to the
+selected job assignment.
+7. Click Save.
+Add Certification Requirements for Job Assignment
+To create a certification requirement for a job assignment:
+1. Go to Org Setup > Job Assignment Qualifications and open the Certifications tab.
+2. Click Add.
+3. In the Job Assignment drop-down list, select the job assignment that you want to add a
+certification requirement to.
+4. In the Locations drop-down list, specify the locations where the job assignment and
+certification association is required.
+5. In the Certifications drop-down list, select the certifications that you want to link to the
+selected job assignment.
+6. Click Save.
+Add Authority Types
+Authority types are used with roles to further define authority levels in an organization. You can
+review and add authority types in Org Setup > Authority Type. Dayforce shows the following
+system authority types: Approve Pay Rate Change, Manager, Performance Admin, and
+Succession Admin.
+To add an authority type:
+1. Go to Org Setup > Authority Type and click Add.
+2. Enter a name, description, and cross-reference code.
+3. Click Save.
+Configure Pay Approval Structure
+The way in which managers select pay details to review, lock, and approve in Pay Approve
+Checklist and Pay Admin Checklist can be based on organizational units, managers, or a mix of
+both (where some employees are grouped and approved by the location where they work and
+others are grouped based on their manager). Dayforce can be configured so that approvals are
+performed per organizational unit, such as a location manager approving pay for all of the
+
+-- 446 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 447 of 0
+employees in the location they manage, but also per manager for some locations, such as head
+office, where the pay in head office isn’t approved at once, by one user. Rather, the employees
+are split between their different managers so that, for example, the VP of marketing approves pay
+for all of their employees and the VP of accounting approves pay for theirs.
+This section describes how to complete this configuration.
+Configuring how employees are grouped (by their location or their manager) for pay approval
+involves selecting or clearing the Approve By Manager checkbox in the General tab for a selected
+site in the Organization tab in Org Setup > Organization.
+When the Approve By Manager checkbox is selected for a site, Dayforce groups employees in the
+same pay group working for the same manager, and pay for each manager’s employees is
+approved at once.
+When the checkbox is cleared, Dayforce groups employees in the same pay group working at
+that location, and pay for the entire location is approved at once.
+Dayforce distinguishes how the pay approval is structured in both checklists:
+In the preceding screenshot, two approvals are shown in Pay Approve Checklist: one, for the
+Cloverleaf location, is grouped by location, and the other, for Ted, is grouped by manager.
+Approving pay for Cloverleaf approves all of the employees working at that location that belong to
+the Default Pay Group. Approving pay for Ted approves all of the employees working at the
+Cranberry location who have Ted as their manager.
+Similarly, for Pay Admin Checklist, Dayforce shows one record per pay group for organizational
+units grouped by location. For locations with Approve By Manager selected, Dayforce shows one
+record for each manager with employees in that location, per pay group.
+Dayforce Functionality Matrix
+This topic provides a table containing a breakdown of what functionality is used or available in
+each app mode configured for an instance of Dayforce:
+App Mode 0: WFM
+App Mode 1: Payroll
+App Mode 2: WFM and Payroll
+
+-- 447 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 448 of 0
+Functionality marked No for an app mode is either unavailable, or isn’t used in Dayforce. Often,
+the field, tab, button, or feature listed in the Functionality column isn’t visible in Dayforce and
+cannot be made available through the user interface by changing client properties, assigning new
+role features, or access authorizations.
+In other cases, the functionality listed is available, or can be viewed, in all app modes, such as the
+Org Setup > Org Payroll Setup > Legal Entity feature, but only the app modes marked with Yes in
+the table use the functionality. For example, the Legal Entity role feature can be active, so that the
+tab is visible in Dayforce, and users with role access can create new legal entities in the tab.
+However, this information isn’t used by other areas of Dayforce; the corresponding role features, if
+any, shouldn’t be enabled if Dayforce is in an app mode that doesn’t use the functionality.
+Functionality matrix
+Functionality
+Used in App
+Mode 0
+(WFM)
+Used in App
+Mode 1
+(Payroll)
+Used in App
+Mode 2 (Payroll
+and WFM)
+Payroll > Archived Reports tab 	No 	Yes 	Yes
+The Refresh Employee Taxes button
+displayed in the Organization tab in Org
+Setup
+No 	Yes 	Yes
+The Export Legal Entity Taxes button
+displayed in Org Setup > Org Payroll
+Setup > Legal Entity
+No 	Yes 	Yes
+The Payroll Card Account drop-down list
+in the General tab of the org unit details
+slide-out panel for a selected org unit (in
+Org Setup > Organization, in the
+Organization tab)
+No 	Yes 	Yes
+Org Setup > Org Payroll Setup > Legal
+Entity feature No 	Yes 	Yes
+The Payroll > Pay Run Management
+feature No 	Yes 	Yes
+Require WFM approval to lock a payrun
+in Payroll > Pay Run Management? N/A 	No 	Yes
+The Year End feature 	No 	Yes 	Yes
+The Credit Journal Number and Identifier
+fields in the Payroll Properties tab of Pay
+Setup > Pay Group
+No 	Yes 	Yes
+The Pay Transmission section of fields in
+the Pay Group Properties tab of Pay
+
+-- 448 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 449 of 0
+Setup > Pay Group 	Yes No Yes
+The Net Pay Setup section of fields in the Payroll Properties tab of Pay Setup
+> Pay Group No Yes Yes
+The Direct Deposit section of fields in the Pay Group Properties tab of Pay Setup
+> Pay Group No Yes Yes
+The Approve By Date and Transmit By Date columns in the Pay Calendars tab
+of Pay Setup > Pay Group Yes No Yes
+The Transmit Options drop-down list in Pay Admin Checklist 	Yes No Yes
+In the Offcycle Pay Export Wizard (launched in Pay Admin Checklist), the Select
+a pay group drop-down list in the Select Offcycle Type stage, as well as the
+ability to link the off cycle export to a new or existing off cycle pay run
+No Yes Yes
+The Labor % field in the Work > Work Assignments screen of People 	No Yes Yes
+The Ledger Code field in HR Admin > Pay Class 	No Yes Yes
+The Auto Pay Payroll checkbox and Ledger Code field in HR Admin > Pay Type No Yes Yes
+The Ledger Code in any project's details in Projects 	No Yes Yes
+The Ledger Code field in Org Setup > Docket 	No Yes Yes
+The Workers Comp section in any job's details in Org Setup > Jobs and Job
+Assignments No Yes Yes
+The Print Current Accrued on Payroll, Print Current Taken on Payroll, and Print
+Current Balance on Payroll checkboxes and the Print Label field in the Balances
+tab of Pay Setup > Balances
+No Yes Yes
+The Pay Group Admin Access tab of System Admin > User 	No Yes Yes
+The Bank Holiday checkbox in Pay Setup > Pay Holidays 	No Yes Yes
+The Payroll Setup feature 	No Yes Yes
+Payroll Setup > Check Templates 	No Yes Yes
+The Earnings tab of Payroll Setup > Earnings and Deductions. 	No Yes Yes
+The Deductions tab of Payroll Setup > Earnings and Deductions 	No Yes Yes
+Payroll Setup > Groupings 	No Yes Yes
+Payroll Setup > Deferred Comp and Pension Plans 	No Yes Yes
+Payroll Setup > Payroll Taxes 	No Yes Yes
+Payroll Setup > Payroll Policies 	No Yes Yes
+Payroll Setup > Third Party Payees 	No Yes Yes
+Payroll Setup > Bank Accounts 	No Yes Yes
+Payroll Setup > Payroll Tax Form Mapping 	No Yes Yes
+Payroll Setup > Third Party Sick Pay Providers 	No Yes Yes
+Payroll Setup > Report Output 	No Yes Yes
+System Admin > Payroll Void Pay Runs 	No Yes Yes
+
+-- 449 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 450 of 0
+The Payroll section in the Properties tab of System Admin > Client Properties 	No Yes Yes
+The Allow Payroll Card as Pay Method checkbox in the Employee section of the
+Properties tab of System Admin > Client Properties No Yes Yes
+The tax locator functionality initiated after an address change in the Addresses
+section of Personal > Contact Information in People No Yes Yes
+The Payroll Policy (Net Pay) drop-down list in the Employment Status tab of the
+Employment > Employment Settings screen in People No Yes Yes
+The Payroll > Direct Deposit screen of People 	No Yes Yes
+The Payroll > Payroll Elections screen of People 	No Yes Yes
+The Payroll > Tax Definitions screen of People 	No Yes Yes
+The Statements > Earning Statements screen in People 	Yes Yes Yes
+The Payroll > Garnishments screen in People 	No Yes Yes
+The Country drop-down list in the Payroll Properties tab in Pay Setup > Pay
+Group No Yes Yes
+The Payroll Mapping tab of Pay Setup > Pay Group 	No Yes Yes
+The Delivery Packages tab of Pay Setup > Pay Group 	No Yes Yes
+The ESS Earning Statement Canada and ESS Earning Statement US options in
+the Image Type drop-down list in the Images tab of Site Setup > Client No Yes Yes
+
+-- 450 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 451 of 0
+Jobs and Job Assignments Configuration
+In Org Setup > Jobs and Job Assignments, you can add or import the jobs and job assignments
+that can be worked in your organization so that employees can be staffed appropriately.
+This feature contains the Jobs and Job Assignments tab, where most configuration takes place,
+and several other tabs for creating additional values that can be associated with jobs and job
+assignments.
+See also:
+Jobs and Job Assignments Background
+Jobs and Job Assignments Configuration Overview
+Initial Configuration for Jobs and Job Assignments
+Jobs and Job Assignments Tab Overview
+Create Jobs
+Create Job Assignments
+Org Setup Import and Export Configuration
+Pay Grade Configuration
+Workers Comp Setup
+Jobs and Job Assignments Background
+In Dayforce, jobs, job assignments, and departments are key values that are defined as follows:
+Job: A general set of duties that employees are eligible to perform such as Analyst, Director,
+Coordinator, and Manager.
+Job Assignment: A specific instance of a job that is tied to a department.
+Department: A generic area that can exist across your organization, like Finance, Marketing,
+Sales, and HR. See Departments Overview.
+Jobs, job assignments, and departments form a hierarchy where a job is a template for a set of
+job assignments under it that are each tied to a department.
+For example, the Clerk job can contain the Meat Clerk, Produce Clerk, and Seafood Clerk job
+assignments, which are assigned to the Meat, Produce, and Seafood departments. This hierarchy
+is represented in the left sidebar in the Jobs and Job Assignments tab:
+
+-- 451 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 452 of 0
+Departments Overview
+In Dayforce, there is a distinction between departments and the on-site department level org units
+that are part of an organizational hierarchy.
+Department: A department represents the area that needs a job to be done. A department
+can represent a function (Finance, Sales), an area of responsibility (Production Line), or
+even a virtual area (Union Duties).
+On-Site Department: An on-site department is made up of a site and a department that are
+configured in Dayforce. For example, New York (site) + Packaging (department) = New
+York Packaging (on-site department).
+Departments are configured in the Departments tab in Org Setup > Organization, and on-site
+departments are configured in the Organization tab of Org Setup > Organization.
+Job assignments and org units can both be assigned a department. A department creates a link
+between job assignments and the org units where a job assignment can be worked. A job
+assignment can only be worked in org units that have the same department assigned.
+For job assignments, the department is assigned in the Department drop-down list of the
+Assignments section in the Jobs and Job Assignments tab in Org Setup > Jobs and Job
+Assignments. In this example, the Produce Clerk job assignment is assigned to the Produce
+department:
+For org units, the department is assigned in the Department drop-down list of the General tab in
+the Organization tab of Org Setup > Organization. In this example, the Produce department is
+assigned to the Store 320 - Produce org unit:
+
+-- 452 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 453 of 0
+Continuing this example, the Produce Clerk job assignment can be worked at the Store 320 -
+Produce org unit because both the job assignment and the org unit are assigned the Produce
+department. The job assignment can also be worked at other org units that have the Produce
+department selected.
+Job Assignments in Work Assignments Overview
+Work assignments are a combination of the job assignment and the org unit where an employee
+works. They are used in various areas of Dayforce such as scheduling and payroll.
+After you configure jobs and job assignments, you can use work assignments to assign job
+assignments to employees. You can add a work assignment to an employee's profile through the
+following methods:
+A form (such as the New Hire form)
+Directly in the Work > Work Assignments screen of People
+By importing
+In this example, an employee's work assignment has Nursing Lead Nurse selected as the job
+assignment and the Sunny Valley - Nursing department-level org unit as the location:
+
+-- 453 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 454 of 0
+Management by Job Assignment Overview
+As an optional feature, you can configure management by job assignment to define an
+employee's manager based on their primary job assignment, such as an employee working a
+Sales Associate job assignment that is managed by an employee working the Sales Manager job
+assignment.
+Job assignment management is configured in the Headcount Allocations subsection of the
+Assignments section of a job assignment's details in the Jobs and Job Assignments tab of Org
+Setup > Jobs and Job Assignments. When you create a headcount allocation record in this
+section, you need to select a job assignment in the Managing Job Assignments drop-down list.
+Job assignment management needs to be configured for individual locations. To define job
+assignment hierarchy for a job assignment that is associated with multiple locations, you must
+configure a separate headcount allocation record for each location. Also, the work assignment of
+the manager and employee being managed must be at the same org unit.
+Management by job assignment is optional, and the configuration can be used in addition to the
+other management hierarchy configurations. When multiple configurations are used, Dayforce
+sets the following order of precedence to determine employee management:
+1. Direct management
+2. Job assignment management
+3. Derived by org
+Note: You can run the Employee Manager Recalc background job to keep management
+assignments by job assignment up to date. In the Org Units setting of the background job's
+parameters, you must select the specific location of the headcount allocation record.
+Example
+In the Headcount Allocations section of the Sales Associate job assignment, you create a
+headcount allocation for the Toronto site. For this record, you select Sales Manager in the
+
+-- 454 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 455 of 0
+Managing Job Assignments drop-down list.
+Stacey Jacobs works the Sales Manager job assignment at the Toronto - Sales onsite department
+of the Toronto site. Also at the Toronto - Sales department of this site, Michael Collins works the
+Sales Associate job assignment. As such, Stacy is automatically Michael's manager based on her
+job assignment.
+In the Managers section of the Work > Management Assignments screen of Michael's profile in
+People, Stacy is shown as his manager. Also, the Derivation Method column of the record shows
+Job Assignment and is read-only:
+See Work > Management Assignments in the HR Administration Guide.
+Jobs and Job Assignments Configuration Overview
+Before you configure jobs and job assignments, you need to complete the following prerequisites:
+Create the org units in your organizational hierarchy where employees can work. This is
+done in the Organization tab in Org Setup > Organization. See Configure Organizational
+Groups and Subgroups.
+Create the generic departments that can be worked across your organization. See
+Configure Departments.
+In Org Setup > Jobs and Job Assignments, configuration involves the following process:
+Creating values that can be associated with jobs and job assignments, such as job families
+and job functions. Configuring these values is optional but can be useful for reporting and
+tracking. While it is a best practice to create these values before you start creating jobs and
+job assignments, you can still configure them afterward as needed. See Initial Configuration
+for Jobs and Job Assignments.
+Adding or importing jobs and job assignments in the Jobs and Job Assignments tab. For
+more information, see the following:
+Jobs and Job Assignments Tab Overview
+Create Jobs
+Create Job Assignments
+Org Setup Import and Export Configuration
+Configuring pay grades that can be assigned to jobs. See Pay Grade Configuration.
+
+-- 455 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 456 of 0
+Creating workers comp codes and defining which jobs they are associated with. See
+Workers Comp Setup.
+Initial Configuration for Jobs and Job Assignments
+Initial configuration in Org Setup > Jobs and Job Assignments involves creating job families, job
+functions, position terms, and employment indicators.
+Create Job Families
+In the Job Families tab of Org Setup > Jobs and Job Assignments, you can create values that are
+used to group a set of similar jobs in the Jobs and Job Assignments tab and for reporting
+purposes. For example, you can create the Retail job family for the Clerk, Receiving, and Cashier
+jobs. Creating job families is optional but useful for managing a large number of jobs.
+To add a job family:
+1. Go to Org Setup > Jobs and Job Assignments and click the Job Families tab.
+2. Click Add.
+3. Enter a name and, optionally, a description.
+4. Enter a value in the Reference Code field. Reference codes are used to export data to other
+applications. These codes must be unique and must not contain special characters.
+5. Click Save.
+Create Job Functions
+In the Job Functions tab of Org Setup > Jobs and Job Assignments, you can create values that
+are used to broadly describe the purpose of a job, such as Administrative or Customer Service.
+Creating job functions is useful for tracking and reporting on jobs.
+Note: Configuring one or more job functions is required if your organization uses, or plans to use,
+the eQuest external job board integration for Recruiting.
+To create a job function:
+1. Go to Org Setup > Jobs and Job Assignments and click the Job Functions tab.
+2. Click Add.
+3. Enter a name and, optionally, a description in the corresponding fields.
+4. Enter a value in the Reference Code field. Reference codes are used to export data to other
+applications. These codes must be unique and must not contain special characters.
+5. Click Save.
+Create Position Terms
+
+-- 456 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 457 of 0
+In the Position Term tab of Org Setup > Jobs and Job Assignments, you can create values that
+are used to track the intended duration of a position such as Episodic or Fixed. Dayforce comes
+with the system Regular position term and you can create additional ones as needed. Creating
+position terms is optional but useful for tracking and reporting on positions.
+You can also import position terms instead of manually adding them. See Org Setup Import and
+Export Configuration.
+To create a position term:
+1. Go to Org Setup > Jobs and Job Assignments and click the Position Term tab.
+2. Click Add.
+3. Enter a name and, optionally, a description in the corresponding fields.
+4. Enter a value in the Reference Code field. Reference codes are used to export data to other
+applications. These codes must be unique and must not contain special characters.
+5. Click Save.
+Create Employment Indicators
+In the Employment Indicator tab of Org Setup > Jobs and Job Assignments, you can create
+values that are used to categorize employees into different groups that track the type of work
+associated with a job assignment. For example, the job assignment could be an apprenticeship or
+internship depending on how your organization structures it.
+Dayforce comes with the system Seasonal employment indicator and you can create additional
+ones as needed. Creating employment indicators is optional but useful for tracking and reporting
+on job assignments.
+You can also import employment indicators instead of manually adding them. See Org Setup
+Import and Export Configuration.
+To create an employment indicator:
+1. Go to Org Setup > Jobs and Job Assignments and click the Employment Indicator tab.
+2. Click Add.
+3. Enter a name and, optionally, a description.
+4. Enter a value in the Reference Code field. Reference codes are used to export data to other
+applications. These codes must be unique and must not contain special characters.
+5. In the Country drop-down list, select one or more countries that the employment indicator is
+available for. If you leave this drop-down list cleared, the employment indicator is available
+regardless of country. See Configure Countries for Employment Indicators.
+6. Click Save.
+Configure Countries for Employment Indicators
+
+-- 457 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 458 of 0
+You can configure employment indicators to be available based on the country that employees
+operate in. This is configured by selecting one or more countries in the Country column of the
+Employment Indicator tab in Org Setup > Jobs and Job Assignments. This column is cleared by
+default. If you leave this column cleared, the employment indicator is available regardless of
+country.
+This functionality is enforced in the following areas:
+In the job assignment details of the Jobs and Job Assignments tab in Org Setup > Jobs and
+Job Assignments. If an option is selected in the Pay Group drop-down list of the job
+assignment details, the Employment Indicator drop-down list shows employment indicators
+that are assigned the same country as the selected pay group and employment indicators
+that don’t have a country assigned. Employment indicators that are assigned a country that
+doesn’t match the employee’s assigned pay group aren’t shown.
+In the following areas where employee details can be updated:
+The Work > Work Assignments screen in People.
+Self-service forms, including the Job Assignment and Compensation Change and Job
+Assignment Change forms.
+The Edit wizard opened from the People List screen of People.
+In each area, the Employment Indicator drop-down list shows employment indicators that
+are assigned the same country as the employee's assigned pay group and employment
+indicators that don’t have a country assigned. Employment indicators that are assigned a
+country that doesn’t match the employee’s assigned pay group aren’t shown.
+Note: Country assignment for employment indicators isn’t enforced in the HR Import or HR Data
+Config import.
+If a job assignment or employee isn’t assigned a pay group, the Employment Indicator drop-down
+list in each area shows only employment indicators that don’t have countries configured.
+Also, Dayforce shows a validation error message if you change the pay group assigned to the job
+assignment or employee to one where the employment indicator that has already been selected
+isn’t configured.
+Jobs and Job Assignments Tab Overview
+In the Jobs and Job Assignments tab of Org Setup > Jobs and Job Assignments, you can add or
+import jobs and job assignments. The left sidebar shows a tree of job families, jobs, job
+assignments, and departments. When you select a job or job assignment, Dayforce shows its
+details in the remainder of the screen:
+
+-- 458 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 459 of 0
+At the highest level of the tree are job families, which you can create in the Job Families tab of Org
+Setup > Jobs and Job Assignments. Dayforce shows the number of jobs that each job family
+contains next to each job family name. Jobs that don’t have a job family assigned are listed under
+the system No Job Family entry.
+You can click a job family to view its jobs. Each job shows the number of job assignments that it
+contains. When you click a job, each of its job assignments are shown along with their associated
+departments:
+Items in each level of the tree are listed alphabetically.
+In the search field at the top of the sidebar, you can enter all or part of a job or job assignment
+name and press Enter to filter the list. The search returns results for job families, jobs, job
+assignments, and the department assigned to job assignments.
+
+-- 459 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 460 of 0
+If a search result is returned for a job assignment or department, the job and job family above it
+are also shown, even if they don’t match your search results. This is because job assignments are
+never shown without their parent job and job family (or the No Job Family entry if a job isn’t
+assigned to a job family).
+In this example, if you search "deli," the job and job family of the Deli Clerk job assignment are
+also shown, even though they don’t contain the word "deli":
+Conversely, if your search matches a job but not any job assignments under it, only the jobs are
+shown.
+Other notes:
+Only active jobs and job assignments are shown in the sidebar by default, but you can click
+All at the top of the list to include end-dated or future-dated ones as well.
+You can click the collapse icon ( ) at the top-right of the sidebar to hide it from the screen.
+At the top of the details for a selected job or job assignment, Dayforce shows information
+about when the record was created and last modified and by whom.
+Create Jobs
+You can create jobs in the Jobs and Job Assignments tab of Org Setup > Jobs and Job
+Assignments.
+You can also import jobs instead of manually adding them. See Org Setup Import and Export
+Configuration.
+To create a job:
+1. Go to Org Setup > Jobs and Job Assignments and click the Jobs and Job Assignments
+tab.
+2. In the left sidebar, select the job family that you want to add the job to and click Add > Add
+Job. If you don’t have job families configured, the job is added under the No Job Family
+entry.
+
+-- 460 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 461 of 0
+Note: You can assign a job family or change the job family after creating the job. There is a
+Job Family drop-down list in the job's details.
+3. Complete the fields. See Job Settings.
+4. Click Save.
+Job Settings
+Job details in the Jobs and Job Assignments tab of Org Setup > Jobs and Job Assignments are
+divided into the following sections:
+General
+Additional Job Details
+Job Description
+Job Qualifications
+Workers Comp
+Before You Begin: Depending on how Dayforce is configured and the country that Dayforce is
+being used for, some settings might not be shown.
+Job settings
+Setting 	Description
+General
+Name 	The job name.
+Reference Code
+The cross-reference code for the job. Reference codes are used to
+export data to other applications. These codes must be unique and
+must not contain special characters.
+Effective From
+The date that the job is available in Dayforce. This field can’t be edited
+after you save the job. Job assignments added under this job must
+have effective dates on or after this date.
+Effective To
+The date that the job is no longer available in Dayforce. The Effective
+To field of a job is only enabled if there are no job assignments under a
+job or all of the job assignments are already end-dated. In these
+cases, the Effective To field is read-only. You can't add job
+assignments to a job that has an end date.
+Ledger Code
+The ledger code for the job. This functionality is applicable only for
+organizations that use the Payroll module. Dayforce can associate the
+pay amounts for each job with the appropriate general ledger account
+and this information can be exported with the Payroll GL Export
+background job.
+
+-- 461 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 462 of 0
+Additional Job Details
+Pay Grade
+The job’s pay grade. Pay grades describe the ranges of pay employees should
+earn for working job assignments under this job. See Pay Grade Configuration.
+Note: This setting isn’t shown if the Pay Grade - Use Job Factor Point System
+client property is enabled in the General section of the Properties tab in System
+Admin > Client Properties.
+Job Family The job family that this job belongs to. If you don’t select a job family, the job is
+listed under No Job Family in the sidebar. See Create Job Families.
+Job Field 1 Additional information about the job. These fields are supported by the
+HR Import, HR Export, and Reporting. Depending on your organization's
+requirements, these fields might have been given different names than what is
+shown here.
+Job Field 2
+Job Field 3
+Rank
+The job's placement in lists and reports, with the highest-ranking jobs listed first.
+For example, when managers print their location's schedule, they can sort the
+schedule by job rank. Jobs without a rank are placed below jobs with ranks
+when Dayforce sorts jobs by rank.
+Job
+Function
+The job’s function. Functions are used to broadly describe the purpose of a job
+and are used for record-keeping purposes. See Create Job Functions.
+Union Job When selected, indicates that the job is associated with a union.
+Union
+The union that the job is associated with, if applicable. Unions are configured in
+HR Admin > Unions.
+This setting doesn’t control employee union membership in forms or the
+employee record. You can use data mapping rules to enforce which union is
+assigned to employees based on their job. See Employee Data Mapping Rules
+Setup in the HR Administration Guide.
+EEO-1 Job
+Category
+(US only) The job’s EEO-1 job category. The list of options is predefined and is
+used for EEO-1 compliance reporting.
+EEO-4 Job
+Category
+(US only) The job’s EEO-4 job category. The list of options is predefined and is
+used for EEO-4 compliance reporting.
+FLSA
+Status
+(US only) Indicates whether employees who work the job are eligible to receive
+overtime under the US Fair Labor Standards Act (FLSA). The available options
+are Exempt and Non-Exempt.
+Note: Selecting a value doesn’t affect job scheduling. This setting is used to
+track the FLSA status associated with the job so that users can decide whether
+
+-- 462 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 463 of 0
+to pay overtime when employees earn it. It doesn’t determine overtime
+eligibility or payments for employees that work the job.
+WSDRF Job
+Classification
+(Quebec only) The WSDRF job classification. The list of options is predefined
+and is used for ACT-90 WSDRF reporting.
+NOC 	(Canada only) The National Occupation Classification (NOC) code.
+KldB Job
+Classification
+(Germany only) The German KldB job classification code. The list of options
+is predefined and is used for compliance reporting.
+SOC
+Occupational
+Code
+(US only) The job’s Standard Occupational Classification (SOC) code. When
+an SOC code is assigned to a job, Dayforce reports the data using the
+current pay check work assignment of each employee. SOC codes are
+included in quarter end payroll processing to be sent to the US Bureau of
+Labor Statistics. SOC reporting is required for some, but not all, US states
+and territories. For information, see https://www.bls.gov/soc/.
+The SOC code can be overridden at the individual employee level in People,
+in the Payroll > Tax Definitions screen, in the Quarterly/Annual Reporting
+Parameters section. See US Quarterly/Annual Reporting Parameters in the
+Payroll Administrator Guide.
+Job
+Description
+Text editor for defining the job description. You can also add images, media,
+and links here.
+Job
+Qualifications
+Text editor for defining the job qualifications. You can also add images,
+media, and links here.
+Workers Comp
+Read-only section that shows the workers’ compensation codes that are
+configured for the job. The following columns are shown:
+Workers Comp Class Code
+Name
+State/Province
+See Workers Comp Setup.
+Create Job Assignments
+After you create a job, you can create job assignments for the job. Job assignments can’t be
+created without a job existing first. See Create Jobs.
+You can also import job assignments instead of manually adding them. See Org Setup Import and
+Export Configuration.
+
+-- 463 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 464 of 0
+To create a job assignment:
+1. Go to Org Setup > Jobs and Job Assignments and click the Jobs and Job Assignments
+tab.
+2. In the left sidebar, expand the job family that contains the job that you want to add the job
+assignment to. Jobs without a job family are listed below No Job Family.
+3. Select the job that you want to add the job assignment to and, in the toolstrip, click Add >
+Add Job Assignment.
+4. Complete the fields. See Job Assignment Settings.
+5. Click Save.
+Job Assignment Settings
+Job assignment details are divided into the following sections and subsections:
+General
+Skills
+Assignments
+Headcount Allocations (a subsection of the Assignments section)
+Compensation Details
+Additional Details
+Job Assignment Description
+Before You Begin: Depending on configuration and the country that Dayforce is being used for,
+some settings might not be shown.
+Job assignment settings
+Setting 	Description
+General
+Name 	The job assignment name.
+Description A description of the job. For example, additional identifiers like cost center or
+department.
+Effective From
+The date at which the job assignment is available to assign to employees, for
+example, in the Job Assignment field of the New Hire form. The current date
+is selected by default. The date you enter can’t be earlier than the effective
+date of the job that it is under. After you save the job assignment, this field
+can no longer be edited.
+Effective To The date at which the job assignment is no longer available to assign to
+employees.
+
+-- 464 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 465 of 0
+Reference
+Code
+A cross-reference code for the job assignment. Reference codes are used to
+export data to other applications. These codes must be unique and must not
+contain special characters.
+Position
+Term
+One or more position terms to include only employees with those terms.
+Position terms are configured in the Position Term tab of Org Setup > Jobs and
+Job Assignments. This selection is populated when users select this job
+assignment in the Job Requisition form, but users filling out the form can still
+change the selection. See Create Position Terms.
+Ledger
+Code
+The ledger code for the job assignment. This functionality is applicable only for
+organizations that use the Payroll module. Dayforce can associate the pay
+amounts for each job assignment with the appropriate general ledger account
+and this information can be exported with the Payroll GL Export task.
+Clock Code
+The numerical code that represents the job assignment on clocks. Depending
+on configuration, the hardware clocks that employees use to clock in and out
+for work can be used to enter job transfers, which are when an employee
+spends time working outside of their primary job assignment. The clock code is
+the number that an employee enters on the clock's number pad when
+transferring to that job assignment.
+Skills
+Note: This service uses the ESCO classification of the European Commission. Custom skills
+and proficiency levels aren’t supported.
+If your organization uses the Career Explorer feature, a list of skills is automatically populated
+for each job assignment based on the job assignment title, job assignment description (if
+available) or job-level description, and any existing job posting details. For new job
+assignments, these skills are populated automatically after you click Save. However, it might
+take some time for the skills to be shown. You can update, add, or delete the populated
+skills, as needed. You can also refresh the populated skills by clicking Refresh skills in the
+Skills section.
+Skill Name A skill that's required for the job assignment.
+Expected
+proficiency The proficiency level that employees in the role are expected to have.
+Assignments
+
+-- 465 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 466 of 0
+Department
+The generic department value, such as Sales or Produce, where the job
+assignment is worked. See Departments Overview.
+Note: For a job assignment to be worked at an org unit, that org unit must also
+be included in the headcount allocations. This is defined in the Headcount
+Allocations subsection, which is described in the next row.
+Headcount
+Allocations
+Required subsection that includes a list for creating headcount allocations,
+which are used with the Department drop-down list of the job assignment
+settings to define which org units a job assignment can be worked in. You
+must create at least one headcount allocation record. In these records you can
+define the applicable org units, the effective start and end date of the
+allocation, and other details.
+Note: Only active headcount allocations are shown in the list by default, but
+you can click All at the top right of the list to include end-dated or future-dated
+allocations as well.
+Location
+The org unit. When you select an org unit, the job assignment can be worked
+at that location and all locations below it in the organizational hierarchy. For
+example, you can select the location at the top of your organizational hierarchy
+to make the job assignment available at all of your organization's locations.
+Note: For a job assignment to be worked at an org unit, the org unit and job
+assignment must have the same department defined. Job assignments are
+assigned a department in the Department drop-down list.
+Effective
+From
+The date at which the job assignment is available to assign to employees at
+the locations below it.
+Effective To The date at which the job assignment is no longer available to assign to
+employees at the locations below it.
+Budget
+The number of employees that should be assigned to the job assignment. If
+the Limit Work Assignments by Budget client property in the General section of
+the Properties tab in System Admin > Client Properties is enabled, and the limit
+entered in the Budget field is reached for the location, the job assignment isn’t
+available to assign to the employee in the following areas:
+
+-- 466 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 467 of 0
+Custom and system XML forms that have the Location and Job
+Assignments fields.
+The Work > Work Assignments screen in the People feature.
+For example, if a job assignment’s limit is reached for the location that you
+select in the Location and Job Assignment section of the New Hire form, that
+job assignment isn’t available to select.
+Actual Shows the number of active employees that have this job assignment in their
+primary work assignment.
+Actual
+(Secondary
+Only)
+Shows the number of active employees that have the job assignment as their
+secondary work assignment.
+Managing Job
+Assignments
+The job assignment that configures the management by job assignment
+functionality. Employees who are assigned the job assignment you’re
+configuring as their primary job assignment will report to the managing job
+assignment.
+Note: Job assignment management is determined by location. To define job
+assignment hierarchy for a job assignment that is used at multiple locations,
+each location must be configured individually. See Ma

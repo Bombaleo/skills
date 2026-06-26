@@ -1,0 +1,507 @@
+/* =====================================================================
+   Timesheets — column geometry + timeline detail view
+   ===================================================================== */
+
+/* --- Toolbar (search) above the table — match other list pages -------- */
+
+.ts-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --- List table column grid -------------------------------------------- */
+
+.req-row.ts-row {
+  grid-template-columns:
+    44px                          /* check  */
+    minmax(140px, 1fr)            /* timesheet id  */
+    140px                         /* status        */
+    minmax(180px, 1.4fr)          /* worker        */
+    minmax(160px, 1.2fr)          /* supplier      */
+    120px                         /* date          */
+    150px                         /* period        */
+    minmax(160px, 1.2fr)          /* engagement    */
+    140px                         /* start         */
+    140px                         /* end           */
+    80px                          /* duration      */
+    44px;                         /* row chev      */
+  /* Right gutter so the kebab does not sit flush against the card
+     edge — paired with `min-width: max-content` (inherited) this
+     also makes the row's bottom border span every cell, including
+     the chev, instead of cutting off at the duration column. */
+  padding-right: 20px;
+}
+
+/* secondary text under start / end / duration */
+.ts-cell--time,
+.ts-cell--dur,
+.ts-cell--date,
+.ts-cell--period,
+.ts-cell--engagement {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  flex-wrap: nowrap;
+}
+.ts-eng-name {
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.ts-eng-ref {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.270px;
+  color: var(--evr-content-primary-lowemp);
+  font-variant-numeric: tabular-nums;
+}
+.ts-time-primary {
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  font-variant-numeric: tabular-nums;
+}
+.ts-time-sub {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.270px;
+  color: var(--evr-content-primary-lowemp);
+  font-variant-numeric: tabular-nums;
+}
+
+.ts-cell--id {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  flex-wrap: nowrap;
+}
+.ts-id-primary {
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+  font-variant-numeric: tabular-nums;
+}
+.ts-id-sub {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--evr-content-primary-lowemp);
+}
+
+.ts-cell--worker,
+.ts-cell--supplier {
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+.ts-worker-name,
+.ts-supplier-name {
+  font: var(--evr-body2);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-cell--chev {
+  justify-content: flex-end;
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* =======================================================================
+   Timesheet details — left summary card + right timeline
+   ======================================================================= */
+
+.ts-detail-grid {
+  display: grid;
+  grid-template-columns: 411px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .ts-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Summary card (left) ----------------------------------------------- */
+
+.ts-summary {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ts-summary-status {
+  align-self: flex-start;
+}
+
+.ts-summary-worker {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ts-summary-worker-avatar {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.ts-summary-worker-avatar .sup-avatar {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--evr-border-decorative-default);
+}
+.ts-summary-worker-sup {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 7px;
+  letter-spacing: 0.2px;
+  border: 1.5px solid var(--evr-surface-primary-default);
+}
+.ts-summary-worker-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ts-summary-worker-name {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--evr-content-primary-highemp);
+}
+.ts-summary-worker-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--evr-body2);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 2px;
+}
+.ts-summary-worker-meta .ts-dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.ts-summary-job {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ts-summary-job-title {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--evr-content-primary-highemp);
+}
+.ts-summary-job-booking {
+  font: var(--evr-body2);
+  font-size: 14px;
+  color: var(--evr-content-primary-default);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.ts-summary-job-booking:hover { color: var(--evr-interactive-primary-default); }
+
+.ts-summary-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ts-summary-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ts-summary-stat-label {
+  font: var(--evr-body2);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+}
+.ts-summary-stat-value {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--evr-content-primary-highemp);
+  font-variant-numeric: tabular-nums;
+}
+.ts-summary-stat-sub {
+  font: var(--evr-body2);
+  font-size: 12px;
+  color: var(--evr-content-primary-lowemp);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Timeline card (right) --------------------------------------------- */
+
+.ts-timeline-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ts-timeline-head {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ts-timeline-head-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ts-timeline-head-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--evr-neutral-96);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--evr-content-primary-default);
+  flex-shrink: 0;
+}
+.ts-timeline-head-text {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--evr-content-primary-default);
+}
+.ts-timeline-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-left: 52px;
+}
+.ts-timeline-head-stamp {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--evr-content-primary-default);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The "calendar" — left gutter w/ hour labels + activity feed */
+.ts-timeline-body {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  background: var(--evr-neutral-95);
+}
+.ts-timeline-hours {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px 0 16px;
+  background: var(--evr-neutral-95);
+  border-right: 1px solid var(--evr-border-decorative-default);
+  align-items: flex-end;
+}
+.ts-timeline-hour {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--evr-content-primary-lowemp);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.27px;
+}
+.ts-timeline-feed-wrap {
+  padding: 32px 32px 32px 8px;
+}
+.ts-timeline-feed {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  padding: 8px 0;
+}
+
+.ts-feed-item {
+  padding: 16px 24px;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  column-gap: 12px;
+  row-gap: 0;
+  align-items: start;
+  position: relative;
+}
+/* connector line between items (mid-column rail) */
+.ts-feed-item--connect::after {
+  content: "";
+  position: absolute;
+  left: 24px;            /* center of 32px gutter (24 = 24px padding + 8) hmm */
+  /* recompute: padding-left is 24, gutter is 32 wide; center is 24 + 16 = 40 */
+  display: none;         /* disabled; we draw dividers per-row instead */
+}
+
+.ts-feed-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--evr-surface-decorative-default-teal, #E0FFFA);
+  color: var(--evr-content-vivid-teal, #0E7F6E);
+  position: relative;
+  z-index: 2;
+}
+.ts-feed-icon--teal {
+  background: #E0FFFA;
+  color: #07312B;
+}
+.ts-feed-icon--neutral {
+  background: var(--evr-neutral-96);
+  color: var(--evr-content-primary-default);
+}
+
+.ts-feed-rail {
+  grid-column: 1;
+  width: 32px;
+  display: flex;
+  justify-content: center;
+}
+.ts-feed-rail::before {
+  content: "";
+  display: block;
+  width: 1px;
+  background: var(--evr-border-decorative-default);
+}
+.ts-feed-rail--16  { height: 16px; }
+.ts-feed-rail--16::before  { height: 16px; }
+.ts-feed-rail--32  { height: 32px; }
+.ts-feed-rail--32::before  { height: 32px; }
+
+.ts-feed-rail--head { padding-top: 0; }
+
+.ts-feed-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ts-feed-title {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--evr-content-primary-default);
+}
+.ts-feed-sched {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--evr-content-primary-lowemp);
+  letter-spacing: 0.27px;
+  font-variant-numeric: tabular-nums;
+}
+.ts-feed-actual {
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--evr-content-primary-default);
+  letter-spacing: 0.23px;
+  font-variant-numeric: tabular-nums;
+}
+.ts-feed-actual b {
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+}
+
+/* Inner row inside a feed item — connector + actual time */
+.ts-feed-subrow {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  column-gap: 12px;
+  align-items: center;
+  margin-top: 6px;
+}
+.ts-feed-subrow-icon {
+  width: 32px;
+  height: 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* End stamp row at the bottom of the timeline */
+.ts-timeline-end {
+  padding: 24px 32px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--evr-content-primary-default);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Edit time button — small ghost w/ chevron */
+.ts-edit-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 12px 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--evr-border-decorative-default);
+  background: var(--evr-surface-primary-default);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 14px;
+  letter-spacing: 0.23px;
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ts-edit-time:hover { background: var(--evr-surface-secondary-hover, var(--evr-neutral-95)); }
+.ts-edit-time:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}

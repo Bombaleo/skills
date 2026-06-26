@@ -1,0 +1,1293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project engagement type · Parity task list · v0.1</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <!--
+    ─────────────────────────────────────────────────────────────────────
+    Flex Work v2 · Project engagement type — parity task list
+    ─────────────────────────────────────────────────────────────────────
+    Scope: Project (engProject) engagement type only — not Shift,
+    Assignment, or SOW. Benchmarks: SAP Fieldglass "Project" module +
+    Workday Vendly "Project Requisition / Project Engagement" surface.
+
+    The doc is structured so each row is a task with:
+      · status   shipped / partial / gap / out-of-scope
+      · title    verb-led, sentence case
+      · detail   one sentence — what changed and why a user would care
+      · area     where it lands in the prototype (page or module)
+      · ref      Fieldglass / Vendly reference where applicable
+
+    Update protocol: when a task ships, flip its status pill in place
+    (do NOT delete rows — keep the trail) and add a matching entry to
+    "Flex Work v2 Changelog.html" the same turn.
+    ─────────────────────────────────────────────────────────────────────
+  -->
+  <style>
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--evr-surface-root-primary);
+      color: var(--evr-content-primary-default);
+      font-family: var(--evr-font-text);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ===== Shell ==================================================== */
+    .pp-page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 56px 40px 96px;
+    }
+
+    /* ===== Header =================================================== */
+    .pp-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 48px;
+      align-items: end;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+      margin-bottom: 36px;
+    }
+    .pp-mark {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 12px;
+    }
+    .pp-title {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 14px;
+      text-wrap: pretty;
+    }
+    .pp-sub {
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--evr-content-primary-default);
+      margin: 0;
+      text-wrap: pretty;
+      max-width: 60ch;
+    }
+    .pp-meta {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .pp-meta b {
+      color: var(--evr-content-primary-default);
+      font-weight: 600;
+    }
+    .pp-meta code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-decorative-default-blue);
+      color: var(--evr-interactive-primary-default);
+      padding: 1px 6px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ===== Lede + legend ============================================ */
+    .pp-lede {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .pp-lede-prose p {
+      margin: 0 0 12px;
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--evr-content-primary-default);
+      text-wrap: pretty;
+    }
+    .pp-lede-prose p b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+    .pp-lede-prose p:last-child { margin-bottom: 0; }
+    .pp-lede-prose code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 1px 5px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 13.5px;
+    }
+
+    .pp-legend {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-sm);
+      background: var(--evr-surface-primary-default);
+      padding: 18px 20px;
+    }
+    .pp-legend h4 {
+      margin: 0 0 12px;
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .pp-legend ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .pp-legend li {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: baseline;
+      font-size: 13.5px;
+      color: var(--evr-content-primary-default);
+    }
+
+    /* ===== Status pills ============================================= */
+    .pp-st {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .pp-st::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .pp-st[data-s="shipped"] {
+      background: var(--evr-surface-decorative-low-green);
+      color: var(--evr-green-600);
+    }
+    .pp-st[data-s="partial"] {
+      background: var(--evr-surface-decorative-low-yellow);
+      color: var(--evr-yellow-700, var(--evr-yellow-600));
+    }
+    .pp-st[data-s="gap"] {
+      background: var(--evr-surface-decorative-low-red);
+      color: var(--evr-red-500);
+    }
+    .pp-st[data-s="oos"] {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* ===== Roll-up counts ========================================== */
+    .pp-rollup {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .pp-rollup-card {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      padding: 16px 18px;
+      display: grid;
+      gap: 8px;
+    }
+    .pp-rollup-card[data-tone="header"] {
+      background: var(--evr-content-primary-highemp);
+      color: var(--evr-content-primary-inverse, #fff);
+      border-color: transparent;
+    }
+    .pp-rollup-h {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+    }
+    .pp-rollup-card[data-tone="header"] .pp-rollup-h {
+      color: rgba(255,255,255,0.7);
+    }
+    .pp-rollup-name {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--evr-content-primary-highemp);
+      line-height: 1.15;
+    }
+    .pp-rollup-card[data-tone="header"] .pp-rollup-name {
+      color: #fff;
+    }
+    .pp-rollup-stats {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      font-feature-settings: "tnum";
+      font-size: 13px;
+      color: var(--evr-content-primary-default);
+    }
+    .pp-rollup-card[data-tone="header"] .pp-rollup-stats {
+      color: rgba(255,255,255,0.85);
+    }
+    .pp-rollup-stats b {
+      font-weight: 600;
+      color: var(--evr-content-primary-highemp);
+    }
+    .pp-rollup-card[data-tone="header"] .pp-rollup-stats b {
+      color: #fff;
+    }
+
+    /* ===== Section ================================================== */
+    .pp-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 24px;
+    }
+    .pp-section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: baseline;
+      margin-bottom: 6px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--evr-border-decorative-default);
+    }
+    .pp-section-num {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .pp-section-name {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0;
+      line-height: 1.2;
+    }
+    .pp-section-counts {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pp-section-lede {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--evr-content-primary-default);
+      margin: 14px 0 22px;
+      max-width: 75ch;
+      text-wrap: pretty;
+    }
+
+    /* ===== Task table =============================================== */
+    .pp-tasks {
+      display: grid;
+      gap: 8px;
+    }
+    .pp-task {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr) 220px;
+      gap: 18px;
+      padding: 16px 20px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      align-items: start;
+    }
+    .pp-task[data-s="shipped"] {
+      border-left: 3px solid var(--evr-green-500);
+    }
+    .pp-task[data-s="partial"] {
+      border-left: 3px solid var(--evr-yellow-600);
+    }
+    .pp-task[data-s="gap"] {
+      border-left: 3px solid var(--evr-red-400);
+    }
+    .pp-task[data-s="oos"] {
+      border-left: 3px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-secondary-default);
+    }
+
+    .pp-task-status {
+      padding-top: 1px;
+    }
+    .pp-task-body h4 {
+      margin: 0 0 4px;
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1.35;
+      color: var(--evr-content-primary-highemp);
+      text-wrap: pretty;
+    }
+    .pp-task-body p {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--evr-content-primary-default);
+      text-wrap: pretty;
+    }
+    .pp-task-body p code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 12.5px;
+    }
+
+    .pp-task-meta {
+      display: grid;
+      gap: 4px;
+      font-size: 12.5px;
+      color: var(--evr-content-primary-lowemp);
+      line-height: 1.45;
+    }
+    .pp-task-meta-row {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 6px;
+    }
+    .pp-task-meta-k {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+      padding-top: 1px;
+    }
+    .pp-task-meta-v {
+      color: var(--evr-content-primary-default);
+    }
+    .pp-task-meta-v code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 11.5px;
+    }
+
+    /* ===== Footer note ============================================== */
+    .pp-foot {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+      font-size: 12.5px;
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    @media (max-width: 920px) {
+      .pp-head { grid-template-columns: 1fr; }
+      .pp-lede { grid-template-columns: 1fr; }
+      .pp-rollup { grid-template-columns: repeat(2, 1fr); }
+      .pp-task { grid-template-columns: 1fr; gap: 10px; }
+      .pp-task-meta { grid-template-columns: repeat(2, 1fr); display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="pp-page">
+
+    <!-- ============================================================== -->
+    <!-- HEADER                                                         -->
+    <!-- ============================================================== -->
+    <header class="pp-head">
+      <div>
+        <div class="pp-mark">Backlog · Project engagement type</div>
+        <h1 class="pp-title">Closing the Project gap against Fieldglass and Vendly.</h1>
+        <p class="pp-sub">A role-segmented task list for the work left between today's <code>engProject</code> primitive and a Project module that can win a Vendly head-up evaluation. Scope is Project only — Shift, Assignment, and SOW each have their own backlogs.</p>
+      </div>
+      <div class="pp-meta">
+        <div><b>Doc</b> &middot; Project engagement type &middot; parity</div>
+        <div><b>Version</b> &middot; <code>v0.1</code> &middot; first cut &middot; v0.86 build &middot; 33 tasks shipped</div>
+        <div><b>Last updated</b> &middot; <time datetime="2026-05-27">27 May 2026</time></div>
+        <div><b>Owner</b> &middot; Dominic Esposito</div>
+        <div><b>Benchmarks</b> &middot; SAP Fieldglass Project &middot; Workday Vendly Project Engagement</div>
+      </div>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- LEDE + LEGEND                                                  -->
+    <!-- ============================================================== -->
+    <section class="pp-lede">
+      <div class="pp-lede-prose">
+        <p><b>What Project is, in our model.</b> Supplier-led delivery against a defined budget. The supplier names the team, the buyer reviews progress against burn, billing is T&amp;M or fixed against a not-to-exceed cap, time is captured weekly per worker per task. No recurring schedule, no clock-punch. Distinct from <b>SOW</b> (MSA-anchored, milestone-billed, deliverable-led) and from <b>Assignment</b> (named worker, single role, period timesheet).</p>
+        <p><b>What we have today.</b> After the v0.86 build: <i>everything in Foundations and Admin ships</i>, plus the Manager burn dashboard / roster / amendments / timesheets / documents / comments / audit / closeout, the Agency team-proposal + burn-view + roster surfaces, and the Worker mobile project landing + task-coded time entry + scope acknowledgement. The new code lives in <code>pages/project-engagement.jsx</code> (primitives + storage + variant registration), <code>pages/project-engagement-views.jsx</code> (every Project-flavoured React component the rest of the app consumes), and the host pages call into them through <code>window.ProjectAdminPanel</code>, <code>window.ProjectIntakeFields</code>, <code>window.ProjectVariantBody</code>, <code>window.AgencyProjectsTab</code>, and <code>window.WorkerProjectScreen</code>. Every surface gates on the <code>engProject</code> feature flag &mdash; with it off the components return null and the prototype is byte-identical to the pre-Project ship.</p>
+        <p><b>What this list is.</b> Every remaining job to take Project from "demo shape" to "Helios can run forty live projects without leaving the product." Tasks are grouped by the four roles that touch a Project: <b>Admin</b> (config), <b>Manager</b> (buyer), <b>Agency</b> (supplier), and <b>Worker</b>. Foundations that cross roles sit in <b>00 · Foundations</b>.</p>
+      </div>
+      <aside class="pp-legend" aria-label="Status legend">
+        <h4>Status legend</h4>
+        <ul>
+          <li><span class="pp-st" data-s="shipped">Shipped</span><span>Live in Helios today. Flip nothing.</span></li>
+          <li><span class="pp-st" data-s="partial">Partial</span><span>Primitive exists; the UX or workflow around it does not.</span></li>
+          <li><span class="pp-st" data-s="gap">Gap</span><span>Nothing in the prototype. Build it.</span></li>
+          <li><span class="pp-st" data-s="oos">Not chasing</span><span>Vendly / Fieldglass have it. We've decided not to compete.</span></li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- ROLL-UP                                                        -->
+    <!-- ============================================================== -->
+    <section class="pp-rollup" aria-label="Counts by section">
+      <div class="pp-rollup-card" data-tone="header">
+        <div class="pp-rollup-h">Backlog · v0.86 build</div>
+        <div class="pp-rollup-name">53 tasks</div>
+        <div class="pp-rollup-stats">48 shipped &middot; 2 partial &middot; 1 gap &middot; 2 not chasing</div>
+      </div>
+      <div class="pp-rollup-card">
+        <div class="pp-rollup-h">00 &middot; Foundations</div>
+        <div class="pp-rollup-name">11 tasks</div>
+        <div class="pp-rollup-stats"><b>11</b> shipped</div>
+      </div>
+      <div class="pp-rollup-card">
+        <div class="pp-rollup-h">01 &middot; Admin</div>
+        <div class="pp-rollup-name">10 tasks</div>
+        <div class="pp-rollup-stats"><b>10</b> shipped</div>
+      </div>
+      <div class="pp-rollup-card">
+        <div class="pp-rollup-h">02 &middot; Manager</div>
+        <div class="pp-rollup-name">14 tasks</div>
+        <div class="pp-rollup-stats"><b>12</b> shipped &middot; <b>1</b> partial &middot; <b>1</b> gap &middot; <b>1</b> not chasing</div>
+      </div>
+      <div class="pp-rollup-card">
+        <div class="pp-rollup-h">03 &middot; Agency &nbsp;+&nbsp; 04 &middot; Worker</div>
+        <div class="pp-rollup-name">18 tasks</div>
+        <div class="pp-rollup-stats"><b>15</b> shipped &middot; <b>1</b> partial &middot; <b>1</b> gap &middot; <b>1</b> not chasing</div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 00 · FOUNDATIONS                                               -->
+    <!-- ============================================================== -->
+    <section id="foundations" class="pp-section">
+      <header class="pp-section-head">
+        <div>
+          <span class="pp-section-num">Section 00</span>
+          <h2 class="pp-section-name">Foundations &middot; data model + lifecycle</h2>
+        </div>
+        <div class="pp-section-counts">
+          <span class="pp-st" data-s="shipped">11 shipped</span>
+        </div>
+      </header>
+      <p class="pp-section-lede">Everything role-agnostic — schema, lifecycle states, currency, audit. Nothing else in the doc lands without these. Foundations are the gate.</p>
+
+      <div class="pp-tasks">
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Engagement-type axis with Project as a first-class value</h4>
+            <p>Project is one of the four <code>ENG_TYPES</code> values; intake picker, list column, filter chip, body-class gate all live. <code>engagement-type.jsx</code> already snaps <code>billingBasis</code> &times; <code>timeCapture</code> to Fixed/Milestone &times; Time-tracking/N/A.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Requisitions &middot; Workforce &middot; Invoices</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>pages/engagement-type.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Type</i> &middot; VNDLY: <i>Engagement Type</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Per-org Project enablement at Settings &rarr; Configuration</h4>
+            <p>Project is its own toggle in Settings &rarr; Configuration &rarr; Engagement types, tenant-scoped, persisted at <code>flexwork.engagementTypes.{orgId}</code>, mirrored to legacy feature flags on load.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Configuration</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>pages/engagement-types-config.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: tenant module enablement</span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project budget &amp; burn-ledger primitives</h4>
+            <p><code>ProjectBudget</code> and <code>BurnLedgerEntry</code> ship as architecture-level objects in v1.6. The shape is correct for T&amp;M-against-budget — neither competitor has a burn view this clean.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>Flex Work 2.0 Architecture v1.6.html</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Spend</i> &middot; VNDLY: <i>Project Budget</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project lifecycle state machine</h4>
+            <p>Today a Project rides the requisition lifecycle (Draft &rarr; Approved &rarr; Filled). Parity requires a dedicated <i>Project</i> lifecycle: Draft &rarr; Budget pending &rarr; Active &rarr; On hold &rarr; Closing &rarr; Closed &rarr; Cancelled. State drives what every other role can do.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model &middot; Workflows</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectEngagement.state</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Status</i> 6 values</span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project hierarchy &mdash; Project &rarr; Phase &rarr; Task</h4>
+            <p>Burn-ledger entries are coded as flat lines today. Vendly and Fieldglass both decompose: Project &gt; Phase &gt; Task (chargeable code). Required for cost-code reporting and for workers to pick a task at time entry.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectPhase</code>, <code>ProjectTask</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project / Phase / Task</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project number &amp; external ERP code</h4>
+            <p>Helios uses <code>PRJ-2026-018</code>-style IDs in fixtures; there's no admin-configurable sequence, no ERP/PMO code field, no validation against treasury capital project IDs (the very thing the <code>cap_project_id</code> custom field hints at).</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model &middot; Settings</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectEngagement.externalId</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>External Project ID</i> &middot; VNDLY: <i>PO Reference</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Not-to-exceed cap as a first-class field</h4>
+            <p>Budget today is a single amount. NTE is the cap above which billing is rejected and the system forces a change request. Required by every enterprise procurement org and the single most-cited Fieldglass primitive in eval calls.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model &middot; Invoices</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectBudget.nteAmount</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>NTE Amount</i> &middot; VNDLY: <i>Budget Ceiling</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project change-order / amendment object</h4>
+            <p>The full draft &rarr; redline &rarr; countersign cycle covered by REC 09 in the Strategy Review, applied to <i>Project</i> (not just SOW). Versioned amendments, linked to parent, with auto-derived deltas (budget +X, dates +Y).</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model &middot; Workflows</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectAmendment</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Revision</i> &middot; VNDLY: <i>Project Amendment</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Multi-currency budget + FX-as-of date</h4>
+            <p>Tied to REC on multi-currency in the Strategy Review but specific to Project: the budget carries one currency, every burn entry resolves to that currency at the entry-date FX rate, with rolled-up GL push to ERP.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model &middot; Financials</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectBudget.currency</code>, <code>FxRate</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Currency</i> (leader)</span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project audit log surface</h4>
+            <p>Every state change, budget change, roster change, amendment, and approval written to a queryable audit feed scoped to a project. Discoverable from the project detail page. Compliance gate for enterprise rollouts.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model &middot; Compliance</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectAuditEntry</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Audit Trail</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project documents attachment surface</h4>
+            <p>Schedule of work, kickoff deck, weekly status PDFs, deliverable hand-offs. Today there's no attachment slot on a project — required parity with both VNDLY and FG, which both ship a documents tab.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Data model &middot; Detail sections</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>ProjectDocument</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Documents</i> &middot; VNDLY: <i>Attachments</i></span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 01 · ADMIN                                                     -->
+    <!-- ============================================================== -->
+    <section id="admin" class="pp-section">
+      <header class="pp-section-head">
+        <div>
+          <span class="pp-section-num">Section 01 &middot; Role</span>
+          <h2 class="pp-section-name">Admin &middot; configure how Projects behave per tenant</h2>
+        </div>
+        <div class="pp-section-counts">
+          <span class="pp-st" data-s="shipped">10 shipped</span>
+        </div>
+      </header>
+      <p class="pp-section-lede">Settings work. Almost all of it lands in Settings &rarr; Configuration, Settings &rarr; Policies, or Settings &rarr; Workflows. Per-org, never tenant-global.</p>
+
+      <div class="pp-tasks">
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Toggle Project on / off per org</h4>
+            <p>Settings &rarr; Configuration &rarr; Engagement types &rarr; Project. Flip drives the entire downstream — intake, lists, invoices, custom-field conditionals.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Configuration</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>pages/settings-config.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">parity met</span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project-conditional custom fields</h4>
+            <p>Custom Fields config supports <code>engagementType in [Project]</code> conditional render &mdash; cap project ID, outage windows, etc. Matches Fieldglass <i>Custom Field</i> module-scoped fields.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Custom Fields</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>pages/custom-fields-config.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">parity met</span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project number / ID sequence config</h4>
+            <p>Admin picks the prefix and counter shape (<code>PRJ-{YYYY}-{####}</code>), with optional external-ID validation (e.g. against Treasury capital project IDs). Sits next to the requisition-ID sequence settings.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Configuration</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>settings-config.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Number Rules</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Budget approval threshold matrix</h4>
+            <p>"Project budget &gt; $50K &rarr; CFO. &gt; $250K &rarr; CFO + CHRO + Legal." Drag-drop conditional approval graph per org. Lands as a Project-flavoured workflow under Settings &rarr; Workflows.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Workflows</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>workflows.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Budget Approval</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Change-order approval policy</h4>
+            <p>"Amendments &lt; 10% of budget auto-approve. 10&ndash;25% &rarr; manager. &gt; 25% &rarr; full re-approval." Per-org thresholds. Pairs with the change-order object in Section 00.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Policies</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>settings-policies.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Revision Approval</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Burn-alert thresholds</h4>
+            <p>"Notify project owner at 75% / 90% / 100% of NTE." Three levels of escalation, configurable recipients, posted to the inbox + email. Out of the box thresholds, customisable per org.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Policies</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>settings-policies.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Spend Threshold Alerts</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project task catalog (per org)</h4>
+            <p>The list of chargeable task codes workers pick at time entry. Reusable across projects ("Discovery", "Build", "UAT", "Hypercare") or project-specific. Foundation for cost-code reporting.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Configuration</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>project-tasks-config.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Task</i> &middot; VNDLY: <i>Task Catalog</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project closeout policy</h4>
+            <p>What "closed" means. Required: zero open timesheets, zero unpaid invoices, all milestones accepted (if hybrid). Optional: closeout survey to the supplier, archived flag, GL final-flush trigger.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Policies</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>settings-policies.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Closure Rules</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Supplier burn visibility policy</h4>
+            <p>Per-org switch: <i>does the supplier see remaining budget?</i> Some buyers keep this hidden to protect negotiation leverage; others share it to invite proactive flagging. VNDLY exposes this as a per-engagement toggle &mdash; we should pull it up to policy.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Policies</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>settings-policies.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Budget Transparency</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project role permissions matrix</h4>
+            <p>Roles &rarr; Project: who can create, who can approve, who can amend, who can close, who can view burn, who can swap workers. Builds on the existing role-defaults work.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Settings &rarr; Roles</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>roles.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Activity Roles</i></span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · MANAGER                                                   -->
+    <!-- ============================================================== -->
+    <section id="manager" class="pp-section">
+      <header class="pp-section-head">
+        <div>
+          <span class="pp-section-num">Section 02 &middot; Role</span>
+          <h2 class="pp-section-name">Manager &middot; create &middot; staff &middot; run &middot; close</h2>
+        </div>
+        <div class="pp-section-counts">
+          <span class="pp-st" data-s="shipped">12 shipped</span>
+          <span class="pp-st" data-s="partial">1 partial</span>
+          <span class="pp-st" data-s="oos">1 not chasing</span>
+        </div>
+      </header>
+      <p class="pp-section-lede">The buyer-side flow end-to-end. Almost everything here is a new surface inside the existing requisition / workforce shells &mdash; the lists are right; the per-project operating UI isn't.</p>
+
+      <div class="pp-tasks">
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Create Project requisition with budget on intake</h4>
+            <p>Engagement-type picker lands cleanly on Project, Setup card auto-flips org level to <i>corporate</i>, billing snaps to Fixed/Milestone. Missing: the budget amount, NTE cap, currency, and phase outline as required fields on the intake card.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Requisitions &rarr; New</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>pages/new-requisition.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Posting</i> &middot; VNDLY: <i>Project Requisition</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="partial">
+          <div class="pp-task-status"><span class="pp-st" data-s="partial">Partial</span></div>
+          <div class="pp-task-body">
+            <h4>Distribute Project to one or many suppliers</h4>
+            <p>Existing distribution rules + supplier tier work for Project intake. Missing: the supplier-side ask is a <i>team proposal</i>, not a single candidate &mdash; the distribution panel needs a "team-fill" mode that tells the supplier how many roles of what type are needed.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Requisitions &middot; Distribution</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>req-distribution-panels.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Team Distribution</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Approve weekly burn / timesheets on a Project</h4>
+            <p>Timesheet detail handles <code>engagementType: "Project"</code> rows with the Project engagement reference. Missing: the weekly burn-roll-up approval view &mdash; manager sees <i>one</i> consolidated weekly sheet for the project, not N per-worker sheets.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Timesheets</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>timesheets.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Time Sheet</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project detail page &mdash; burn dashboard</h4>
+            <p>The home for a live project. Header: budget, NTE, dates, status, owner. Body: weekly burn chart against forecast, days remaining, NTE proximity, roster, recent timesheets, open amendments, documents. Replaces today's reliance on the requisition detail shell.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Requisitions / Engagements</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>project-detail.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Workbench</i> &middot; VNDLY: <i>Engagement Hub</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Review &amp; accept supplier team proposal</h4>
+            <p>The supplier proposes a team of N workers in a single submission. The manager sees them side-by-side: roles, rates, start dates, fit notes. Accept all, accept some, reject with reason. Today's per-candidate panel is shift-shaped and not built for multi-pick.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Requisitions &middot; Proposals</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>project-team-review.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Candidate Team Submission</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project roster &mdash; named workers on the engagement</h4>
+            <p>One list per project: name, role, supplier, start, end, hours-to-date, hours-remaining, rate. Add, swap, end-date, freeze. This is the operational surface the manager lives in mid-project.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new tab in <code>project-detail.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Resources</i> &middot; VNDLY: <i>Project Team</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Submit a change-order request</h4>
+            <p>"Extend budget +$80K, extend end date +4 weeks, add 1 senior dev." Form pre-populated with current values, delta shown, routed through the change-order approval policy from Section 01. Outcome writes a <code>ProjectAmendment</code> linked to the parent.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail &middot; Workflows</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>project-amendment-panel.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Revision</i> &middot; VNDLY: <i>Project Amendment</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Add / remove / swap workers mid-project</h4>
+            <p>The roster's edit affordances: replace this worker with a new one starting Monday, end-date that worker on Friday, add a third senior dev for the last six weeks. Each action writes a roster-change entry to the audit log.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail &middot; Roster</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">reuse <code>assign-worker-panel.jsx</code> + <code>remove-worker-panel.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Roster Action</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Re-assign worker between tasks / phases</h4>
+            <p>One worker logs against three tasks across the project life. Manager can move planned hours from Task A to Task B mid-flight without breaking history. Depends on the Project &rarr; Phase &rarr; Task hierarchy.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail &middot; Roster</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new control in <code>project-detail.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Task Re-assignment</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Re-distribute under-spent budget</h4>
+            <p>Mid-project: Phase 1 came in $40K under budget. Move that $40K into Phase 3, or release it back to the budget pool. Lives inside the change-order surface but worth calling out: VNDLY ships it, FG ships it, we don't.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail &middot; Budget</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>project-amendment-panel.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Budget Reallocation</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project status report &mdash; weekly cadence</h4>
+            <p>Auto-drafted from the data: this week's hours, this week's burn, on-track flag, top three risks (pulled from supplier comments). Manager reviews, edits, sends to stakeholders. Cadence configurable per project.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail &middot; Reports</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>project-status-report.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Weekly Status</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project closeout sign-off</h4>
+            <p>Two-party sign-off on a closing project: manager confirms deliverables; supplier confirms no further billing. Drives the lifecycle to <i>Closed</i> and triggers the closeout policy from Section 01.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail &middot; Closeout</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>project-closeout-panel.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Closure</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project commentary thread</h4>
+            <p>Slack-shaped thread on the project detail page. Manager, agency, internal stakeholders. Quoted into status reports and amendments. Materially cheaper than "let me check my email for that decision".</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new tab in <code>project-detail.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Engagement Comments</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="oos">
+          <div class="pp-task-status"><span class="pp-st" data-s="oos">Not chasing</span></div>
+          <div class="pp-task-body">
+            <h4>Per-project supplier scorecard</h4>
+            <p>Per-project NPS, on-time hits, defect rate. Both VNDLY and FG ship this; our QBR work is covered at the <i>supplier</i> level. Decision: stay at supplier scope until a Helios-class customer asks otherwise.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Project detail (deferred)</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">deferred</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Scorecard</i> (lead)</span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · AGENCY                                                    -->
+    <!-- ============================================================== -->
+    <section id="agency" class="pp-section">
+      <header class="pp-section-head">
+        <div>
+          <span class="pp-section-num">Section 03 &middot; Role</span>
+          <h2 class="pp-section-name">Agency &middot; propose a team, manage it, bill it</h2>
+        </div>
+        <div class="pp-section-counts">
+          <span class="pp-st" data-s="shipped">8 shipped</span>
+          <span class="pp-st" data-s="partial">1 partial</span>
+          <span class="pp-st" data-s="gap">1 gap</span>
+        </div>
+      </header>
+      <p class="pp-section-lede">Supplier-portal work. Project is the engagement shape where suppliers do the most work end-to-end; today they receive a distribution and submit candidates &mdash; everything after that is gap.</p>
+
+      <div class="pp-tasks">
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Receive Project distribution as the supplier</h4>
+            <p>Distribution rules already deliver a Project requisition to the supplier inbox with the engagement-type chip and the budget envelope visible. Missing: the supplier accept / decline flow specifically calling out "team of N" rather than "one worker".</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Inbox</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>pages/agency-pro.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Supplier Project Inbox</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="partial">
+          <div class="pp-task-status"><span class="pp-st" data-s="partial">Partial</span></div>
+          <div class="pp-task-body">
+            <h4>Expense submission against a project</h4>
+            <p>Professional Expenses surface accepts T&amp;E lines &mdash; works for Project as one of the supported engagement types. Missing: tie an expense line to a phase + task code so it shows on the burn ledger next to time.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Expenses</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>professional-expenses.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Expense Sheet</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Propose a team of N candidates in one submission</h4>
+            <p>The supplier-side counterpart to the Manager's team-review surface. Multi-row form: candidate, role, rate, start, fit notes. Submit all together so the buyer evaluates the shape of the proposal, not five separate offers.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Proposals</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>agency-team-proposal.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Team Submit</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Manage project roster &mdash; supplier view</h4>
+            <p>Same roster object as the manager surface, supplier-flavoured: list of workers, weekly hours, remaining hours per role, ability to propose a swap with a reason code. Supplier-initiated changes route through the manager.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Workforce</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new tab in <code>agency-pro.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Supplier Team View</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Submit consolidated weekly time on the team's behalf</h4>
+            <p>One screen per project per week: rows of workers, columns of days, totals per task. Supplier approves once; system fans it out into individual timesheets. Today every worker submits separately &mdash; for a 12-person project that's 12 round trips.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Timesheets</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>agency-project-timesheet.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Time Sheet (consolidated)</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Burn visibility from the supplier side</h4>
+            <p>Gated by the Admin policy in Section 01. When on, the supplier sees: spent vs. budget, NTE proximity, days remaining, top burn-risk per phase. Pushes proactive flagging.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Project view</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>agency-pro.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Supplier Spend View</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Initiate change-order from the supplier</h4>
+            <p>Counterpart to the Manager amendment surface: supplier requests budget +$20K, dates +2 weeks, additional role +1, with justification. Routed to the buyer through the same approval policy.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Amendments</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">reuse <code>project-amendment-panel.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Supplier-initiated Amendment</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Resource swap with reason code</h4>
+            <p>Worker leaves, gets sick, gets pulled. Supplier proposes a like-for-like replacement with a reason picked from a fixed list (Voluntary, Performance, Illness, Reassigned). Buyer approves; roster updates; audit log entry written.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Roster</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new &middot; <code>resource-swap-panel.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Resource Swap</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="gap">
+          <div class="pp-task-status"><span class="pp-st" data-s="gap">Gap</span></div>
+          <div class="pp-task-body">
+            <h4>Compliance docs scoped to a project</h4>
+            <p>NDA-per-project, site-induction sign-off, IP-assignment per project. Today compliance lives at worker scope &mdash; project parity needs project-scope docs that workers acknowledge on first time entry.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Compliance</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>compliance.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Compliance Pack</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Closeout acceptance from the supplier</h4>
+            <p>Two-party closeout: supplier confirms no further billing claim, all expenses submitted, all workers off-boarded. Drives the project state to <i>Closed</i> alongside the manager-side sign-off.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Agency &middot; Closeout</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">reuse <code>project-closeout-panel.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Supplier Closure Acknowledge</i></span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 04 · WORKER                                                    -->
+    <!-- ============================================================== -->
+    <section id="worker" class="pp-section">
+      <header class="pp-section-head">
+        <div>
+          <span class="pp-section-num">Section 04 &middot; Role</span>
+          <h2 class="pp-section-name">Worker &middot; accept &middot; log time &middot; close</h2>
+        </div>
+        <div class="pp-section-counts">
+          <span class="pp-st" data-s="shipped">7 shipped</span>
+          <span class="pp-st" data-s="partial">0 partial</span>
+          <span class="pp-st" data-s="gap">0 gap</span>
+          <span class="pp-st" data-s="oos">1 not chasing</span>
+        </div>
+      </header>
+      <p class="pp-section-lede">Worker-mobile surface. Project workers are professionals on weekly timesheets, not frontline workers on a clock &mdash; the worker app needs the project shape, not the shift shape.</p>
+
+      <div class="pp-tasks">
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Receive project assignment from the agency</h4>
+            <p>Worker mobile shows the engagement type chip and the project name. Missing: the project-specific landing &mdash; SoW summary, phase outline, named manager, named project lead from the supplier.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Worker mobile</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v"><code>pages/worker-mobile.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Worker Project Card</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Project landing on worker mobile</h4>
+            <p>One screen per project: scope summary, phases, my role, my hours-to-date, my hours-remaining, manager + supplier lead contact. The home base for the worker mid-engagement.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Worker mobile</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new screen in <code>worker-mobile.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Engagement Detail Mobile</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Time entry per phase / task code</h4>
+            <p>Weekly timesheet on mobile: pick phase, pick task, enter hours per day. Task list scoped to the worker's project assignment, defaults seeded from last week. Required by every cost-code reporting setup at enterprise.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Worker mobile &middot; Time</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>worker-mobile.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Time Sheet</i> &middot; VNDLY: <i>Task Time Entry</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Expense entry against project (worker side)</h4>
+            <p>Mobile-first expense form: T&amp;E, photo of receipt, tied to phase + task. Lands in the supplier's expense sheet for the project, then onto the invoice.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Worker mobile &middot; Expenses</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">new screen in <code>worker-mobile.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Project Expense (Worker)</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Acknowledge project scope &amp; compliance docs</h4>
+            <p>First time the worker opens the project: SoW summary, NDA, site induction, IP-assignment. Acknowledge once, recorded in the project audit log. Gate the first time entry on this.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Worker mobile &middot; Compliance</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>worker-mobile.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">FG: <i>Worker Compliance Acknowledge</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>View own contribution &amp; remaining hours</h4>
+            <p>"You've logged 142 of your planned 200 hours. 58 hours remain across Build + UAT." Helps the worker self-pace, helps the supplier avoid surprise burn-overs. No budget dollars exposed to the worker.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Worker mobile &middot; Project landing</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>worker-mobile.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>My Hours Card</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="shipped">
+          <div class="pp-task-status"><span class="pp-st" data-s="shipped">Shipped</span></div>
+          <div class="pp-task-body">
+            <h4>Change-order acknowledgement</h4>
+            <p>When a manager-approved amendment changes the worker's planned hours or end-date, the worker gets a push, acknowledges the new shape, and the audit log carries the receipt.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">Worker mobile</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">extend <code>worker-mobile.jsx</code></span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Amendment Acknowledge</i></span></div>
+          </div>
+        </article>
+
+        <article class="pp-task" data-s="oos">
+          <div class="pp-task-status"><span class="pp-st" data-s="oos">Not chasing</span></div>
+          <div class="pp-task-body">
+            <h4>Peer rating between project workers</h4>
+            <p>Some Vendly programs run peer ratings as part of project closeout. Decision: stay out. The signal-to-noise inside a six-person team is too low, and the optics around contingent peer review are bad.</p>
+          </div>
+          <div class="pp-task-meta">
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Area</span><span class="pp-task-meta-v">deferred</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">File</span><span class="pp-task-meta-v">deferred</span></div>
+            <div class="pp-task-meta-row"><span class="pp-task-meta-k">Ref</span><span class="pp-task-meta-v">VNDLY: <i>Peer Review</i> (deferred)</span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- FOOT                                                           -->
+    <!-- ============================================================== -->
+    <footer class="pp-foot">
+      <p>Companion docs &middot; <a href="Project Parity Architecture Map.html">Architecture map</a> &middot; <a href="../Flex Work 2.0 Architecture v1.6.html">Architecture v1.6</a> &middot; <a href="../Feature Audits/Flex Work VMS Strategy Review.html">Strategy Review</a> &middot; <a href="../Flex Work v2 Changelog.html">Changelog</a></p>
+      <p>Update rule &middot; flip a task's status pill in place, do not delete rows, and add a matching changelog entry the same turn.</p>
+    </footer>
+
+  </main>
+</body>
+</html>

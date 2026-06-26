@@ -1,0 +1,355 @@
+/* =====================================================================
+   Booking Simulator — Rate Automation prototype (Settings →
+   Configuration → Booking Simulator). Scoped under .proto-app; reuses
+   proto-card / proto-numfield / proto-btn / rc-seg primitives. Everest
+   tokens only. All classes bsim-* prefixed.
+   ===================================================================== */
+
+.proto-app .bsim-layout {
+  display: grid;
+  grid-template-columns: minmax(340px, 420px) 1fr;
+  gap: var(--evr-spacing-lg);
+  align-items: start;
+  margin-top: var(--evr-spacing-md);
+}
+@media (max-width: 1080px) { .proto-app .bsim-layout { grid-template-columns: 1fr; } }
+
+/* ---- form column ---- */
+.proto-app .bsim-form { display: flex; flex-direction: column; gap: var(--evr-spacing-sm); min-width: 0; }
+.proto-app .bsim-card { padding: 0; overflow: hidden; }
+.proto-app .bsim-card-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-secondary-default);
+}
+.proto-app .bsim-card-title {
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+  margin: 0; font: var(--evr-body1); font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.proto-app .bsim-card-title .proto-ico { color: var(--evr-content-primary-lowemp); width: 16px; height: 16px; }
+.proto-app .bsim-fields { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+.proto-app .bsim-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.proto-app .bsim-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.proto-app .bsim-flabel {
+  font: var(--evr-caption); font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-default);
+}
+.proto-app .bsim-fhint { font-weight: var(--evr-fw-regular); font-style: normal; color: var(--evr-content-primary-lowemp); }
+
+.proto-app .bsim-select,
+.proto-app .bsim-input {
+  width: 100%; height: 38px; padding: 0 10px;
+  border: 1px solid var(--evr-border-primary-default);
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-primary-default);
+  font: var(--evr-body2); color: var(--evr-content-primary-highemp);
+  box-sizing: border-box; font-variant-numeric: tabular-nums;
+}
+.proto-app .bsim-select { appearance: none; -webkit-appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b6c79' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
+}
+.proto-app .bsim-select:focus,
+.proto-app .bsim-input:focus { outline: none; border-color: var(--evr-interactive-primary-default); box-shadow: 0 0 0 2px var(--evr-interactive-primary-decorative); }
+
+/* read-only derived field (e.g. job type, fixed by the chosen position) */
+.proto-app .bsim-derived {
+  display: flex; align-items: center;
+  width: 100%; height: 38px; padding: 0 10px;
+  border: 1px dashed var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-secondary-default);
+  font: var(--evr-body2); color: var(--evr-content-primary-default);
+  box-sizing: border-box; font-variant-numeric: tabular-nums;
+}
+
+/* number-field suffix (proto-numfield already styles the wrap + prefix) */
+.proto-app .bsim-card .proto-numfield,
+.proto-app .bsim-asm-field .proto-numfield { width: 100%; }
+.proto-app .nf-suffix { color: var(--evr-content-primary-lowemp); font: var(--evr-body2); padding-left: 4px; white-space: nowrap; }
+
+/* ---- assumptions ---- */
+.proto-app .bsim-asm-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 12px 16px; border: 0;
+  background: var(--evr-surface-secondary-default); cursor: pointer; text-align: left;
+}
+.proto-app .bsim-asm.is-open .bsim-asm-toggle { border-bottom: 1px solid var(--evr-border-decorative-lowemp); }
+.proto-app .bsim-asm-toggle-right { display: inline-flex; align-items: center; gap: 10px; }
+.proto-app .bsim-asm-summary { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.proto-app .bsim-asm-toggle-right .proto-ico { color: var(--evr-content-primary-default); width: 18px; height: 18px; }
+.proto-app .bsim-asm-body { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.proto-app .bsim-asm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.proto-app .bsim-asm-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.proto-app .bsim-asm-field > span { font: var(--evr-caption); font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-default); }
+.proto-app .bsim-asm-sub { display: flex; flex-direction: column; gap: 8px; }
+.proto-app .bsim-asm-subtitle { margin: 0; font: var(--evr-caption); font-weight: var(--evr-fw-demibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-asm-foot { display: flex; justify-content: flex-end; }
+
+/* read-only assumption list — values belong to the rate card / agency, not editable here */
+.proto-app .bsim-asm-rolist { display: grid; grid-template-columns: 1fr; gap: 0; }
+.proto-app .bsim-asm-ro { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--evr-border-decorative-lowemp); min-width: 0; }
+.proto-app .bsim-asm-ro-l { font: var(--evr-body2); color: var(--evr-content-primary-lowemp); white-space: nowrap; }
+.proto-app .bsim-asm-ro-r { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; }
+.proto-app .bsim-asm-ro-v { font: var(--evr-body2); font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-default); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.proto-app .bsim-asm-ro-src { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); text-transform: capitalize; white-space: nowrap; }
+
+.proto-app .bsim-markup { display: flex; align-items: stretch; gap: 8px; }
+.proto-app .bsim-markup .proto-numfield { flex: 1 1 auto; min-width: 0; }
+.proto-app .bsim-markup .rc-seg { flex: 0 0 auto; }
+
+/* ---- result column ---- */
+.proto-app .bsim-result {
+  display: flex; flex-direction: column; gap: var(--evr-spacing-sm);
+  position: sticky; top: 12px; min-width: 0;
+}
+.proto-app .bsim-resolve {
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-primary-default);
+  padding: 16px 18px;
+}
+.proto-app .bsim-resolve-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.proto-app .bsim-resolve-label { font: var(--evr-caption); font-weight: var(--evr-fw-demibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-src { padding: 3px 10px; border-radius: var(--evr-radius-circle); font: var(--evr-caption); font-weight: var(--evr-fw-demibold); }
+.proto-app .bsim-src--override { background: var(--evr-surface-decorative-low-blue); color: var(--evr-blue-600); }
+.proto-app .bsim-src--base { background: var(--evr-surface-tertiary-default); color: var(--evr-content-primary-default); }
+.proto-app .bsim-resolve-rate { display: flex; align-items: baseline; gap: 8px; }
+.proto-app .bsim-resolve-amount { font-family: var(--evr-font-display); font-size: 32px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); line-height: 1; font-variant-numeric: tabular-nums; }
+.proto-app .bsim-resolve-unit { font: var(--evr-body1); color: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-resolve-meta { margin-top: 8px; font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-resolve-none { display: flex; align-items: flex-start; gap: 10px; color: var(--evr-content-status-error-lowemp); font: var(--evr-body2); }
+.proto-app .bsim-resolve-none .proto-ico { flex: 0 0 auto; margin-top: 1px; color: var(--evr-content-status-error-default); }
+
+/* combined final card: resolved rate head + total-charge summary footer, parked at the bottom */
+.proto-app .bsim-finalcard {
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-primary-default);
+  overflow: hidden;
+}
+.proto-app .bsim-finalcard-head {
+  padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.proto-app .bsim-finalcard-head .bsim-bk { padding-top: 14px; border-top: 1px solid var(--evr-border-decorative-lowemp); }
+.proto-app .bsim-finalcard .bsim-summary { border-radius: 0; }
+
+/* reset button parked under the form, outside the assumptions card */
+.proto-app .bsim-form-foot { display: flex; justify-content: flex-end; margin-top: 2px; }
+
+/* pricing-configuration card caption */
+.proto-app .bsim-cfg-note { margin: 0; font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+/* resolved agency rate readout under the config select */
+.proto-app .bsim-cfg-rate {
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  margin-top: 2px; padding: 10px 12px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-decorative-low-purple);
+}
+.proto-app .bsim-cfg-rate-l { font: var(--evr-caption); font-weight: var(--evr-fw-demibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--evr-content-decorative-purple); }
+.proto-app .bsim-cfg-rate-v { font-family: var(--evr-font-display); font-size: 18px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-cfg-rate-v .nf-suffix { font-size: 12px; }
+.proto-app .bsim-cfg-rate-grp { margin-left: auto; font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+
+/* master rate card panel (pricing configuration) */
+.proto-app .bsim-master {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-secondary-default);
+}
+.proto-app .bsim-master-ico { flex: none; width: 22px; height: 22px; margin-top: 1px; color: var(--evr-interactive-primary-default); }
+.proto-app .bsim-master-main { display: flex; flex-direction: column; gap: 4px; }
+.proto-app .bsim-master-name {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--evr-font-display); font-size: 16px; font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.proto-app .bsim-master-ver {
+  font-family: var(--evr-font-text); font-size: 11px; font-weight: var(--evr-fw-demibold);
+  padding: 1px 7px; border-radius: var(--evr-radius-circle);
+  color: var(--evr-content-status-informative-highemp); background: var(--evr-surface-status-informative-lowemp);
+}
+.proto-app .bsim-master-sub { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+
+/* parity status — derived worker assumption */
+.proto-app .bsim-parity {
+  display: flex; flex-direction: column; gap: 4px;
+  margin-top: 2px; padding: 10px 12px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-secondary-default);
+}
+.proto-app .bsim-parity-head { display: flex; align-items: center; gap: 10px; }
+.proto-app .bsim-parity-l { font: var(--evr-caption); font-weight: var(--evr-fw-demibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-parity-v {
+  margin-left: auto;
+  font-family: var(--evr-font-text); font-size: 12px; font-weight: var(--evr-fw-bold);
+  padding: 2px 10px; border-radius: var(--evr-radius-circle);
+}
+.proto-app .bsim-parity--pre { color: var(--evr-content-status-warning-highemp); background: var(--evr-surface-status-warning-lowemp); }
+.proto-app .bsim-parity--post { color: var(--evr-content-status-success-highemp); background: var(--evr-surface-status-success-lowemp); }
+.proto-app .bsim-parity-note { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+
+/* booking chips */
+.proto-app .bsim-bk { display: flex; flex-wrap: wrap; gap: 8px; }
+.proto-app .bsim-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 11px; border-radius: var(--evr-radius-circle);
+  background: var(--evr-surface-tertiary-default);
+  font: var(--evr-caption); color: var(--evr-content-primary-default);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.proto-app .bsim-chip .proto-ico { width: 13px; height: 13px; }
+.proto-app .bsim-chip--strong { background: var(--evr-surface-decorative-low-blue); color: var(--evr-blue-600); font-weight: var(--evr-fw-demibold); }
+.proto-app .bsim-chip--warn { background: var(--evr-surface-status-warning-lowemp); color: var(--evr-content-status-warning-highemp); font-weight: var(--evr-fw-demibold); }
+.proto-app .bsim-chip--peak { background: var(--evr-surface-decorative-low-orange); color: var(--evr-content-decorative-orange); font-weight: var(--evr-fw-demibold); }
+
+/* summary */
+.proto-app .bsim-summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  padding: 16px 20px; border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-inverse-primary); color: var(--evr-content-primary-inverse);
+}
+.proto-app .bsim-summary-main { display: flex; flex-direction: column; gap: 2px; }
+.proto-app .bsim-summary-amt { font-family: var(--evr-font-display); font-size: 30px; font-weight: var(--evr-fw-demibold); line-height: 1; font-variant-numeric: tabular-nums; }
+.proto-app .bsim-summary-cap { font: var(--evr-caption); opacity: 0.7; }
+.proto-app .bsim-summary-side { display: flex; gap: 22px; }
+.proto-app .bsim-stat { display: flex; flex-direction: column; gap: 1px; text-align: right; }
+.proto-app .bsim-stat .v { font: var(--evr-body1); font-weight: var(--evr-fw-demibold); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-stat .l { font: var(--evr-caption); opacity: 0.7; }
+
+/* waterfall */
+.proto-app .bsim-breakdown {
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-primary-default);
+  overflow: hidden;
+}
+.proto-app .bsim-line { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--evr-border-decorative-lowemp); }
+.proto-app .bsim-line:last-child { border-bottom: none; }
+
+/* shift pay intervals — a sub-block above the worker-pay waterfall line */
+.proto-app .bsim-ivl-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 9px 16px; background: var(--evr-surface-secondary-default); border-bottom: 1px solid var(--evr-border-decorative-lowemp); }
+.proto-app .bsim-ivl-head-l { font: var(--evr-caption); font-weight: var(--evr-fw-bold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--evr-content-primary-lowemp); white-space: nowrap; }
+.proto-app .bsim-ivl-head-b { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; text-align: right; }
+.proto-app .bsim-ivl { display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 18px; border-bottom: 1px dashed var(--evr-border-decorative-lowemp); }
+.proto-app .bsim-ivl-dot { flex: 0 0 8px; width: 8px; height: 8px; border-radius: var(--evr-radius-circle); }
+.proto-app .bsim-ivl-time { flex: 0 0 auto; font: var(--evr-body2); font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); font-variant-numeric: tabular-nums; min-width: 92px; }
+.proto-app .bsim-ivl-tag { flex: 1 1 auto; min-width: 0; font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-ivl-hrs { flex: 0 0 auto; font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-ivl-rate { flex: 0 0 auto; text-align: right; min-width: 72px; font: var(--evr-body2); font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-ivl--overtime .bsim-ivl-tag { color: var(--evr-orange-500, var(--evr-content-primary-default)); }
+.proto-app .bsim-ivl--night .bsim-ivl-tag { color: var(--evr-purple-500, var(--evr-content-primary-default)); }
+
+.proto-app .bsim-line-bar { flex: 0 0 4px; align-self: stretch; min-height: 30px; border-radius: 2px; background: var(--evr-surface-tertiary-default); position: relative; overflow: hidden; }
+.proto-app .bsim-line-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 2px; transition: width 200ms cubic-bezier(0.4,0,0.2,1); }
+.proto-app .bsim-line-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.proto-app .bsim-line-label { display: flex; align-items: center; gap: 8px; font: var(--evr-body2); font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); }
+.proto-app .bsim-line-pct { font: var(--evr-caption); font-weight: var(--evr-fw-bold); color: var(--evr-content-primary-lowemp); background: var(--evr-surface-tertiary-default); padding: 1px 7px; border-radius: var(--evr-radius-circle); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-line-basis { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-line-figs { flex: 0 0 auto; text-align: right; display: flex; flex-direction: column; gap: 1px; }
+.proto-app .bsim-line-amt { font: var(--evr-body2); font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-line-perhr { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-line.is-muted { opacity: 0.5; }
+.proto-app .bsim-line--sub { background: var(--evr-surface-secondary-default); justify-content: space-between; }
+.proto-app .bsim-line--sub .bsim-line-label { color: var(--evr-content-primary-default); }
+.proto-app .bsim-line--total { flex-direction: column; align-items: stretch; gap: 12px; background: var(--evr-surface-decorative-low-blue); padding: 16px; }
+.proto-app .bsim-tc-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.proto-app .bsim-line--total .bsim-line-label { font-family: var(--evr-font-display); font-size: 16px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); }
+.proto-app .bsim-line--total .bsim-line-amt { font-family: var(--evr-font-display); font-size: 22px; font-weight: var(--evr-fw-bold); color: var(--evr-blue-600); font-variant-numeric: tabular-nums; }
+
+/* compact resolved-rate detail nested under the Total charge (incl VAT) line */
+.proto-app .bsim-tc-detail { display: flex; flex-direction: column; gap: 9px; }
+.proto-app .bsim-line--total .bsim-tc-detail { padding-top: 12px; border-top: 1px solid var(--evr-border-decorative-default); }
+.proto-app .bsim-tc-rrow { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.proto-app .bsim-tc-rlabel { font: var(--evr-caption); font-weight: var(--evr-fw-demibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-tc-rrate { display: inline-flex; align-items: baseline; gap: 3px; font-family: var(--evr-font-display); font-size: 18px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-tc-runit { font: var(--evr-caption); font-family: var(--evr-font-text); color: var(--evr-content-primary-lowemp); white-space: nowrap; }
+.proto-app .bsim-tc-rrow .bsim-src { margin-left: auto; }
+.proto-app .bsim-tc-rmeta { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-tc-none { display: flex; align-items: flex-start; gap: 10px; color: var(--evr-content-status-error-lowemp); font: var(--evr-body2); }
+.proto-app .bsim-tc-none .proto-ico { flex: 0 0 auto; margin-top: 1px; color: var(--evr-content-status-error-default); }
+
+/* =====================================================================
+   v0.14 — two-step output: hourly rate card, then booking duration + VAT.
+   ===================================================================== */
+.proto-app .bsim-section {
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-primary-default);
+  padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.proto-app .bsim-section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.proto-app .bsim-section-titlewrap { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.proto-app .bsim-section-step {
+  flex: 0 0 auto; width: 22px; height: 22px; border-radius: var(--evr-radius-circle);
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--evr-surface-decorative-low-blue); color: var(--evr-blue-600);
+  font: var(--evr-caption); font-weight: var(--evr-fw-bold); font-variant-numeric: tabular-nums;
+}
+.proto-app .bsim-section-title { font-family: var(--evr-font-display); font-size: 16px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); }
+.proto-app .bsim-section-meta { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); margin-top: -6px; font-variant-numeric: tabular-nums; }
+
+/* rate-unit suffix on £/hr figures in the rate-card waterfall */
+.proto-app .bsim-rate-unit { font: var(--evr-caption); font-family: var(--evr-font-text); font-weight: var(--evr-fw-regular); color: var(--evr-content-primary-lowemp); margin-left: 2px; }
+
+/* the "Total hourly charge rate" line — emphasised mini-total at the foot of the rate card */
+.proto-app .bsim-line--charge { justify-content: space-between; background: var(--evr-surface-decorative-low-blue); padding: 14px 16px; }
+.proto-app .bsim-line--charge .bsim-line-label { font-family: var(--evr-font-display); font-size: 15px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); }
+.proto-app .bsim-line--charge .bsim-line-amt { font-family: var(--evr-font-display); font-size: 20px; font-weight: var(--evr-fw-bold); color: var(--evr-blue-600); }
+.proto-app .bsim-line--charge .bsim-rate-unit { font-size: 12px; }
+
+/* booking lines (no progress bar — duration + VAT in absolute £) */
+.proto-app .bsim-line--bk { justify-content: space-between; }
+
+/* the final total line — simple row (the nested resolved-rate detail moved to card 1) */
+.proto-app .bsim-section--booking .bsim-line--total { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; }
+.proto-app .bsim-section--booking .bsim-line--total .bsim-line-label { font-family: var(--evr-font-display); font-size: 16px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); }
+.proto-app .bsim-section--booking .bsim-line--total .bsim-line-amt { font-family: var(--evr-font-display); font-size: 24px; font-weight: var(--evr-fw-bold); color: var(--evr-blue-600); font-variant-numeric: tabular-nums; }
+
+/* booking summary stats row */
+.proto-app .bsim-bk-stats { display: flex; border: 1px solid var(--evr-border-decorative-lowemp); border-radius: var(--evr-radius-2xs); overflow: hidden; }
+.proto-app .bsim-stat2 { flex: 1 1 0; display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-right: 1px solid var(--evr-border-decorative-lowemp); min-width: 0; }
+.proto-app .bsim-stat2:last-child { border-right: none; }
+.proto-app .bsim-stat2 .v { font-family: var(--evr-font-display); font-size: 18px; font-weight: var(--evr-fw-demibold); color: var(--evr-content-primary-highemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-stat2 .l { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+
+/* =====================================================================
+   v0.92 — rate-card (version) selector + its pricing-rule chips. The
+   simulator prices against the selected version and shows only the
+   inputs its rules use.
+   ===================================================================== */
+.proto-app .bsim-ver-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 2px; }
+.proto-app .bsim-ver-pill {
+  font-family: var(--evr-font-text); font-size: 11px; font-weight: var(--evr-fw-bold);
+  padding: 2px 9px; border-radius: var(--evr-radius-circle);
+}
+.proto-app .bsim-ver-pill--active { color: var(--evr-content-status-success-highemp); background: var(--evr-surface-status-success-lowemp); }
+.proto-app .bsim-ver-pill--superseded { color: var(--evr-content-primary-default); background: var(--evr-surface-tertiary-default); }
+.proto-app .bsim-ver-pill--scheduled { color: var(--evr-content-status-informative-highemp); background: var(--evr-surface-status-informative-lowemp); }
+.proto-app .bsim-ver-eff { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; }
+.proto-app .bsim-ver-rulen { margin-left: auto; font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; }
+
+.proto-app .bsim-rulechips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.proto-app .bsim-rulechip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px 3px 8px; border-radius: var(--evr-radius-circle);
+  background: var(--evr-surface-tertiary-default);
+  font: var(--evr-caption); color: var(--evr-content-primary-default); white-space: nowrap;
+}
+.proto-app .bsim-rulechip::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--evr-content-primary-lowemp); }
+.proto-app .bsim-rulechip--worker::before { background: var(--evr-blue-400); }
+.proto-app .bsim-rulechip--statutory::before { background: var(--evr-teal-400); }
+.proto-app .bsim-rulechip--markup::before { background: var(--evr-purple-400); }
+.proto-app .bsim-rulechip--tax::before { background: var(--evr-content-primary-lowemp); }
+
+/* tenure margin reduction — a deduction line in the rate-card waterfall */
+.proto-app .bsim-line--neg .bsim-line-amt { color: var(--evr-content-status-success-highemp); }

@@ -1,0 +1,1533 @@
+you can also allow
+Pennsylvania local resident withholding for employees who reside in Pennsylvania but
+work outside of the state.
+Single Sites with Multiple Legal Entities
+You can assign multiple legal entities to a single site within your organization by using overrides at
+the On-Site Department level. This gives you greater flexibility in structuring the organization. It
+also provides an additional level of override so that on-site departments within a site can all report
+to their own legal entities and each have their own taxation address.
+Before You Begin: Make sure that you are familiar with the general concepts in Organization
+Hierarchy.
+How Overrides Are Applied
+Dayforce is bound by the following constraints when applying overrides:
+If the Employee Work Location Override is configured, it sets the override.
+
+-- 382 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 383 of 0
+Site level settings are the default if there are no other configurations.
+If an On-Site Department level override is configured, it overrides the Site level.
+If an override is needed, the tabled address must be used; otherwise the Site level address
+applies.
+Free form addresses in the Site level are used for taxation unless a tabled address is
+selected in the Site level.
+Role Configuration
+Before You Begin: Complete the following configuration steps:
+Configure a role to assign multiple legal entities to a single site
+Ensure that Support has released the ability to set taxation addresses on work locations
+Configure a role to set taxation addresses on work locations
+Configure a Role to Assign Multiple Legal Entities to a Single Site
+1. Go to System Admin > Roles and select the role to which you want to grant access.
+2. Click the Features tab.
+3. Select the Org Setup > Org Setup > Org Payroll Setup > Location Addresses role feature.
+4. Click Save, then click Refresh.
+Ensure that Support has Released the Ability to Set Taxation Addresses on Work Locations
+(Service Level Users Only) The ability to set the taxation address on an employee work location
+override isn’t released to all instances, and must be released to instances specifically using the
+script: IsTaxationAddressAvailable.
+Configure a Role to Set Taxation Addresses on Work Locations
+1. Go to System Admin > Roles and select the role to which you want to grant access.
+2. Click the Features tab.
+3. Select the Org Setup > Org Setup > Organization > Organization > Taxation Address
+Available role feature.
+4. Click Save, then click Refresh.
+After Your Role is Configured
+After your role has access to assign multiple legal entities to a site, you can proceed with the three
+main steps involved in assigning multiple legal entities to a site:
+Set Location Addresses for a Legal Entity
+Set Employee Work Location Overrides
+Set the Taxation Address for an Employee Work Location
+Set Location Addresses for a Legal Entity
+
+-- 383 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 384 of 0
+The first step for assigning multiple legal entities to a single site is entering the appropriate
+addresses in Org Setup > Org Payroll Setup > Location Addresses. The following screenshot is
+an example:
+To set up location addresses:
+1. Go to Org Setup > Org Payroll Setup > Location Addresses and click Add.
+2. Add the following basic information to the new entry fields:
+Enter a name for the location address.
+(Optional) Enter a description for the location address.
+Enter an cross-reference code for imports and exports.
+Select the Is Taxation checkbox.
+3. In the fields below the new entry, fill out the rest of the fields:
+Short Name: This is populated with the name that you entered.
+Description: This is populated with the description that you entered.
+Reference Code: This is populated with the cross-reference code that you entered.
+Address: Required field for the location address.
+Address Line 2: Optional field for the location address.
+Zip / Postal Code: Required field for the ZIP or postal code.
+Country Code: Required drop-down list to select the country.
+State / Province: Required drop-down list to select the state or province.
+City: Required drop-down list to select the city; also has the Add a new city option.
+County: Optional field for the county.
+4. Click Save, then click Refresh.
+
+-- 384 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 385 of 0
+Setting up the addresses here replaces the free form address option in the Employee Work
+Location Overrides tab with a table of addresses in the Location Addresses tab. This provides
+greater consistency and lets you select an existing address rather than enter addresses manually
+with an override.
+Set Employee Work Location Overrides
+Next, enter new employee work location overrides in Org Setup > Org Payroll Setup > Employee
+Work Location Overrides. The addresses that you created in the Location Address tab are options
+here in the Location Address drop-down list, and they also appear as options in the Taxation
+Address drop-down list in the Address tab.
+To add an employee work location override:
+1. Go to Org Setup > Org Payroll Setup > Employee Work Location Overrides and click Add.
+2. Enter a name and, optionally, a description.
+3. (Optional) Select the Allow Legal Entity Override checkbox if you want to configure a legal
+entity override the work location override. The Legal Entity tab is added to the screen.
+4. Enter a cross-reference code in the Reference Code field.
+5. In the Address tab, select an address in the Location Address drop-down list.
+6. (Optional) Click the Legal Entity tab and complete the following steps:
+a. Click Add.
+b. In the Legal Entity drop-down list, select a legal entity.
+c. Enter a start date in the Effective From field.
+d. (Optional) Enter an end date in the Effective To field.
+7. Click Save, then click Refresh.
+Set the Taxation Address for an Employee Work Location
+After you have set up the addresses and work location overrides for the organization to use, you
+are ready to set the taxation address for employee work locations.
+To set the taxation address for an employee work location:
+1. Go to Org Setup > Organization and click the Organization tab.
+2. Select an org unit at the Site level or the Department org level.
+3. Click the Address sub-tab and select an option in the Taxation Address drop-down list.
+4. Click Save, then click Refresh.
+In terms of when to apply the overrides, the application is bound by the following constraints:
+If configured, the Employee Work Location Override sets the override.
+The On-Site Department level overrides the Site level, if configured.
+Site-level settings are the default if there are no other configurations.
+
+-- 385 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 386 of 0
+If an override is needed, the tabled address must be used, otherwise the site-level address
+applies.
+Free form addresses at the site level are used for taxation unless a tabled address is
+selected at the site level.
+Override the Coordinates of Location Addresses
+As part of assigning multiple legal entities to a single site, you can enter location addresses for the
+legal entities to override the site-level address. Dayforce uses a third-party geocoding tool to
+ensure the accuracy of the addresses you've entered. The tool generates a set of coordinates
+when it validates the address. These coordinates are then used to determine the appropriate tax
+jurisdiction for payroll calculations. When needed, you can override the validated coordinates in
+Org Setup > Org Payroll Setup > Location Addresses.
+Note: The override coordinates feature should only be used for US states with local government
+taxes.
+Before You Begin:
+Make sure that you're familiar with the general concepts in Single Sites with Multiple Legal
+Entities
+Configure the location addresses for the legal entity.
+Role feature access:
+Org Setup > Org Setup > Org Payroll Setup > Location Addresses
+Org Setup > Org Setup > Organization > Organization > Taxation Address Available
+To add override coordinates for a legal entity's location address:
+1. Go to Org Setup > Org Payroll Setup > Location Addresses.
+2. Expand the custom location address that you want to update.
+3. Select the Geo Points Override checkbox.
+4. Enter the override coordinates in Latitude and Longitude. The accepted range of values in
+Latitude is between +90 and-90. The accepted range of values in Longitude is between
++180 and -180.
+5. Important: Dayforce isn’t responsible for the accuracy of the override coordinates you enter.
+5. Click Save.
+To ensure that the correct tax jurisdiction is used in the payroll calculations, Dayforce clears the
+override coordinates when you change any of the following fields in the location address: Country
+Code, State/Province, Address, Address Line 2, County, City, and Zip/Postal Code.
+Configure Legal Entity for Early Filing Status
+
+-- 386 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 387 of 0
+In the United States and Canada, when a legal entity is sold or goes out of business mid-year,
+employers must generate, print, and distribute tax forms to employees within 30 days of notifying
+the government. Also, within these 30 days, employers must send the completed tax forms to the
+government for processing. In Dayforce, you can update the legal entity with an end date and
+update the status to report an out of business, lost tax form, or new seasonal operation status for
+government mid-year reporting for early filers.
+Note: Amendments aren’t available for early filers until February of the following year. Also, US
+1099 and D2X tax forms aren’t eligible for early filing.
+To configure a legal entity for early filing:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select the US or Canadian legal
+entity.
+2. In the Legal Entity Status drop-down list, select the applicable status such as Lost with Tax
+Forms and Filing or Out of Business (Accelerated).
+3. In the Effective End field, enter an end date.
+4. Go to Year End > Canada Year End or Year End > USA Year End, select the applicable
+year from the Year drop-down list to run the year end process for the affected legal entity.
+5. In the Process Job drop-down list, select a filing option such as Generate Preview, Request
+Print, or Distribute for Filing.
+6. Click Save.
+Configure GRS Tax Remittance (Canada only)
+For legal entities in Canada, you must configure the application to remit taxes through the
+Government Remittance System (GRS) in the Dayforce Back Office system, and to specify the
+frequency at which those taxes will be remitted. This is to ensure that remittances are made
+correctly and on time. This is done in Org Setup > Org Payroll Setup > Legal Entity, in the Tax
+Remittance tab.
+Tax remittance authorities
+Tax Authority 	Taxes
+Canada Federal Federal Income Tax (includes all non-Quebec Provinces and
+Territories), Canada Pension Plan, Employment Insurance.
+Manitoba 	Manitoba Health and Education Tax (HET)
+Newfoundland / Labrador Newfoundland & Labrador Health and Post-Secondary
+Education Tax (HAPSET)
+Northwest Territories 	Northwest Territories Payroll Tax
+Nova Scotia 	Workers Compensation
+Nunavut 	Nunavut Payroll Tax
+Ontario 	Ontario Employer Health Tax (EHT)
+
+-- 387 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 388 of 0
+Quebec
+Quebec Income Tax, Quebec Pension Plan, Quebec Parental Insurance Plan,
+Health Services Fund (HSF), Quebec Workers’ Compensation Premiums (CNESST –
+formerly CSST)
+To configure the application to remit taxes to the GRS:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity.
+2. Select the Canadian legal entity you want to work with.
+3. Click the Tax Remittance tab.
+4. Click Add.
+5. In the Authority drop-down list, select a tax authority.
+6. In the Remittance Frequency drop-down list, select a frequency.
+7. Select the Is Remitted checkbox.
+8. In the Start Date field, enter a date when the tax remittance through GRS starts.
+9. (Optional) In the End Date field, select a date when the tax remittance through GRS stops.
+10. Click Save.
+Customer Funding Identifiers for Canadian Legal Entities
+For Canadian legal entities, you can specify the funding account used by the legal entity to pay its
+employees in Org Setup > Org Payroll Setup > Legal Entity in the Customer Funding Identifiers
+tab.
+You can also set the funding account at the pay group level in Pay Setup > Pay Group, in the
+Payroll Properties tab, by entering the account number in the Identifier field. As a best practice,
+you should configure a funding identifier at the pay group level, even if you are configuring a legal
+entity level funding identifier. Additional information is available in Pay Groups.
+Important: Legal entity funding identifiers override pay group funding identifiers.
+Configuring a customer funding identifier for a Canadian legal entity ensures that employees in
+pay groups under that legal entity are paid using the account associated with the legal entity
+funding identifier, regardless of any identifier set at the pay group level.
+The process to determine what funding identifier to use is determined by Dayforce during the
+sales and contracting process.
+Customer Funding Identifiers for Canada
+Canadian customer funding identifiers conform to the following specifications:
+The customer funding identifier must start with the letters E, F, or L (to indicate the series),
+then have an alphanumeric character other than O, I, or Z, then have three numeric
+characters.
+The identifiers E4000, F4000, and L4000 are reserved and cannot be used.
+
+-- 388 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 389 of 0
+Assigning Customer Funding Identifiers to Canadian Legal Entities
+To assign customer funding identifiers to Canadian legal entities:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Customer Funding Identifiers tab.
+3. Click Add.
+4. (Optional) Select the Is Default checkbox.
+5. Enter a name and, optionally, a description.
+6. In the Reference Code field, enter an XREF code.
+7. In the Funding Identifier field, enter the appropriate funding identifier.
+8. In the Effective Start field, select or enter an effective from date. The application uses the
+funding identifier information during its effective date range.
+9. Click Save.
+Overriding Customer Funding Identifiers in Canadian Legal Entities
+Dayforce applies the default funding identifier to all org units within the legal entity, unless
+otherwise specified. However, if you have configured multiple customer funding identifiers, you
+can override the default funding identifier at specific org levels.
+In Org Setup > Organization > Organization, select an org level to expand the slide-out panel. In
+the Legal Entity tab, and select a non-default funding identifier in the Override Customer Funding
+Identifiers drop-down list:
+Employment Insurance in Canada
+
+-- 389 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 390 of 0
+In Canada, both employees and employers make contributions to employment insurance (or EI)
+premiums. Employee contribution amounts are determined by employee insurable earnings
+multiplied by the federal (or provincial, in Quebec) rate, up to a maximum annual insurable
+earnings amount. You can locate the latest Federal and provincial (Quebec) EI premium rates and
+maximums by visiting https://www.canada.ca.
+Employers must contribute EI premiums based on a factor of 1.4 times the employee's premium
+contribution (there can be exceptions: see https://www.canada.ca and talk with your
+implementation consultant). If we take Linda as an example again Employers also have a federal –
+or provincial, for Quebec – maximum annual employer premium amount. As a rule, the employer
+is responsible for the following:
+Deducting employee EI premiums from the employee's insurable earnings up to a maximum
+annual premium amount
+Contributing employer EI premiums, calculated by multiplying employee contributions by
+1.4, up to a maximum annual employer premium amount
+For the year 2018, for employee contributions, the federal rate is 1.66% on a maximum annual
+insurable earnings amount of $51,700, for a maximum annual employee contribution amount of
+$858.22. The employer maximum annual premium amount is $1,201.51.
+For example, if Linda lives in Ontario and earns $30,000 annually, her total annual EI contribution
+amount would be $489, calculated as follows: $30,000 x 1.66% = $489
+The employer's total annual EI contribution amount would be $684.60, calculated by multiplying
+Linda's amount by 1.4: $489 x 1.4 = $684.60
+However, if Linda's annual salary were $95,000, her total EI contributions would be $858.22, and
+her employer's contributions would be $1,201.51, because the 2018 maximum annual insurable
+earnings amount is $51,700.
+To set the employment insurance factors for a legal entity, you need to create at least one EI rate
+group and reference code entry and save it, effectively assigning it to the legal entity.
+If the legal entity has received permission from Service Canada to remit employment insurance
+premiums at a lower rate, you can enter an additional EI rate group and reference code with a
+lower defined factor. If you configure multiple EI rate groups for a legal entity, you can override the
+default rate group at the employee level in People for a selected employee in the Payroll > Tax
+Definitions screen in the Employee Payroll Tax section. Instructions and additional information are
+available in the topic Assign EI Rates to Employees.
+In the following screenshot, you can see the entries for employment insurance rates for a selected
+legal entity in the Employment Insurance sub-tab:
+
+-- 390 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 391 of 0
+In the example screenshot, in addition to the Default EI rate group, you can see additional EI rate
+entries for the legal entity Manufacturing Co. Canada. Each of these was set up with a different
+rate. Take the example Category 3 EI 1.224, which has a rate set at 1.224 with an effective start
+date of January 1, 2020:
+
+-- 391 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 392 of 0
+After you have created employment insurance rates for a legal entity, you can assign them to
+employees. See Assign EI Rates to Employees.
+Set the Employer EI Rate for a Legal Entity
+When the legal entity gets permission from Service Canada to remit employment insurance (EI)
+premiums at a lower rate, you need to set custom EI rates (or factors) for a legal entity. To set a
+custom rate, you must create at least one EI Rate Group with a corresponding Reference Number
+with the lower factor, and assign the rate group to the legal entity.
+If more than one EI reference number is configured for a legal entity, you can assign a preferred
+reference number at the legal entity level or at the employee level. A number assigned at the
+employee level in People in Payroll > Tax Definitions in the Employee Payroll Tax section overrides
+the number assigned at the legal entity level.
+Before You Begin: Make sure you're familiar with the concepts in Employment Insurance in
+Canada.
+To set a custom EI factor for a legal entity:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Employment Insurance tab.
+3. To create the EI rate group entry:
+a. Click Add.
+b. In the Rate Group field, enter the rate group name.
+c. In the Reference Code field, enter the EI reference number that is four digits long.
+d. Select the Is Default checkbox to set this entry as the default rate for the legal entity.
+e. Click Save.
+4. To enter an EI rate for the rate group entry:
+a. In the Rates section, click Add.
+b. In the Rate field, enter the EI factor. The rate for the default should be 1.4.
+c. In the Start Date field, enter or select the effective start date for the EI factor.
+d. (Optional) In the End Date field, enter an effective end date of the EI factor. Dayforce
+only uses the factor during its effective date range up to the end date.
+e. Click Save.
+After you've created an EI factor entry, you can assign it to employees in People, in the Payroll
+> Tax Definitions screen, in the Employee Payroll Tax section. Information and instructions are
+available in Assign EI Rates to Employees.
+Assign EI Rates to Employees
+In some cases, a specific employee might be entitled to a different employment insurance rate.
+Employee-level employment insurance factors can override the factors set at the legal entity level.
+
+-- 392 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 393 of 0
+Note: The employment insurance Override Parameters section is only displayed when you select
+a Canadian employee.
+You can record employment insurance factors for specific employees in the Employee Payroll Tax
+section of the Payroll > Tax Definitions screen in People.
+To record employment insurance rates for specific employees:
+1. Go to People, open the employee profile, and click Payroll > Tax Definitions.
+2. In the Employee Payroll Tax section, select the employer's employment insurance tax.
+3. Click Add.
+4. Enter the effective start date of the employment insurance rate in the Effective From field.
+The application uses the factor only during its effective date range.
+5. (Optional) Enter the effective end date of the employment insurance rate in the Effective To
+field.
+6. In the Override Parameters section under the effective dates, select the employee's
+reduced rate group in the Reduced EI Rate drop-down list. This list is populated with the
+EI rate groups configured in Org Setup. See Employment Insurance in Canada.
+7. Click Save.
+Configure Payroll Numbers for Specific Payments (Canada Only)
+In some cases, your organization might choose to set up supplementary wage insurance to top
+up the amounts paid by government when employees are laid off, go on parental leave, or are
+absent from work for other legitimate reasons. This can require making and reporting separate
+payments to private insurance programs.
+To accommodate this, you will need the following:
+Two separate RP (payroll) numbers - an existing one and another to apply to the specific
+payments
+One or more new rate groups
+A new (or modified existing) check template
+One or more new (or modified existing) payroll policies that include the Canadian
+Employment Insurance Rate Rule that includes (or excludes) the appropriate check
+template or templates
+To set up payroll numbers:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity.
+2. Locate and select the Canadian legal entity you want to work with.
+3. Click the Employment Insurance tab, which loads a list of any existing rate groups and a
+Rates section below that displays rates for the selected rate group.
+4. Click Add.
+
+-- 393 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 394 of 0
+5. Enter a name in the Rate Group field.
+6. In the Reference Code field, enter the payroll (RP) number.
+7. In the Rates section, click Add to add a rate for this group.
+8. Click Save.
+After you have created the new rate groups, the next task is to determine which of your check
+templates should be targeted to it. Typically, you will need to create a check template for this
+purpose. Information about check templates and how to configure them is available in Check
+Templates and Check Types.
+Finally, you will need to create or update an existing payroll policy for Employment Insurance
+rules. One policy must be configured to include your new rate group and include your new check
+template. Another must be configured to include your other rate groups and to exclude your new
+check template.
+Link Legal Entities to Org Units
+Each location in the organization configured as a site needs to be part of a configured legal entity
+so that the employees working at each site are paid by the appropriate legal entity.
+The application links legal entities to org units based on the legal entity's country, as well as the
+country selected for the org unit's address in the Address tab within the Organization tab of Org
+Setup > Organization.
+To link legal entities to sites:
+1. Go to Org Setup > Organization and click the Organization tab.
+2. Select the site you want to assign a legal entity to.
+3. Ensure that the org unit has a country selected in the Country Code drop-down list in the
+Address tab.
+4. Click the Legal Entity tab.
+5. Click Add.
+6. Select an entity in the Legal Entity drop-down list.
+7. If you have configured multiple worksite reporting, you can select the worksite number
+applicable to the org unit in the Worksite Name [State-Number] drop-down list.
+8. See Configure Multiple Worksite Reporting.
+8. Define an effective date range for the legal entity assignment.
+9. Click Save.
+Historical Payroll Data Loading
+When implementing Dayforce Payroll mid-year for an organization, all payroll information for the
+year up to the point that the organization starts using Dayforce Payroll must be loaded in
+Dayforce.
+
+-- 394 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 395 of 0
+Before You Begin: The audience for this content is Dayforce Services Representatives and
+Implementation Consultants who have database access and can log in to the application using a
+user role configured as a Service Role.
+The following topics describe the process of loading historical payroll data into Dayforce before
+switching over to Dayforce Payroll.
+Set the Payroll History Load Type
+Load Payroll Historical Data
+Enter YTD Amounts of Employer Taxes for Canadian Legal Entities
+Set the Payroll History Load Type
+You must set the payroll history load type to load payroll history in Dayforce. You must have
+database administrator access to perform this task.
+There are three options for setting the database field PayrollHistoryLoadType on the
+Client table:
+0: No earning statement history was loaded.
+1: Earning statement history was imported using the Earning Statement Import to show
+historical earning statements prior to the payroll cut over date.
+2: Earning statement history was imported using the Pay Run History Import as archived
+pay runs and to show historical earning statements for those archived pay runs prior to the
+payroll cut over date.
+Set the Payroll History Load Type
+To set the payroll history load type:
+1. Set the database field PayrollHistoryLoadType on the Client table to enable the
+features you require. The recommended setting is 2.
+2. Set the PayrollCutoverDate field on the Client table to the date that marks the
+boundary between payroll history imported from another application and live payroll data
+generated and calculated by Dayforce Payroll.
+3. Note: This date can be overridden at the pay group level in Pay Setup > Pay Group if a date
+has been defined on the Client table.
+Setting PayrollHistoryLoadType to 2 enables the following behaviors:
+Record of Employment (ROEs)
+ROEs read values from the MigratedROEData import for any periods prior to the cut-over date.
+This data can be imported using the Dayforce Migrated ROE History Import.
+
+-- 395 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 396 of 0
+Earning Statements
+All earning statements read imported data, if it exists, for pay periods prior to the cut-over date.
+This data can be imported using the Dayforce Pay Run History Import.
+Payroll Reports
+Payroll reports are not available for periods that are prior to the cut-over date.
+Employer YTD Taxes
+For Canadian customers, there is no dependency on the PayrollHistoryLoadType value. At the
+legal entity level for each Canadian pay group, the YTD taxes can be inserted for the migration
+year and the Payroll Register Report, Payroll Summary Report, the Preview tab in Payroll, and any
+year end files generated use the inserted amounts in the aggregation (at the pay group level
+only) of YTD totals.
+Load Payroll Historical Data
+After the payroll history load type has been set, you can load payroll historical data using the
+Dayforce Pay Run History Import interface specification.
+Download the Dayforce Interface Specifications ZIP file and see the Dayforce Pay Run History
+Import Specification document for information on how to use this interface.
+Incomplete Payroll Historical Data
+Functionality exists that allows Dayforce Service Representatives implementing Dayforce Payroll to
+import incomplete historical data, missing either wage or tax amounts for different tax authorities,
+and have Dayforce recalculate the pay run and generate the missing data based on the earnings
+and deductions data imported, as well as Dayforce’s current configuration.
+For example, the historical data being imported for an employee contains $1,200 in regular
+earnings, $500 in bonus earnings, but no wage or tax amounts. Using this functionality, Dayforce
+can calculate what employer and employee taxes were paid in the imported pay run. The
+calculations are based on a variety of factors that must already be configured in Dayforce for the
+recalculation to occur, including:
+The employee must have a valid payroll policy applied to them that applies their earnings
+and taxes.
+The employee’s home and work address information.
+The organizational hierarchy and legal entity configuration.
+Earning and deductions are configured with the appropriate tax and compliance codes.
+
+-- 396 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 397 of 0
+The effectiveness of the recalculation of wages and taxes is tied to the proper and complete
+configuration of Dayforce. To calculate the appropriate New York state taxes the employee pays
+on the imported earnings, as an example, the employee’s home and work address must be
+accurate in Dayforce.
+It’s important to note that when migrating customers to Dayforce Payroll every effort should be
+made to import the appropriate data from the previous payroll system; the functionality described
+in this entry should only be used when the complete data does not exist.
+Before You Begin: This functionality should only be used before Dayforce Payroll has gone live
+and before any pay runs have been committed.
+Note: This functionality requires database access and can only be performed by Dayforce
+Services or Support Representatives accessing Dayforce using a user account configured as a
+service role.
+To import incomplete historical data:
+1. Services Representatives can specify 0 in the fields in the import file where the data does
+not exist. Specifically, record 0 in the Amount, CurrentWageBasis, and TotalTaxableWages
+fields of the PayRunTax and PayRunTaxMethodDetail sections of the import file.
+2. Dayforce still accepts the import file with a 0 value in these fields; the historical pay run is
+imported as normal. If viewed or reported on in Payroll > Pay Run Management, the
+imported pay run wouldn’t contain tax or wage amount for the tax authorities imported with 0
+values in these fields.
+2. A representative with database access needs to mark within the database that the pay run
+can be recalculated. This is done by updating the IsSetup field to 1 in the PRPayRun table
+for the imported pay run with incomplete data.
+3. Log in to Dayforce using a service role.
+4. Define for which tax authorities Dayforce should calculate tax and wage amounts within the
+pay run. This functionality is controlled by the Generate Tax in Setup Pay Run and Generate
+Wages in Setup Pay Run checkboxes in Payroll Setup > Payroll Taxes.
+5. By default, these checkboxes are cleared for each tax authority. Select the appropriate
+checkbox for each corresponding tax authority that was imported with missing data.
+6. For example, if the imported pay run didn’t contain tax amounts for the California State
+Withholding Tax, select its Generate Tax in Setup Pay Run checkbox to configure Dayforce
+to calculate the tax amount based on the imported earnings.
+7. Note: To perform these steps, you must access Dayforce using a service role. ‘Service role’
+refers to a user role configured to access restricted areas of Dayforce. These roles are
+limited to Dayforce Services and Support Representatives.
+5. Run the Calculate Payroll background task in System Admin > Background Jobs, specifying
+the pay run’s start and end date in the appropriate fields, selecting the run’s pay group in
+the Pay Group drop-down list, and selecting the Include Committed Data Only checkbox.
+
+-- 397 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 398 of 0
+10. The task calculates the tax and wage amounts for the tax authorities with the Generate Tax
+in Setup Pay Run and Generate Wages in Setup Pay Run checkboxes selected for any pay
+run with IsSetup set to 1 in the database that intersects the date range specified in the
+task’s Start Date and End Date parameters.
+11. Dayforce creates additional records in the pay run results for the calculated amounts and
+does not modify any imported values. This means that if a tax or wage amount for a tax
+authority was imported and then incorrectly flagged for recalculation, by selecting either the
+Generate Tax in Setup Pay Run or Generate Wages in Setup Pay Run checkbox, both the
+imported and calculated amount records are included in the pay run results and the
+amounts will be doubled.
+12. Important: It’s crucial that only the taxes without tax or wage information that have been
+imported with 0 values are calculated using this functionality.
+13. Because calculated amounts never overwrite imported amounts, if there are imported
+amounts that need to be corrected, the data needs to be reimported.
+Enter YTD Amounts of Employer Taxes for Canadian Legal Entities
+To keep their tax records accurate, Canadian legal entities that start using Payroll midyear in
+Dayforce must enter amounts already paid for EI, CPP, QPP, and various provincial and territorial
+health taxes. Many of these legal entities migrated to Dayforce Payroll midyear, or began by using
+the WFM features and later added Payroll to their Dayforce system.
+In the YTD Amount tab in Org Setup > Org Payroll Setup > Legal Entity, you can enter the
+employer deductions paid for the year to date before the payroll start date. These amounts must
+include total taxable wages and limited taxable wages.
+Before You Begin: This topic is meant for Implementation users. You should only use the
+YTD Amount tab if you can't include one or more employer taxes in the Pay Run History Import as
+part of the implementation process. For details about that import, download the Dayforce Interface
+Specifications ZIP file and see the Dayforce Pay Run History Import Specification document.
+If the legal entity has more than one pay group, create a record for each pay group and split the
+amounts appropriately.
+To enter YTD amounts for a migrating Canadian legal entity:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a Canadian legal entity.
+2. Click the YTD Amount tab.
+3. In the Pay Group drop-down list, select a pay group for which you want to enter previous
+YTD amounts.
+4. In the Funding Identifier drop-down list, select a funding identifier.
+5. In the Migration Year drop-down list, select the year when the legal entity migrated to
+Dayforce Payroll.
+
+-- 398 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 399 of 0
+6. In the Employer Employment Insurance (EI) section, click Add to create an entry and fill out
+the following fields:
+EI Rate Group: Select the EI rate group.
+Tot Taxable Wage: Enter total taxable wage.
+Ltd Taxable Wage: Enter limited taxable wage.
+Taxes: Enter taxes.
+7. In the Employer Canada Pension Plan (CPP) section, click Add to create an entry and fill out
+the following fields:
+EI Rate Group: Select the EI rate group.
+Tot Taxable Wage: Enter total taxable wage.
+Ltd Taxable Wage: Enter limited taxable wage.
+Taxes: Enter taxes.
+8. In the Health Taxes section, enter the insurable wages earned by the pay group's
+employees in the Wages field of the appropriate taxes and premiums. For example, enter
+the pay group's insurable wages for EI in the Wages field in the Employer Employment
+Insurance (EI) section.
+9. Enter the taxes paid for the pay group's employees in the Taxes field of the appropriate
+taxes and premiums.
+10. Click Save.
+The health tax wage amounts affect whether the health taxes are applied. Each tax has an
+exemption amount, so when wages are below that limit, the tax isn’t paid. When a legal entity
+reaches the legislated threshold for each health tax, Dayforce automatically calculates and
+applies the tax. The prior wage amount entered in the YTD Amount tab helps determine when that
+threshold is reached for a legal entity in a migration year. These amounts are also reported in the
+Payroll Register and Payroll Summary Report.
+The Fiscal Calendar Feature
+A fiscal calendar is essentially an annual accounting period that might or might not coincide with
+the calendar year. Fiscal calendars are used for accounting, the general ledger, and for producing
+annual statements. Payroll Setup > Fiscal Calendars is divided into two tabs: Fiscal Calendars,
+where you can create and manage fiscal calendars; and Fiscal Years, where you can create and
+manage fiscal years.
+The concept of the fiscal year is associated with fiscal calendars. If your organization uses a fiscal
+year (or accounting period, if you are in the United Kingdom) that does not coincide with the
+calendar year, you have the option of configuring one or more fiscal calendars in Dayforce that
+you can assign to legal entities in your organization.
+You must configure a fiscal calendar if you intend to configure an earning or deduction grouping
+using an accumulation type. Additional information is available in Deduction and Earning
+Groupings.
+
+-- 399 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 400 of 0
+Important: One example of a fiscal calendar that does not correspond with the calendar year is
+the fiscal calendar for the United Kingdom, which has a fiscal year of April 6 to April 5. However, it
+isn’t mandatory to configure a fiscal calendar for UK legal entities in Dayforce as part of normal
+setup for UK payroll.
+As a rule, the fiscal calendar has nothing to do with year end processing for employee taxes.
+To use a custom fiscal calendar in Dayforce, you must create a fiscal calendar and then assign a
+legal entity to the year. There are two steps to this process:
+Create a fiscal calendar in the Fiscal Calendar tab. See The Fiscal Calendar Tab.
+Assign the calendar to a legal entity in Org Setup > Organization. See Assign a Custom
+Fiscal Calendar to a Legal Entity.
+A potential third step is the addition of a fiscal year to a fiscal calendar. See Fiscal Years Tab.
+The Fiscal Calendar Tab
+You use the Fiscal Calendars tab in Payroll Setup > Fiscal Calendar to create new or manage
+existing fiscal calendars. The fiscal calendars created in this tab can be used in the Fiscal Years
+tab.
+The Fiscal Calendars tab contains the following fields and controls:
+Name: The name for the fiscal calendar.
+Description: The description of the fiscal calendar.
+Month by Payroll Date: Specifies when a pay period is considered part of a month and has
+two options:
+Pay Date: The pay date determines the fiscal month. For example, if a pay period
+ends in April, but has a pay date in May, then Dayforce considers the pay period to
+belong to the fiscal month of May.
+Pay Period End Date: The pay period end date determines the fiscal month. For
+example, if a pay period ends in April, then Dayforce considers that pay period to
+belong to the fiscal month of April.
+Start Date: The start date for the fiscal calendar.
+Starting Month: The starting month for the fiscal calendar.
+Quarter Pattern: The pattern that determines the number of weeks in each of the quarters
+for the fiscal year. For example, to set quarters to have two 4-week periods and one 5-week
+period, select the 4-4-5 pattern. The options are:
+4-4-5
+4-5-4
+5-4-4
+Last Quarter Pattern: The pattern that determines the number of weeks in the last quarter of
+the fiscal year. The options are:
+
+-- 400 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 401 of 0
+4-4-6
+4-5-5
+4-6-4
+5-4-5
+5-5-4
+6-4-4
+You can also change existing calendars in the Fiscal Calendar tab. When you select a calendar
+row, its fields become editable. You can make any changes you need and click Save to commit
+them.
+Three other options are available for managing calendars:
+Copy: Creates a duplicate instance of the selected calendar at the top of the list, where you
+can make such changes as you need and click Save to save the new calendar.
+Delete: You can delete a calendar by clicking this and then clicking OK when asked to
+confirm the deletion.
+Localize: Opens a dialog box where, by clicking Add, you insert a row to the localization list
+that enables you to select the local language for the calendar from the Language drop-
+down list, and to enter a localized Name for the calendar, and a Description.
+In the following example screenshot, you can see a fiscal calendar with a starting month of May
+that has a quarterly pattern of 4-4-5 at the bottom of the list.
+You can add fiscal years to your new calendar in the Fiscal Years tab. See Fiscal Years Tab.
+Add Fiscal Calendars
+To add a fiscal calendar:
+1. Go to Payroll Setup > Fiscal Calendar.
+2. Click the Fiscal Calendars tab.
+3. Click Add.
+4. Enter a name and, optionally, a description for the fiscal calendar.
+5. In the Month by Payroll Date drop-down list, select Pay Date or Pay Period End Date.
+6. In the Start Date field, enter a start date for the fiscal calendar.
+7. In the Starting Month drop-down list, select the month the calendar should begin with.
+8. In the Quarter Pattern drop-down list, select the pattern of weeks for the quarters.
+
+-- 401 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 402 of 0
+9. In the Last Quarter Pattern drop-down list, you can optionally designate a different pattern
+of weeks for the last quarter of the fiscal year.
+10. Click Save.
+When you click Save, the calendar is also available for use in the Fiscal Year tab.
+Fiscal Years Tab
+The Fiscal Years tab provides the means to manage fiscal years, and is accessed by going to
+Payroll Setup > Fiscal Calendar and selecting the Fiscal Years tab. This tab contains the fiscal
+calendar settings created for the fiscal years, and can contain a list of more than one year for a
+selected fiscal calendar. After you have created the basic fiscal calendar entry, you can create a
+calendar for individual years by specifying the start date, the starting month, and configuring a
+pattern for the quarters.
+At least one fiscal calendar must exist in the system before you can add and configure a fiscal
+year. If there are no calendars available when you access the Fiscal Years tab, you will need to
+add a calendar in the Fiscal Calendars tab. See The Fiscal Calendar Feature.
+The Fiscal Years tab contains the following fields and controls:
+On the left, the list of available fiscal calendars and the fiscal years currently grouped under
+them.
+A General section, displaying the following fields:
+Name: The name for the fiscal year (required)
+Fiscal Year: The fiscal year calendar year (for example, 2019) (required)
+Begin Date: The starting date inherited from the fiscal calendar (required)
+Fiscal Calendar: The fiscal calendar that the fiscal year is grouped under. This is an
+important consideration because the fiscal year will inherit the calendar's start date
+and year and weekly periods from its parent fiscal calendar.
+Description: A general identifier for this fiscal year
+A Periods in Year list, displaying:
+Fiscal Period: The number of the fiscal period
+Name: The period's name
+Description: A general identifier for the period
+Weeks In Period: The number of weeks in the period
+Quarter: In which fiscal quarter the period occurs
+Begin Date: The date the period begins
+A Weeks in Period list, displaying:
+Period Week: The number of the period week within the period
+Fiscal Week: The number of the fiscal week within the period
+Begin Date: The date the fiscal week begins
+
+-- 402 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 403 of 0
+Two additional options are available:
+Delete: You can delete a year by clicking this and then clicking OK when asked to confirm
+the deletion.
+Localize: Clicking this opens a dialog box where, by clicking Add, you insert a row in the
+localization list that enables you to select the local language for the year in the Language
+drop-down list, enter a localized name for the year in the Name field, and enter a
+description in the Description field.
+Add Fiscal Years
+To add a fiscal year:
+1. Go to Payroll Setup > Fiscal Calendar.
+2. Click the Fiscal Years tab.
+3. Click Add and select the fiscal calendar you want the new fiscal year to be assigned to.
+This selection preconfigures the Begin Date and Fiscal Calendar fields (and locks them),
+and the Periods in Year and Weeks in Period lists.
+4. Enter a name and, optionally, a description for the fiscal year.
+5. In the Fiscal Year field, enter the year the fiscal year begins.
+6. Click Save.
+Assign a Custom Fiscal Calendar to a Legal Entity
+
+-- 403 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 404 of 0
+After you have created a fiscal calendar, you can assign it to one or more legal entities in your
+organization. You might have created multiple fiscal calendar entries for your organization, but you
+can only assign one fiscal calendar to a legal entity at a time.
+Before You Begin: Ensure that you have competed the steps in the topic Add Fiscal Calendars.
+To assign a fiscal calendar to a legal entity:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity.
+2. Select a legal entity in the list.
+3. Click the Fiscal Calendar tab under the list of legal entities.
+4. Click Add.
+5. In the Start Date field, enter or select a date for the legal entity to start using the fiscal
+calendar.
+6. In the Fiscal Calendar drop-down list, select the fiscal calendar to associate with the
+selected legal entity.
+7. Click Save.
+Medicare-Only Legal Entities and Filers
+Both Medicare-Only and Regular employers each have separate validation rules for creating legal
+entities and employee records, committing payroll, and creating reports. The following tax types
+are affected:
+Fed MWT EE: Federal - Employee Medicare Tax
+Fed MWT ER: Federal - Employer Medicare Tax
+FICA EE: Federal - Employee Social Security Tax
+FICA ER: Federal - Employer Social Security Tax
+Regular filers must either be exempt from all of FICA EE, FICA ER, Fed MWT EE, and Fed MWT
+ER, or exempt from none of these. It isn’t possible to exempt a legal entity or employee from one
+or more of these taxes unless they are exempt from all of them. If you try, Dayforce returns the
+following error message:
+Copy
+Invalid tax exemption attempted. Please ensure that Medicare ER, Medicare EE, SocS
+Medicare-only filers must be exempt from FICA EE and FICA ER, but must not be exempt from
+Fed MWT EE or Fed MWT ER. If you try, Dayforce returns the following error message:
+Copy
+Invalid tax exemption attempted. Please ensure that SocSec ER and SocSec EE are ma
+
+-- 404 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 405 of 0
+The validations described for Medicare-only legal entities and employees apply when the
+employment code for the legal entity is configured for Medicare qualified government employment
+– Form 941 in Org Setup > Org Payroll Setup. You can find this by going to Org Setup > Org
+Payroll Setup > Legal Entity, selecting a legal entity and clicking the Quarterly/Annual Reporting
+Parameters tab.
+If you are setting up the tax authorities for a legal entity that is exempt from Federal Medicare and
+Social Security Taxes, or if you are setting up employees of a regular filing legal entity who are
+exempt from Federal Medicare and Social Security taxes, you must select Exempt Tax And
+Taxable Wages for each of the following tax types:
+Fed MWT EE: Federal - Employee Medicare Tax
+Fed MWT ER: Federal - Employer Medicare Tax
+FICA EE: Federal - Employee Social Security Tax
+FICA ER: Federal - Employer Social Security Tax
+If all four aren’t set, Dayforce returns the following error message:
+Copy
+Invalid tax exemption attempted. Please ensure that Medicare ER, Medicare EE, SocS
+If you are setting up the tax authorities for a Medicare-only legal entity, you must select the option
+Exempt Tax And Taxable Wages for each of the following tax types:
+FICA EE: Federal - Employee Social Security Tax
+FICA ER: Federal - Employer Social Security Tax
+Additional Information
+When you run the US Wage and Tax report in Payroll > Overview or Payroll > Pay Run
+Management, Dayforce verifies that the tax definitions are set up correctly for Medicare-only
+employees. If the exempt tax and taxable wages aren’t set up correctly, the Validations page
+displays the following error messages for employee and employer taxes:
+Copy
+{Legal Entity} EE tax is wage exempt but has YTD wages.
+{Legal Entity} ER tax is wage exempt but has YTD wages.
+Also, the US Wage and Tax report displays the following message on the Validations page:
+Copy
+Employees must either be exempt from all FICA taxes (FICA EE, FICA ER, Fed MWT EE,
+
+-- 405 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 406 of 0
+Verify Medicare-Only Settings for Legal Entities
+To verify Medicare-Only settings for a legal entity:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Quarterly/Annual Reporting Parameters tab.
+3. In the Employment Code drop-down list, ensure that Medicare Qualified Government
+Employment - Form 941 is selected.
+4. Click the Tax Authorities tab to view the taxes associated with the legal entity. When you
+have selected a tax, view the Tax Setting section to the right of the list of tax authorities.
+5. Verify that the Exempt Tax and Taxable Wages checkbox is selected.
+6. Repeat steps 5 and 6 for the Federal Employee and Employer Medicare Taxes and Federal
+Employee and Employer Social Security Taxes.
+Verify Medicare-Only Settings for Employees
+To verify Medicare-only settings for an employee:
+1. Go to People, open the employee profile, and click Payroll > Tax Definitions.
+2. In the Employee Payroll Tax section, select a tax.
+3. Verify that the Exempt Tax And Taxable Wages checkbox is selected.
+4. Repeat steps 3 and 4 for the Federal Employee and Employer Medicare Taxes and Federal
+Employee and Employer Social Security Taxes.
+Configure Mobile Org Units
+To configure a site as a mobile org unit:
+1. Go to Org Setup > Organization and click the Organization tab.
+2. Select a site-level org unit, and click the Properties tab.
+3. Ensure that the Physical Location checkbox is selected.
+4. Select the Is Mobile Org checkbox.
+5. Click Save.
+Configure Mobile Org Addresses
+After you have configured a mobile org unit, you must also configure mobile org addresses.
+To configure mobile org addresses:
+1. Go to Org Setup > Org Payroll Setup > Mobile Org Addresses.
+2. Enter the name of the mobile org unit.
+3. (Optional) Enter a description and reference code.
+4. In the Color Code drop-down list, select a color to color-code the mobile org unit for easy
+reference in the Mobile Org Schedules feature.
+
+-- 406 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 407 of 0
+5. Enter the address and ZIP/postal code.
+6. Select the country and state or province in the drop-down lists.
+7. Click the City selector icon and select the city associated with the mobile org address.
+8. (Optional) Record the county in the County field.
+9. Click Save.
+Assign Mobile Org Addresses to Mobile Org Units
+After you have saved one or more mobile org addresses, you must assign them to the mobile org
+units to which they apply.
+To assign mobile org addresses:
+1. Go to Org Setup > Organization and click the Organization tab.
+2. Select a site-level mobile org unit and click the Address tab.
+3. In the Mobile Org Addresses field, select the addresses associated with the mobile org unit.
+4. Click Save, and then click Refresh Employee Taxes to ensure that employees are taxed
+appropriately.
+After you configure mobile org units and addresses, managers can configure associated
+schedules in the Mobile Org Schedules feature. See Schedule Mobile Org Units in the Manager
+Guide.
+US Quarterly/Annual Reporting Parameters
+The following topics briefly describe the parameters used by the Quarterly/Annual Reporting
+Parameters sections in both Org Setup > Org Payroll Setup > Legal Entity and in the Payroll > Tax
+Definitions screen in People:
+US Legal Entity Specific Tax Reporting Parameters
+US Employee-Specific Tax Reporting Parameters
+US Legal Entity Specific Tax Reporting Parameters
+Tax reporting parameters for legal entities are specified at the federal and state level. These
+parameters are configured in the Quarterly/Annual Reporting Parameters sub-tab in Org Setup
+> Org Payroll Setup > Legal Entity.
+Before You Begin: Not all states require additional parameters. The Jurisdiction drop-down list
+includes only the states with options for additional filing requirements.
+The following entries describe the options available depending on which option you select in the
+Jurisdiction drop-down list for an entry in the Quarterly/Annual Reporting Parameters sub-tab.
+USA Federal
+
+-- 407 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 408 of 0
+Kind of Employer
+Drop-down list with options used for year-end reporting. Select an option in the drop-down list to
+represent the legal entity’s employer type:
+Federal Government if the legal entity is an entity of the US federal government
+None Apply if none of the employer type options apply
+State and Local Governmental Employer if the legal entity is part of state or local
+government
+State and Local Tax Exempt Employer if the legal entity a State or Local 501c organization
+Tax Exempt Employer if the legal entity is a non-governmental 501c organization
+Employment Code
+Drop-down list with options used for year-end reporting. Select an option to represent the legal
+entity’s employment code, as determined when the legal entity was registered:
+Agriculture – Form 943 if the legal entity operates in the agricultural industry
+Household – Schedule H if the legal entity operates in the household services industry
+Medicare Qualified Government Employment - Form 941 if the legal entity is a state or local
+government employer, and employs individuals whose services aren’t covered for Social
+Security, but who are required to pay the Medicare-only portion of the Federal Insurance
+Contributions Act tax (FICA)
+Military – Form 941 if the legal entity has registered its FEIN as military (Code M)
+Railroad – CT-1 if the legal entity will file the Employer's Annual Railroad Retirement Tax
+Return
+Regular – Form 941 if the legal entity submits form 941
+Regular – Form 944 if the legal entity has been notified in writing by the IRS that annual form
+944 must be filed instead of form 941
+Terminated Business
+Used for year-end reporting. Select this checkbox if the business has been closed or terminated.
+Retirement Plan Eligible
+Drop-down list used for year-end reporting. Select Yes if the legal entity’s employees are eligible
+for a retirement plan, select No if they aren’t, or select [None] to have the application determine
+employees' availability based on their contributions to a deferred compensation plan within the tax
+year. This information populates the Box 13 – Retirement Plan checkbox on employees' W-2
+forms.
+Annual Tax Filing Other EIN
+
+-- 408 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 409 of 0
+Field for the former FEIN of a legal entity if the legal entity reorganizes mid-year and uses a new
+FEIN number. This field populates the otherEIN field in the XML file.
+For example, say a legal entity is reorganized in July: for the first six months of the year, the legal
+entity's FEIN was 41-1234567. Then, after reorganization, the legal entity's FEIN was changed to
+41-9876543. This would result in all of the YTD being moved to the last six months and filed under
+the second FEIN (41-9876543). To ensure proper reporting, you would enter the FEIN for the first
+six months of the year in the Annual Tax Filing Other EIN field.
+Account Number on 1099R
+Contractor Tax Form Type
+1099 Payer Phone Number
+The payer's telephone number you want to include in the 1099-M, 1099-NEC, and 1099-R forms.
+Alaska
+Alaska Geo Area Code
+Used for quarter-end reporting, record the appropriate two-digit numeric geographic code in this
+field; this is required for a legal entity if any of its employees' primary worksite is in Alaska during
+the quarter and is based on the address of employees' primary work locations.
+If you are unsure of the correct geographic code, see the Alaska Occupational Coding Manual,
+which can be found at https://live.laborstats.alaska.gov/erg/codehelp.cfm.
+By setting the code at the legal entity, you are defining a code that is applied, by default, to all of
+the legal entity's employees; this is appropriate if the legal entity only has one worksite in Alaska,
+or if the majority of employees primarily work at one worksite it is faster to set the code at the legal
+entity, as a default, and apply different geo area codes for specific employees to override this
+default, as necessary.
+if the legal entity has several worksites in Alaska where its employees work, you need to specify
+the appropriate geo area code at the employee-level.
+Maine
+Seasonal Period Start
+Used for quarter-end reporting, select a start date for the seasonal period in this field.
+Seasonal Period End
+Used for quarter-end reporting, select an end date for the seasonal period in this field.
+
+-- 409 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 410 of 0
+Minnesota
+Unit Number Reporting
+Used for quarter-end reporting, set up if the legal entity has Unit Numbers for Sites (that is, the
+Worksite Number field is populated) and must report the Unit Number on the Quarterly Returns.
+Verify by going to Org Setup > Org Payroll Setup > Legal Entity, selecting the legal entity, clicking
+the Multiple Worksite Reporting sub-tab, and then, in the Worksites section, locate the Worksite
+Number for the entry or entries.
+Montana
+Reimbursable ER
+Used for quarter-end reporting if you are a Montana SUI Reimbursable client. If you are a Montana
+Reimbursable client, go to Org Setup > Org Payroll Setup > Legal Entity, and in the
+Quarterly/Annual Reporting Parameters sub-tab, in the Jurisdiction drop-down list, select
+Montana, set a start date, and select the checkbox in the panel to the right to apply the
+Reimbursable ER parameter. This tax replaces Wages to the Limit with the value of Full Subject
+Wages in the quarterly filing for Montana.
+This feature has been replaced by the Rpt Full Subject Wages tax setting in Org Setup > Org
+Payroll Setup > Legal Entities in the Tax Authorities tab, and should no longer be used.
+New Mexico
+Unit Number Reporting
+Used for quarter-end reporting, set up if legal entity has Unit Numbers for Sites (that is, the
+Worksite Number field is populated) and must report the Unit Number on the Quarterly Returns.
+Verify by going to Org Setup > Org Payroll Setup > Legal Entity, selecting the legal entity, clicking
+the Multiple Worksite Reporting sub-tab, and then, in the Worksites section, locate the Worksite
+Number for the entry or entries.
+New York
+Dependent Medical Insurance
+Used for quarter-end reporting, select this checkbox if the legal entity provides medical insurance
+for employees’ dependents.
+Northern Mariana Islands
+Box D - CNMI NAICS Employee class code
+
+-- 410 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 411 of 0
+Used for the six-digit industry code of your business. For more information about the North
+American Industry Classification System (NAICS), go to https://www.census.gov/naics/.
+Vermont
+Health Care Coverage
+Used for quarter-end reporting, select this checkbox if the legal entity offers employees
+healthcare coverage.
+Wyoming
+NAICS Employee class code
+Used for quarter-end reporting, record the six-digit North American Industry Classification System
+code in this field. This code is assigned to the legal entity by the state of Wyoming, and is specific
+to the primary nature of the business.
+US Employee-Specific Tax Reporting Parameters
+This topic describes each of the possible federal and state parameters that might apply to an
+employee. Not all states require additional parameters. The Jurisdiction drop-down list includes
+only the states with additional filing requirements.
+Tax reporting parameters for employees are specified at the federal and state level. These
+parameters are configured by going to People, loading an employee profile, expanding the
+Payroll > Tax Definitions screen, and locating the Quarterly/Annual Reporting Parameters section.
+The Quarterly/Annual Reporting Parameters section contains a section in which you can add to
+the list of quarterly/annual reporting parameters (if any) for the selected employee. When you
+create an entry, or select an existing entry, the entry expands and displays an additional two
+sections: General and Details. The choices you make in the General section determine what is
+displayed in the Details section. The General section contains the following fields:
+Jurisdiction: Drop-down list with federal and state options.
+Effective From: Mandatory field that indicates the start date of the parameter
+Effective To: Optional field that indicates the end-date of the parameter.
+Standard Occupational Codes (SOC) are configured at the employer-level for each job in the SOC
+Occupational Code field in Org Setup > Jobs and Assignments in the Jobs and Job Assignments
+tab.
+Federal
+If you select Federal in the Jurisdiction field, the General section displays the following options:
+
+-- 411 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 412 of 0
+Statutory Employee
+Used for year end reporting, you need to select this checkbox for statutory employees whose
+earnings are subject to social security and Medicare taxes but not subject to federal income tax
+withholding.
+Do not select this checkbox for common-law employees. There are workers who are independent
+contractors under the common-law rules but are treated by statute as employees. They are called
+statutory employees and include:
+A driver who distributes beverages (other than milk), or meat, vegetable, fruit, or bakery
+products; or who picks up and delivers laundry or dry cleaning if the driver is the employer's
+agent or is paid on commission.
+A full-time life insurance sales agent whose principal business activity is selling life
+insurance or annuity contracts, or both, primarily for one life insurance company.
+An individual who works at home on materials or goods that the employer supplies and that
+must be returned to the employer if the employer also furnishes specifications for the work
+to be done.
+A full-time traveling or city salesperson and turns in orders to the employer from
+wholesalers, retailers, contractors, or operators of hotels, restaurants, or other similar
+establishments. The goods sold must be merchandise for resale or supplies for use in the
+buyer's business operation. This work must be the salesperson's principal business activity.
+SS/MED Religious Exemption (Form 4029)
+Used for year end reporting, select this checkbox if the employee has submitted Federal Form
+4029 (Application for Exemption From Social Security and Medicare Taxes and Waiver of
+Benefits).
+Retirement Plan Eligible
+Used for year end reporting, select 'Yes' if the employee is eligible for a retirement plan, or 'No' if
+they aren’t . Select '[None]', and the application determines the employee's availability based on
+their contributions to a deferred compensation plan within the tax year. This information populates
+the Box 13 – Retirement Plan checkbox on the employee's W-2 forms.
+This can be used to override the parameter set at the legal entity level.
+TTOC Code
+Field to select a Treasury Tipped Occupation Code.
+Second TTOC Code
+Field to select an additional Treasury Tipped Occupation Code.
+
+-- 412 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 413 of 0
+Alaska
+If you select Alaska in the Jurisdiction field, the General section displays the following option:
+Alaska Geo Area Code
+Used for quarter end reporting, record the two-digit numeric geographic code in this field if the
+employee's primary worksite is in Alaska during the quarter. If the employee worked at different
+locations during the quarter, code for the most recent primary worksite. If the employee travels
+statewide, for example as a sales representative, specify the code for the location in which the
+employee spends the most time.
+If you are unsure of the correct geographic code, see the Alaska Occupational Coding Manual,
+which can be found at https://live.laborstats.alaska.gov/erg/codehelp.cfm.
+Arkansas
+If you select Arkansas in the Jurisdiction field, the General section displays the following option:
+Seasonal Employee Code
+Used for quarter end reporting, record the seasonal employee code assigned by the state of
+Arkansas. These codes are given out by the Department of Workforce Services and can be 1-2
+characters.
+California
+If you select California in the Jurisdiction field, the General section displays the following option:
+State Disability Insurance
+Used for quarterly reporting, select a combination of state disability insurance and state
+unemployment insurance (SUI):
+Select Personal Income Tax Only if the employee is having only personal income tax
+withheld.
+Select State Plan for Dis Ins and SUI if the employee has a state plan for disability insurance
+and state unemployment insurance.
+Note: Typically this will apply to the vast majority of the employees.
+Select State Plan for Dis Ins, exempt from SUI if the employee has a state plan for disability
+insurance, and is exempt from state unemployment insurance.
+Select State Plan for SUI –Public Entity Employees Only if the employee is a public entity
+employee, and has a state plan for unemployment insurance.
+Select State Plan for SUI, exempt from Dis Ins if the employee has a state plan for
+unemployment insurance, but is exempt from disability insurance.
+
+-- 413 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 414 of 0
+Select State Plan for SUI, Vol Plan for Dis Ins if the employee has a state plan for
+unemployment insurance, and a voluntary or private plan for disability insurance.
+Select Voluntary Plan for Disability Insurance, Exempt from SUI if the employee has a
+voluntary or private plan for disability insurance, and is exempt from state unemployment
+insurance.
+This parameter is used for employees reporting Californian SUI or disability wages; typically an
+employee that has earned money and paid taxes in California during the quarter.
+Indiana
+If you select Indiana in the Jurisdiction field, the General section displays the following option:
+Seasonal Employee Code
+Used for quarter end reporting, record the seasonal employee code assigned by the state of
+Indiana. These codes are given out by the Department of Workforce Development and can be 1-2
+characters.
+Maine
+If you select Maine in the Jurisdiction field, the General section displays the following options:
+Seasonal Period Start
+Used for quarter end reporting, select a start date for the seasonal period in this field.
+Seasonal Period End
+Used for quarter end reporting, select an end date for the seasonal period in this field.
+Massachusetts
+If you select Massachusetts in the Jurisdiction field, the General section displays the following
+option:
+Corporate Officer
+Used for year end reporting, select this checkbox if the employee is a corporate officer.
+Minnesota
+If you select Minnesota in the Jurisdiction field, the General section displays the following option:
+Corporate Officer
+Used for year end reporting, select this checkbox if the employee is a corporate officer.
+New Jersey
+
+-- 414 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 415 of 0
+If you select New Jersey in the Jurisdiction field, the General section displays the following option:
+State Disability Insurance
+Used for quarterly reporting, select this checkbox if the employee is eligible for state disability
+insurance.
+New Mexico
+If you select New Mexico in the Jurisdiction field, the General section displays the following option:
+Corporate Officer
+Used for year end reporting, select this checkbox if the employee is a corporate officer.
+Ohio
+If you select Ohio in the Jurisdiction field, the General section shows the following option:
+RITA Qualified Remote Work Location
+Used for reporting the Ohio Regional Income Tax Agency (RITA) annual return information for
+employees who work virtually or as a telecommuter. Select the RITA Qualified Remote Work
+Location checkbox for employees in a RITA locality and who are in a qualifying remote work
+location. A qualifying work location is either the employee’s home or another employer-approved
+location that isn't the employee’s home, such as a virtual worksite. When this checkbox is
+selected, this setting replaces reporting as a virtual employee or telecommuter for Ohio
+employees.
+Puerto Rico
+If you select Puerto Rico in the Jurisdiction field, the General section displays the following option:
+State Disability Insurance
+Used for quarterly reporting, select this checkbox if the employee is eligible for state disability
+insurance.
+Date on Which Employee Started to Receive Puerto Rico Pension
+The date when the employee started receiving their Puerto Rico Pension annuity.
+Employee Classification
+The following employee classifications are part of Form 499R-2/W-2PR. For more information
+about these classification types, go to the Puerto Rico Department of Treasury website
+https://hacienda.pr.gov.
+
+-- 415 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 416 of 0
+Employee classifications in the Quarterly/Annual Reporting Parameters section for Puerto
+Rico employees
+Employee Classification Description
+Employee Classification A:
+Qualified Physician
+Indicates the employee was paid to provide services as a
+qualified physician.
+Employee Classification B:
+Domestic Services
+Indicates the employee was paid to provide domestic
+services.
+Employee Classification C:
+Agricultural Labor Indicates the employee was paid to do agricultural work.
+Employee Classification D:
+Minister of a Church
+Indicates the employee was paid to provide services as a
+church minister.
+Employee Classification E:
+Health Professionals
+Indicates the employee was paid as a licensed health
+professional.
+Employee Classification F:
+Direct Employment Indicates the employee was hired by a qualified business.
+Employee Classification F: Total
+Hours Worked
+The total number of hours in a year worked by the employee
+classified under Employee Classification F.
+Employee Classification F: EIN
+of Exempt Business
+The Employer Identification Number (EIN) of the employer of
+the employee classified under Employee Classification F.
+Employee Classification G:
+Other Indicates a classification group not covered by the A to F.
+Rhode Island
+If you select Rhode Island in the Jurisdiction field, the General section displays the following
+option:
+State Disability Insurance
+Used for quarterly reporting, select this checkbox if the employee is eligible for state disability
+insurance.
+Washington
+If you select Washington in the Jurisdiction field, the General section displays the following
+options:
+Corporate Officer
+Used for year end reporting, select this checkbox if the employee is a corporate officer.
+Wages with No Hours Code
+
+-- 416 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 417 of 0
+Used for quarterly reporting, select this checkbox if the employee has current quarter-to-date
+State Unemployment Insurance (SUI) wages and zero work hours. The state of Washington
+requires you to add a reason for the zero work hours in the quarter end file.
+Important: To ensure accurate reporting in Dayforce, this state parameter must have an effective
+end date. The end date must be the end of the current quarter.
+Exemption Letter Provided
+Used to configure an employee who is exempt from contributing to the Washington Cares Fund.
+Select the checkbox when an employee has an exemption approval letter from the Employment
+Security Department (ESD).
+Configuring an employee who is exempt from contributing to the Washington Cares Fund in
+Dayforce is a multi-step process. For more information about how to configure an employee
+exemption, see the Configure Employee Exemption for WA Cares Fund (US) Dayforce Knowledge
+Base article. If you can’t access the article at this link, contact your Dayforce administrator.
+Wyoming
+If you select Wyoming in the Jurisdiction field, the General section displays the following options:
+Employee Class Code
+Drop-down list with quarter end reporting options for employees that are State Unemployment
+Insurance (SUI) exempt. Select an exemption class code in the drop-down list:
+Corporate Officer if the employee is exempt from state unemployment insurance because
+they are a corporate officer within the legal entity. If you select this, the application loads the
+Corporate Officer Type drop-down control.
+Government if the employee is exempt from state unemployment insurance because they
+are a government employee.
+Inmate if the employee is exempt from state unemployment insurance because they are an
+inmate.
+Job Training Program if the employee is exempt from state unemployment insurance
+because they are part of a job training program.
+School to Work if the employee is exempt from state unemployment insurance because they
+are part of a school to work program.
+Volunteer if the employee is exempt from state unemployment insurance because they are a
+volunteer.
+Welfare if the employee is exempt from state unemployment insurance because they are a
+welfare recipient.
+Corporate Officer Type
+
+-- 417 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 418 of 0
+Drop-down list that is displayed if the Corporate Officer option was selected from the Employee
+Class Code drop-down list. Select a corporate officer type:
+Other Officer if the employee is a corporate officer type that isn’t included in the list of
+options.
+President if the employee is President.
+Secretary if the employee is Secretary.
+Treasurer if the employee is Treasurer.
+Vice President if the employee is Vice President.
+NAICS Employee Class Code
+In the NAICS Employee Class Code field, enter the six-digit NAICS (North American Industry
+Classification System) code in this field. This code is assigned by the state of Wyoming and is
+specific to the primary nature of the employee's job.
+Typically this is set at the legal entity level and applies to all employees of the legal entity.
+Populate this field only to override the legal entity value for the specific employee, if necessary.
+Configure Organizational Groups and Subgroups
+This section describes the first step to configuring your organization: configuring the groups and
+subgroups that make up your organizational hierarchy. You need to configure the top of your
+organization and the organizational groups and subgroups, often referred to as org units, that
+make up your organization, such as districts and regions, so that the other organizational
+elements can be assigned to the appropriate groups in the organization.
+It’s important to define and assign levels in a logical manner to the different organizational units
+within the organizational hierarchy. Levels don’t have to be parallel, meaning under the Corporate
+level (the top of the hierarchy). You can define an organizational unit as a district, with several
+sites underneath it, as well a region, which has several districts, each with their own sites
+underneath.
+For example, the first or top level is the Corporate level but the second level (or the units directly
+underneath the first) can be both a district and a region. In this sense they aren’t parallel: there is
+an org unit 1 level down from Corporate that is a district but there are also org units 2 levels down
+from Corporate that are districts.
+Dayforce Payroll uses the levels assigned to org units to group payroll data in some of its reports.
+To determine grouping, Dayforce starts at an employee’s site and traverses up the tree until it
+finds the org unit with the org level the report is being grouped by and groups the employee’s
+data under that org unit.
+
+-- 418 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 419 of 0
+As a result, it’s important to logically structure the organizational hierarchy and assign appropriate
+levels to the org units in it.
+You can configure as many org units as you need to mirror your organization’s structure in Org
+Setup.
+To configure organizational groups and subgroups:
+1. Go to Org Setup > Organization and click the Organization tab.
+2. In the organization hierarchy, select the item under which to create your entry from the
+organizational hierarchy. If you’re creating the first org unit, you won’t have any existing org
+units to select from, and you can continue to step 3.
+3. Click Add.
+4. In the slide-out panel that opens, enter the unit’s name and description.
+5. (Optional) Select or search for which item in your organization you want the new item to be
+under in the Parent Org Unit drop-down list. By default, the new item’s parent is the item you
+selected in the organization tree. For the top of the organization, the Parent Org Unit is itself.
+6. Click the Effective From calendar icon and select the date on which the unit is an active part
+of your organization. By default, Dayforce uses today’s date.
+7. (Optional) Select the date on which the location is no longer a part of your organization in
+the Effective To field. By default, this field is blank and the new item won’t be removed from
+your organizational chart unless you delete it.
+8. Enter a cross-reference code in the Reference Code field. Cross-reference codes are used
+to export data from Dayforce to other applications and must be unique for each org unit.
+9. Important: Don’t use special characters such as hyphens in cross-reference codes. This
+can cause an issue where employees are unable to record time in Work > Timesheet.
+Dayforce validates the location reference code value against existing values and you can’t
+save duplicate values when you edit an existing location or create a location.
+9. In the Level drop-down list, select the new item’s level in your organization. By default, new
+items can be classified under one of the following levels:
+Corporate: Represents the top level of your organization. Typically, you wouldn’t add
+new items with the corporate level.
+Corporate Site: Represents a physical location where employees at the top of your
+organization work; a head office.
+District: Represents a group of sites.
+On-Site Department: Represents a physical area within a location.
+Region: Represents a group of districts. Typically, regions are the levels directly
+underneath the corporate level.
+Site: Represents a physical location.
+10. You can configure additional org levels as required. See Configure Additional Organization
+Levels.
+
+-- 419 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 420 of 0
+10. Select which week day is considered the start of the week from the Start Day of Week drop-
+down list. The application uses this value to determine the start day of the week for the
+calendars in Work, Schedules, and Timesheets.
+11. Note: When the Start Day of Week setting isn’t specified in the org setup for a user’s primary
+location, Dayforce uses the configuration specified in the First Day of Week setting in Site
+Setup > Client. If Start Day of Week and First Day of Week have been specified, the
+calendars show the Start Day of Week. If both the Start Day of Week and First Day of Week
+aren’t specified, the calendars show Sunday as the first day of the week.
+11. Skip the following fields for now, because they’re used only for locations, which you will
+specify later in the organizational groups definition process: Department, Zone, Comparable
+Org Unit, Physical Location, Opening Date, Closing Date, Ledger Code, and Clock Code.
+12. Note: For the top of your organizational hierarchy, regions, districts, or any other group or
+sub-group in the hierarchy, leave these fields blank. You should select the Physical Location
+checkbox only for organizational units with the Site and Corporate Site Org Level.
+12. Click Save.
+Add Org Unit Email Addresses
+If your organization uses HireRight for candidate screening, you might want to add an org unit
+email address for your onboarding and recruiting workflows.
+To add an org unit email address:
+1. Go to Org Setup > Organization and select an org unit.
+2. Click the Contact tab.
+3. In the Email field, enter the email address to use when sending the manager section of
+Form I-9 for completion.
+Configure Additional Organization Levels
+You can configure additional org levels to associate with units in your organization, in the Levels
+tab of Org Setup > Organization.
+After you configure org levels, they can be selected in the Org Level drop-down list, in the
+General subtab of Org Setup > Organization. Org levels are supported by the HR Export
+interfaces, using dynamic export tokens to return values associated with the configured levels.
+To define a custom organization level:
+1. Go to Org Setup > Organization.
+2. Click the Levels tab, and then click Add.
+3. Enter a name and, optionally, a description for the org level.
+4. Enter a cross-reference code in the Reference Code field.
+5. Reference codes are used to export data from Dayforce to other applications.
+
+-- 420 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 421 of 0
+6. Important: Don’t use special characters such as hyphens in cross-reference codes. This
+can cause an issue where employees can’t record time in Work > Timesheet.
+5. Click Save.
+Override the Coordinates of Site Addresses
+Dayforce uses a third-party geocoding tool to ensure the accuracy of the addresses you've
+entered. The tool generates a set of coordinates when it validates the address. These coordinates
+are then used to determine the appropriate tax jurisdiction for payroll calculations. When needed,
+you can override the validated coordinates for site-level addresses in Org Setup > Organization in
+the Organization tab.
+Note: The override coordinates feature should only be used for US states with local government
+taxes.
+Before You Begin:
+Make sure that you're familiar with the general concepts in Configure Organizational Groups
+and Subgroups
+Configure the site addresses for your organization.
+Role feature access: Org Setup > Org Setup > Organization > Organization
+To add override coordinates for a legal entity's location address:
+1. Go to Org Setup > Organization.
+2. In the Organization tab, expand the site address that you want to update.
+3. Select the Geo Points Override checkbox.
+4. Enter the override coordinates in Latitude and Longitude. The accepted range of values in
+Latitude is between +90 and-90. The accepted range of values in Longitude is between
++180 and -180.
+5. Important: Dayforce isn’t responsible for the accuracy of the override coordinates you enter.
+5. Click Save.
+To ensure that the correct tax jurisdiction is used in the payroll calculations, Dayforce clears the
+override coordinates when you change any of the following fields in the location address: Country
+Code, State/Province, Address, Address Line 2, County, City, and Zip/Postal Code.
+Configure Departments
+This section describes how to set up your organization’s generic departments in Dayforce.
+Departments contain the jobs employees are scheduled to work and are linked to zones, which
+receive a portion of a location’s labor budget.
+
+-- 421 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 422 of 0
+It’s important to configure all of the different departments that can be in your organization’s various
+locations as Dayforce uses departments and zones to organize schedules, jobs, and labor
+budgets.
+Departments are used in job assignment configuration. See Jobs and Job Assignments
+Background.
+You can also import departments instead of manually adding them. See Org Setup Import and
+Export Configuration.
+To add a department:
+1. Go to Org Setup > Organization and click the Departments tab.
+2. Click Add.
+3. Enter the department’s name and description.
+4. Enter a cross-reference code in the Reference Code field. Reference codes are used to
+export data to other applications. These codes must be unique and must not contain
+special characters.
+5. Click Save.
+Zones Configuration
+In Dayforce, zones are used to organize a location for labor planning, scheduling, and security
+access. Zones are an area in a location that uses part of the labor budget and has employees
+scheduled to work in it. A common example of a zone is an area in a store that sells similar
+products, like the Home Theater zone in an electronics store. However, a zone doesn't need to
+generate sales or transactions. A stock room in a clothing store is a zone because employees are
+scheduled to work in it and those labor hours are budgeted for, but the zone doesn't directly
+generate sales. Similarly, organizations in the manufacturing industry wouldn't consider sales
+when deciding what areas of a plant need to be zones. They might have a zone for each line in
+the plant.
+Although you need to configure a zone for each staffed area in your location, each location
+doesn’t need to have a zone. Zones might only describe certain locations in your organization. For
+example, in a hotel chain, the Lounge zone needs to be configured to plan, schedule, and track
+the performance of the bar and lounge in the company's high-end hotels. Because the bar and
+lounge area are only present in high-end hotels, the Lounge zone is only assigned to certain
+locations.
+Assigning appropriate zones helps users manage their locations. A manager of a hotel without a
+lounge wouldn't want it as a department on the hotel's schedule or see it in the labor budget in
+Plan, as the hotel won't use any of its labor budget staffing an area it doesn’t have.
+
+-- 422 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 423 of 0
+You can organize your locations into as many zones as needed. For example, a specialty audio
+retail store that tracks sales between headphones, mini-systems, speakers, and receivers would
+need at least four zones configured in Dayforce. The store could also have zones for customer
+service, receiving, or any other staffed area.
+All zones configuration, from creating zones and zones packages to linking them to
+merchandising departments, is completed in the Zones Configuration feature.
+When deciding how many zones locations require, keep a few items in mind:
+Zones and departments might be configured with a one-to-one ratio.
+A single zone can contain multiple departments. This allows for the management of a larger
+employee base than just a single department per zone.
+Zones are the lowest or most granular unit used in Dayforce for planning, forecasting, and
+scheduling.
+The general process flow for configuring zones in Dayforce consists of the following:
+Create Zones
+Create Zone Packages
+Create Merchandising Departments
+Link Merchandising Departments to Zones
+Create Zones
+To create zones:
+1. Go to Org Setup > Zones Configuration and click the Zones tab.
+2. Click Add.
+3. Enter a name and, optionally, a description of the zone.
+4. In the Organization field, specify where the zone can be assigned in your organization by
+selecting the checkbox next to the appropriate locations in the organizational tree.
+5. In the Efficiency Score Method drop-down list, select the option you want to use for
+calculating the zone’s efficiency score. A zone's efficiency score is a percentage score that
+reflects how close its schedule matches the labor demand. A zone’s efficiency score is a
+percentage score that reflects how close its schedule matches the labor demand. You can
+select one of the following options:
+DayOnly: Dayforce compares the number of employees scheduled to the labor
+demanded for the day.
+QuarterHourOnly: Dayforce compares the number of employees scheduled to the
+labor demand at each quarter hour. Any time the zone is understaffed or overstaffed
+is subtracted from this score.
+BothServiceInsideHOO: Dayforce uses both quarter hour and daily coverage scores
+inside the location's hours of operation. However, outside the hours of operation,
+
+-- 

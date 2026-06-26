@@ -1,0 +1,740 @@
+/* =====================================================================
+   Flex Work — Invoices page (list + details)
+   Builds on styles-req.css / styles.css.
+   ===================================================================== */
+
+/* --- Pill: error + warning (extends the req-pill family) -------------- */
+
+.req-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.req-pill--error {
+  background: var(--evr-red-50);
+  color: var(--evr-red-700);
+}
+.req-pill--warning {
+  background: var(--evr-yellow-50);
+  color: var(--evr-yellow-700);
+}
+.req-pill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Soft "+N more" chip — subtler than the bordered req-chip */
+.req-chip--soft {
+  background: var(--evr-surface-secondary-default);
+  border-color: transparent;
+  color: var(--evr-content-primary-default);
+}
+
+/* --- Toolbar (search + actions) above the table ----------------------- */
+
+.inv-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* EngagementScope chip-bar · sits at the head of the invoices list.
+   Hidden by JS when no variant flag is on. */
+.inv-scope-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.inv-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.inv-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;
+  height: 48px;
+  background: var(--evr-neutral-100);
+  border: 1px solid var(--evr-neutral-60);
+  border-radius: 8px;
+  padding: 0 12px 0 44px;
+  transition: border-color 120ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.inv-search:hover { border-color: var(--evr-neutral-40); }
+.inv-search:focus-within {
+  border-color: var(--evr-interactive-primary-default);
+  box-shadow: 0 0 0 2px var(--evr-blue-100);
+}
+.inv-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  color: var(--evr-content-primary-default);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.inv-search-input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: 400 16px/1.5 var(--evr-font-text);
+  color: var(--evr-content-primary-highemp);
+  height: 100%;
+  padding: 0;
+  min-width: 0;
+}
+.inv-search-input::placeholder { color: var(--evr-content-primary-lowemp); }
+
+.inv-toolbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .inv-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .inv-search { max-width: none; }
+  .inv-toolbar-actions { justify-content: flex-end; }
+}
+
+/* --- Invoices table — overrides for the column geometry --------------- */
+
+.req-row.inv-row {
+  grid-template-columns:
+    44px                          /* check */
+    minmax(180px, 1fr)            /* invoice */
+    minmax(180px, 1.1fr)          /* supplier */
+    140px                         /* status */
+    minmax(220px, 1.4fr)          /* locations */
+    140px                         /* amount */
+    32px;                         /* chevron */
+  /* Right gutter so the row-actions kebab does not sit flush against
+     the card's right edge — matches the Timesheets table pattern.
+     Base `.req-row` zeroes this out; we re-apply it here. */
+  padding-right: 20px;
+}
+
+.req-scroll .req-row.inv-row { min-width: 1100px; }
+
+.inv-cell--amount { justify-content: flex-end; flex-wrap: nowrap; }
+/* Specificity bump — `.req-row--header .req-cell` in styles.css sets
+   justify-content: flex-start, which would otherwise outrank the
+   single-class rule above and strand "Amount" at the left of the
+   right-aligned column. */
+.req-row--header .req-cell.inv-cell--amount { justify-content: flex-end; }
+.inv-cell--chev {
+  justify-content: flex-end;
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* Invoice primary + secondary text */
+.inv-cell--invoice {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex-wrap: nowrap;
+}
+.inv-invoice-id {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--evr-content-primary-highemp);
+}
+.inv-invoice-sub {
+  font: var(--evr-body2);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  line-height: 1.3;
+}
+
+.inv-cell--supplier {
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+.inv-supplier-name {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* =====================================================================
+   Invoice Details — paper document
+   ===================================================================== */
+
+.inv-doc-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 16px auto 32px;
+  padding: 0 16px;
+}
+
+.inv-doc {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-neutral-90);
+  border-radius: 32px;
+  padding: 54px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  color: var(--evr-content-primary-highemp);
+  box-shadow: var(--evr-depth-02);
+}
+@media (max-width: 720px) {
+  .inv-doc { padding: 28px; border-radius: 20px; }
+}
+
+/* ---- Header (Bill to + amount due) ---- */
+
+.inv-doc-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: flex-start;
+}
+@media (max-width: 720px) {
+  .inv-doc-head { grid-template-columns: 1fr; }
+}
+
+.inv-doc-eyebrow {
+  display: block;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--evr-content-primary-default);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.inv-doc-party {
+  margin: 0 0 16px;
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 18px;
+  line-height: 1.25;
+  color: var(--evr-content-primary-highemp);
+}
+
+.inv-doc-party-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 240px) minmax(220px, 240px);
+  gap: 12px;
+}
+@media (max-width: 720px) {
+  .inv-doc-party-grid { grid-template-columns: 1fr; }
+}
+
+.inv-doc-address {
+  margin: 0;
+  font-family: var(--evr-font-text);
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.27px;
+  color: var(--evr-content-primary-default);
+}
+
+.inv-doc-amount {
+  min-width: 220px;
+  text-align: right;
+}
+.inv-doc-amount .inv-doc-eyebrow {
+  text-align: right;
+}
+.inv-doc-amount-value {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--evr-content-primary-highemp);
+  letter-spacing: -0.005em;
+  margin-bottom: 24px;
+}
+.inv-doc-amount-sign {
+  margin-right: 2px;
+  font-size: 22px;
+  font-weight: var(--evr-fw-bold);
+}
+
+.inv-doc-meta {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: stretch;
+}
+.inv-doc-meta > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.27px;
+}
+.inv-doc-meta dt {
+  margin: 0;
+  color: var(--evr-content-primary-default);
+}
+.inv-doc-meta dd {
+  margin: 0;
+  color: var(--evr-content-primary-highemp);
+  text-align: right;
+}
+
+/* ---- Line items table ---- */
+
+.inv-doc-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.inv-doc-row {
+  display: grid;
+  grid-template-columns:
+    minmax(140px, 1.4fr)   /* Location */
+    100px                  /* Date */
+    minmax(120px, 1.2fr)   /* Worker */
+    minmax(100px, 1fr)     /* Job */
+    80px                   /* Hours */
+    120px;                 /* Amount */
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--evr-content-primary-highemp);
+}
+
+.inv-doc-row--head {
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-default);
+  padding: 10px 0;
+}
+
+.inv-doc-num { text-align: right; }
+
+.inv-doc-rule {
+  height: 1px;
+  background: var(--evr-border-decorative-lowemp);
+}
+
+.inv-doc-rows {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+.inv-doc-totals {
+  display: flex;
+  flex-direction: column;
+}
+.inv-doc-totalrow {
+  padding: 8px 0;
+  color: var(--evr-content-primary-highemp);
+}
+.inv-doc-totalrow > span:nth-child(4) {
+  text-align: left;
+  color: var(--evr-content-primary-default);
+}
+.inv-doc-totalrow--final > span:nth-child(4),
+.inv-doc-totalrow--final .inv-doc-num {
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+}
+
+/* ---- Responsive table — stack on narrow ---- */
+@media (max-width: 720px) {
+  .inv-doc-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  }
+  .inv-doc-row--head { display: none; }
+  .inv-doc-row > span:nth-child(1) { grid-column: 1 / -1; font-weight: var(--evr-fw-bold); }
+  .inv-doc-row > span:nth-child(2) { text-align: left; }
+  .inv-doc-row > span:nth-child(5),
+  .inv-doc-row > span:nth-child(6) { text-align: right; }
+}
+
+/* ---- Footer ---- */
+
+.inv-doc-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 8px;
+}
+.inv-doc-logo {
+  height: 28px;
+  width: auto;
+  margin-bottom: 4px;
+  align-self: flex-start;
+  display: block;
+}
+
+/* =====================================================================
+   Engagement-type variants (Assignment / Project / SOW)
+   --------------------------------------------------------------------
+   These tables live inside `.inv-doc` alongside the canonical Shift
+   table. Each variant defines its own `grid-template-columns` so the
+   column track matches what was actually billed (hours vs weeks vs
+   milestones vs deliverables). The wrapping table also carries a
+   <Caption/> block above the columns that anchors the work to a
+   PO / project / assignment / SOW reference.
+   ===================================================================== */
+
+/* ---- Caption header (above the line-items column tracks) ---- */
+.inv-doc-caption {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 14px;
+  margin-bottom: 6px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+}
+.inv-doc-caption-l {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.inv-doc-caption-eyebrow {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+}
+.inv-doc-caption-title {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demi, var(--evr-fw-bold));
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--evr-content-primary-highemp);
+}
+.inv-doc-caption-sub {
+  font-weight: var(--evr-fw-regular);
+  color: var(--evr-content-primary-default);
+}
+.inv-doc-caption-meta {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  color: var(--evr-content-primary-default);
+}
+.inv-doc-caption-r,
+.inv-doc-caption-side {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  color: var(--evr-content-primary-default);
+  white-space: nowrap;
+  text-align: right;
+  flex-shrink: 0;
+}
+.inv-doc-caption-side strong {
+  color: var(--evr-content-primary-highemp);
+  font-weight: var(--evr-fw-bold);
+}
+@media (max-width: 720px) {
+  .inv-doc-caption {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .inv-doc-caption-r,
+  .inv-doc-caption-side {
+    text-align: left;
+  }
+}
+
+/* ---- Assignment table — 6 cols (Hourly/Weekly/Monthly) ---- */
+.inv-doc-row--asgn {
+  grid-template-columns:
+    minmax(140px, 1.2fr)   /* Worker */
+    minmax(140px, 1.2fr)   /* Role */
+    minmax(150px, 1.3fr)   /* Period */
+    80px                   /* Units */
+    110px                  /* Rate */
+    120px;                 /* Amount */
+}
+/* Assignment Fixed — 5 cols (no Units / Rate, single fee row) */
+.inv-doc-row--asgn-fixed {
+  grid-template-columns:
+    minmax(140px, 1.2fr)   /* Worker */
+    minmax(140px, 1.2fr)   /* Role */
+    minmax(140px, 1fr)     /* Period */
+    minmax(150px, 1.4fr)   /* Description */
+    140px;                 /* Amount */
+}
+
+/* ---- Project · Milestone — 4 cols ---- */
+.inv-doc-row--prj-ms {
+  grid-template-columns:
+    100px                  /* Milestone # */
+    minmax(220px, 2.4fr)   /* Description */
+    140px                  /* Accepted */
+    140px;                 /* Amount */
+}
+/* ---- Project · T&M — 6 cols (same DNA as Shift, project-anchored) ---- */
+.inv-doc-row--prj-tm {
+  grid-template-columns:
+    minmax(140px, 1.2fr)   /* Worker */
+    minmax(140px, 1.2fr)   /* Role */
+    minmax(150px, 1.4fr)   /* Period */
+    80px                   /* Hours */
+    110px                  /* Rate */
+    120px;                 /* Amount */
+}
+/* ---- Project · Fixed-fee — 5 cols ---- */
+.inv-doc-row--prj-fixed {
+  grid-template-columns:
+    140px                  /* Phase ref */
+    minmax(180px, 2fr)     /* Description */
+    110px                  /* % complete */
+    110px                  /* % invoiced */
+    140px;                 /* Amount */
+}
+
+/* ---- SOW — 6 cols (Milestone / Deliverable / Accepted / Amount / Retainage / Net) ---- */
+.inv-doc-row--sow {
+  grid-template-columns:
+    100px                  /* Milestone # */
+    minmax(220px, 2fr)     /* Deliverable + sub-deliverables */
+    120px                  /* Accepted */
+    130px                  /* Amount */
+    130px                  /* Retainage */
+    130px;                 /* Net */
+}
+/* SOW · multi-line deliverable cell */
+.inv-doc-sow-name {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  margin-bottom: 6px;
+}
+.inv-doc-sow-delivs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.inv-doc-sow-deliv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  color: var(--evr-content-primary-default);
+}
+.inv-doc-sow-deliv-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.inv-doc-sow-deliv-status {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: var(--evr-fw-bold);
+  letter-spacing: 0.2px;
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-default);
+  flex-shrink: 0;
+}
+.inv-doc-sow-deliv-status--accepted {
+  background: var(--evr-surface-decorative-default-green, #E0F1E5);
+  color:      var(--evr-content-decorative-green,      #1F6A3D);
+}
+.inv-doc-sow-deliv-status--inreview {
+  background: var(--evr-surface-decorative-default-orange, #FBE4CC);
+  color:      var(--evr-content-decorative-orange,        #8B4E0E);
+}
+.inv-doc-sow-deliv-status--inprogress {
+  background: var(--evr-surface-decorative-default-purple, #ECE0F8);
+  color:      var(--evr-content-decorative-purple,        #6B3296);
+}
+.inv-doc-sow-deliv-status--notstarted {
+  background: var(--evr-surface-secondary-default);
+  color:      var(--evr-content-primary-lowemp);
+}
+.inv-doc-sow-note {
+  margin: 12px 0 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--evr-content-primary-default);
+  padding-left: 2px;
+}
+.inv-doc-sow-note > span {
+  flex: 1;
+  font-style: italic;
+}
+
+/* ---- Subtotal row inside the variant table ---- */
+.inv-doc-subtotal {
+  padding-top: 12px;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.inv-doc-subtotal .inv-doc-num {
+  font-weight: var(--evr-fw-bold);
+}
+
+/* ---- Variant table — vertical alignment for multi-line cells (SOW) ---- */
+.inv-doc-table--sow .inv-doc-rows .inv-doc-row {
+  align-items: flex-start;
+}
+
+/* ---- Responsive: stack variant tables on narrow ---- */
+@media (max-width: 720px) {
+  .inv-doc-row--asgn,
+  .inv-doc-row--asgn-fixed,
+  .inv-doc-row--prj-ms,
+  .inv-doc-row--prj-tm,
+  .inv-doc-row--prj-fixed,
+  .inv-doc-row--sow {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  }
+  .inv-doc-table--asgn .inv-doc-row--head,
+  .inv-doc-table--prj  .inv-doc-row--head,
+  .inv-doc-table--sow  .inv-doc-row--head {
+    display: none;
+  }
+  .inv-doc-row--asgn > span:nth-child(1),
+  .inv-doc-row--asgn-fixed > span:nth-child(1),
+  .inv-doc-row--prj-ms > span:nth-child(2),
+  .inv-doc-row--prj-tm > span:nth-child(1),
+  .inv-doc-row--prj-fixed > span:nth-child(2),
+  .inv-doc-row--sow > span:nth-child(2) {
+    grid-column: 1 / -1;
+    font-weight: var(--evr-fw-bold);
+  }
+}
+
+/* =====================================================================
+   Totals stack — used for non-Shift invoices.
+   The Subtotal lives inside the typed line-items table; this block
+   carries only Taxes / Fees / Amount Due (+ optional reverse-charge
+   note + program-fee rows). Layout is a simple right-aligned label /
+   amount pair, decoupled from the column track above so each variant
+   table can pick its own grid.
+   ===================================================================== */
+.inv-doc-totals-stack {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+  padding-top: 8px;
+}
+.inv-doc-totals-stack-row {
+  display: grid;
+  grid-template-columns: 1fr minmax(120px, max-content);
+  align-items: center;
+  gap: 24px;
+  padding: 8px 0;
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+}
+.inv-doc-totals-stack-row > span:first-child {
+  text-align: right;
+  color: var(--evr-content-primary-default);
+}
+.inv-doc-totals-stack-amt {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.inv-doc-totals-stack-row--final {
+  margin-top: 4px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+}
+.inv-doc-totals-stack-row--final > span,
+.inv-doc-totals-stack-row--final .inv-doc-totals-stack-amt {
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+  font-size: 16px;
+}
+.inv-doc-totals-stack-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--evr-content-primary-default);
+  padding: 8px 0 4px;
+  justify-content: flex-end;
+  text-align: right;
+}
+.inv-doc-totals-stack-note > span {
+  font-style: italic;
+  max-width: 360px;
+}
+.inv-doc-totals-stack-row--pf {
+  color: var(--evr-content-primary-default);
+}
+.inv-doc-totals-stack-row--pf .inv-doc-pf-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 8px;
+  margin-left: 8px;
+  border-radius: 100px;
+  background: var(--evr-blue-50, #E6EEF9);
+  color: var(--evr-blue-700, #173A7D);
+  font-size: 10px;
+  font-weight: var(--evr-fw-bold);
+  letter-spacing: 0.3px;
+}
+.inv-doc-totals-stack-row--pf-net {
+  font-weight: var(--evr-fw-bold);
+}

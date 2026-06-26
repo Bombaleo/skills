@@ -1,0 +1,1865 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flex Work V1 · Changelog</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <!--
+    ─────────────────────────────────────────────────────────────────────
+    Rate Automation · Prototype changelog
+    ─────────────────────────────────────────────────────────────────────
+    ISOLATED, PER-PROTOTYPE changelog. This file tracks ONLY the
+    Rate Automation feature prototype (prototype/Rate Automation.html).
+    It is intentionally separate from the project-wide
+    `Flex Work v2 Changelog.html` and from every other prototype's
+    changelog — same structure and behaviour, different scope.
+
+    Maintenance contract:
+      • Update this file in the same turn you ship a change to the
+        Rate Automation prototype (a new surface, a behavioural change,
+        a fix). Do NOT log unrelated app changes here.
+      • Prepend a new <li class="cl-entry"> to today's
+        <section data-day="YYYY-MM-DD">; create the day section if it
+        does not exist yet. Newest day first, newest change on top.
+      • Same entry markup as the main changelog: tag (add / change /
+        fix / remove / system), verb-led sentence-case title, a
+        one-sentence detail, a meta row (area + version) and a real
+        teammate as author (data-author + the Author: span must match).
+      • Reactions and comments persist under a prototype-scoped
+        localStorage key so this log's social state never collides
+        with the main changelog or any other prototype.
+    ─────────────────────────────────────────────────────────────────────
+  -->
+  <style>
+    /* ===== Page shell ============================================== */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--evr-surface-root-primary);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-body1);
+    }
+    .cl-page {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 56px 32px 96px;
+    }
+
+    /* ===== Author filter =========================================== */
+    .cl-authors {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 28px;
+      padding: 14px 16px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+    }
+    .cl-authors-label {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      margin-right: 4px;
+    }
+    .cl-author-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 30px;
+      padding: 0 12px 0 4px;
+      border-radius: 999px;
+      border: 1px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-primary-default);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-body2);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms, color 150ms;
+    }
+    .cl-author-chip[data-author="all"] {
+      padding: 0 14px;
+    }
+    .cl-author-chip:hover {
+      background: var(--evr-surface-secondary-default);
+    }
+    .cl-author-chip.is-active {
+      background: var(--evr-interactive-primary-default);
+      border-color: var(--evr-interactive-primary-default);
+      color: #fff;
+    }
+    .cl-author-chip.is-active .cl-avatar {
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.35);
+    }
+    .cl-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font: var(--evr-utility2);
+      font-weight: 700;
+      letter-spacing: 0;
+      color: #fff;
+      flex: none;
+    }
+    .cl-authors-count {
+      margin-left: auto;
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* Hidden entries / day sections when filtered out */
+    .cl-entry[hidden],
+    .cl-day[hidden] {
+      display: none;
+    }
+
+    /* Inline avatar in the meta row */
+    .cl-entry-author {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cl-entry-author .cl-avatar {
+      width: 16px;
+      height: 16px;
+      font-size: 9px;
+    }
+
+    /* ===== Top bar ================================================= */
+    .cl-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 40px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-topbar a {
+      color: var(--evr-interactive-primary-default);
+      text-decoration: none;
+      font: var(--evr-body2-bold);
+    }
+    .cl-topbar a:hover { text-decoration: underline; }
+    .cl-crumb {
+      font: var(--evr-utility2);
+      color: var(--evr-content-primary-lowemp);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ===== Header ================================================== */
+    .cl-header { margin-bottom: 40px; }
+    .cl-eyebrow {
+      font: var(--evr-utility2);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--evr-interactive-primary-default);
+      margin: 0 0 8px;
+    }
+    .cl-title {
+      font: var(--evr-h1);
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+    }
+    .cl-sub {
+      font: var(--evr-body1);
+      color: var(--evr-content-primary-default);
+      max-width: 64ch;
+      margin: 0 0 20px;
+    }
+    .cl-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-meta-row b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+
+    /* ===== Day section ============================================= */
+    .cl-day {
+      display: grid;
+      grid-template-columns: 168px 1fr;
+      gap: 32px;
+      padding: 32px 0;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-day:first-of-type { border-top: 0; padding-top: 0; }
+
+    .cl-day-rail {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+    }
+    .cl-day-date {
+      font: var(--evr-h4);
+      color: var(--evr-content-primary-highemp);
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+    .cl-day-weekday {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      margin-top: 4px;
+    }
+    .cl-day-count {
+      margin-top: 12px;
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* ===== Entry list ============================================== */
+    .cl-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cl-entry {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: var(--evr-radius-2xs);
+      align-items: start;
+    }
+    .cl-entry + .cl-entry {
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-entry:hover {
+      background: var(--evr-surface-secondary-default);
+    }
+    .cl-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      white-space: nowrap;
+      width: max-content;
+    }
+    .cl-tag--add {
+      background: #E7F1EA;
+      color: #1F6B41;
+    }
+    .cl-tag--change {
+      background: #E6EEFB;
+      color: #1F4ED1;
+    }
+    .cl-tag--fix {
+      background: #FBEFD9;
+      color: #7A5210;
+    }
+    .cl-tag--remove {
+      background: #F6E2E1;
+      color: #92211B;
+    }
+    .cl-tag--system {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+    }
+    .cl-entry-body {
+      min-width: 0;
+    }
+    .cl-entry-title {
+      font: var(--evr-body1-bold);
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 4px;
+      text-wrap: pretty;
+    }
+    .cl-entry-detail {
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      margin: 0 0 6px;
+      text-wrap: pretty;
+    }
+    .cl-entry-meta {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .cl-entry-meta span + span::before {
+      content: "·";
+      margin-right: 12px;
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* ===== Screenshots / image gallery ============================= */
+    .cl-shots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 12px;
+    }
+    .cl-shot {
+      margin: 0;
+      position: relative;
+      width: 176px;
+      border-radius: var(--evr-radius-2xs);
+      overflow: hidden;
+      border: 1px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-secondary-default);
+      cursor: zoom-in;
+      transition: border-color 150ms, box-shadow 150ms, transform 150ms;
+    }
+    .cl-shot:hover {
+      border-color: var(--evr-interactive-primary-default);
+      box-shadow: var(--evr-depth-04);
+      transform: translateY(-1px);
+    }
+    .cl-shot:focus-visible {
+      outline: none;
+      border-color: var(--evr-interactive-primary-default);
+      box-shadow: 0 0 0 3px var(--evr-surface-decorative-low-blue);
+    }
+    .cl-shot-thumb {
+      display: block;
+      width: 100%;
+      height: 108px;
+      object-fit: cover;
+      object-position: top left;
+      background: var(--evr-surface-secondary-default);
+    }
+    .cl-shot figcaption {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+      padding: 6px 9px;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cl-shot-zoom {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--evr-radius-3xs);
+      background: rgba(16, 19, 26, 0.58);
+      color: #fff;
+      opacity: 0;
+      transition: opacity 150ms;
+    }
+    .cl-shot-zoom svg { width: 14px; height: 14px; }
+    .cl-shot:hover .cl-shot-zoom,
+    .cl-shot:focus-visible .cl-shot-zoom { opacity: 1; }
+
+    /* override controls — reader can swap the proposed screenshot */
+    .cl-shot-tools {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 150ms;
+      z-index: 2;
+    }
+    .cl-shot:hover .cl-shot-tools,
+    .cl-shot:focus-within .cl-shot-tools { opacity: 1; }
+    .cl-shot-tool {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: var(--evr-radius-3xs);
+      background: rgba(16, 19, 26, 0.58);
+      color: #fff;
+      cursor: pointer;
+      transition: background 150ms;
+    }
+    .cl-shot-tool:hover { background: rgba(16, 19, 26, 0.85); }
+    .cl-shot-tool:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+    .cl-shot-tool svg { width: 13px; height: 13px; }
+    .cl-shot-flag {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      margin-right: 6px;
+      font-weight: 600;
+      color: var(--evr-content-status-informative-highemp);
+    }
+    .cl-shot-flag svg { width: 11px; height: 11px; }
+    .cl-shot.is-custom .cl-shot-flag { display: inline-flex; }
+    .cl-shot.is-custom { border-color: var(--evr-border-status-success); }
+
+    /* ===== Lightbox =============================================== */
+    .cl-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 40px;
+      background: rgba(16, 19, 26, 0.84);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+    .cl-lightbox.is-open { opacity: 1; pointer-events: auto; }
+    .cl-lightbox-figure {
+      margin: 0;
+      max-width: min(1180px, 94vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .cl-lightbox-img {
+      display: block;
+      max-width: min(1180px, 94vw);
+      max-height: 78vh;
+      border-radius: var(--evr-radius-xs);
+      background: #fff;
+      box-shadow: var(--evr-depth-06);
+    }
+    .cl-lightbox-cap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font: var(--evr-body2);
+      color: rgba(255, 255, 255, 0.92);
+      text-align: center;
+    }
+    .cl-lightbox-count {
+      font: var(--evr-caption);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .cl-lb-btn {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: var(--evr-radius-circle);
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 150ms;
+    }
+    .cl-lb-btn:hover { background: rgba(255, 255, 255, 0.24); }
+    .cl-lb-btn svg { width: 22px; height: 22px; }
+    .cl-lb-close { top: 24px; right: 24px; }
+    .cl-lb-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+    .cl-lb-next { right: 24px; top: 50%; transform: translateY(-50%); }
+    .cl-lightbox[data-single] .cl-lb-prev,
+    .cl-lightbox[data-single] .cl-lb-next { display: none; }
+
+    /* ===== Backlog (pre-changelog history) ========================= */
+    .cl-backlog {
+      margin-top: 56px;
+      padding: 24px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-sm);
+      background: var(--evr-surface-primary-default);
+    }
+    .cl-backlog-h {
+      font: var(--evr-h4);
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 6px;
+    }
+    .cl-backlog-sub {
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-lowemp);
+      margin: 0 0 18px;
+    }
+    .cl-backlog ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cl-backlog li {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 16px;
+      align-items: baseline;
+    }
+    .cl-backlog .cl-ver {
+      font: var(--evr-body2-bold);
+      color: var(--evr-interactive-primary-default);
+      letter-spacing: 0.02em;
+    }
+    .cl-backlog p {
+      margin: 0;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+    }
+    .cl-backlog p b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+
+    /* ===== Footer note ============================================= */
+    .cl-foot {
+      margin-top: 48px;
+      padding: 18px 20px;
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-secondary-default);
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+    }
+    .cl-foot b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+    .cl-foot code {
+      font-family: var(--evr-font-mono);
+      font-size: 0.92em;
+      padding: 1px 6px;
+      background: var(--evr-surface-primary-default);
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: 4px;
+    }
+
+    /* ===== Topbar persona selector ================================ */
+    .cl-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .cl-persona { position: relative; }
+    .cl-persona-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 34px;
+      padding: 0 10px 0 5px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: 999px;
+      background: var(--evr-surface-primary-default);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-body2);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms;
+    }
+    .cl-persona-btn:hover { background: var(--evr-surface-secondary-default); }
+    .cl-persona-label {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-persona-chev {
+      width: 14px;
+      height: 14px;
+      color: var(--evr-content-primary-lowemp);
+      flex: none;
+    }
+    .cl-persona-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      min-width: 248px;
+      padding: 6px;
+      background: var(--evr-surface-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      box-shadow: var(--evr-depth-04);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .cl-persona-menu[hidden] { display: none; }
+    .cl-persona-menu-label {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      padding: 8px 10px 4px;
+    }
+    .cl-persona-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 10px;
+      border: 0;
+      background: transparent;
+      border-radius: var(--evr-radius-3xs);
+      cursor: pointer;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      text-align: left;
+    }
+    .cl-persona-item:hover { background: var(--evr-surface-secondary-default); }
+    .cl-persona-item.is-current {
+      background: var(--evr-surface-decorative-low-blue);
+      font-weight: 600;
+    }
+    .cl-persona-item .cl-check {
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+      color: var(--evr-interactive-primary-default);
+      flex: none;
+    }
+    .cl-avatar--sm { width: 28px; height: 28px; font-size: 11px; }
+    .cl-avatar--xs { width: 20px; height: 20px; font-size: 9px; }
+
+    /* inline "Commenting as" picker, lives in the composer */
+    .cl-as-picker { position: relative; }
+    .cl-as-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px 3px 4px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: 999px;
+      background: var(--evr-surface-primary-default);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-caption);
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms;
+    }
+    .cl-as-btn:hover { background: var(--evr-surface-secondary-default); }
+    .cl-as-btn .cl-as-pre { color: var(--evr-content-primary-lowemp); }
+    .cl-as-btn b { font-weight: 600; }
+    .cl-as-chev {
+      width: 13px;
+      height: 13px;
+      color: var(--evr-content-primary-lowemp);
+      flex: none;
+    }
+    .cl-as-picker .cl-persona-menu {
+      bottom: calc(100% + 6px);
+      top: auto;
+      left: 0;
+      right: auto;
+    }
+
+    /* ===== Social: reactions, comments, threads ==================== */
+    .cl-social {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cl-social-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .cl-react-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cl-react-list:empty { display: none; }
+    .cl-react-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 11px;
+      border-radius: 999px;
+      border: 1px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-primary-default);
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      line-height: 1;
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms;
+    }
+    .cl-react-chip:hover { background: var(--evr-surface-secondary-default); }
+    .cl-react-chip.is-mine {
+      background: var(--evr-surface-decorative-low-blue);
+      border-color: var(--evr-interactive-primary-default);
+      color: var(--evr-content-status-informative-highemp);
+    }
+    .cl-react-emoji { font-size: 15px; }
+    .cl-react-count {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+    }
+
+    .cl-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 28px;
+      padding: 0 11px;
+      border-radius: 999px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      background: transparent;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-lowemp);
+      cursor: pointer;
+      transition: background-color 150ms, color 150ms, border-color 150ms;
+    }
+    .cl-icon-btn:hover {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+    }
+    .cl-icon-btn.is-open {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border-color: var(--evr-border-decorative-default);
+    }
+    .cl-icon-btn svg { width: 16px; height: 16px; flex: none; }
+    .cl-icon-btn .cl-count-badge {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .cl-react-add-wrap { position: relative; display: inline-flex; }
+    .cl-react-palette {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 0;
+      display: flex;
+      gap: 2px;
+      padding: 6px;
+      background: var(--evr-surface-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      box-shadow: var(--evr-depth-04);
+      z-index: 30;
+    }
+    .cl-react-palette[hidden] { display: none; }
+    .cl-react-palette button {
+      border: 0;
+      background: transparent;
+      font-size: 20px;
+      line-height: 1;
+      padding: 6px;
+      border-radius: var(--evr-radius-3xs);
+      cursor: pointer;
+    }
+    .cl-react-palette button:hover { background: var(--evr-surface-secondary-default); }
+
+    /* ----- Thread ----- */
+    .cl-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 4px 0 2px 16px;
+      border-left: 2px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-thread[hidden] { display: none; }
+    .cl-comment { display: flex; gap: 10px; }
+    .cl-comment-main { min-width: 0; flex: 1; }
+    .cl-comment-head {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .cl-comment-author {
+      font: var(--evr-body2-bold);
+      color: var(--evr-content-primary-highemp);
+    }
+    .cl-comment-time {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-comment-text {
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      margin: 3px 0 0;
+      white-space: pre-wrap;
+      text-wrap: pretty;
+      overflow-wrap: anywhere;
+    }
+    .cl-comment-actions {
+      margin-top: 5px;
+      display: flex;
+      gap: 14px;
+    }
+    .cl-link-btn {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      font: var(--evr-caption);
+      font-weight: 600;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-link-btn:hover {
+      color: var(--evr-interactive-primary-default);
+      text-decoration: underline;
+    }
+    .cl-link-btn.cl-link-danger:hover { color: var(--evr-content-status-error-default); }
+    .cl-comment-replies {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-left: 14px;
+      border-left: 2px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-comment-replies:empty { display: none; }
+
+    /* ----- Composer ----- */
+    .cl-composer {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .cl-composer.cl-composer--reply { margin-top: 12px; }
+    .cl-composer[hidden] { display: none; }
+    .cl-composer-fields { flex: 1; min-width: 0; }
+    .cl-composer textarea {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 38px;
+      resize: vertical;
+      font: var(--evr-body2);
+      font-family: var(--evr-font-text);
+      color: var(--evr-content-primary-default);
+      padding: 9px 12px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-3xs);
+      background: var(--evr-surface-primary-default);
+    }
+    .cl-composer textarea::placeholder { color: var(--evr-content-primary-lowemp); }
+    .cl-composer textarea:focus {
+      outline: none;
+      border-color: var(--evr-interactive-primary-default);
+      box-shadow: 0 0 0 3px var(--evr-surface-decorative-low-blue);
+    }
+    .cl-composer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .cl-composer-as {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-composer-as b {
+      color: var(--evr-content-primary-default);
+      font-weight: 600;
+    }
+    .cl-composer-btns { display: flex; gap: 8px; }
+    .cl-btn-primary {
+      height: 34px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: var(--evr-radius-3xs);
+      background: var(--evr-interactive-primary-default);
+      color: #fff;
+      font: var(--evr-button-sm);
+      cursor: pointer;
+      transition: background-color 150ms;
+    }
+    .cl-btn-primary:hover { background: var(--evr-interactive-primary-hover); }
+    .cl-btn-primary:disabled {
+      background: var(--evr-inactive-surface);
+      color: var(--evr-inactive-content);
+      cursor: default;
+    }
+    .cl-btn-ghost {
+      height: 34px;
+      padding: 0 14px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-3xs);
+      background: transparent;
+      color: var(--evr-content-primary-default);
+      font: var(--evr-button-sm);
+      cursor: pointer;
+      transition: background-color 150ms;
+    }
+    .cl-btn-ghost:hover { background: var(--evr-surface-secondary-default); }
+
+    @media (max-width: 720px) {
+      .cl-page { padding: 32px 20px 64px; }
+      .cl-day {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .cl-day-rail { position: static; }
+      .cl-entry {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cl-page">
+
+    <!-- Top bar -->
+    <nav class="cl-topbar" aria-label="Document navigation">
+      <span class="cl-crumb">Flex Work V1 · Internal docs</span>
+      <a href="index.html">← Back to Flex Work V1</a>
+    </nav>
+
+    <!-- Header -->
+    <header class="cl-header">
+      <p class="cl-eyebrow">Changelog</p>
+      <h1 class="cl-title">Flex Work V1 Changelog</h1>
+      <p class="cl-sub">
+        Running log of every feature, change, and fix shipped into the
+        Flex Work V1 track — the current / legacy platform state, built
+        under /v1 and kept separate from the V2 app at the project root.
+        Entries are grouped by day, newest first, and this file is
+        updated as part of every V1 change.
+      </p>
+      <div class="cl-meta-row">
+        <span><b>Track</b> Flex Work V1</span>
+        <span><b>IA version</b> V1</span>
+        <span><b>Current version</b> v0.4</span>
+        <span><b>Last updated</b> <time datetime="2026-06-08">June 8, 2026</time></span>
+        <span><b>Maintained by</b> the Flex Work design team</span>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         CHANGELOG ENTRIES — reverse chronological by day.
+         To append a new entry on a new day, prepend a new <section>
+         here. To append to today, add a new <li> at the top of the
+         existing day's <ul>.
+
+         Author tracking — every <li class="cl-entry"> carries a
+         data-author="Firstname Lastname" attribute that matches the
+         Author: span in its meta row. The filter chips below read
+         from data-author to narrow the visible entries; an author
+         not represented in any entry is dropped from the chip row.
+         Add a new teammate by giving them a unique chip color in
+         the AUTHORS map at the bottom of this file.
+         ============================================================ -->
+    <main>
+
+      <!-- Author filter — chips render from the AUTHORS map + the
+           set of data-author values found on entries below. -->
+      <div class="cl-authors" id="cl-authors" role="group" aria-label="Filter by author">
+        <span class="cl-authors-label">Author</span>
+        <!-- chips injected by script — keeps the markup honest -->
+        <span class="cl-authors-count" data-authors-count></span>
+      </div>
+
+      <!-- ============ 2026-06-08 ============ -->
+      <section class="cl-day" data-day="2026-06-08" aria-label="June 8, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 8, 2026</h2>
+          <div class="cl-day-weekday">Monday</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Elijah Bilokur">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added remove rule action to rate engine editor panel</h3>
+              <p class="cl-entry-detail">
+                The rule editor now has a "Remove rule" button in its footer; clicking it shows an inline confirmation prompt before permanently deleting the rule, so operators can remove a rule from the detail view without going back to the table.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &middot; v0.4</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Elijah Bilokur">EB</span>Elijah Bilokur</span>
+              </div>
+            </div>
+          </li>
+              <p class="cl-entry-detail">
+                Added a new Configuration surface under Settings that lets operators define lookup rules mapping Legal Entity, Tenure Status, Locations and Positions to a full pay rate engine configuration (margin, OT multiplier, rounding and on-cost components). Rules are evaluated top-down and the first match wins; rules can be added, edited, reordered and toggled active or inactive.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &middot; v0.4</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Elijah Bilokur">EB</span>Elijah Bilokur</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ============ 2026-06-04 ============ -->
+      <section class="cl-day" data-day="2026-06-04" aria-label="June 4, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 4, 2026</h2>
+          <div class="cl-day-weekday">Thursday</div>
+          <div class="cl-day-count" data-day-count>1 change</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Elijah Bilokur">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Rebuilt the V1 app on the Flex Work V1 design system</h3>
+              <p class="cl-entry-detail">
+                Re-skinned the entire V1 single-page app off Everest and onto the Flex Work V1 design system &mdash; Gilroy and Helvetica type, the Dayforce Blue palette, FontAwesome 7 Solid icons, the legacy white side-nav with its 4px blue active stripe, pill buttons and 24px cards &mdash; across the top bar, sidebars, Active Agencies list, WorkWhile detail and the Settings &rarr; Pricing rate-automation flow. The icon layer now renders FontAwesome glyphs instead of fetching Everest SVGs, and SheetJS loads on demand so first paint never waits on the CDN.
+              </p>
+              <div class="cl-entry-meta">
+                <span>App-wide &middot; v0.3</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Elijah Bilokur">EB</span>Elijah Bilokur</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ============ 2026-06-03 ============ -->
+      <section class="cl-day" data-day="2026-06-03" aria-label="June 3, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 3, 2026</h2>
+          <div class="cl-day-weekday">Wednesday</div>
+          <div class="cl-day-count" data-day-count>4 changes</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Elijah Bilokur">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Built the Active Agencies list in the V1 legacy design</h3>
+              <p class="cl-entry-detail">
+                Added Agencies &rarr; Active &mdash; a legacy-styled Active Agencies List card with Date Sent and Date Activated sort pills and a zebra-striped table (drag-handle priority, agency name, contact, copyable email, invite-sent and date-activated columns) that opens the WorkWhile agency detail on row click. Built as bespoke legacy components rather than Everest, alongside an expandable Agencies sub-nav (Invite, Active, Deactivated, Invoices), a legacy top bar (locale flag, name and account menu) and a User Guides / API Docs / Changelog footer.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; Active &middot; v0.2</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Elijah Bilokur">EB</span>Elijah Bilokur</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Elijah Bilokur">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Rebuilt V1 as a single-page app shell</h3>
+              <p class="cl-entry-detail">
+                Refactored the single-file Rate Automation prototype into a v2-style single-page app &mdash; index.html plus core.js, chrome.js, page modules under pages/ and a boot-last app.js &mdash; so every state, page and role runs from one page. Split the CSS into a shared shell and per-page sheets, added a top-bar account and viewing-as menu (Admin only for now), and retired the standalone Rate Automation.html.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Repo &middot; v0.2</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Elijah Bilokur">EB</span>Elijah Bilokur</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Elijah Bilokur">
+            <span class="cl-tag cl-tag--system">System</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Established the Flex Work V1 track</h3>
+              <p class="cl-entry-detail">
+                Split V1 out from the V2 app into its own <code>/v1</code> folder so the team can push into both tracks independently, moved the Rate Automation prototype in as the first V1 surface, and stood up this changelog as the V1 track's source of truth alongside the root-level Flex Work v2 changelog.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Repo &middot; v0.1</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Elijah Bilokur">EB</span>Elijah Bilokur</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Created the Rate Automation feature prototype</h3>
+              <p class="cl-entry-detail">
+                Stood up an isolated V1-shell prototype with two clickable surfaces &mdash; an Agencies &rarr; WorkWhile detail (contract-dates bar, agency hero with a copyable GUID and expandable cards) and a Settings &rarr; Pricing rate-automation upload flow that downloads a pre-filled rate-card template and parses a dropped .xlsx, .xls or .csv into a preview table before applying.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Rate Automation &middot; v0.1</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <p class="cl-foot">
+      <b>Updating the V1 changelog.</b> This log is the single source of
+      truth for the <b>Flex Work V1</b> track (everything under
+      <code>/v1</code>). Land each change as a new
+      <code>&lt;li class="cl-entry"&gt;</code> at the top of today's
+      <code>&lt;section data-day&gt;</code>, creating the day section if
+      one does not exist yet. It is kept separate from the V2
+      <code>Flex Work v2 Changelog.html</code> at the project root. See
+      the comment at the top of this file for the full contract.
+    </p>
+
+  </div>
+
+  <script>
+    // ---------------------------------------------------------------
+    // Authors registry — extend by adding a new entry here. The
+    // `color` is the avatar background. Anyone present in
+    // data-author but missing here falls back to a neutral chip.
+    // ---------------------------------------------------------------
+    var AUTHORS = {
+      "Dominic Esposito": { color: "#2A6FDB" },
+      "Elijah Bilokur":   { color: "#1F8A5B" },
+      "Dmitry Grechko":   { color: "#C2602F" },
+      "Seth Pelletier":   { color: "#6A3FB5" },
+      "Iryna Kosakovska": { color: "#0F8C8C" }
+    };
+
+    (function () {
+      // 1. Day-count auto-sync (counts only currently-visible entries).
+      function refreshDayCounts() {
+        document.querySelectorAll("[data-day]").forEach(function (day) {
+          var visible = day.querySelectorAll(".cl-entry:not([hidden])").length;
+          var total = day.querySelectorAll(".cl-entry").length;
+          var counter = day.querySelector("[data-day-count]");
+          if (!counter) return;
+          if (visible === total) {
+            counter.textContent = total + (total === 1 ? " change" : " changes");
+          } else {
+            counter.textContent = visible + " of " + total + (total === 1 ? " change" : " changes");
+          }
+          // Hide the whole day if nothing visible inside.
+          day.hidden = visible === 0;
+        });
+      }
+
+      // 2. Color every author avatar (entry rows + chips) by the
+      // AUTHORS map. Unknown names get a neutral slate.
+      function initials(name) {
+        return name.split(" ").map(function (p) { return p[0]; }).join("").toUpperCase();
+      }
+      function colorFor(name) {
+        return (AUTHORS[name] && AUTHORS[name].color) || "#5A6273";
+      }
+      document.querySelectorAll("[data-author-avatar]").forEach(function (el) {
+        el.style.background = colorFor(el.getAttribute("data-author-avatar"));
+      });
+
+      // 3. Gather the set of authors that actually appear in entries,
+      // in the order they first appear (most recent → oldest, since
+      // the doc is reverse-chron). Render a chip for each.
+      var seen = new Set();
+      var ordered = [];
+      document.querySelectorAll(".cl-entry[data-author]").forEach(function (li) {
+        var name = li.getAttribute("data-author");
+        if (!seen.has(name)) { seen.add(name); ordered.push(name); }
+      });
+      // Stable alphabetical order so the row doesn't reshuffle as
+      // history grows — easier to find a teammate by name.
+      ordered.sort();
+
+      var bar = document.getElementById("cl-authors");
+      var countEl = bar.querySelector("[data-authors-count]");
+
+      function makeChip(name, opts) {
+        opts = opts || {};
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cl-author-chip";
+        btn.setAttribute("data-author", name);
+        if (opts.active) btn.classList.add("is-active");
+        if (opts.allChip) {
+          btn.textContent = "All";
+        } else {
+          var av = document.createElement("span");
+          av.className = "cl-avatar";
+          av.style.background = colorFor(name);
+          av.textContent = initials(name);
+          btn.appendChild(av);
+          btn.appendChild(document.createTextNode(name));
+        }
+        btn.addEventListener("click", function () { applyFilter(name); });
+        return btn;
+      }
+
+      var allChip = makeChip("all", { active: true, allChip: true });
+      bar.insertBefore(allChip, countEl);
+      ordered.forEach(function (name) {
+        bar.insertBefore(makeChip(name), countEl);
+      });
+
+      function applyFilter(name) {
+        // Toggle chip state
+        bar.querySelectorAll(".cl-author-chip").forEach(function (c) {
+          c.classList.toggle("is-active", c.getAttribute("data-author") === name);
+        });
+        var total = 0, shown = 0;
+        document.querySelectorAll(".cl-entry").forEach(function (li) {
+          total++;
+          var match = name === "all" || li.getAttribute("data-author") === name;
+          li.hidden = !match;
+          if (match) shown++;
+        });
+        refreshDayCounts();
+        if (name === "all") {
+          countEl.textContent = total + (total === 1 ? " entry" : " entries");
+        } else {
+          countEl.textContent = shown + " of " + total + " by " + name;
+        }
+      }
+
+      // Initial render.
+      applyFilter("all");
+    })();
+  </script>
+
+  <!-- ===============================================================
+       Reactions, comments & threaded replies.
+       • Persisted in localStorage under STORE_KEY — survives reload.
+       • Each entry is keyed by a stable hash of its title, so reordering
+         or filtering the changelog never orphans a thread.
+       • "Commenting as" persona is read from the AUTHORS map above and
+         stamped onto every reaction and comment the user makes.
+       =============================================================== -->
+  <script>
+    (function () {
+      var STORE_KEY = "flexwork-v1-changelog-social-v1";
+      var EMOJI = ["👍", "❤️", "🎉", "🚀", "👀", "🙌"];
+      var NAMES = Object.keys(AUTHORS);
+
+      // ---- store -------------------------------------------------
+      function load() {
+        try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+        catch (e) { return {}; }
+      }
+      var store = load();
+      store.reactions = store.reactions || {};   // { entryId: { emoji: [name,…] } }
+      store.threads   = store.threads   || {};   // { entryId: [ comment,… ] }
+      store.shots     = store.shots     || {};   // { entryId: { idx: dataURL } } — reader screenshot overrides
+      if (!store.currentUser || NAMES.indexOf(store.currentUser) < 0) {
+        store.currentUser = NAMES[0];
+      }
+      function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {} }
+
+      // ---- helpers ----------------------------------------------
+      function initials(name) {
+        return name.split(" ").map(function (p) { return p[0]; }).join("").toUpperCase();
+      }
+      function colorFor(name) {
+        return (AUTHORS[name] && AUTHORS[name].color) || "#5A6273";
+      }
+      function avatar(name, cls) {
+        var a = document.createElement("span");
+        a.className = "cl-avatar" + (cls ? " " + cls : "");
+        a.style.background = colorFor(name);
+        a.textContent = initials(name);
+        a.setAttribute("title", name);
+        return a;
+      }
+      function uid() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+      }
+      function hashStr(str) {
+        var h = 5381;
+        for (var i = 0; i < str.length; i++) { h = (((h << 5) + h) ^ str.charCodeAt(i)) >>> 0; }
+        return h.toString(36);
+      }
+      function timeAgo(ts) {
+        var s = (Date.now() - ts) / 1000;
+        if (s < 45) return "just now";
+        var m = s / 60; if (m < 60) return Math.floor(m) + "m ago";
+        var h = m / 60; if (h < 24) return Math.floor(h) + "h ago";
+        var d = h / 24; if (d < 7) return Math.floor(d) + "d ago";
+        return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      }
+      function svg(paths) {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round">' + paths + '</svg>';
+      }
+      var ICON_COMMENT = svg('<path d="M5 5h14v10h-9l-4 3v-3H5z"/>');
+      var ICON_FACE = svg('<circle cx="12" cy="12" r="8"/><path d="M9 10h.01M15 10h.01"/><path d="M9 14c.8.9 1.9 1.4 3 1.4s2.2-.5 3-1.4"/>');
+      var ICON_CHEV = svg('<path d="M6 9l6 6 6-6"/>');
+      var ICON_CHECK = svg('<path d="M5 12.5l4.5 4.5L19 7"/>');
+
+      function totalComments(list) {
+        var n = 0;
+        (list || []).forEach(function (c) { n += 1 + (c.replies ? c.replies.length : 0); });
+        return n;
+      }
+
+      // ---- persona picker (lives inside each composer) ----------
+      var rerenderers = []; // called when the active persona changes
+
+      function makeAsPicker() {
+        var wrap = document.createElement("div");
+        wrap.className = "cl-as-picker";
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cl-as-btn";
+        btn.setAttribute("aria-haspopup", "true");
+        function label() {
+          btn.innerHTML = '<span class="cl-as-pre">as</span>';
+          btn.appendChild(avatar(store.currentUser, "cl-avatar--xs"));
+          var b = document.createElement("b");
+          b.textContent = store.currentUser;
+          btn.appendChild(b);
+          var chev = document.createElement("span");
+          chev.className = "cl-as-chev";
+          chev.innerHTML = ICON_CHEV;
+          btn.appendChild(chev);
+        }
+        label();
+
+        var menu = document.createElement("div");
+        menu.className = "cl-persona-menu";
+        menu.hidden = true;
+        var lbl = document.createElement("div");
+        lbl.className = "cl-persona-menu-label";
+        lbl.textContent = "Commenting as";
+        menu.appendChild(lbl);
+        NAMES.forEach(function (name) {
+          var item = document.createElement("button");
+          item.type = "button";
+          item.className = "cl-persona-item";
+          item.appendChild(avatar(name, "cl-avatar--sm"));
+          item.appendChild(document.createTextNode(name));
+          var chk = document.createElement("span");
+          chk.className = "cl-check";
+          chk.innerHTML = ICON_CHECK;
+          item.appendChild(chk);
+          item.addEventListener("click", function () {
+            store.currentUser = name; save();
+            menu.hidden = true;
+            rerenderers.forEach(function (fn) { fn(); });
+          });
+          menu.appendChild(item);
+        });
+
+        function syncCurrent() {
+          menu.querySelectorAll(".cl-persona-item").forEach(function (it, i) {
+            it.classList.toggle("is-current", NAMES[i] === store.currentUser);
+          });
+        }
+        syncCurrent();
+
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          menu.hidden = !menu.hidden;
+        });
+        document.addEventListener("click", function (e) {
+          if (!wrap.contains(e.target)) menu.hidden = true;
+        });
+
+        wrap.appendChild(btn);
+        wrap.appendChild(menu);
+        rerenderers.push(function () { label(); syncCurrent(); });
+        return wrap;
+      }
+
+      // ---- composer ---------------------------------------------
+      // onPost(text) → returns true if accepted (clears + collapses)
+      function makeComposer(opts) {
+        opts = opts || {};
+        var form = document.createElement("div");
+        form.className = "cl-composer" + (opts.reply ? " cl-composer--reply" : "");
+
+        form.appendChild(avatar(store.currentUser, "cl-avatar--sm js-me-avatar"));
+
+        var fields = document.createElement("div");
+        fields.className = "cl-composer-fields";
+
+        var ta = document.createElement("textarea");
+        ta.rows = opts.reply ? 2 : 2;
+        ta.placeholder = opts.placeholder || "Add a comment";
+        fields.appendChild(ta);
+
+        var row = document.createElement("div");
+        row.className = "cl-composer-row";
+        row.appendChild(makeAsPicker());
+
+        var btns = document.createElement("div");
+        btns.className = "cl-composer-btns";
+        if (opts.onCancel) {
+          var cancel = document.createElement("button");
+          cancel.type = "button";
+          cancel.className = "cl-btn-ghost";
+          cancel.textContent = "Cancel";
+          cancel.addEventListener("click", function () { opts.onCancel(); });
+          btns.appendChild(cancel);
+        }
+        var post = document.createElement("button");
+        post.type = "button";
+        post.className = "cl-btn-primary";
+        post.textContent = opts.postLabel || "Comment";
+        post.disabled = true;
+        btns.appendChild(post);
+        row.appendChild(btns);
+        fields.appendChild(row);
+        form.appendChild(fields);
+
+        ta.addEventListener("input", function () { post.disabled = !ta.value.trim(); });
+        function submit() {
+          var t = ta.value.trim();
+          if (!t) return;
+          opts.onPost(t);
+          ta.value = ""; post.disabled = true;
+        }
+        post.addEventListener("click", submit);
+        ta.addEventListener("keydown", function (e) {
+          if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submit();
+        });
+
+        // keep the composer avatar fresh on persona change
+        rerenderers.push(function () {
+          var av = form.querySelector(".js-me-avatar");
+          if (av) {
+            av.style.background = colorFor(store.currentUser);
+            av.textContent = initials(store.currentUser);
+            av.setAttribute("title", store.currentUser);
+          }
+        });
+        if (opts.autofocus) setTimeout(function () { ta.focus(); }, 0);
+        return form;
+      }
+
+      // ---- comment rendering ------------------------------------
+      function renderComment(entryId, comment, parentId, rerenderThread) {
+        var el = document.createElement("div");
+        el.className = "cl-comment";
+        el.appendChild(avatar(comment.author, "cl-avatar--sm"));
+
+        var main = document.createElement("div");
+        main.className = "cl-comment-main";
+
+        var head = document.createElement("div");
+        head.className = "cl-comment-head";
+        var au = document.createElement("span");
+        au.className = "cl-comment-author";
+        au.textContent = comment.author;
+        var tm = document.createElement("span");
+        tm.className = "cl-comment-time";
+        tm.textContent = timeAgo(comment.ts);
+        head.appendChild(au); head.appendChild(tm);
+        main.appendChild(head);
+
+        var txt = document.createElement("p");
+        txt.className = "cl-comment-text";
+        txt.textContent = comment.text;
+        main.appendChild(txt);
+
+        var actions = document.createElement("div");
+        actions.className = "cl-comment-actions";
+        // Reply only on top-level comments (one level of threading)
+        if (!parentId) {
+          var replyBtn = document.createElement("button");
+          replyBtn.type = "button";
+          replyBtn.className = "cl-link-btn";
+          replyBtn.textContent = "Reply";
+          actions.appendChild(replyBtn);
+        }
+        if (comment.author === store.currentUser) {
+          var del = document.createElement("button");
+          del.type = "button";
+          del.className = "cl-link-btn cl-link-danger";
+          del.textContent = "Delete";
+          del.addEventListener("click", function () {
+            removeComment(entryId, comment.id, parentId);
+            rerenderThread();
+          });
+          actions.appendChild(del);
+        }
+        if (actions.children.length) main.appendChild(actions);
+
+        // replies + inline reply composer
+        if (!parentId) {
+          var repliesWrap = document.createElement("div");
+          repliesWrap.className = "cl-comment-replies";
+          (comment.replies || []).forEach(function (r) {
+            repliesWrap.appendChild(renderComment(entryId, r, comment.id, rerenderThread));
+          });
+          main.appendChild(repliesWrap);
+
+          replyBtn.addEventListener("click", function () {
+            if (main.querySelector(".cl-composer--reply")) return;
+            var composer = makeComposer({
+              reply: true, autofocus: true, postLabel: "Reply",
+              placeholder: "Reply to " + comment.author,
+              onPost: function (text) {
+                addComment(entryId, comment.id, text);
+                rerenderThread();
+              },
+              onCancel: function () { composer.remove(); }
+            });
+            main.appendChild(composer);
+          });
+        }
+
+        main && el.appendChild(main);
+        return el;
+      }
+
+      // ---- data ops ---------------------------------------------
+      function addComment(entryId, parentId, text) {
+        var list = store.threads[entryId] = store.threads[entryId] || [];
+        var node = { id: uid(), author: store.currentUser, text: text, ts: Date.now() };
+        if (parentId) {
+          var p = list.filter(function (c) { return c.id === parentId; })[0];
+          if (!p) return;
+          p.replies = p.replies || [];
+          p.replies.push(node);
+        } else {
+          node.replies = [];
+          list.push(node);
+        }
+        save();
+      }
+      function removeComment(entryId, commentId, parentId) {
+        var list = store.threads[entryId] || [];
+        if (parentId) {
+          var p = list.filter(function (c) { return c.id === parentId; })[0];
+          if (p && p.replies) p.replies = p.replies.filter(function (r) { return r.id !== commentId; });
+        } else {
+          store.threads[entryId] = list.filter(function (c) { return c.id !== commentId; });
+        }
+        save();
+      }
+      function toggleReaction(entryId, emoji) {
+        var me = store.currentUser;
+        var r = store.reactions[entryId] = store.reactions[entryId] || {};
+        var arr = r[emoji] = r[emoji] || [];
+        var i = arr.indexOf(me);
+        if (i >= 0) arr.splice(i, 1); else arr.push(me);
+        if (arr.length === 0) delete r[emoji];
+        save();
+      }
+
+      // ---- per-entry social block -------------------------------
+      function buildSocial(entry) {
+        var title = entry.querySelector(".cl-entry-title");
+        var entryId = hashStr(((title && title.textContent) || "").trim());
+        entry.setAttribute("data-entry-id", entryId);
+        var body = entry.querySelector(".cl-entry-body");
+        if (!body) return;
+
+        var social = document.createElement("div");
+        social.className = "cl-social";
+
+        var bar = document.createElement("div");
+        bar.className = "cl-social-bar";
+
+        var reactList = document.createElement("div");
+        reactList.className = "cl-react-list";
+        bar.appendChild(reactList);
+
+        // add-reaction button + palette
+        var addWrap = document.createElement("div");
+        addWrap.className = "cl-react-add-wrap";
+        var addBtn = document.createElement("button");
+        addBtn.type = "button";
+        addBtn.className = "cl-icon-btn";
+        addBtn.setAttribute("aria-label", "Add reaction");
+        addBtn.innerHTML = ICON_FACE + "<span>React</span>";
+        var palette = document.createElement("div");
+        palette.className = "cl-react-palette";
+        palette.hidden = true;
+        EMOJI.forEach(function (em) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = em;
+          b.addEventListener("click", function (e) {
+            e.stopPropagation();
+            toggleReaction(entryId, em);
+            palette.hidden = true;
+            renderReactions();
+          });
+          palette.appendChild(b);
+        });
+        addBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          palette.hidden = !palette.hidden;
+        });
+        document.addEventListener("click", function (e) {
+          if (!addWrap.contains(e.target)) palette.hidden = true;
+        });
+        addWrap.appendChild(addBtn);
+        addWrap.appendChild(palette);
+        bar.appendChild(addWrap);
+
+        // comment toggle
+        var commentBtn = document.createElement("button");
+        commentBtn.type = "button";
+        commentBtn.className = "cl-icon-btn";
+        bar.appendChild(commentBtn);
+
+        social.appendChild(bar);
+
+        // thread
+        var thread = document.createElement("div");
+        thread.className = "cl-thread";
+        thread.hidden = true;
+        social.appendChild(thread);
+
+        function renderReactions() {
+          reactList.innerHTML = "";
+          var r = store.reactions[entryId] || {};
+          EMOJI.forEach(function (em) {
+            var users = r[em];
+            if (!users || !users.length) return;
+            var chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "cl-react-chip";
+            if (users.indexOf(store.currentUser) >= 0) chip.classList.add("is-mine");
+            chip.title = users.join(", ");
+            chip.innerHTML = '<span class="cl-react-emoji">' + em + '</span><span class="cl-react-count">' + users.length + '</span>';
+            chip.addEventListener("click", function () {
+              toggleReaction(entryId, em);
+              renderReactions();
+            });
+            reactList.appendChild(chip);
+          });
+        }
+        function renderCommentBtn() {
+          var n = totalComments(store.threads[entryId]);
+          commentBtn.classList.toggle("is-open", !thread.hidden);
+          commentBtn.innerHTML = ICON_COMMENT +
+            "<span>" + (n ? "Comments" : "Comment") + "</span>" +
+            (n ? '<span class="cl-count-badge">' + n + "</span>" : "");
+        }
+        function renderThread() {
+          thread.innerHTML = "";
+          (store.threads[entryId] || []).forEach(function (c) {
+            thread.appendChild(renderComment(entryId, c, null, renderThread));
+          });
+          thread.appendChild(makeComposer({
+            placeholder: "Add a comment",
+            onPost: function (text) { addComment(entryId, null, text); renderThread(); }
+          }));
+          renderCommentBtn();
+        }
+        commentBtn.addEventListener("click", function () {
+          thread.hidden = !thread.hidden;
+          if (!thread.hidden && !thread.childElementCount) renderThread();
+          renderCommentBtn();
+        });
+
+        renderReactions();
+        renderCommentBtn();
+        rerenderers.push(function () {
+          renderReactions();
+          if (!thread.hidden) renderThread();
+        });
+
+        body.appendChild(social);
+      }
+
+      // ---- screenshot gallery + lightbox ------------------------
+      // Authoring: PROPOSE the screenshots that best show a change by
+      // dropping a <div class="cl-shots"> inside .cl-entry-body
+      // (between the detail and meta) holding 1–3 <figure class="cl-shot">,
+      // each with an <img class="cl-shot-thumb" src alt> and an optional
+      // <figcaption>. This script makes each thumbnail open a shared
+      // lightbox (prev/next, counter, Esc + arrow keys) AND adds hover
+      // controls so any reader can override a proposed shot with their
+      // own upload or revert to it — overrides persist per entry in
+      // localStorage and never touch the authored markup.
+      var ICON_ZOOM = svg('<path d="M4 9V4h5"/><path d="M20 15v5h-5"/><path d="M15 4h5v5"/><path d="M9 20H4v-5"/>');
+      var ICON_X = svg('<path d="M6 6l12 12M18 6L6 18"/>');
+      var ICON_ARR_L = svg('<path d="M15 5l-7 7 7 7"/>');
+      var ICON_ARR_R = svg('<path d="M9 5l7 7-7 7"/>');
+      var ICON_SWAP = svg('<path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 20h16"/>');
+      var ICON_UNDO = svg('<path d="M9 14l-5-5 5-5"/><path d="M4 9h10a6 6 0 0 1 0 12H8"/>');
+
+      var lb = null, lbState = { list: [], i: 0 };
+      function buildLightbox() {
+        if (lb) return lb;
+        lb = document.createElement("div");
+        lb.className = "cl-lightbox";
+        lb.setAttribute("role", "dialog");
+        lb.setAttribute("aria-modal", "true");
+        lb.setAttribute("aria-label", "Screenshot viewer");
+        lb.innerHTML =
+          '<button type="button" class="cl-lb-btn cl-lb-close" aria-label="Close">' + ICON_X + '</button>' +
+          '<button type="button" class="cl-lb-btn cl-lb-prev" aria-label="Previous">' + ICON_ARR_L + '</button>' +
+          '<button type="button" class="cl-lb-btn cl-lb-next" aria-label="Next">' + ICON_ARR_R + '</button>' +
+          '<figure class="cl-lightbox-figure">' +
+            '<img class="cl-lightbox-img" alt="" />' +
+            '<figcaption class="cl-lightbox-cap"><span class="cl-lightbox-text"></span><span class="cl-lightbox-count"></span></figcaption>' +
+          '</figure>';
+        document.body.appendChild(lb);
+        lb.querySelector(".cl-lb-close").addEventListener("click", closeLightbox);
+        lb.querySelector(".cl-lb-prev").addEventListener("click", function (e) { e.stopPropagation(); stepLightbox(-1); });
+        lb.querySelector(".cl-lb-next").addEventListener("click", function (e) { e.stopPropagation(); stepLightbox(1); });
+        lb.addEventListener("click", function (e) { if (e.target === lb) closeLightbox(); });
+        return lb;
+      }
+      function showLightbox() {
+        var node = buildLightbox();
+        var shot = lbState.list[lbState.i];
+        node.querySelector(".cl-lightbox-img").src = shot.full;
+        node.querySelector(".cl-lightbox-img").alt = shot.alt || shot.caption || "";
+        node.querySelector(".cl-lightbox-text").textContent = shot.caption || "";
+        var count = node.querySelector(".cl-lightbox-count");
+        count.textContent = lbState.list.length > 1 ? (lbState.i + 1) + " / " + lbState.list.length : "";
+        node.toggleAttribute("data-single", lbState.list.length < 2);
+      }
+      function openLightbox(list, i) {
+        lbState.list = list; lbState.i = i;
+        var node = buildLightbox();
+        showLightbox();
+        requestAnimationFrame(function () { node.classList.add("is-open"); });
+        document.addEventListener("keydown", onLbKey);
+      }
+      function closeLightbox() {
+        if (lb) lb.classList.remove("is-open");
+        document.removeEventListener("keydown", onLbKey);
+      }
+      function stepLightbox(d) {
+        var n = lbState.list.length;
+        lbState.i = (lbState.i + d + n) % n;
+        showLightbox();
+      }
+      function onLbKey(e) {
+        if (e.key === "Escape") closeLightbox();
+        else if (e.key === "ArrowRight") stepLightbox(1);
+        else if (e.key === "ArrowLeft") stepLightbox(-1);
+      }
+
+      function buildShots(entry) {
+        var wrap = entry.querySelector(".cl-shots");
+        if (!wrap) return;
+        var title = entry.querySelector(".cl-entry-title");
+        var entryId = hashStr(((title && title.textContent) || "").trim());
+        var figs = Array.prototype.slice.call(wrap.querySelectorAll(".cl-shot"));
+
+        // one hidden file input shared by every thumbnail in this entry
+        var fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.style.display = "none";
+        wrap.appendChild(fileInput);
+        var pendingIdx = -1;
+        fileInput.addEventListener("change", function () {
+          var f = fileInput.files && fileInput.files[0];
+          fileInput.value = "";
+          if (!f || pendingIdx < 0) return;
+          var rd = new FileReader();
+          rd.onload = function () {
+            (store.shots[entryId] = store.shots[entryId] || {})[pendingIdx] = rd.result;
+            save();
+            refresh();
+          };
+          rd.readAsDataURL(f);
+        });
+
+        function buildList() {
+          return figs.map(function (fig) {
+            var img = fig.querySelector("img");
+            var capText = fig.querySelector(".cl-shot-cap-text");
+            return {
+              full: fig.getAttribute("data-full") || (img && img.getAttribute("src")) || "",
+              alt: img ? img.getAttribute("alt") : "",
+              caption: capText ? capText.textContent.trim() : (img ? img.getAttribute("alt") : "")
+            };
+          });
+        }
+
+        figs.forEach(function (fig, idx) {
+          var img = fig.querySelector("img");
+          // remember the proposed (authored) source so revert can restore it
+          if (!fig.hasAttribute("data-proposed")) {
+            fig.setAttribute("data-proposed", fig.getAttribute("data-full") || (img && img.getAttribute("src")) || "");
+          }
+          // restructure the caption once to hold a "Custom" flag + the text
+          var cap = fig.querySelector("figcaption");
+          if (cap && !cap.querySelector(".cl-shot-cap-text")) {
+            var txt = cap.textContent.trim();
+            cap.innerHTML = '<span class="cl-shot-flag">Custom</span><span class="cl-shot-cap-text"></span>';
+            cap.querySelector(".cl-shot-cap-text").textContent = txt;
+          }
+          if (!fig.querySelector(".cl-shot-zoom")) {
+            var badge = document.createElement("span");
+            badge.className = "cl-shot-zoom";
+            badge.innerHTML = ICON_ZOOM;
+            fig.appendChild(badge);
+          }
+          // replace / revert tools
+          if (!fig.querySelector(".cl-shot-tools")) {
+            var tools = document.createElement("div");
+            tools.className = "cl-shot-tools";
+
+            var replace = document.createElement("button");
+            replace.type = "button";
+            replace.className = "cl-shot-tool";
+            replace.title = "Replace with your own screenshot";
+            replace.setAttribute("aria-label", "Replace this screenshot with your own image");
+            replace.innerHTML = ICON_SWAP;
+            replace.addEventListener("click", function (e) {
+              e.stopPropagation();
+              pendingIdx = idx;
+              fileInput.click();
+            });
+
+            var revert = document.createElement("button");
+            revert.type = "button";
+            revert.className = "cl-shot-tool js-revert";
+            revert.title = "Revert to the proposed screenshot";
+            revert.setAttribute("aria-label", "Revert to the proposed screenshot");
+            revert.innerHTML = ICON_UNDO;
+            revert.addEventListener("click", function (e) {
+              e.stopPropagation();
+              if (store.shots[entryId]) { delete store.shots[entryId][idx]; save(); }
+              refresh();
+            });
+
+            tools.appendChild(replace);
+            tools.appendChild(revert);
+            fig.appendChild(tools);
+          }
+
+          fig.setAttribute("role", "button");
+          fig.setAttribute("tabindex", "0");
+          fig.addEventListener("click", function (e) {
+            if (e.target.closest(".cl-shot-tools")) return;
+            openLightbox(buildList(), idx);
+          });
+          fig.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(buildList(), idx); }
+          });
+        });
+
+        function refresh() {
+          figs.forEach(function (fig, idx) {
+            var img = fig.querySelector("img");
+            var ov = (store.shots[entryId] || {})[idx];
+            var src = ov || fig.getAttribute("data-proposed");
+            if (img) img.setAttribute("src", src);
+            fig.setAttribute("data-full", src);
+            fig.classList.toggle("is-custom", !!ov);
+            var rev = fig.querySelector(".js-revert");
+            if (rev) rev.style.display = ov ? "" : "none";
+            var capText = fig.querySelector(".cl-shot-cap-text");
+            var label = (capText && capText.textContent.trim()) || "screenshot";
+            fig.setAttribute("aria-label", "View screenshot: " + label + (ov ? " (custom)" : ""));
+          });
+        }
+        refresh();
+      }
+
+      document.querySelectorAll(".cl-entry").forEach(function (entry) {
+        buildShots(entry);
+        buildSocial(entry);
+      });
+    })();
+  </script>
+</body>
+</html>

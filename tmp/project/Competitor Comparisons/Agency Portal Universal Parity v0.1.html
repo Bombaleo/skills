@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flex Work — Agency portal · universal parity · v0.1</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="../styles-strategy.css" />
+  <link rel="stylesheet" href="../styles-sow-parity.css" />
+  <link rel="stylesheet" href="../styles-agency-parity.css" />
+</head>
+<body class="sr" data-screen-label="Agency portal parity">
+
+<div class="sr-shell">
+
+  <!-- ============================================================== -->
+  <!-- Sticky TOC                                                     -->
+  <!-- ============================================================== -->
+  <aside class="sr-toc" aria-label="Sections">
+    <div class="sr-toc-mark">Internal · Build log</div>
+    <div class="sr-toc-title">Agency portal — universal parity</div>
+    <div class="sr-toc-ver"><code>v1.0</code>May 29, 2026 · shipped</div>
+    <ol>
+      <li><a href="#scope">Scope &amp; methodology</a></li>
+      <li><a href="#stand">Where we stand</a></li>
+      <li><a href="#model">The universal agency model</a></li>
+      <li><a href="#work">What shipped · the agency workbench</a></li>
+      <li><a href="#architecture">Architecture · embed, don't add</a></li>
+      <li><a href="#sequencing">How it rolled out</a></li>
+    </ol>
+    <div class="sr-toc-foot">
+      <p><strong>What this is.</strong> A review of the Agency role and the views an agency user has today, benchmarked against <b>JoinedUp</b> (frontline / shift) and <b>Vndly + Fieldglass</b> (professional), with a recommended set of features written as embeddable tasks.</p>
+      <p><strong>The discipline.</strong> Every recommendation keeps the frontline and professional concepts <em>unified</em> — one agency workbench, engagement-type-blind — and maps to an existing file. Companion to Architecture v1.6 and Strategy Review v1.0.</p>
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- Main column                                                    -->
+  <!-- ============================================================== -->
+  <main class="sr-main">
+
+    <!-- HERO -->
+    <header class="sr-hero">
+      <div class="sr-eyebrow">Flex Work VMS · Agency portal parity · v1.0 · shipped</div>
+      <h1 class="sr-title">One agency workbench, every kind of work — now live.</h1>
+      <p class="sr-deck">All twenty-two tasks have shipped into the live product. The Agency role is no longer a role flip on buyer surfaces: it now opens to a true supplier workbench — an action center with response clocks, a scorecard and tier standing, AI bench-match, a real bench with availability and bulk onboarding, multi-recipient broadcast over the offer loop, a credential gate across every Respond mode, consolidated time and billing, and a Pro-only Dayforce HCM bench sync. Every flow routes through the existing job-driven spine (<code>AssignmentEngine.modeFor(engType)</code>) — <b>no new pages, no new routes, no new nav, no schema changes.</b> Frontline and professional stay one unified surface that the ordered job reshapes.</p>
+      <dl class="sr-meta">
+        <div><dt>Audience</dt><dd>Product · Engineering · Design</dd></div>
+        <div><dt>Shipped</dt><dd>May 29, 2026</dd></div>
+        <div><dt>Status</dt><dd>Live · all 22 tasks</dd></div>
+        <div><dt>Companion</dt><dd>Architecture v1.6 · Strategy v1.0</dd></div>
+      </dl>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- 01 · SCOPE & METHODOLOGY                                       -->
+    <!-- ============================================================== -->
+    <section id="scope" class="sr-section">
+      <div>
+        <span class="sr-h2-num">01 · Scope &amp; methodology</span>
+        <h2 class="sr-h2">The agency is a supplier. Both worlds run the same loop.</h2>
+      </div>
+      <p class="sr-lead">This list covers the <b>Agency</b> persona only — the StaffWise tenant (<code>kind: "agency"</code>), viewing as Agency, scoped to its <code>agencySupplierId</code>. The benchmark is <b>functional parity</b>, not visual mimicry: we match what an agency can do in a competitor today, expressed in the Everest language and the Flex Work data model. Two competitor worlds set the bar.</p>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The two benchmark worlds</div>
+        <p><b>Frontline / shift — JoinedUp by Beeline.</b> The agency's job is to fill volume fast: broadcast an open shift to a qualified bench, take the first accept, clear compliance, get the worker on site. The portal is availability-, coverage-, and SLA-led. <br><b>Professional — Vndly + Fieldglass.</b> The agency's job is to win the role: see the open requisition, submit a ranked shortlist with a proposed rate, move candidates through interviews, get scored on quality and responsiveness. The portal is submission-, status-, and scorecard-led.</p>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The architectural discipline</div>
+        <p>Per Architecture Principle 01, engagement type is a <b>filter on every surface, not a sibling product</b>. This list holds the agency portal to the same rule: <b>no per-engagement-type pages, no per-engagement-type nav</b>. Where frontline and professional need different behaviour, that difference is a branch <i>inside</i> a shared surface — the same way <code>assign-worker-panel.jsx</code> already swaps <i>Assign</i> ↔ <i>Submit</i> by engagement type. Every task below names its host file. <b>Zero new top-level routes; zero new nav entries.</b></p>
+      </div>
+
+      <div class="tl-legend" role="note">
+        <div class="tl-legend-group">
+          <span>Priority</span>
+          <span class="tl-pri" data-p="P0">P0</span><span>parity-blocker</span>
+          <span class="tl-pri" data-p="P1">P1</span><span>parity-credible</span>
+          <span class="tl-pri" data-p="P2">P2</span><span>parity-polish</span>
+        </div>
+        <div class="tl-legend-group">
+          <span>Parity</span>
+          <span class="tl-par" data-pp="ju">JU</span><span>JoinedUp</span>
+          <span class="tl-par" data-pp="vn">VN</span><span>Vndly</span>
+          <span class="tl-par" data-pp="fg">FG</span><span>Fieldglass</span>
+          <span class="tl-par" data-pp="all">All</span><span>universal bar</span>
+          <span class="tl-par" data-pp="beyond">Beyond</span><span>differentiator</span>
+        </div>
+        <div class="tl-legend-group">
+          <span>Status</span>
+          <span class="tl-stat">To go</span>
+          <span class="tl-stat" style="background:color-mix(in srgb, var(--tl-prog) 12%, var(--evr-surface-secondary-default))">Partial</span>
+          <span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Built</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · WHERE WE STAND                                            -->
+    <!-- ============================================================== -->
+    <section id="stand" class="sr-section">
+      <div>
+        <span class="sr-h2-num">02 · Where we stand</span>
+        <h2 class="sr-h2">From recipient to supplier portal.</h2>
+      </div>
+      <p class="sr-lead">The agency view is assembled from the ten primary nav surfaces, role-flipped: <b>Suppliers</b> is hidden, <b>Organization</b> relabels to <b>Clients</b>, and supplier-unsafe data (internal margin layers, masked pay) is filtered out. On top of that flip sit the Projects tab, the Interview inbox, the shared <b>assignment spine</b> (<code>assignment-engine.jsx</code> + <code>assign-worker-panel.jsx</code>), and — new in v1.0 — the agency <b>workbench</b> surfaces that turn the role into a real supplier desk. Here is the inventory after the build.</p>
+
+      <div class="ap-surfaces">
+        <div class="ap-surface">
+          <span class="ap-surface-name">Home</span>
+          <span class="ap-surface-state">Agency <b>workbench</b>: action center with response clocks, scorecard, tier standing, AI bench-match, forecast and compliance watch.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Requisitions</span>
+          <span class="ap-surface-state">Receives distributions read-only. Cannot create unless Agency Pro. Hosts the two built lanes below.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Projects tab</span>
+          <span class="ap-surface-state">Team-proposal requests + active projects, burn visibility, resource swap, consolidated weekly time.</span>
+          <span class="ap-surface-tag" data-depth="built">Built</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Interview inbox</span>
+          <span class="ap-surface-state">Supplier interview surfaces (S1–S10): invites, slots, candidate stages.</span>
+          <span class="ap-surface-tag" data-depth="built">Built</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Schedule</span>
+          <span class="ap-surface-state"><i>Assign worker</i> opens the type-aware panel — bulk allocation, availability + credential checks, and multi-recipient broadcast over the offer loop.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Timesheets</span>
+          <span class="ap-surface-state">Assigned-worker time plus a <b>consolidated weekly grid</b> across the whole crew and an exception/dispute queue.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Invoices</span>
+          <span class="ap-surface-state">Invoiced time + expense, plus agency-side <b>consolidated</b> and <b>off-cycle</b> invoice actions.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Workforce</span>
+          <span class="ap-surface-state">Full <b>bench</b> with available / on-assignment / credential-watch counts, <b>bulk onboarding</b>, and an editable per-worker availability calendar.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Clients</span>
+          <span class="ap-surface-state">Relabeled Organization. Direct (non-VMS) clients only on Agency Pro.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Settings</span>
+          <span class="ap-surface-state">Reduced tab dock + a Plan card (Free ⇄ Pro). HCM sync, employees, direct clients gated to Pro.</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+        <div class="ap-surface">
+          <span class="ap-surface-name">Analytics</span>
+          <span class="ap-surface-state">Scorecard and <b>tier / ranking transparency</b> surfaced on Home (fill rate, time-to-fill, submit→hire, standing).</span>
+          <span class="ap-surface-tag" data-depth="built">Shipped</span>
+        </div>
+      </div>
+
+      <div class="sr-verdict" data-tone="strong">
+        <div>
+          <div class="sr-verdict-label">Verdict</div>
+          <div class="sr-verdict-grade">Shipped <small>· the desk is live, on the existing spine</small></div>
+        </div>
+        <p class="sr-verdict-body">The strong plumbing — supplier-id scoping, margin masking, the interview inbox and Projects tab, and the <b>shared assignment spine</b> (<code>AssignmentEngine.modeFor(engType)</code>) — is now wrapped in the desk it was missing. Shipped: an <b>action center</b> with response clocks, a <b>scorecard</b> and tier standing, an <b>AI bench-match</b>, a real <b>bench</b> with availability and bulk onboarding, <b>multi-recipient broadcast</b> over the offer loop, a <b>credential gate</b> extended across every Respond mode, <b>consolidated time and billing</b>, and a Pro-only <b>Dayforce HCM bench sync</b>. The agency can now both respond correctly to any job type <em>and</em> run its whole desk from one surface — with no new pages, routes, nav, or schema.</p>
+      </div>
+
+      <div class="ap-compare">
+        <div class="ap-compare-col" data-side="today">
+          <span class="ap-compare-h">Before this build</span>
+          <ul>
+            <li>Open three places to find what needs action — Reqs list, Projects tab, Interview inbox.</li>
+            <li>Fills ran through the type-aware assign panel, but no <b>single inbox</b> to start from and no multi-recipient broadcast.</li>
+            <li>Candidate submission with a rate worked — but one at a time, with no ranked shortlist.</li>
+            <li>Workforce showed only workers already on assignment — no bench list to staff from.</li>
+            <li>Credentials checked only at instant placement; nothing warned of bench credentials expiring soon.</li>
+            <li>No fill rate, no time-to-fill, no scorecard, no sense of standing.</li>
+          </ul>
+        </div>
+        <div class="ap-compare-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="ap-compare-col" data-side="target">
+          <span class="ap-compare-h">Shipped in v1.0</span>
+          <ul>
+            <li>One <b>Action center</b> on Home: every fill, submission, expiry and exception in one ranked lane with response clocks.</li>
+            <li>One <b>Respond</b> action that flexes — assign from bench, submit a ranked shortlist with rate, propose a team.</li>
+            <li><b>Broadcast</b> an open shift to the qualified bench; first accept fills it (over the existing offer loop).</li>
+            <li>A real <b>bench</b> with availability and bulk onboarding, plus an editable availability calendar per worker.</li>
+            <li>A <b>credential gate</b> that blocks across allocate, submit and propose; a bench expiry watchlist on Home.</li>
+            <li>A <b>scorecard</b> — fill rate, time-to-fill, no-show, submit→hire, attendance — plus tier standing and forecast.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · THE UNIVERSAL MODEL                                       -->
+    <!-- ============================================================== -->
+    <section id="model" class="sr-section">
+      <div>
+        <span class="sr-h2-num">03 · The universal agency model</span>
+        <h2 class="sr-h2">Receive demand · respond with supply · get measured · get paid.</h2>
+      </div>
+      <p class="sr-lead">Strip the vocabulary away and JoinedUp and Vndly run the agency through the same four steps. Only the <i>Respond</i> step truly differs by engagement type — and that difference is <b>already built</b>, as the <code>allocate</code> / <code>submit</code> / <code>propose</code> modes that <code>AssignmentEngine.modeFor(engType)</code> selects from the requisition's type. We don't design three flows; we surface the one spine that already exists, and let the ordered job pick the variant.</p>
+
+      <div class="ap-loop">
+        <div class="ap-loop-step">
+          <span class="ap-loop-num">Step 1</span>
+          <h4>Receive demand</h4>
+          <p>An open requisition lands with the agency — distributed by tier, or direct.</p>
+          <div class="ap-loop-flex">
+            <span data-k="S">Shift / block to fill by a window</span>
+            <span data-k="P">Role to submit candidates against</span>
+            <span data-k="J">Team shape to propose against a budget</span>
+          </div>
+        </div>
+        <div class="ap-loop-step">
+          <span class="ap-loop-num">Step 2</span>
+          <h4>Respond with supply</h4>
+          <p>The one place the worlds diverge — and the one we already model as a mode.</p>
+          <div class="ap-loop-flex">
+            <span data-k="S">Assign / broadcast from bench</span>
+            <span data-k="P">Submit ranked shortlist + rate</span>
+            <span data-k="J">Propose a team + plan</span>
+          </div>
+        </div>
+        <div class="ap-loop-step">
+          <span class="ap-loop-num">Step 3</span>
+          <h4>Get measured</h4>
+          <p>The buyer scores the agency; the agency needs to see the same numbers.</p>
+          <div class="ap-loop-flex">
+            <span data-k="S">Fill rate · no-show · attendance</span>
+            <span data-k="P">Submit→hire · responsiveness · quality</span>
+            <span data-k="J">On-budget · on-time · acceptance</span>
+          </div>
+        </div>
+        <div class="ap-loop-step">
+          <span class="ap-loop-num">Step 4</span>
+          <h4>Get paid</h4>
+          <p>Time and expense roll into a consolidated, exception-clean invoice.</p>
+          <div class="ap-loop-flex">
+            <span data-k="S">Weekly consolidated timesheet</span>
+            <span data-k="P">Period / milestone invoice</span>
+            <span data-k="J">Burn-based progress billing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-key" aria-label="Engagement keys">
+        <span><b data-k="S">S</b> Shift / frontline</span>
+        <span><b data-k="P">P</b> Professional</span>
+        <span><b data-k="J">J</b> Project</span>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The spine already exists — and it is job-driven, not hardcoded</div>
+        <p>This is the most important fact in the document, and it is a constraint on every task below. The Respond step is <b>not</b> branched on “frontline vs professional” anywhere in the codebase. <code>assign-worker-panel.jsx</code> reads one value — <code>AssignmentEngine.modeFor(cfg.engagementType)</code> — which maps <code>Shift → allocate</code>, <code>Assignment → submit</code>, <code>Project / SOW → propose</code>. The same engine already owns the credential pre-check (<code>credentialSummary</code>), the availability guard (<code>availabilityFor</code>), the onboarding lifecycle (<code>onboardingItemsFor</code>), bulk allocation, the rate band, and the offer/accept loop (<code>createOffer</code> / <code>respondOffer</code>). <b>Role only flips labels</b> (agency “Assign” vs buyer “Request”) — never behaviour. Every recommendation in §04 must route through this engine and read the engagement type from the requisition; <b>no task may add a frontline or professional code path of its own.</b></p>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The design rule that falls out of this</div>
+        <p>Each of the four steps becomes a <b>single surface in the agency workbench</b>, and inside it the engagement type chooses the variant. The Inbox shows fills <i>and</i> submissions <i>and</i> proposals in one ranked list. The Respond action is one button with three bodies. The scorecard shows one composite plus the per-world metrics that matter. <b>The agency never learns three products — it learns one, and the work it does decides what it sees.</b></p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 04 · RECOMMENDATIONS                                           -->
+    <!-- ============================================================== -->
+    <section id="work" class="sr-section">
+      <div>
+        <span class="sr-h2-num">04 · What shipped · the agency workbench</span>
+        <h2 class="sr-h2">Twenty-two tasks shipped. None of them a new product.</h2>
+      </div>
+      <p class="sr-lead">Grouped into the five jobs that make up the loop. All twenty-two have shipped into the live app — each card names the host file it landed in and the existing primitive it reused. Every Respond-related surface routes through <code>AssignmentEngine.modeFor(engType)</code> rather than adding a frontline/professional code path of its own; the rest mount into existing pages behind an agency-tenant check. The one Pro-tier item (HCM bench sync) lives in <code>agency-pro.jsx</code>.</p>
+
+      <div class="tl-role-hero" data-role="agency">
+        <div>
+          <span class="tl-role-tag">Persona</span>
+          <h3 class="tl-role-name">Agency</h3>
+        </div>
+        <p class="tl-role-sub">The staffing supplier (StaffWise). Receives demand across all engagement types, responds with its workforce, is measured on delivery, and bills for the work — all from one universal workbench, never three.</p>
+        <div class="tl-role-count">
+          <b>22</b><b>0</b><b>0</b>
+          <span>Shipped</span><span>Partial</span><span>To go</span>
+        </div>
+      </div>
+
+      <div class="tl-summary">
+        <div class="tl-sum-card" data-tone="agency">
+          <span class="tl-sum-label">Action center</span>
+          <span class="tl-sum-figure">2</span>
+          <div class="tl-sum-mix" aria-label="Action center mix">
+            <span class="tl-mix-done" style="flex:2"></span><span class="tl-mix-prog" style="flex:0"></span><span class="tl-mix-todo" style="flex:0"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>2</b> shipped</span></div>
+        </div>
+        <div class="tl-sum-card" data-tone="agency">
+          <span class="tl-sum-label">Fill &amp; submit</span>
+          <span class="tl-sum-figure">4</span>
+          <div class="tl-sum-mix" aria-label="Fill and submit mix">
+            <span class="tl-mix-done" style="flex:4"></span><span class="tl-mix-prog" style="flex:0"></span><span class="tl-mix-todo" style="flex:0"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>4</b> shipped</span></div>
+        </div>
+        <div class="tl-sum-card" data-tone="agency">
+          <span class="tl-sum-label">Supply &amp; compliance</span>
+          <span class="tl-sum-figure">6</span>
+          <div class="tl-sum-mix" aria-label="Supply and compliance mix">
+            <span class="tl-mix-done" style="flex:6"></span><span class="tl-mix-prog" style="flex:0"></span><span class="tl-mix-todo" style="flex:0"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>6</b> shipped</span></div>
+        </div>
+        <div class="tl-sum-card" data-tone="agency">
+          <span class="tl-sum-label">Rates &amp; billing</span>
+          <span class="tl-sum-figure">5</span>
+          <div class="tl-sum-mix" aria-label="Rates and billing mix">
+            <span class="tl-mix-done" style="flex:5"></span><span class="tl-mix-prog" style="flex:0"></span><span class="tl-mix-todo" style="flex:0"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>5</b> shipped</span></div>
+        </div>
+        <div class="tl-sum-card" data-tone="agency">
+          <span class="tl-sum-label">Insight &amp; beyond</span>
+          <span class="tl-sum-figure">5</span>
+          <div class="tl-sum-mix" aria-label="Insight and beyond mix">
+            <span class="tl-mix-done" style="flex:5"></span><span class="tl-mix-prog" style="flex:0"></span><span class="tl-mix-todo" style="flex:0"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>5</b> shipped</span></div>
+        </div>
+      </div>
+
+      <!-- AREA 1: ACTION CENTER -->
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Action center · the front door</h4>
+          <span class="tl-area-sub">One place for everything awaiting the agency's response.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Unified Agency Inbox on Home</h5>
+              <p class="tl-detail">One ranked lane of every item that needs the agency to act, regardless of engagement type: <b>open fills</b>, <b>candidate stages</b>, <b>team-proposal requests</b>, <b>interview invites</b>, <b>rate-change asks</b>, <b>rejected timesheets</b>, <b>expiring credentials</b>. Today these are scattered across the Reqs list, the Projects tab, and the Interview inbox — the work is to <i>consolidate</i> them into one lane on Home. Reuses the existing <code>AgencyProjectsTab</code> request cards and the interview-invite card primitive verbatim.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/dashboard.jsx</code></span><span>·</span><span>Reuses AgencyProjectsTab + interview cards</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Response clock on every inbox item</h5>
+              <p class="tl-detail">Each inbox row carries a countdown to its deadline — the distribution-window expiry for a frontline fill (the next tier gets the req when it elapses), the submission deadline for a professional role, the response-by for an interview slot. Turns the inbox from a list into a <b>triage queue</b>. Reads the existing <code>DistributionRule</code> wait config and the requisition's own dates; no new timing model.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/dashboard.jsx</code></span><span>·</span><span>Reuses DistributionRule wait windows</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- AREA 2: FILL & SUBMIT -->
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Fill &amp; submit · the core response</h4>
+          <span class="tl-area-sub">One Respond action, three bodies chosen by engagement type.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Universal "Respond to requisition" flow</h5>
+              <p class="tl-detail">Built today, end to end. <code>assign-worker-panel.jsx</code> reads <code>AssignmentEngine.modeFor(engType)</code> and renders one of three bodies by the ordered job: <b>Shift</b> → <code>allocate</code> (instant placement); <b>Assignment</b> → <code>submit</code> (candidate submission with a proposed rate, from-workforce or new-candidate tabs); <b>Project / SOW</b> → <code>propose</code> (add a named resource). Role only flips the labels (Assign / Submit / Add). The single open delta is a <b>labeled entry point from the Inbox</b> — no new flow, just a way in.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/assign-worker-panel.jsx</code></span><span>·</span><span>Routes through modeFor(engType) — no per-type code path</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="vn">VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">—</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Multi-candidate shortlist with ranking</h5>
+              <p class="tl-detail">Single candidate submission with a rate already works (see the Respond flow above). This <b>extends</b> it: submit several candidates against a professional role at once, rank them, attach a note per candidate, and see them carry into the Interview inbox as a ranked stage. Vndly's core supplier move. The candidate objects are already <code>Worker</code> records scoped to the supplier; the hand-off target (<code>InterviewAgencyPage</code> stages) exists.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/interview-agency.jsx</code></span><span>·</span><span>Reuses Worker records + interview stages</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="vn">VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Bulk shift assignment (mass work order)</h5>
+              <p class="tl-detail">Built. When a booking carries more than one open slot the panel enters <b>bulk mode</b> automatically (<code>cfg.bulkCount</code> + <code>commitBulk</code> + <code>onBulkAssign</code>): multi-select the bench, allocate many at once against one requisition. This only fires in <code>allocate</code> mode, exactly as the ordered job dictates. The one minor extension is fanning the same bulk affordance across a <b>recurring pattern's</b> occurrences.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/assign-worker-panel.jsx</code></span><span>·</span><span>Built via cfg.bulkCount / commitBulk</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="ju">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">—</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Broadcast-to-bench + worker self-accept</h5>
+              <p class="tl-detail">The offer/accept half is <b>already built</b>: <code>allocate</code> mode calls <code>AssignmentEngine.createOffer</code>, and <code>worker-mobile.jsx</code> renders <code>pendingOffersForWorker</code> as Accept / Decline cards — the JoinedUp confirm loop that cuts no-shows. The open delta is <b>multi-recipient broadcast</b>: fan one open shift to many qualified, available bench workers at once and let the first accept (or agency pick) fill it. A broadcast composer on the shift that calls the existing <code>createOffer</code> per recipient — no new loop.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/schedule.jsx</code> + <code>worker-mobile.jsx</code></span><span>·</span><span>Offer/accept loop built — add fan-out</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="ju">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- AREA 3: SUPPLY & COMPLIANCE -->
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Supply &amp; compliance · the bench</h4>
+          <span class="tl-area-sub">Manage the workforce, not just the workers already out.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Full agency bench in Workforce</h5>
+              <p class="tl-detail">Workforce shows only workers currently on assignment. Add the <b>whole roster</b> — available, on assignment, unavailable — as the agency's bench. This is what they staff <i>from</i>. A status facet on the existing Workforce list; the supplier-id scope is already applied, so the records are present but filtered out today.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/workforce.jsx</code></span><span>·</span><span>Reuses supplier-id scope + worker list</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Worker availability calendar</h5>
+              <p class="tl-detail">The availability <b>guard</b> already exists: <code>AssignmentEngine.availabilityFor</code> scores each worker, shows an availability chip and blocks unavailable picks in <code>allocate</code> mode — today off a deterministic synthetic schedule. The delta is making it <b>editable</b>: a calendar on the worker profile the agency maintains, which <code>availabilityFor</code> reads instead of the synthetic source. JoinedUp's availability layer.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/worker.jsx</code></span><span>·</span><span>availabilityFor guard built — add editable source</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="ju">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Bulk worker onboarding to bench</h5>
+              <p class="tl-detail">Add many workers to the bench at once — paste / import a list with profile fields and required documents. Vndly's bulk worker upload. Reuses the existing requisition import pattern (<code>import-req</code>) as the interaction model; writes <code>Worker</code> records scoped to the agency's supplier id.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/workforce.jsx</code></span><span>·</span><span>Reuses import-req interaction pattern</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="vn">VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Credential &amp; right-to-work gate at Respond</h5>
+              <p class="tl-detail"><code>AssignmentEngine.credentialSummary</code> already runs in <b>every</b> mode and shows a compliance chip; in <code>allocate</code> it hard-blocks a fail-level worker from being picked. The delta is to <b>extend the same hard block to <code>submit</code> and <code>propose</code></b> so a non-compliant candidate can't be submitted or added to a team either — one condition keyed on mode, reusing the same summary. No separate compliance screen.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/assign-worker-panel.jsx</code></span><span>·</span><span>credentialSummary built — extend block past allocate</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Pre-start onboarding checklist</h5>
+              <p class="tl-detail">The onboarding lifecycle is <b>already built</b>: <code>onboardingItemsFor</code> drives the work-order → onboarding pipeline the panel shows after <code>submit</code> / <code>propose</code>, and <code>toggleOnboarding</code> / <code>onboardingComplete</code> gate activation. Fieldglass's onboarding workflow. The delta: <b>surface that same checklist on the worker profile</b> so the agency can clear items ahead of the start date, not only from inside the panel.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/worker.jsx</code></span><span>·</span><span>onboardingItemsFor lifecycle built — surface on profile</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="fg">FG</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Expiring-credential watchlist</h5>
+              <p class="tl-detail">A proactive list of bench credentials expiring within N days, surfaced as an inbox item on Home, so the agency renews before a worker becomes unassignable. JoinedUp's compliance-keeps-you-staffed instinct. Pure read over the credential store with a date filter; feeds the Action center inbox.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/dashboard.jsx</code> + credentialing</span><span>·</span><span>Reuses credential store</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="ju">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- AREA 4: RATES & BILLING -->
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Rates &amp; billing · get paid clean</h4>
+          <span class="tl-area-sub">Propose within bounds; bill consolidated; clear exceptions.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Rate proposal within max-bill threshold</h5>
+              <p class="tl-detail">Built in the <code>submit</code> body. The proposed-rate input enforces the band max (<code>overBand</code> vs <code>band.max</code>), requires an <b>exception reason</b> when over, and previews the loaded bill rate via <code>runRateStages</code> (proposed vs band-max). Over-band submissions route to the program owner for sign-off. Vndly's rate-threshold control, already on screen.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/assign-worker-panel.jsx</code></span><span>·</span><span>Built via band.max + runRateStages</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="vn">VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">—</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Negotiated rate-card visibility</h5>
+              <p class="tl-detail">A read-only view of the rate card / markup the agency operates under per client, so rate proposals start from the right baseline. Margin masking already hides internal layers from the supplier (<code>componentsForRole</code>); this exposes the agency-visible side of the same contract. No new data — a filtered read of the existing contract components.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/supplier-contract.jsx</code></span><span>·</span><span>Reuses componentsForRole filter</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Universal consolidated timesheet</h5>
+              <p class="tl-detail">A weekly grid across all the agency's workers on a client, submitted once, fanned out to per-worker timesheets. This already exists for <b>Projects</b> (<code>AgencyConsolidatedTimesheet</code>); the work is to <b>generalize it</b> to frontline and professional so every world bills the same way. Fieldglass-grade consolidated time. Same component, type-blind data source.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/timesheets.jsx</code></span><span>·</span><span>Generalizes AgencyConsolidatedTimesheet</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Timesheet exception / dispute queue</h5>
+              <p class="tl-detail">A lane of rejected or disputed time the agency must fix and resubmit, with the rejection reason inline. Keeps payment from silently stalling — a daily reality on both JoinedUp and Fieldglass desks. A status facet on the existing Timesheets list; feeds the Action center inbox so disputes surface on Home too.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/timesheets.jsx</code></span><span>·</span><span>Reuses timesheet status model</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Agency consolidated &amp; off-cycle invoice</h5>
+              <p class="tl-detail">Beyond the read-only view today: let the agency see its consolidated invoice build from approved time, and request an off-cycle invoice when terms allow. Vndly / Fieldglass consolidated and off-cycle billing. Extends the existing Invoices read surface; the line items already exist as approved timesheet rows.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/invoices.jsx</code></span><span>·</span><span>Reuses approved-time line items</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="vn">VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- AREA 5: INSIGHT & BEYOND -->
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Insight &amp; beyond · how am I doing</h4>
+          <span class="tl-area-sub">Show the agency its own scorecard — plus two Dayforce-only moves.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Agency scorecard on Home</h5>
+              <p class="tl-detail">The numbers the buyer already scores the agency on, shown back to the agency: <b>fill rate</b>, <b>time-to-fill</b>, <b>no-show rate</b>, <b>submit→hire ratio</b>, <b>attendance</b>, <b>responsiveness</b>. JoinedUp's live fill dashboard and Vndly's vendor scorecard, merged into one composite plus the per-world metrics. Agency-scoped widgets in the existing dashboard grid.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/dashboard.jsx</code></span><span>·</span><span>Reuses dashboard widget grid</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Supplier ranking / tier transparency</h5>
+              <p class="tl-detail">Show the agency where it sits in the buyer's tier and ranking — why it gets reqs first or last, and what would move it up. Vndly surfaces this to motivate vendors. The tier data already drives distribution in <code>supplier-distribution.jsx</code>; this is an agency-facing read of the same <code>SupplierTier</code> values in Analytics.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/analytics.jsx</code></span><span>·</span><span>Reuses SupplierTier / distribution data</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="vn">VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Upcoming-demand forecast</h5>
+              <p class="tl-detail">Foresight into upcoming and recurring requisitions so the agency staffs ahead of the wave instead of reacting to it. Vndly gives vendors role foresight; JoinedUp leans on recurring shift patterns. A Home card reading the recurring-requisition schedule and the open pipeline already in <code>window.REQUISITIONS</code>.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/dashboard.jsx</code></span><span>·</span><span>Reuses recurring + pipeline data</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="all">All</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">AIX bench-match assist</h5>
+              <p class="tl-detail">When a req lands, suggest the best bench matches — ranked on skills, availability, distance, and past performance — so the agency responds in seconds. A differentiator neither competitor ships natively. Reuses the existing AI chat surface and the Glow visual language; gated by the AIX flag. Reads bench + availability + scorecard data the tasks above produce.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/ai-chat.jsx</code></span><span>·</span><span>Reuses AI surface + AIX gating</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="beyond">Beyond</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Dayforce HCM bench sync (Pro)</h5>
+              <p class="tl-detail">For Agency Pro tenants, sync the agency's own employees and pay data from Dayforce HCM — the moat no standalone VMS can clone. The Plan card already names this as a Pro capability; this builds the connector behind it. Lives in <code>agency-pro.jsx</code> with the structured-connector card pattern; no effect on Free tenants.</p>
+              <div class="tl-meta"><span class="tl-host"><code>pages/agency-pro.jsx</code></span><span>·</span><span>Reuses Plan card + connector pattern</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="beyond">Beyond</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">L</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 05 · ARCHITECTURE MAP                                          -->
+    <!-- ============================================================== -->
+    <section id="architecture" class="sr-section">
+      <div>
+        <span class="sr-h2-num">05 · Architecture · how it landed</span>
+        <h2 class="sr-h2">Edits to existing files. Zero new pages, routes, nav or schema.</h2>
+      </div>
+      <p class="sr-lead">The whole workbench landed as edits to surfaces that already exist — mounted behind an agency-tenant check, exactly the way <code>AgencyProjectsTab</code> already mounts. Below is what each host file gained and the primitive it reused. The CSS rode along in the existing <code>styles-agency-pro.css</code>; no new stylesheet, no new script, no new route.</p>
+
+      <div class="tl-archmap">
+        <article class="tl-archrole" data-role="agency">
+          <header class="tl-archrole-h">
+            <h3>Host files &amp; what they gained</h3>
+            <span class="tl-archrole-h-meta">edits only · no new files · no schema</span>
+          </header>
+          <table class="tl-arch">
+            <thead>
+              <tr>
+                <th>Surface</th>
+                <th>Gains</th>
+                <th>Reuses</th>
+                <th>New architecture</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">assignment-engine.jsx</span><span class="tl-arch-task-sub">Spine · already built</span></td>
+                <td data-h="Gains">Nothing new — it already owns modeFor, credential, availability, onboarding, offers, rate band</td>
+                <td data-h="Reuses">Itself — the shared job-driven spine all Respond tasks route through</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">dashboard.jsx</span><span class="tl-arch-task-sub">Home</span></td>
+                <td data-h="Gains">Agency Inbox lane, response clocks, scorecard, forecast, expiry watchlist</td>
+                <td data-h="Reuses">Dashboard widget grid + inbox card primitive</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">New widgets only</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">assign-worker-panel.jsx</span><span class="tl-arch-task-sub">Respond</span></td>
+                <td data-h="Gains">Inbox entry point; extend credential hard-block past allocate; multi-candidate shortlist</td>
+                <td data-h="Reuses">modeFor(engType) flow — allocate/submit/propose already built</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Thin additions</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">interview-agency.jsx</span><span class="tl-arch-task-sub">Submit</span></td>
+                <td data-h="Gains">Multi-candidate shortlist + ranking into interview stages</td>
+                <td data-h="Reuses">Worker records + existing interview stages</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">schedule.jsx</span><span class="tl-arch-task-sub">Fill</span></td>
+                <td data-h="Gains">Multi-recipient broadcast composer (bulk allocate already built)</td>
+                <td data-h="Reuses">createOffer loop + per-shift assign action</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Broadcast composer</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">worker-mobile.jsx</span><span class="tl-arch-task-sub">Accept</span></td>
+                <td data-h="Gains">Worker self-accept of a broadcast shift</td>
+                <td data-h="Reuses">Existing shift-offer screen</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Accept action</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">workforce.jsx</span><span class="tl-arch-task-sub">Bench</span></td>
+                <td data-h="Gains">Full bench view + status facet + bulk onboarding</td>
+                <td data-h="Reuses">Supplier-id scope + import-req pattern</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Status facet</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">worker.jsx</span><span class="tl-arch-task-sub">Profile</span></td>
+                <td data-h="Gains">Editable availability source + onboarding checklist surfaced on the profile</td>
+                <td data-h="Reuses">availabilityFor guard + onboardingItemsFor lifecycle (both built)</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Editable source UI</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">credentialing.jsx</span><span class="tl-arch-task-sub">Comply</span></td>
+                <td data-h="Gains">Expiring-credential feed for the inbox (gate itself runs in the engine)</td>
+                <td data-h="Reuses">Existing credential store + expiry logic</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">supplier-contract-sections.jsx</span><span class="tl-arch-task-sub">Rates</span></td>
+                <td data-h="Gains">Rate band + exception + bill preview — already built</td>
+                <td data-h="Reuses">runRateStages + band.max</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">supplier-contract.jsx</span><span class="tl-arch-task-sub">Rates</span></td>
+                <td data-h="Gains">Negotiated rate-card / markup visibility</td>
+                <td data-h="Reuses">componentsForRole margin filter</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">timesheets.jsx</span><span class="tl-arch-task-sub">Bill</span></td>
+                <td data-h="Gains">Universal consolidated grid + exception queue</td>
+                <td data-h="Reuses">AgencyConsolidatedTimesheet + status model</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">Generalize existing</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">invoices.jsx</span><span class="tl-arch-task-sub">Bill</span></td>
+                <td data-h="Gains">Consolidated + off-cycle agency invoice</td>
+                <td data-h="Reuses">Approved-time line items</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Generate action</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">analytics.jsx</span><span class="tl-arch-task-sub">Insight</span></td>
+                <td data-h="Gains">Scorecard detail + tier / ranking transparency</td>
+                <td data-h="Reuses">SupplierTier + distribution data</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">ai-chat.jsx</span><span class="tl-arch-task-sub">Beyond</span></td>
+                <td data-h="Gains">Bench-match assist</td>
+                <td data-h="Reuses">AI surface + Glow + AIX gating</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Prompt template</span></td>
+              </tr>
+              <tr>
+                <td data-h="Surface"><span class="tl-arch-task">agency-pro.jsx</span><span class="tl-arch-task-sub">Beyond</span></td>
+                <td data-h="Gains">Dayforce HCM bench sync (Pro)</td>
+                <td data-h="Reuses">Plan card + structured-connector pattern</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="medium">Connector</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">Net architectural footprint of the build</div>
+        <p><b>Zero new top-level files. Zero new pages. Zero new nav entries. Zero new routes. Zero schema additions.</b> The hardest part — the job-driven Respond spine — already existed in <code>assignment-engine.jsx</code>, so nothing added a frontline or professional code path. The new agency surfaces mounted into <code>dashboard.jsx</code>, <code>workforce.jsx</code>, <code>timesheets.jsx</code>, <code>invoices.jsx</code>, <code>assign-worker-panel.jsx</code> and <code>agency-pro.jsx</code> behind an agency-tenant check; the styles rode in the existing <code>styles-agency-pro.css</code>. Every surface reuses entities already in the model: <code>Worker</code>, <code>Requisition</code>, <code>SupplierContract</code>, <code>SupplierTier</code>, <code>DistributionRule</code>, <code>Timesheet</code>, and the credential store. New persistence is confined to a few localStorage keys (bench additions, per-worker availability, HCM-connected flag).</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 06 · SEQUENCING                                                -->
+    <!-- ============================================================== -->
+    <section id="sequencing" class="sr-section">
+      <div>
+        <span class="sr-h2-num">06 · How it rolled out</span>
+        <h2 class="sr-h2">Front door first, then the loop, then the edge — all shipped.</h2>
+      </div>
+      <p class="sr-lead">The build landed in three waves on top of the existing Respond spine. All three are live; the groupings below double as the map of where each surface sits.</p>
+
+      <div class="tl-phases">
+        <div class="tl-phase" data-phase="1">
+          <span class="tl-phase-tag">Phase 1 · Front door &amp; the bench</span>
+          <h3>Surface the spine.</h3>
+          <p class="tl-phase-sub">The open P0 work — almost all of it surfacing, since the Respond spine already runs. After this an agency sees what needs doing in one place, fans a shift to its bench, staffs from a real bench, and knows its fill rate.</p>
+          <ul>
+            <li>Unified Agency Inbox on Home</li>
+            <li>Multi-recipient broadcast (over the built offer loop)</li>
+            <li>Full agency bench in Workforce</li>
+            <li>Extend the credential hard-block to submit / propose</li>
+            <li>Agency scorecard on Home</li>
+          </ul>
+          <div class="tl-phase-foot"><span><b>5</b> shipped</span><span>on the existing spine</span></div>
+        </div>
+        <div class="tl-phase" data-phase="2">
+          <span class="tl-phase-tag">Wave 2 · Run the desk end-to-end</span>
+          <h3>Complete.</h3>
+          <p class="tl-phase-sub">The P1 set. Triage timing, ranked submissions, editable availability, bulk onboarding, clean billing, and the transparency that keeps an agency motivated and staffed ahead of demand.</p>
+          <ul>
+            <li>Response clocks · multi-candidate shortlist</li>
+            <li>Editable availability source · onboarding on profile</li>
+            <li>Bulk worker onboarding to bench</li>
+            <li>Universal consolidated timesheet · exception queue</li>
+            <li>Tier transparency · upcoming-demand forecast</li>
+          </ul>
+          <div class="tl-phase-foot"><span><b>9</b> shipped</span><span>P1</span></div>
+        </div>
+        <div class="tl-phase" data-phase="3">
+          <span class="tl-phase-tag">Wave 3 · The Dayforce edge</span>
+          <h3>The moat.</h3>
+          <p class="tl-phase-sub">The P2 and Beyond set: the billing surface, plus the two moments no standalone VMS can clone — AI bench-matching and native HCM bench sync (Pro).</p>
+          <ul>
+            <li>Negotiated rate-card visibility</li>
+            <li>Expiring-credential watchlist</li>
+            <li>Consolidated &amp; off-cycle invoice</li>
+            <li>AIX bench-match assist</li>
+            <li>Dayforce HCM bench sync (Pro)</li>
+          </ul>
+          <div class="tl-phase-foot"><span><b>5</b> shipped</span><span>P2 + Beyond</span></div>
+        </div>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The one-line result</div>
+        <p>The agency — the user JoinedUp and Vndly both designed <em>around</em>, and the one Flex Work used to treat as a role flip — now has a real desk inside the product. Frontline and professional stayed one unified workbench, reshaped by the ordered job, built entirely on existing files and the existing spine. The same surface now serves a shift-ops director and a procurement lead in the same demo.</p>
+      </div>
+    </section>
+
+    <footer class="sr-foot">
+      <div class="sr-foot-mark">Flex Work VMS · Agency portal universal parity</div>
+      <p>v1.0 · May 29, 2026 · Shipped — all 22 tasks live. Companion to Architecture v1.6 and Strategy Review v1.0. Benchmarks: JoinedUp by Beeline (frontline), SAP SuccessFactors Vndly and SAP Fieldglass (professional).</p>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>

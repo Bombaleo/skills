@@ -17,7 +17,7 @@ gaps. You walk nothing — you read the existing walk output and source.
 
 - **entity_name** (required): e.g. `Requisition`.
 - **entity_slug** (required): e.g. `requisition`.
-- **role** (required): one-line description of the entity from the discoverer.
+- **role** (required): one-line description of the entity from the source map.
 - **map_path** (required): `.specwork/catalog/map.json`. Find your entity by `entity_slug`; its
   `features`, `states`, and `transitions` are the **authority for what exists** in the prototype.
 - **evidence_screens** (required): `.txt` outline filenames in `walk_dir` that show this entity.

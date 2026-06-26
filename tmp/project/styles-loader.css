@@ -1,0 +1,74 @@
+/* App-wide loader overlay
+   ------------------------------------------------------------------
+   Shown when switching organization, role, MSP program, or temp-spend
+   tier — each requires a longer reload while data modules re-derive
+   off the new context. The overlay fades in instantly so the user sees
+   immediate feedback that their selection is being applied, even
+   though the underlying page reload may take several hundred ms.
+
+   Drawn vanilla (not React) so it's available before app.jsx mounts
+   and survives across the React tree being torn down for a reload. */
+
+.app-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--evr-spacing-md, 24px);
+
+  /* Dark scrim — the light overlay was getting lost over the off-white
+     product surface. A near-black wash with a touch of blur reads as
+     a clear "the page is busy" interrupt and gives the spinner and
+     text strong contrast. */
+  background: rgba(20, 21, 26, 0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+
+  /* Fade in on insert. JS toggles the .is-visible class on the next
+     frame so the transition actually plays. */
+  opacity: 0;
+  transition: opacity 160ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.app-loader-overlay.is-visible {
+  opacity: 1;
+}
+
+/* Spinner — a 40px ring with one quarter cut out, rotating. The ring
+   color is the brand blue (interactive-primary-default) so the
+   loading state reads as the app speaking, not the browser. */
+.app-loader-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Ring uses a translucent white base with a brighter blue cap so it
+     reads cleanly against the dark scrim. */
+  border: 3px solid rgba(255, 255, 255, 0.22);
+  border-top-color: var(--evr-blue-300, #6299F4);
+  animation: app-loader-spin 900ms linear infinite;
+}
+
+@keyframes app-loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+.app-loader-text {
+  font-family: var(--evr-font-text, "Clarika Grotesque", system-ui, sans-serif);
+  font-size: 16px;
+  font-weight: var(--evr-fw-demibold, 600);
+  letter-spacing: 0.1px;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+/* Optional secondary line (e.g. "Switching to Hospitality") shown
+   under "Loading…" when JS passes a detail string. */
+.app-loader-sub {
+  font-family: var(--evr-font-text, "Clarika Grotesque", system-ui, sans-serif);
+  font-size: 13px;
+  font-weight: var(--evr-fw-regular, 400);
+  color: rgba(255, 255, 255, 0.72);
+  margin: -16px 0 0 0;
+}

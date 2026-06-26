@@ -1,0 +1,1474 @@
+ce populates the Name and Description columns according to your selection.
+4. Click Save.
+Documentation and Translation Coverage
+Dayforce provides some related content in the core languages such as:
+Selected Dayforce administrator and user guides
+
+-- 114 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 115 of 0
+Release notes
+Add a Logo or Signature
+You can upload logos and signature images that are shown on benefit summaries, earning
+statements, and US checks in Site Setup > Client, in the Images tab.
+When you add a logo or signature image, you can select one of the following Image Type choices
+for the image:
+Benefit Summary Logo
+Check Signature US : This option is available for the United States only. This option is used
+for normal and additional checks, as well as onsite checks that don’t use pre-printed check
+stock. This option also allows you to add an image of a signature to be used when you print
+onsite checks using pre-printed onsite check stock. See Org Payroll Setup > Legal Entity
+and Client Properties - Payroll.
+Client Branding Logo: This option shows as the branded logo in the toolbar if Dayforce is
+configured to show it. See Brand the Application.
+Compensation Logo
+ESS Earning Statement Canada
+ESS Earning Statement Legal Entity: This option allows you to assign a logo that can
+override any logo assigned to a country in Org Setup > Org Payroll Setup > Legal Entity,
+where logo names are set up in images and available for selection.
+ESS Earning Statement US
+Login Screen Logo
+Performance Logo
+Printed Earning Statement Logo US: This option also shows as the employer logo on printed
+checks.
+Recruiting Logo
+Each image type is subject to specific criteria:
+Check Signature US images and Printed Earning Statement US logo images must be in
+JPG or PNG format.
+Dimensions for Check Signature US images and Printed Earning Statement US logo images
+must be 600 x 225 pixels with a resolution of 300 DPI (dots per inch).
+Note: For best results, you should upload black and white images for printed earning statement
+logos, check signatures, and check logos.
+To add logos or signatures:
+1. Go to Site Setup > Client and click the Images tab.
+2. Click Add.
+3. Enter a name and, optionally, a description of the logo.
+
+-- 115 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 116 of 0
+4. In the Image Type drop-down list, select the image type according to the document in which
+the image will appear.
+5. Enter a start date and, optionally, an end date to have Dayforce use the selected image
+type for a specific period of time.
+6. (Optional) Enter a comment.
+7. In the Edit Image drop-down list, click Upload.
+8. In the File Upload dialog box, select the file type and image file and then click Open.
+Dayforce uploads the selected image file and shows a preview of it in the Image section.
+9. Note: You can upload only JPG and PNG files.
+9. Click Save.
+Brand the Application
+You can further customize Dayforce by displaying your organization's logo in the toolbar, to the
+right of the menu icon. The branding property is enabled by default. When you log in to Dayforce,
+the application shows your company logo on the login screen and the main toolbar by default.
+To upload a branding logo:
+1. Go to Site Setup > Client and click the Images tab.
+2. Click Add.
+3. Enter a name and, optionally, a description of the logo.
+4. In the Image Type drop-down list, click Client Branding Logo.
+5. Enter a start date and, optionally, an end date to have Dayforce use the selected image for
+a specific period of time.
+6. (Optional) Enter a comment.
+7. In the Edit Image drop-down list, click Upload.
+8. Select the file type and the appropriate image file and click Open. Dayforce uploads the
+selected image file and shows a preview of it in the Image section.
+9. Note: You can upload only JPG and PNG files.
+9. Click Save.
+Important: When users accessing Dayforce with a Hub-enabled role click the logo, it navigates to
+Hub or Home, depending on what is configured. The logo is either your company logo, if you
+uploaded one, or the Dayforce logo.
+System Admin
+The System Admin feature is used to configure some general settings for your organization.
+Before You Begin: Some of the fields or features described in this topic might be available only to
+users with Support or Service roles. For more information, contact your implementation consultant.
+The following is a list of some of the features available in System Admin:
+
+-- 116 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 117 of 0
+User: Used to manage users. See User Configuration.
+Roles: Used to manage user roles. See User Roles.
+Background Jobs: Used to manage background jobs. See Background Jobs Configuration.
+Client Properties: Used to configure various client (customer) instance settings. See System
+Admin > Client Properties.
+Password Policy: Used to manage password policies. See Password Policies.
+IP Network Restrictions: Used to manage IP network restrictions. See IP Network
+Restrictions.
+System Admin > Client Properties
+In System Admin > Client Properties, you can configure several client settings that control specific
+behavior in your instance of Dayforce. These settings can have a large impact on Dayforce
+functionality.
+The following is a list of tabs in System Admin > Client Properties with brief descriptions for each:
+Contacts: Contains information for different contacts and contact types for your organization
+(for example, Benefits Admin, Payroll Admin, ROE Contact, and ROE Issuer).
+Addresses: Contains address information for your organization.
+Properties: Contains sections that describe client properties:
+General: Contains details used by multiple features in Dayforce to control application
+behavior.
+Messages: Contains properties used by Dayforce to control how and when certain
+messages are shown.
+Employee: Contains properties for employee details used by HR.
+Timesheet: Contains properties that control how Dayforce shows information on
+timesheets.
+Time and Attendance: Contains properties used by WFM for time and attendance.
+Scheduling: Contains properties that control how Dayforce schedules employees and
+shows information in Schedules.
+Multi-Week Calendar: Contains properties that control how information is shown in
+Multi-Week Calendar.
+Payroll: Contains properties used by the Payroll feature to control payroll processing
+behavior.
+Dayforce Wallet: Contains properties that control Dayforce Wallet functionality.
+Reporting: Contains properties that control some aspects of ad hoc reporting
+functionality in Dayforce.
+Benefits: Contains properties that control Benefits functionality.
+Position Management: Contains properties that control Position Management
+functionality in Dayforce.
+Security: Contains properties that control security related functionality in Dayforce.
+
+-- 117 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 118 of 0
+UI Modernization: Contains properties for enabling the updated user interface (UI).
+Group Members Generation: Contains properties related to group member generation
+in HR Admin > Groups.
+Billing And Support: Contains billing information related to your organization. This tab is
+typically available only to Dayforce Customer Support users.
+Enter Contact Information
+In System Admin > Client Properties, in the Contacts tab, you can set various contacts for your
+organization. For example, the contacts that receive the delivery packages generated by
+Dayforce, Inc.. Delivery packages can be sent to multiple contacts in the organization and can
+contain reports, direct deposit pay stubs, or physical checks to be distributed. You can also set
+other contact types here, including ROE Contacts and ROE Issuers (for Canadian payroll).
+To enter contacts for an organization:
+1. Go to System Admin > Client Properties.
+2. In the Contacts tab, click Add.
+3. In the Contact Type drop-down list, select the type of contact you're configuring.
+4. Enter the contact details using the available fields and drop-down lists.
+5. In the Communication Type drop-down list, select the contact's communication type.
+Select Customer Support/Year End to receive emails from the Support team regarding
+year end activities.
+No other types are used at this time.
+6. Click Save.
+Add an ROE Issuer or ROE Contact
+Canadian ROE forms require you to enter the name and contact information of the person in your
+organization who can provide more information about the ROE form, if needed. According to
+Service Canada, an ROE contact should be able to provide information about the reason for
+issuing the ROE, and an ROE issuer should be able to answer questions about the information on
+the ROE.
+You need to add people and their contact details in Dayforce so that this information appears on
+the generated ROE forms.
+To add a person as an ROE issuer or an ROE contact for the organization:
+1. Add the ROE contact assignment role feature to the user role that is used to configure the
+ROE contacts and issuers.
+a. Go to System Admin > Roles and select a role in the list.
+b. Click the Features tab.
+c. Under Payroll Setup, select the ROE Contact Assignment checkbox.
+d. Click Save.
+
+-- 118 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 119 of 0
+2. Go to System Admin > Client Properties and click the Contacts tab.
+3. Click Add.
+4. In the Contact Type drop-down list, select ROE Issuer or ROE Contact.
+5. Add the contact name, phone, country, and language details in their respective fields.
+6. In the Communication Type drop-down list, select All to receive emails from the Dayforce
+support team about product updates.
+7. Click Save.
+8. To make this person the default ROE issuer or contact for the organization (if you previously
+added a default issuer or contact and do not want to change this setup, you can skip this
+step):
+a. Go to Payroll Setup > ROE Contact Assignment.
+b. Expand ROE Contacts or ROE Issuers and select the contact that you just added.
+Under Assignment, select the Default checkbox.
+c. Click Save.
+You can also assign ROE issuers and contacts to specific pay groups so that ROE forms list
+specific contact information for different pay groups. See Configure Multiple ROE Contact
+Assignments.
+Configure Multiple ROE Contact Assignments
+An organization can have more than one person who issues ROE forms or who is designated as
+the ROE contact. In Dayforce, you can assign multiple pay groups to one person, assign specific
+pay groups to specific people, or delegate a default ROE contact and ROE issuer for all pay
+groups. A default ROE contact and issuer ensures pay groups without an assigned contact or
+issuer will not be overlooked. See Add an ROE Issuer or ROE Contact.
+For example, if your organization has four pay groups (A, B, C, and D):
+You can assign person X to be the ROE contact and issuer for pay groups A and B.
+Person Y isn’t only assigned as the default contact and issuer for the organization, they are
+also the contact and issuer for the pay group C.
+Pay group D does not have a contact or issuer assigned to it. Because person Y is the
+default ROE contact and issuer for the organization, this means person Y will be listed as a
+contact and issuer for pay group D.
+For more information on working with ROEs in Payroll, see Record of Employment (ROE) in the
+Payroll Administrator Guide.
+You can configure either the ROE contact or ROE issuer in the ROE Contact Assignment screen
+by clicking Payroll Setup > ROE Contact Assignment.
+To configure a specific ROE contact or issuer to one or more pay groups:
+
+-- 119 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 120 of 0
+1. Add the ROE contact assignment role feature to the user role that is used to configure the
+ROE contacts and issuers:
+a. Go to System Admin > Roles and select a role in the list.
+b. Click the Features tab.
+c. Under Payroll Setup, select the ROE Contact Assignment checkbox.
+d. Click Save.
+2. Add the contact details in System Admin > Client Properties in the Contacts tab. See Add
+an ROE Issuer or ROE Contact.
+3. Go to Payroll Setup > ROE Contact Assignment.
+4. Assign one or more pay groups to an ROE contact:
+a. Expand ROE Contacts and select the assignee.
+b. Under Assignment, in Pay Groups, select one or more pay groups.
+5. Assign one or more pay groups to an ROE issuer:
+a. Expand ROE Issuers and select the assignee.
+b. Under Assignment, in Pay Groups, select one or more pay groups.
+6. Click Save.
+Enter Address Information
+You can set various addresses for your organization in the Addresses tab of System Admin
+> Client Properties. In addition, you can set a primary or corporate address for your organization
+here.
+To enter addresses for an organization:
+1. Go to System Admin > Client Properties and click the Addresses tab.
+2. Click Add.
+3. In the Address Type drop-down list, select an address type.
+4. Enter the address details in the available fields.
+5. Select the Main checkbox if the address is the organization's head office or primary
+address.
+6. Click Save.
+General
+The settings in the General section of the Properties tab in System Admin > Client Properties are
+application-wide and don’t relate specifically to timesheets, schedules, or employee information.
+Display Mobile User Profile Image
+Controls whether user profile images are shown in the app.
+Enforce Authorization For Self
+
+-- 120 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 121 of 0
+Enforce a user’s access authorizations when they use browser development tools with Dayforce.
+By default, this checkbox isn’t selected.
+Allow Pay Zone Region Import to partially process
+Controls whether Dayforce continues to process the pay zone region import if it encounters an
+error. When this checkbox is cleared, Dayforce stops processing the import when it encounters an
+error.
+Do not populate the base rate on loading the Rehire form
+Select this checkbox to set the Base Rate field on the Rehire forms to 0 when you select an
+employee in the Terminated Employee Search drop-down list. If you don't enable this client
+property, the field is populated with the employee's last base rate or minimum wage for their
+location and position. This client property affects the following forms:
+Rehire
+Rehire (Position Management)
+Rehire with Contract
+Rehire with Contract (Position Management)
+Display User Profile Image
+Controls whether Dayforce shows profile images.
+Allow employees to identify their pronouns
+Adds the edit icon to the employee profile header in Profile. When users click the edit icon, the
+Share your pronouns dialog box opens and employees can enter and save their pronouns for
+display across Dayforce.
+Apply Schedule Rule Policy validation to Work Contract
+When enabled, Dayforce applies employees’ schedule rule policy to any changes that you make
+to their work pattern details in People, in the Work > Work Contracts screen.
+Allow saving Work Contracts if schedule rules are violated
+Used only if you enable the Apply Schedule Rule Policy validation to Work Contract client
+property. When enabled, you can save changes to employees’ work pattern details that violate
+their schedule rule policy. See Work > Work Contracts in the HR Administration Guide.
+From e-mail used for alerts
+The email address shown in the From field for any email alerts sent by Dayforce. When a user
+replies to an email alert, this email is also used for their reply.
+
+-- 121 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 122 of 0
+Important: Before configuring this client property, contact Dayforce Support and submit a ticket to
+request a Domain Keys Identified Mail (DKIM) setup. This setup authorizes Dayforce to send email
+on behalf of your organization and helps to make sure that alert email messages are delivered
+successfully. After DKIM setup is completed for your domain, Dayforce Support will give you the
+public record. Your organization's IT team is then responsible for implementing this record in your
+Domain Name System (DNS). If you don’t complete DKIM setup, email messages might not be
+delivered successfully to recipients.
+Full Balance Display
+Controls the level of detail for balance information that Dayforce shows in the Balances tab of the
+following features:
+Employee Timesheet
+Manager Timesheet
+Timesheets
+Work > Time Away List
+Work > Timesheet
+Time Review
+Period Review
+When this checkbox is cleared, Dayforce shows a simplified view of the balance information:
+When this checkbox is selected, Dayforce shows the Approved and Pending columns. Also, if the
+employee has balances with grant amounts, Dayforce shows the Grant and Remaining Grant
+columns.
+Display Time in HH:MM
+Important: This functionality applies only to time data where the unit of time is “hours.”
+When selected, Dayforce shows some time data using the HH:MM format. When cleared,
+Dayforce shows most time data in the decimal format. For example, when this client property is
+enabled, an employee’s average daily hours and normal weekly hours are shown in the
+HH:MM format in their employee profile:
+
+-- 122 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 123 of 0
+This client property doesn't apply to time data in Schedules and Timesheets. To show time data
+using the HH:MM format in these features, use the View totals in hours:minutes setting in the
+Options panel. See Schedule Your Staff and Take Attendance and Correct Pay.
+Display Time Decimal Precision
+Controls how many decimal places Dayforce shows in times. For example, to show time to three
+decimal places, select 3 (##.###).
+Note: To support this functionality, when converting from hours to minutes, Dayforce rounds up or
+down to the nearest minute.
+This client property also works with the Display rounding informational message client property,
+which is located in System Admin > Client Properties, in the Properties tab, in the Timesheet
+section. The Display rounding informational message client property controls whether Dayforce
+shows an informational message about decimal precision in the Timesheets feature in the Pay
+panel. Dayforce shows the informational message only when the following conditions are met:
+The Display rounding informational message checkbox is selected.
+The Display Time Decimal Precision client property is set to either 1 (##.#), 2 (##.##), or 3
+(##.###).
+See Timesheet.
+Display Currency Precision
+Controls how many decimal places Dayforce shows in dollar amounts. The drop-down list
+contains options from zero to four. For example, to show amounts to two decimal places, click 2.
+Note: This property doesn’t apply to the Base Rate field in the Employment > Employment
+Settings screen in People.
+Authorize mobile time entries with geolocation
+Controls whether users can set the GPS coordinates of a location to validate employee clock
+entries through the mobile app. When selected, employees can clock in through their mobile
+device using the Clock feature of the employee mobile apps, after a manager, administrator, or
+
+-- 123 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 124 of 0
+other user with access configures the location coordinates through the Set Coordinates feature of
+the manager mobile app.
+Enable HR Event on HR Import
+Select this checkbox for HR imports to be able to trigger the New Hire/Rehire and Assignment
+Changed HR events. This checkbox is cleared by default.
+See Events Triggered by HR Import.
+HR Import Event Threshold in Days
+Enter a value to place a boundary on how far back an update in the import can go to trigger the
+above HR events. This is evaluated as follows:
+For new hires and rehires, Dayforce looks at the Hire Date field in the import file.
+For work assignment changes Dayforce looks at the date that the primary work assignment
+record changed.
+This client property is set to 0 by default so that updates only trigger an HR event if they are on
+the date that the import is run or future dated.
+For example, you leave this field set to zero and run an HR import on February 17, 2020. The
+import includes employees with the following hire dates:
+Steve, hired on February 16, 2020
+Erin, hired on February 17, 2020
+Kyle, hired on February 18, 2020
+As a result, the HR event is only triggered for Erin and Kyle, and not for Steve, whose hire date
+falls outside of the threshold.
+Continuing this example, if you enter 7 in this field, all three employees are included. In this case,
+hires, rehires, and assignment changes in the file that occurred on February 10, 2020 and onward
+can have an event triggered for them.
+Note: The HR Import Event Threshold in Days field accepts negative values, but entering a
+negative value sets the system to only generate events for items with an effective date in the
+future.
+See Events Triggered by HR Import.
+Company Code
+Specifies the code used to identify the company in some exports. The Company Code client
+property is only used for integrating with specific products and can be left blank.
+
+-- 124 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 125 of 0
+End Dates Required on Secondary HR Records
+Controls whether users need to provide an effective end date when adding secondary records in
+the Work > Work Assignments screen in People. When selected, users can’t save secondary
+records in People without specifying a date in the Effective To field. When cleared, Dayforce
+doesn’t enforce this requirement.
+HR Import Auto Generates Config Data
+Note: If your organization uses Position Management this client property isn’t applicable to
+position assignments, because position work assignments have preconfigured locations.
+Controls whether the HR Import interface automatically generates missing configuration data if it’s
+being assigned by the import. This data can be jobs, departments, job assignments, employment
+statuses, employment status reasons, and pay classes. If an import file contains entries for any of
+this data that are missing in Dayforce, the items are automatically created and then assigned to
+the employee. For example, in the HR Import, several employees are being assigned the Head
+Cashier job, but this job hasn’t yet been created in Dayforce. With the new configuration enabled,
+Dayforce creates the Head Cashier job and then assigns it to the employees specified in the HR
+Import.
+When selected, Dayforce creates the configuration data listed above if it’s specified in the import
+file but missing in Dayforce. When cleared, the import doesn't create new data. Instead, records
+that attempt to assign items that don’t exist in Dayforce fail.
+Client Operating Locations
+Configures Dayforce to show labels based on where the organization is located. For example, if all
+locations are in the United States, Dayforce can show State and SSN labels, while if all locations
+are in Canada, Dayforce can show Province and SIN labels in the associated fields.
+The selection controls address labels in People, the New Hire form, and in workflow forms with
+address information. It also affects references to Social Security information in the Personal
+> Confidential Information screen in People, the New Hire form, and in corresponding workflow
+forms.
+The drop-down list contains the following options:
+Canada: Locations operate only in Canada. Labels reference “Provinces” and “Postal
+Codes” in address fields and “SIN” in personal details. When users specify addresses in
+People or in workflow forms, Dayforce populates the Province drop-down list with only the
+provinces of Canada.
+United States: Locations operate only in the United States of America. Labels reference
+“States” and “ZIP Codes” in address fields and “SSN” in personal details. When users
+
+-- 125 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 126 of 0
+specify addresses in People or on workflow forms, Dayforce populates the State drop-down
+list only with the states of the US.
+North America: Locations operate in both the United States and Canada. Labels reference
+“State/Province” and “Zip / Postal Code” in address fields and “SSN / SIN” in personal
+details. When users specify addresses in People or in workflow forms, Dayforce populates
+the State/Province drop-down list with Canadian provinces and states of the US.
+International: Locations operate worldwide. Dayforce labels reference “State/Province” and
+“Zip / Postal Code” in address fields and “National ID Number” in personal details. When
+users specify addresses in People or in workflow forms, Dayforce populates the
+State/Province drop-down list with Canadian provinces, states of the US, the UK, Germany,
+Mexico, Netherlands, Italy, Czech Republic, Japan, China, India, Poland, and Korea.
+Respect Client Operating Locations for Non-Primary Contact Information
+Controls whether Dayforce allows international address and contact information for employees'
+non-primary records. By default, the checkbox is selected and Dayforce restricts address and
+contact information to the locations selected in the Client Operating Locations drop-down list.
+Clear the checkbox and Dayforce shows additional options in the State/Province and Country
+drop-down lists in address and contact records.
+Hide displayed zero values
+Controls whether Dayforce suppresses the display of zero dollar figures. If a field, report, row, or
+column would show $0, Dayforce can be configured to substitute the value with a special
+character or simply a blank. When selected, Dayforce shows the characters specified in the Text
+to replace hidden zero values with field. If you leave the field blank, the $0 is replaced with a
+blank.
+Text to replace hidden zero values with
+Controls what characters are shown instead of zero dollar figures; only used if the Hide displayed
+zero values property is selected. If left blank and the Hide displayed zero values property is
+selected, $0 is replaced with a blank.
+Default Job Assignment Display
+Controls the default setting of the Display Job Assignment As drop-down list in the view options of
+Timesheets and the Grid View of Schedules. Select Job Name to hide the department names on
+shift labels by default; select Department Name Job Name to show the full department and job
+name by default.
+Pay and Time Entry Aggregation for Plan
+Enables the schedule and actual cost functionality in Dayforce. See Schedule Costs and Actual
+Costs. When cleared, Dayforce calculates the scheduled cost and actual cost of labor for any
+
+-- 126 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 127 of 0
+given week based on a predefined formula that examines the hours scheduled and worked and
+the pay rates of the employees who were both scheduled and recorded worked hours to
+determine the costs shown in the Schedule and Actual columns.
+Planning Calendar Display
+Defines what week is loaded by default in Plan. The options are:
+Current Week
+Next Week
+Two Weeks Ahead
+Background Job queueing delay (in seconds)
+Set the time frame to cancel a background job before it’s in the queue to run in System Admin
+> Background Jobs. You can select 10 seconds, 5 seconds, or 0 seconds (which queues the job
+immediately).
+Restrict access to secondary locations in Plan
+Determines which users can load plans for secondary locations in Plan. Select this checkbox and
+users can only access secondary locations in Plan when:
+They’re assigned access to the location in the Location Access tab in System Admin > User.
+They manage employees (either directly or by organization), and the employee has a
+primary work assignment for that location.
+Employee Search Result Limit
+Note: This setting is no longer applicable.
+Pay Grade - Annualized Hours
+Determines the annualized hours value Dayforce uses when it calculates the conversion between
+the hourly rate and salary rate values for pay grades, when Dayforce isn’t configured to use the
+Job Factor Point System. See Pay Grade - Use Job Factor Point System.
+Specify the number of hours that Dayforce uses to represent a work year. Leave the field blank
+and Dayforce uses the standard 2080 hours.
+Pay Grade - Use Job Factor Point System
+Dayforce can be configured to use two different pay grade systems. Select the checkbox and
+Dayforce uses the job factor point system, showing the Job Grade, Pay Grade Group, Pay Grade,
+Job Factor, Job Factor Score, Jobs & Job Grades and Bonus Grade tabs in the Pay Grades tab in
+Org Setup > Jobs and Job Assignments. See Job Factor Point Configuration.
+
+-- 127 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 128 of 0
+Clear the checkbox and users configure rates and org differentials for each pay grade in the Pay
+Grades tab in Org Setup > Jobs and Job Assignments. See Pay Grade Configuration.
+Suppress from HR Export changes made by HR Import
+Controls whether Dayforce exports delta changes made to employee records through the
+HR Export, if the changes were made by the HR Import. Select the checkbox and Dayforce
+ignores changes made by the HR Import when delta changes are exported through the
+HR Export, to prevent Dayforce from performing cyclical import-export cycles. Clear the checkbox
+and Dayforce exports all delta change values when the HR Export is configured to export them.
+Limit Work Assignments by Budget
+Controls whether Dayforce limits work assignments based on the number entered in the Budget
+field of a job assignment’s headcount allocations, which are located in the Assignments section of
+the job assignment’s details in the Jobs and Job Assignments tab of Org Setup > Jobs and Job
+Assignments.
+When the limit is reached for a location, the job assignment isn’t available to assign to the
+employee in the following areas:
+Custom and system XML forms that have the Location and Job Assignment fields.
+The Work > Work Assignments screen in the People feature.
+For example, if a job assignment’s limit is reached for the location that you select in the Location
+and Job Assignment section of the New Hire form, that job assignment isn’t available to select.
+Restrict Job Assignment - Location Assignment To Physical Locations
+Controls whether job assignments can be assigned to any organizational unit in the hierarchy, or if
+job assignments are restricted to locations that are configured with the Physical Location
+checkbox selected in the General subtab of the Organization tab in Org Setup > Organization.
+Select the checkbox, and job assignments can only be assigned to physical locations. Clear the
+checkbox, and job assignments can be assigned to any location in the organizational hierarchy.
+Preferred Time Zone
+Select the time zone that Dayforce uses for scheduling background jobs. With a time zone
+selected, when system administrators schedule background jobs for specific times, Dayforce
+schedules the job to run at the specified time in the time zone selected in this setting, regardless
+of the time zone of the user’s computer or the server. For example, select Pacific Standard Time
+and when a system administrator schedules a background job to run at 4:00 PM, Dayforce runs
+the job at 4:00 PM Pacific Standard Time, even if the system administrator schedules the job from
+a computer in a different time zone.
+
+-- 128 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 129 of 0
+Disable Client Side Calculation for Plan
+When selected and you load Plan, Dayforce loads data based on server-side calculations rather
+than client-side calculations.
+Use TAFW workflow
+Enables time away from work (TAFW) workflows. See Workflow Configuration for Time Away from
+Work.
+TAFW auto select shifts
+Controls whether Dayforce automatically unfills or deletes shifts in Approvals that overlap with an
+employee’s approved time away from work request. When selected, Dayforce automatically
+removes the shift from the employee’s schedule (either by deleting or unfilling it, depending on
+how Dayforce is configured) when managers approve a request. If the TAFW auto select shifts
+checkbox isn’t selected, managers need to manually select the shifts they want to delete or unfill
+in the Edit Schedule dialog box.
+TAFW Search Result Limit
+The number of time away from work requests that Dayforce loads in Approvals.
+Note: When you search using the Employee Name field in the Filter & Sort panel, Dayforce
+respects the Employee Search Result Limit field (also configured in the General section of the
+Properties tab in System Admin > Client Properties) instead of the TAFW Search Result Limit field.
+For example, with the Employee Search Result Limit field set to 15, and the TAFW Search Result
+Limit field to set 100, Dayforce only returns results if you select 15 or fewer employees.
+TAFW Alert/Reports Show By
+Controls how Dayforce shows time in the Pending Time Off Request Alert and the Employee TAFW
+Report. The following options are available:
+Elapsed: Dayforce shows elapsed time in the alert and report. For example, an employee
+has a shift rotation of Monday to Friday, with Saturday and Sunday off. The employee
+schedules time off starting on a Friday, and ending on a Monday. With this option selected,
+the alert and report show a duration of four days
+Scheduled: Dayforce shows scheduled time in the alert and report. Continuing the example
+above, the alert and report show a duration of two days.
+Approvals Max Employees Search Limit
+Specifies the limit for employee search results in Approvals. For example, if you enter 100 in this
+field and then perform a search that yields more than 100 employees, a message is shown to
+
+-- 129 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 130 of 0
+indicate that the search can't be completed because it exceeds the search limit. To complete the
+search, you must refine it so that it yields a result of fewer than 100 employees.
+Approvals Show Seniority Date
+When selected, shows the Seniority Date sorting option in the Sorting Options dialog box in
+Approvals.
+Run Pay Engine on Punch Import
+Selected by default. Dayforce runs the pay rule engine on every out clock entry and injected meal
+during the import. To reduce the import time for files that contain a large number of clock entries,
+administrators can clear this checkbox to prevent the engine from running.
+Run Pay Engine on Pay Adjustment Import
+By default, this checkbox is selected and Dayforce runs the pay rule engine after the Employee
+Pay Adjustment Import runs. Dayforce also runs the Pay Summary Recalc background job for all
+of the records in the import file.
+By default, the Pay Summary Recalc background job processes the records one at a time. If the
+File size (no. of records) threshold client property is configured with a value and the import file has
+more records than this value, then its records are processed all at once. Otherwise, the records
+are processed one at a time.
+Clear this checkbox and the pay rule engine doesn’t run after the Employee Pay Adjustment
+Import runs. The Pay Summary Recalc background job also doesn’t run. This reduces the import
+time for files with a large number of pay adjustments.
+If your organization has a large number of employees, it’s recommended that you clear this client
+property to reduce the import time. For example, if your import file contains more than 500 pay
+adjustments, this client property—if enabled—can impact Dayforce performance when running
+the import. You could also ask Dayforce Support to set an appropriate value in the File size (no. of
+records) threshold client property to improve the processing time for large import files.
+File size (no. of records) threshold
+Before You Begin: You need to contact Dayforce Support to ask for this field to be updated.
+Specify the number of records there should be in an import file for Dayforce to run the Pay
+Summary Recalc background job for all of the records in an import file instead of one record at a
+time. By default, this field is set to 0.
+When the Run Pay Engine on Pay Adjustment Import client property is selected and a value is
+configured in this field, the Pay Summary Recalc background job processes all the records in an
+import file at once when there are more records in the file than the value configured in this field. If
+
+-- 130 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 131 of 0
+the number of records in an import file are less than the value configured in this field, the
+Pay Summary Recalc background job processes each record one at a time.
+Change Reason is Mandatory
+Controls whether the Reason field for primary work assignments is a required field in the following
+areas of Dayforce:
+The Employment Status tab of the Employment > Employment Settings screen in People.
+The Assignments section of the Work > Work Assignments screen in People.
+The Job Assignment and Compensation Change form.
+The Internal Candidate Hire form in the Candidates tab of Recruiting > Recruiting > Job
+Requisitions.
+Any custom forms that include the status change reason field.
+When the checkbox is selected, the Reason drop-down list is indicated as required with a red
+asterisk (*). Dayforce shows an informational message when a value isn’t provided.
+Denormalized Last Full Update
+Shows the date of the latest full update for the denormalized tables in Reporting and Analytics
+> Reporting.
+Dashboards Data Preparation Last Run Date
+Shows the date of the latest ETL run date for Dashboards.
+Dashboards Data Preparation Maximum Views to Cache
+Specifies the number of views to cache in Dashboards.
+Dashboards Data Preparation Maximum Minutes For View Caching
+Specifies the maximum minutes for view caching in Dashboards.
+Filter out Render on Demand and Workflow Jobs
+When selected, Dayforce excludes all “Render on demand report” and “Workflow Processor” jobs
+from the background job log. Excluding these jobs from the list dedicates space to more relevant
+jobs. When this checkbox is selected, users can view these jobs by selecting them in the Job
+Name setting.
+Purge Employee Time Entry Pictures threshold (in days)
+By default, this field is set to 180, and Dayforce automatically deletes any employee clock
+pictures (that is, the pictures that are captured when employees perform clock entries on a
+
+-- 131 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 132 of 0
+Dayforce Touch Clock that has picture capture enabled) that are older than 180 days. To delete
+clock pictures after a different number of days, enter that number in this field.
+For more information about picture capture and clock pictures, see the Clocks Guide.
+Offline Threshold
+The number of minutes that a clock must be offline for before Dayforce sends the Offline Clock
+Alert. For example, enter 25 and Dayforce sends the alert when a clock has been offline for at
+least 25 minutes. This setting is set to 30 minutes by default.
+Hide $ symbol
+When selected, hides the dollar symbol ($) for monetary values in several areas of Dayforce,
+including:
+Planning features, such as Plan.
+Scheduling features, such as Centralized Schedules and Schedules.
+Grid and duration timesheet features, such as Timesheets, Employee Timesheet, Manager
+Timesheet, Work > Timesheet, Period Review, and Time Review.
+Some fixed format reports, such as the Employee Pay Summary, Pay Delta, and Pay Detail
+reports.
+This functionality is useful for European users who don’t use the dollar symbol for monetary
+values.
+Retain employee TAFW records on inactivating
+When selected, retains employees’ time away from work requests when their status is changed to
+inactive. By default, this checkbox is cleared and Dayforce automatically cancels employees’
+pending and future approved time away from work requests when their status changes to inactive.
+Show Affiliate Promotions
+When selected, Dayforce shows an Intuit TurboTax promotional offer when US employees view
+their W-2 forms in Earnings > Year End Forms. This feature is designed as an opportunity for
+customers to offer their employees a way to potentially save money on their taxes. By default, this
+checkbox is selected, and Dayforce shows the Intuit TurboTax offer above the user’s W-2. To
+disable this, clear the Show Affiliate Promotions checkbox, click Save, and then click Refresh.
+Basic Business Day Calculation
+This checkbox is selected by default, and Dayforce uses the basic calculation method to
+determine business day alignment time (BDA). The basic method applies the BDA settings
+configured at the pay group level first, and if the employee’s pay group doesn't have a BDA
+
+-- 132 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 133 of 0
+configured, then it applies the organization-level BDA settings. If there is no BDA specified at the
+organization level, Dayforce uses the default BDA of midnight.
+If you clear this checkbox, Dayforce uses BDA settings from the following sources in order of
+priority:
+1. Shift rotation
+2. Pay group
+3. Organization
+4. Default (midnight)
+Set holiday start and duration
+When selected, enables the holiday start time and start and end offset settings in Pay Setup >
+Holiday Group. Using this setting, you can specify a start time that’s different from the business
+day alignment, and create pay holidays that are shorter or longer than 24 hours.
+Analytics/Period Planner - Use Annual Salary
+Select this checkbox to have the Period Planner pull employees’ annual salary amounts from the
+Annual Salary field in the Employment > Employment Settings screen of People. When this
+checkbox isn’t selected, Dayforce continues to pull annual salary amounts from the Rate field in
+the Work > Work Assignments screen of People. By default, this checkbox isn’t selected.
+Show site purpose banner (non-production only)
+By default, this checkbox is selected and Dayforce shows an indicator to the left of the feature
+name at the top of the screen when you’re using a non-production site:
+This is useful for quick identification when you’re switching between production and testing sites.
+To turn off this functionality, clear the checkbox.
+Save daily net hours for each TAFW request
+Select this checkbox when you configure any rules in Time Away From Work > Time Off Rules
+Policy that depend on daily net hour calculations such as the TAFW Attachment Required Rule.
+Use TAFW Change Pay Summary Recalculation Queue
+Select this checkbox to enable Dayforce to track and save time away from work (TAFW) changes
+for recalculation later. When this functionality is enabled, Dayforce doesn’t recalculate these
+changes automatically. To recalculate TAFW changes, you must run the TAFW Change Pay
+Summary Recalculation background job. See TAFW Change Pay Summary Recalculation.
+
+-- 133 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 134 of 0
+Allow Erase/Purge for persons with critical warnings
+Controls whether a person’s data can be deleted in System Admin > Data Management Center
+when there are critical warnings for the person's data. By default, if a person has critical warning
+type messages, their records won’t be deleted even though they’re in the erase queue. Selecting
+this client property overrides this default setting.
+See Personal Data Management Administration.
+Default Value for User Property “Display24HourTime” via HR Import
+Controls which time display format employees receive when they are created using the HR Import:
+24-hour time or 12-hour time. The options are as follows:
+True: Applies the 24-hour time format to new employees imported by the HR Import.
+False: Applies the 12-hour time format to new employees imported by the HR Import.
+By default, this property has no option selected and new imported employees receive the 24-hour
+time format. However, if you select False for this property, the HR Import applies the 12-hour time
+format to the new employees it imports. If you later want to go back to the 24-hour time format,
+you can select True.
+Automatically trigger 'Pay Zone Differential Recalc' Job after a 'Pay Grade' or 'Pay Grade Rates
+Import'
+Select this checkbox to enable Dayforce to automatically run the Pay Zone Differential Recalc
+background job when pay grades or pay grade rates are imported. This checkbox is cleared by
+default and the Pay Zone Differential Recalc background job doesn’t run automatically when pay
+grades or pay grade rates are imported.
+Automatically trigger “Employee Pay Zone Recalc” and “Pay Zone Differential Recalc” Jobs
+Select this checkbox to enable Dayforce to automatically do the following:
+Run the Employee Pay Zone Recalc background job after pay zone imports.
+Run the Pay Zone Differential Recalc background job after new pay zones are created.
+For more information about these jobs, see the following topics:
+Employee Pay Zone Recalc
+Pay Zone Differential Recalc
+Enable Leave Projection
+Enables leave projection functionality in Dayforce. Through leave projection, Dayforce forecasts
+employees’ projected balance totals based on their estimated worked time.
+
+-- 134 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 135 of 0
+Important: Projected balance totals are estimates and aren’t guaranteed.
+For more information about how to configure and use leave projection, see Leave Projection.
+Remove future Employee Employment Status and Employee Work Assignments that exist after
+termination
+Select this checkbox, and when the Terminate an Employee form or HR Import is processed,
+employee future status and work assignment records are removed when they’re no longer relevant
+to the terminated employee record.
+When this client property is enabled and you submit the Terminate an Employee form for an
+employee, their secondary job work assignments and primary or secondary position assignments
+that are active as of the termination date are end-dated. Primary and secondary job work
+assignments and position assignments that become active after the termination date are deleted.
+When the client property isn’t enabled and you submit the Terminate an Employee form for an
+employee, any association between their position and their primary and secondary work
+assignments is ended. Primary and secondary job work assignments, position assignments, and
+future status records aren’t deleted.
+Toast Notification Duration (seconds)
+The number of seconds Dayforce shows toast notifications, such as the ones shown when reports
+are ready:
+For example, to show notifications for five seconds, enter 5 in the Toast Notification Duration
+(seconds) field. Notifications will show for five seconds, or until the user dismisses them,
+whichever comes first.
+Note: This setting doesn't apply to the notifications Dayforce shows when errors occur. Error
+notifications continue to be shown until users dismiss them.
+Allow Erase of Persons with Error type messages
+Select this checkbox and employees and candidates can be deleted in the Erase tab in System
+Admin > Data Management Center, even if they have error type validation messages. By default,
+this checkbox is cleared and personal data isn’t deleted by the background job for people who
+have error type warnings. See Erase Personal Data Records by Request.
+
+-- 135 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 136 of 0
+Disable Employee Manager Recalc During HR Import
+Select this checkbox to disable the Employee Manager Recalc job during HR imports to improve
+performance and prevent the job from running twice (in cases where it's configured to run directly
+after the import). By default, this checkbox is cleared and the job runs during imports.
+Enable Balance Period Validation
+Select the checkbox and Dayforce validates balance transactions to ensure that they fall within
+the effective date range of the associated balance. If there is no configured balance period,
+Dayforce shows an error message and you can't save the transaction. When the checkbox is
+cleared, Dayforce validates the transaction without looking at the balance period.
+Account Code For Sterling Screening
+Integrates the features of Recruiting with the Sterling third-party candidate screening service.
+When your organization creates an account with the screening service, Sterling Screening
+provides an integration code, which you add here to complete the integration.
+Account Code For HireRight Screening
+Integrates the features of Recruiting and Onboarding with the HireRight third-party candidate
+screening service and I-9 service. When your organization creates an account with the screening
+service, HireRight provides an integration code, which you add here to complete the integration.
+Days to load SL without prompt
+Silverlight loads in Dayforce for the following three reasons:
+When a role uses Silverlight features.
+When a role is associated with workflows or forms that use Silverlight.
+When Dayforce detects in the back end that a user’s activity requires Silverlight.
+This property addresses the last point above. When Dayforce detects that a user’s activity
+requires Silverlight, an entry is made in the database in the backend and Silverlight loads in
+Dayforce. By default, the expiration for a user session is 30 days and administrators can reduce or
+increase the value based on the user’s needs. If the value is reduced, and there are days
+remaining for the user’s session, the expiration for the user’s session is updated the next time the
+user logs in. If the value is reduced, and there are no days remaining for the user’s session,
+Silverlight won't load.
+End date non-primary work assignments upon termination on HR Import
+Select this checkbox to end-date existing active non-primary work assignments as of employee
+termination dates when terminating employees via the HR Import. Non-primary work assignments
+that start after the termination date are deleted.
+
+-- 136 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 137 of 0
+Automatically reassign employee to next-level manager on direct manager termination
+When the Automatically reassign employee to next-level manager on direct manager termination
+client property is enabled and an employee’s direct manager is terminated in Dayforce, the
+employee is automatically assigned to the terminated manager’s direct manager, preventing
+employees from not having a manager in Dayforce.
+See Management Model in the HR Administration Guide.
+Disable Employee Manager Hierarchy recalc on transactional changes
+Clear the checkbox, and Dayforce recalculates the employee manager hierarchy when you save
+a change to an employee work assignment or management authority record. When the checkbox
+is selected, Dayforce doesn't recalculate the employee manager hierarchy, and existing employee
+manager hierarchy data isn’t updated.
+Note: By default, the checkbox is selected and Dayforce doesn't recalculate the existing
+employee manager hierarchy when you save a change to an employee work assignment or
+management authority record.
+Include Pre-Start status records in HR Export
+Select this checkbox to include onboarding records when you export HR data. To exclude this
+data, clear the checkbox.
+Delegation Duration Maximum (in Days)
+Enter a number in this field to limit the number of days for which a delegation can be configured.
+Enter a value between 1 and 999999999 to restrict the delegation access duration. Dayforce
+treats the value 0 in the same way as there being no value entered, and delegations will have no
+duration restriction. The default value in the field is 0.
+Important: You can enter and save values between -999999999 and 999999999. It’s important that
+you only enter values between 0 and 999999999 in this field because Dayforce only validates that
+a value within this range has been entered when you’re configuring delegation access elsewhere
+in Dayforce.
+Disable Onboarding Date creation when processing hiring forms
+Select this checkbox to disable Onboarding functionality in forms. When this checkbox is
+selected, Dayforce doesn't show the Onboarding Date or Onboarding Role settings in hiring
+forms.
+Use Onboarding Date instead of Hire Date for Employee Properties on forms
+
+-- 137 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 138 of 0
+Select this checkbox to use employee onboarding dates instead of hire dates as the effective start
+date of the employee properties included in hiring forms.
+Note: This checkbox isn’t enabled if the Disable Onboarding Date creation when processing hiring
+forms client property is selected.
+Assign employee to all matching departments on HR Import when org assignment is above site
+level
+When you select this checkbox, and the OrgUnitXrefCode in the HR import file is above store
+level, then the import looks at the child org units under the OrgUnitXrefCode to find a
+department that matches the DepartmentXrefCode provided in the file. The employee is then
+assigned to the org unit that matches the department.
+When you select this checkbox, and the OrgUnitXrefCode in the HR Import is at or below store
+level, then the import finds the matching department at the onsite department level and assigns
+the employee to that department.
+Show Week Number On Calendar Selection Controls
+Select this checkbox to show calendar week numbers in the drop-down calendar throughout
+Dayforce. The drop-down calendar is found in a number of screens across Dayforce, including
+Timesheets, Schedules, Work > Calendar, and Time Review.
+In the preceding screenshot, the 43rd week is selected in the drop-down calendar and the Wk
+column shows the week numbers for the selected month.
+
+-- 138 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 139 of 0
+Also, if this checkbox is selected, Dayforce includes the week number in the Printed Schedule
+Report and Schedule Report with Contract.
+Note: The week number calculation is based on the ISO week date system and isn’t configurable.
+Disable Population of End Date from Close Date in Org Import
+Controls whether the closing date overrides the effective end date when you import an org and
+the effective end date isn’t provided in the XML file.
+Dayforce links in messages use SSO (if enabled)
+Select this checkbox and users who have a single sign-on (SSO) account are directed to use the
+SSO login process when they click a link in a Dayforce message. Users who don’t have an SSO
+account are directed to sign in using the company name and their Dayforce login information.
+When this checkbox is cleared, all users are directed to the login screen when they click links in
+Dayforce messages.
+Note: If most of your users have SSO accounts, it’s recommended that you select this checkbox.
+Customers who don’t use SSO should clear this checkbox to help ensure optimal response times
+during the login process.
+Countries to create and update Leave Management records with form submissions
+Select the countries that you want to generate leave management records for in the Leave
+Management screen of People. Only certain countries are eligible.
+Disable Pay Grade Validation on HR Import
+Controls whether pay grade validation of the HR Import is enabled. By default, the checkbox isn’t
+selected and pay grade validation is applied to the import.
+Disable Pay Grade Validation on HR Recruiting Import
+Controls whether pay grade validation of the HR Recruiting Import is enabled. By default, the
+checkbox isn’t selected and pay grade validation is applied to the import.
+Enable Military Address
+Controls whether you can add military addresses to employee records in Dayforce by adding the
+Include Military States checkbox to HR Admin > Contact Information Types. Selecting the Include
+Military States checkbox for a contact information type allows you to then add a military address
+for an employee, their dependents and beneficiaries, and their emergency contacts in People.
+See Contact Information Type Setup in the HR Administration Guide.
+Enable Pay Zones in place of Org. Differentials
+
+-- 139 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 140 of 0
+Select this checkbox to enable pay zone functionality, including the Employee Pay Zone Recalc
+background job and the Pay Zone Differential Recalc background job. Dayforce replaces the Org
+Differentials subtab in the Pay Grades tab of Org Setup > Jobs and Job Assignments with the Pay
+Zone Differentials subtab. The Pay Zone Differentials subtab is where you associate pay zones
+with pay grades.
+Compensation change limit in job assignment and compensation change form
+Enter the amount that compensation can be increased in the Job Assignment and Compensation
+form before a validation is triggered. By default, this value is 10,000,000.
+Generate Base Rate Transactions
+This setting controls whether Dayforce can detect and commit base rate transactions after you run
+the Base Rate Recalc background job.
+Select this checkbox to include base rate transactions in base rate recalculations. This includes
+both system-generated base rate updates and manual base rate updates made in the Work
+> Base Rate Progression screen of People.
+Clear this checkbox and Dayforce ignores both system-generated and manual transactions
+during base rate recalculation. This checkbox is cleared by default. It’s recommended that you
+don’t enable this client property if your organization doesn't use the Dayforce base rate
+progression features, because it might affect the performance of the background job engine.
+Indicate Shared Employees
+Select this checkbox to show the Indicate Shared Employees checkbox in the Options panel in
+Schedules and Timesheets. When the Indicate Shared Employees checkbox is selected, Dayforce
+shows the shared employee icon ( ) next to employees who work at the selected location on a
+secondary work assignment.
+Enable activity based costing
+When you select this checkbox, you can assign the system-generated Activity labor metric to time
+entry policies and default labor records in the Labor Metrics tab of Pay Setup > Time Entry Policy
+and in the Work > Default Labor screen of People. When this checkbox is cleared, Dayforce hides
+the Activity labor metric in these locations and makes it unavailable for time entry policy and
+default labor configuration.
+Disable auto update of Most Recent Hire date
+When an employee’s employment status transitions from Terminated to Active, Dayforce
+automatically updates the Most Recent Hire Date field to match the start date of the new Active
+status. Employment status transitions can be triggered by HR Import, forms, or when you make
+
+-- 140 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 141 of 0
+changes in the Employment > Employment Settings screen in People. You can disable this
+behavior by enabling the Disable auto update of Most Recent Hire date client property.
+Hide comments from Complex (Non-XML based) forms
+Select this checkbox to hide the Comment field from complex (non-XML based) forms anywhere
+that a form is shown. For example, users won't see it when they fill out the Direct Deposit form,
+during any approval stage, or in the form submission history. This functionality can be used to limit
+free-text communication between employees in Dayforce to prevent the sharing of sensitive data.
+Comments that are in submitted forms before this checkbox is selected are retained in the
+database but hidden from all areas in Dayforce.
+Notes:
+A complex form is a Dayforce form that has predefined content and no XML code to review
+or edit. Examples include the Direct Deposit form and tax forms. In the Form Builder screen
+of Workflow Administration, these forms have the IsComplexForm checkbox of the
+Properties tab selected, and the XML and Preview tabs grayed-out.
+In non-complex forms (forms where the XML code is editable), you can manually remove
+the Comment field from the form code so that it's not available to users.
+Show 'Recommended browsers' banner on HTML page when using IE or Firefox (ESR52)
+browsers
+This setting allows you to show or hide the banner that reminds you to use Chrome, Safari, Firefox,
+or Edge browsers whenever you’re logged in using Internet Explorer or Firefox Extended Support
+Release (ESR) version 52 browsers. Because Dayforce shows the banner by default, if you want
+to hide the banner, click No. Changes take effect after the next login.
+Exclude One Time Payment Bonus Form
+Select this checkbox to ensure that approval requests for a custom version of the Bonus Payment
+Form are only shown in Message Center.
+When users submit the system version of the Bonus Payment Form that comes with Dayforce,
+approvals are only shown in Message Center and not in other areas such as the Actions tab of
+Home. This is because of a processing requirement for this form. However, when users submit a
+custom version of this form, approvals aren't just restricted to Message Center by default, and
+processing issues can occur if users approve it in other areas.
+To ensure that approval requests for a custom version of a Bonus Payment Form only appear in
+Message Center:
+Select the Exclude One Time Payment Bonus Form checkbox.
+
+-- 141 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 142 of 0
+In the Properties tab of Workflow Administration > Form Builder for the custom form, enter
+OneTimePaymentBonus in the Reference Code field.
+This functionality is only supported for one custom Bonus Payment Form per instance of Dayforce,
+because only one custom form can have this reference code.
+Allow attachments section to be updated when HR Policies are in use
+Select this checkbox to enable the Attachments section in HR Admin > HR Policies for active
+policies, allowing users to add or delete attachments while an HR policy is in use. Clearing this
+checkbox disables the Attachments section for active policies. This checkbox is cleared by
+default.
+Delay the Employee Manager and Manager Hierarchy Recalc Jobs until after the HR Import 2.0
+file is processed
+Select this checkbox to delay the Employee Manager Recalc job and the Manager Hierarchy
+Recalc job until after the HR Import 2.0 file is processed to improve performance. By default, this
+checkbox is selected and the jobs don’t run until after HR Import 2.0 processing has finished.
+Note: If the Disable Employee Manager Recalc During HR Import property is selected, the Delay
+the Employee Manager and Manager Hierarchy Recalc Jobs until after the HR Import 2.0 file is
+processed checkbox is unavailable.
+Delay the Employee Manager and Manager Hierarchy Recalc Jobs until after the mass employee
+edits in People is processed
+Select this checkbox to delay the Employee Manager Recalc job and the Manager Hierarchy
+Recalc job until after mass employee edits in People are processed to improve performance. By
+default, this checkbox is selected and the jobs don’t run until mass employee edits are finished.
+Allow a client to transition a Secondary WorkAssignment to a Primary WorkAssignment
+Controls you can import a primary work assignment that has the same job, location, and
+overlapping dates as an existing secondary work assignment using HR Import. When this
+property is cleared, Dayforce returns an error message indicating that the primary work
+assignment overlaps with an existing work assignment and the import fails. When this property is
+selected, Dayforce end-dates the existing secondary work assignment and imports the primary
+work assignment successfully.
+Display Enhanced Gender Last Modification Information and Effective Dating
+Controls whether effective dating and last modified record data is collected for employee gender
+updates and shown in the Personal > Confidential Information screen of People. By default, this
+checkbox is cleared.
+
+-- 142 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 143 of 0
+Minimum worksheets to set budget by guidelines using a background job
+Enter the minimum number of compensation worksheets required to trigger a background job for
+setting budgets.
+If the number of worksheets exceeds this value and one or more guidelines are set based on
+budgets, the Compensation Set Budget From Guidelines Job runs to set the budgets. Otherwise,
+budgets are set without using the background job.
+The background job also supports setting budgets by percentage or fixed amount when these
+options are used together with guidelines.
+By default, this field is set to a high integer.
+Minimum employees to auto-allocate rewards using a background job
+Enter the minimum number of employees required in compensation worksheets to enable auto-
+allocation of the budget using a background job. If the number of employees exceeds this limit,
+the Compensation Auto Allocation Job allocates the budget and automatically saves the
+worksheet. Otherwise, when you click Auto-Allocate in compensation worksheets, Dayforce
+allocates the budget without using a background job.
+By default, this field is set to a high integer to allow automatic budget allocation. If you experience
+issues with auto-allocation, reduce the value (the recommended setting is 500).
+Maximum reward letters per ZIP file for mass download
+Enter the number of reward letters that should be included in each ZIP file when users download
+reward letters for multiple employees. The default value is 50. This value indicates that each ZIP
+file contains 50 reward letters for a mass download. If you encounter performance issues when
+downloading reward letters in bulk, enter a lower value for this client property.
+Sync Compensation Employee Data
+Select this checkbox to capture HR events and process them through a background job, allowing
+administrators to synchronize employee data changes using the Sync Employee Data button in
+compensation worksheets.
+This client property works with the Sync Employee Data role feature. To make the Sync Employee
+Data button available in compensation worksheets, select this role feature in System Admin >
+Roles, in the Features tab, under Compensation Administration > Compensation Cycle
+Administration.
+Enable Document Preview
+
+-- 143 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 144 of 0
+Select this checkbox to show a preview of images and documents without needing to download a
+copy of an attached file.
+Messages
+The client properties in the Messages section of the Properties tab in System Admin > Client
+Properties control how and when certain messages are shown in Dayforce, and properties for
+email verification.
+Report Client Message
+Enter the message that Dayforce displays on the Printed Schedule Report. This output is a fixed-
+format report, which you can run in the Reports dialog box in Schedules.
+In the example above, Dayforce is configured to show the message, "The use of this report by
+unauthorized third parties shall be at their own risk."
+Letter Management Sender Address
+Enter the default email address that employee letters and candidate offers are sent from when the
+user sending the letter doesn't have an active business email address. This property allows
+Dayforce users who don’t have an employee record, like system admins, to send letters. See
+Letter Management Configuration.
+Confirm DKIM setup and use Letter Management Sender Address
+Select this checkbox after the Domain Keys Identified Mail (DKIM) setup is complete for your
+organization. When you select this checkbox, any letter sent from a user who doesn't have an
+active business email shows the sender address you saved in the Letter Management Sender
+Address client property, instead of the default Dayforce address.
+To configure DKIM, contact your Dayforce support representative and submit a ticket to request a
+DKIM setup. This setup authorizes Dayforce to send email on behalf of your organization and
+makes sure that alert email messages are delivered successfully. Your organization’s IT team is
+
+-- 144 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 145 of 0
+responsible for implementing this record in your Domain Name System (DNS). If you don’t
+complete the DKIM setup, email messages might not be delivered to recipients.
+Employee
+The settings in the Employee section of the Properties tab in System Admin > Client Properties
+deal with employee information in Dayforce.
+Enable SSN Validation
+Controls whether Dayforce validates the Social Security numbers (SSN) or Social Insurance
+numbers (SIN) supplied for each employee in People and any new hires onboarded using the
+onboarding wizard in People, or the workflow New Hire form.
+The SSN validation checks whether the number is in a valid format and isn’t a duplicate of a
+number already entered for an employee in Dayforce.
+When the Enable SSN Validation checkbox is cleared, Dayforce doesn't validate SSNs and the
+field doesn't need a valid number when onboarding employees with the onboarding wizard.
+Note: The Enable SSN Validation client property must be enabled if you’re using payroll because
+the Payroll functionality requires that all employees have valid SSNs.
+Allow Applied for SSN
+Controls whether Dayforce allows duplicate SSN values of 000-00-0000 to be entered for
+employees in People, imported through the HR Imports, or saved on workflow forms, for
+employees that have applied for a Social Security number but haven’t received one yet.
+Note: This functionality only affects employees with a primary residence in the United States.
+Allow Hiring With No SSN/SIN
+When this checkbox is selected, the SSN/SIN field (or the National ID Number field in some
+locations) in the Personal Details section of the Candidate Hire form isn’t required. Select this
+checkbox if you’ll onboard employees before entering their SSN/SIN.
+Blank SSN for Contractors
+Controls whether you can onboard contractors without entering their SSN or SIN.
+Enable SSN Warning Or Error Messages
+Controls whether Dayforce shows an error or warning message when employees are onboarded
+without a valid Social Security number (SSN) and Dayforce is configured with the Enable
+SSN Validation client property selected or when employees enter dependent information without a
+
+-- 145 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 146 of 0
+valid Social Security number (SSN) and Dayforce is configured with the Enable Dependent SSN
+Required at age (In Months) client property selected.
+When Dayforce is configured to show error messages, the form can't be submitted with an invalid
+SSN or SIN. When Dayforce is configured to show warning messages, the form can be submitted
+or approved, if the warning message is approved.
+Note: The Enable SSN Warning or Error Messages client property is only active if the Enable
+SSN Validation checkbox is also selected.
+Enable Dependent SSN Required at age (In Months)
+Controls whether Dayforce validates the SSN or SIN of employees' dependents saved in Dayforce
+Benefits. Specify the age, in months, at which Dayforce begins validating the SSN or SIN for
+dependents. For example, enter 6 and Dayforce validates the value for any dependents older
+than six months, and doesn't validate SSNs or SINs for dependents younger than six months.
+If left blank, Dayforce doesn't validate SSN or SIN values for employees' dependents regardless
+of age.
+When you select the Enable SSN Validation checkbox and leave the Enable Dependent SSN
+Required at age (In Months) field blank, Dayforce doesn’t validate the SSN field for US
+dependents, or the SIN and SIN Expiry Date fields for Canadian dependents during mobile and
+web enrollments.
+If you select the Enable SSN Validation checkbox and enter zero in the Enable Dependent SSN
+Required at age (In Months) field, Dayforce doesn't validate the SIN or SIN Expiry Date fields for
+Canadian dependents. However, Dayforce continues to validate the SSN field for US dependents
+during mobile and web enrollments.
+Generate granular Work Assignment records via Cover Your Tracks
+Controls how Dayforce generates Cover Your Tracks (CYT) work assignments. Select the
+checkbox and Dayforce generates multiple individual work assignments to cover the periods
+taken into consideration by CYT. Clear the checkbox and Dayforce generates only one work
+assignment record to cover the periods taken into consideration by CYT. For more information
+about CYT, see Cover Your Tracks Work Assignments in the HR Administration Guide.
+Allow Duplicate Australian Tax File Number (TFN)
+Controls whether employee profiles can have duplicate tax file numbers (TFNs). This option
+provides support for cases where employees work under more than one award classification with
+different pay frequencies. An employee's pay frequency in Dayforce is based on the pay group
+assigned to their employment status record, and an employee can have only one active status
+record at a given time. To pay these types of employees correctly, they must have a separate
+employee record configured for each pay frequency. Each employee record must have the same
+
+-- 146 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 147 of 0
+TFN record on file for payroll processing, and as such, you must configure Dayforce to allow
+duplicate TFNs.
+When you select this checkbox, and an identification record with the TFN type is added or
+updated, Dayforce doesn't need the identification number to be unique compared to other
+identification records with the TFN type already in Dayforce. This functionality is in place when you
+add or update records through the Identification section of the Personal > Confidential Information
+screen in People, and through HR forms or the HR Import.
+If you leave the Allow Duplicate Australian Tax File Number (TFN) checkbox cleared, Dayforce
+continues to validate that TFN records added to Dayforce are unique. Regardless of whether the
+Allow Duplicate Australian Tax File Number (TFN) checkbox is selected, Dayforce always
+performs the standard TFN validation for format and length as set out by the Australian Taxation
+Office.
+Allow Duplicate New Zealand IRD Number
+Controls whether employee profiles can have duplicate IRD numbers. This option adds support
+for cases where employees work under more than one award classification with different pay
+frequencies. An employee's pay frequency in Dayforce is based on the pay group assigned to
+their employment status record, and an employee can only have one active status record at a
+given time. To pay these types of employees correctly, they must have a separate employee
+record configured for each pay frequency. Each employee record must have the same
+IRD number record on file for payroll processing, and as such, you must configure Dayforce to
+allow duplicate IRD numbers.
+When you select this checkbox, and an identification record with the IRD Number type is added or
+updated, Dayforce doesn't need the number to be unique compared to other identification
+records with the IRD Number type already in Dayforce. This functionality is in place when you add
+or update records through the Identification section of the Personal > Confidential Information
+screen of People, and through HR forms or the HR Import.
+If you leave the Allow Duplicate New Zealand IRD Number checkbox cleared, Dayforce continues
+to validate that IRD number records added to Dayforce are unique. Regardless of whether the
+Allow Duplicate New Zealand IRD Number checkbox is selected, Dayforce always performs the
+standard IRD number validation for format and length as set out by the Inland Revenue
+Department.
+Name Display Format
+Defines how employee names are shown in Dayforce. There are several options, which you can
+combine into your preferred format.
+Name display format tokens
+Token 	Description
+
+-- 147 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 148 of 0
+Last Name 	The employee's last name.
+First Name 	The employee's first name.
+Middle Name 	The employee's full middle name.
+Title 	The employee’s formal honorific. For example, Mr. or Mrs.
+Suffix 	The employee's full suffix. For example, Jr. or Sr.
+Common Name The employee's full common name. For example, an employee with the
+first name “William” may use “Bill” as his common name.
+Preferred Last Name
+The employee's preferred last name. For example, an employee with a
+lengthy or complex last name may choose to shorten it for every day
+use.
+Initials A set of capitalized letters representing the initial letters of a person's
+first, middle, and/or last names.
+Second Last Name The employee's full second last name.
+Last Name Prefix 	(Germany only) The prefix of the employee's last name.
+Professional Title 	(Germany only) The employee's professional title.
+Previous Last Name
+The last name that the employee used before a name change. For
+example, if the employee married and took their partner’s name, their
+previous last name is what they used before they married.
+FirstChar(Last
+Name) The initial of the employee’s last name.
+FirstChar(Middle
+Name) The initial of the employee's middle name.
+FirstChar(First
+Name) The initial of the employee’s first name.
+FirstChar(Common
+Name) The initial of the employee's common name.
+Space
+5 spaces for use in the name combination you create. You can only
+use each one once.
+Space
+Space
+Space
+Space
+, (Comma)
+Punctuation options.
+. (Period)
+( (Left Parenthesis)
+) (Right Parenthesis)
+- (Hyphen)
+For example, selecting the following options, in the order shown, for employee Margaret Parr
+shows her name as Margaret P:
+
+-- 148 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 149 of 0
+First Name
+Space
+FirstChar(Last Name)
+However, selecting these options shows it as Parr, M:
+Last Name
+, (Comma)
+Space
+FirstChar(First Name)
+To help ensure the proper display of employee names, Dayforce makes the following automatic
+updates to all name display formats:
+Multiple spaces are compressed to a single space.
+Spaces immediately before a comma are removed.
+If a comma is the first character, it’s removed.
+Spaces at the beginning or the end of the name after all other changes have been made
+are removed to ensure that there is no whitespace.
+Posted Schedule Name Display Format
+Defines how employee names are shown on printed schedules. There are several options, which
+use combinations of the following tokens:
+Schedule name display tokens
+Token 	Description
+FIRST 	The employee's full first name
+COMMON 	The employee's full common name
+LAST 	The employee's full last name
+MIDDLE 	The employee's full middle name
+SECONDLAST 	The employee's full second last name
+SUFFIX 	The employee's full suffix
+F 	The initial of the employee's first name
+C 	The initial of the employee's common name
+L 	The initial of the employee's last name
+M 	The initial of the employee's middle name
+For example, selecting the option FIRST L for employee Margaret Parr shows her name as
+Margaret P. However, selecting the option LAST, F shows it as Parr, M.
+Add Employee Number to Name Display
+
+-- 149 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 150 of 0
+Defines whether employee numbers are shown alongside employee names throughout Dayforce.
+Select the checkbox and Dayforce appends the employee number to the end of the employee's
+display name, wherever the name is shown in Dayforce.
+Number Algorithm
+The algorithm used for generating new employee numbers. Set it to AUTO_UNIQUE to generate
+employee numbers for employees onboarded through the HR Import or People. Set it to
+USER_UNIQUE to allow users to specify their own employee numbers for new hires.
+Note: The Number Algorithm field must be set to 'AUTO_UNIQUE' to use the Generate New
+Employee Number functionality in the Work > Work Assignments screen of People, or
+'USER_UNIQUE' for users to edit and specify employee numbers. See Generate New Employee
+Numbers in the HR Administration Guide.
+Reuse Rehire Previous Employee Number
+Determines whether terminated employees can be reassigned their most recently assigned
+employee number when they’re rehired with the same SSN or SIN as was saved previously. Select
+the checkbox, and when an employee is rehired, Dayforce reassigns the employee's existing
+employee number. Clear the checkbox, and the employee is assigned a new employee number
+on rehire.
+Important: To use this functionality, Dayforce must be configured with the Enable SSN Validation
+client property selected, and the Number Algorithm set to AUTO_UNIQUE.
+Allow Multiple Employees To Share The Same Employee Number
+Determines whether duplicate employee numbers are permitted in the RESTful API, HR Import,
+Rehire form, and user interface.
+Options are:
+Legacy: Preserves the default functionality where you can create duplicate numbers
+through the user interface but not through HR Import. In addition, patching employees
+allows duplicate employee numbers but posting employees doesn’t. This is the default
+option.
+On: Duplicate employee numbers are allowed in PATCH, POST, HR Import, Rehire form, and
+the user interface.
+Off: Duplicate employee numbers aren’t allowed in PATCH, POST, HR Import, forms, or the
+user interface, including inactive employee numbers.
+Important: If you select the Allow Multiple Employees To Share The Same Employee Number client
+property to allow duplicate employee numbers, don’t select the Set Employee Badge to Employee
+Number for New Hire client property.
+
+-- 150 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 151 of 0
+Login Algorithm
+The algorithm used for generating new employee user names.
+Important: These options generate user names only for employees hired through a new hire
+workflow, and not for employees added to Dayforce using the HR Import.
+The login algorithm options are:
+Custom Format: Dayforce generates a login based on the format defined in the Login
+Algorithm Custom Format client property of System Admin > Client Properties.
+Note: You must configure the Login Algorithm Custom Format client property to use this
+option.
+Employee number: Dayforce generates a login that is the employee number of the new hire.
+F.LAST: Dayforce generates a login that is the first initial of the new hire's first name and
+their full last name, separated by a period. For example, the login Dayforce generates for
+Margaret Parr is M.Parr.
+FIRST.LAST: Dayforce generates a login that is the new hire's first name and last name,
+separated by a period. For example, the login Dayforce generates for Margaret Parr is
+Margaret.Parr.
+LAST.FIRST: Dayforce generates a login that is the new hire's last name and first name,
+separated by a period. For example, the login Dayforce generates for Margaret Parr is
+Parr.Margaret.
+User defined: Users specify a login ID themselves when onboarding new employees and
+Dayforce validates that the user name is unique. Users can only specify a login ID if their
+user role is configured with at least one user role in the New Hire Role Assignments tab in
+System Admin > Roles. See Define New Hire Role Assignment Access.
+Employees reporting to multiple managers
+Controls whether employees can report to multiple managers in Dayforce. When selected,
+multiple assigned managers can schedule the employee, add or edit worked shifts or pay
+adjustments on the timesheet, record or approve time away from work requests for the employee,
+or receive notification of decisions from a workflow routing node.
+Note: If your organization uses Position Management, this client property isn’t applicable because
+employees can’t report to multiple managers.
+Allow Payroll Card as Pay Method
+Determines whether Dayforce can be configured to support Payroll cards. Select the checkbox,
+and configure the organization's Comdata Payroll card accounts in Payroll Setup > Bank
+Accounts > Payroll Card Accounts.
+Allow payroll card selection before registration in self service
+
+-- 151 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 152 of 0
+Controls whether Payroll Card is always an option in the Account Type drop-down list in Direct
+Deposit forms.
+When the Allow payroll card selection before registration in self service checkbox isn’t selected,
+and an employee’s pay card isn’t registered in Dayforce, the Payroll Card option isn’t shown in the
+Account Type drop-down list of the Direct Deposit form. When this is the case, users can’t add a
+direct deposit record for an instant issue pay card.
+When the Allow payroll card selection before registration in self service checkbox is selected, the
+Payroll Card option is always shown, even when the employee’s pay card isn’t registered. This
+allows users to add instant issue pay cards in the form.
+Payroll Card is shown as a pay method option only when the following is true:
+The Allow Payroll Card as Pay Method client property, located in the same section, is
+enabled.
+The employee belongs to a US pay group.
+Also, the Allow payroll card selection before registration in self service client property isn’t
+applicable for direct deposit records added directly in the Payroll > Direct Deposit screen of
+People.
+Set Employee Badge to Employee Number for New Hire
+Controls whether Dayforce automatically assigns the employee number generated for employees
+as their clock badge number when the employee is onboarded.
+If an employee is onboarded using HR Import, and the import file has a badge number specified
+for the employee, this client property setting is ignored.
+If the employment status of an employee with an active badge changes from Inactive to Active,
+this client property is ignored.
+To use this functionality, the Number Algorithm property must be set to 'AUTO_UNIQUE'. See
+Number Algorithm.
+Enable Business Title
+Controls whether Dayforce shows the business title in place of the employee's Job Assignment
+Title throughout Dayforce.
+Select the Enable Business Title checkbox and Dayforce shows the custom business title
+configured in the Work > Work Assignments screen of People or in the Job Assignment and
+Compensation Change form in place of the Job Assignment name. The business title is shown in
+various places throughout Dayforce, including in Performance, in Home > My Team, and on
+employee cards.
+
+-- 152 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 153 of 0
+Note: Business titles aren’t used for employees who are assigned to positions using Position
+Management. In most areas of Dayforce, the name of the employee’s position is shown. In the org
+chart in People, the employee’s job assignment is shown.
+Prevent gaps between Employment Status and Work Assignment dates
+Controls whether Dayforce shows an error when you save an employee work assignment record
+and the employee doesn't have an inclusive date range covered by their work assignment records
+from their hire date. Select the checkbox, and Dayforce validates that there are no gaps in
+employee work assignment dates.
+Use predictive analytics for flight risk
+Controls whether Dayforce uses the Predictive Analytics feature to calculate flight risk for
+employees. By default, the Use predictive analytics for flight risk checkbox is selected, and
+Dayforce uses Predictive Analytics to calculate each employee’s flight risk. When the Use
+predictive analytics for flight risk checkbox is cleared, you can manually enter a flight risk rating
+for each employee when completing their talent reviews in Home or People. See Flight Risk in the
+HR Administration Guide.
+Minimum age for new hires
+Use the Minimum age for new hires field to override the default validation for the minimum age that
+is entered for employees in Dayforce. Minimum age validation helps to prevent mistakes such as
+entering the current date as the employee's date of birth.
+By default, if you enter a date of birth in areas such as the New Hire form that is within three years
+of the current date, Dayforce shows a warning message asking you to verify the entered date.
+With warning messages, you can still save the record.
+You can use the Minimum age for new hires field to set a custom minimum age that is enforced by
+an error message rather than a warning message. For example, if you enter 14 and a user enters
+a date of birth in the New Hire form that places the employee below 14 years of age, an error
+message is generated and you can't save the record.
+Minimum age validation is enforced in the following areas:
+Candidate Hire form
+New Hire form
+Rehire form
+HR Import
+The Birth Date field in the General section of the Personal > Confidential Information screen
+in People.
+Disable View link for hourly rate/salary
+
+-- 153 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 154 of 0
+Select this checkbox to configure the Hourly Rate/Annual Salary field in the following areas so that
+users can see the associated amount without clicking the View link:
+The Compensation section of the Overview screen in People.
+The Pay Information section of the Pay tab in the employee card.
+The Payroll Information section of the Personal > About Me screen in Profile.
+View link comparison
+View Link Enabled 	View Link Not Enabled
+Length of Service Date
+Controls which date Dayforce uses to calculate an employee's length of service. By default, Most
+Recent Hire Date is selected. The following options are avai

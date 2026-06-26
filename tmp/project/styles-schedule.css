@@ -1,0 +1,1772 @@
+/* =====================================================================
+   Flex Work — Schedule
+   ===================================================================== */
+
+.sch-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* Hug content vertically — the page scrolls when the by-worker grid
+     or other sections outgrow the viewport. Avoids clipping rows when
+     the schedule fills up with many records. */
+  flex: 0 0 auto;
+}
+
+/* --- Top rail (segmented + chips left, date paddle right) -------------- */
+
+.sch-rail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.sch-rail-left,
+.sch-rail-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sch-rail-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sch-rail-sep {
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  background: var(--evr-neutral-90);
+  margin: 0 4px;
+}
+
+/* When embedded in an omnibar action slot */
+.sch-rail-inline {
+  margin-right: 8px;
+}
+
+/* --- Segmented control ------------------------------------------------- */
+
+.sch-seg {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 9999px;
+}
+.sch-seg-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-lowemp);
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1), color 120ms;
+}
+.sch-seg-btn:hover { color: var(--evr-content-primary-highemp); }
+.sch-seg-btn--active {
+  background: var(--evr-interactive-primary-decorative);
+  color: var(--evr-content-primary-highemp);
+  box-shadow: inset 0 0 0 1px var(--evr-blue-200);
+}
+
+/* --- Chip ("selected" with checkmark, or plain) ------------------------ */
+
+.sch-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  cursor: pointer;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sch-chip:hover { background: var(--evr-surface-primary-hover); }
+
+.sch-chip--selected {
+  background: var(--evr-neutral-93);
+  border-color: transparent;
+}
+.sch-chip--selected:hover { background: var(--evr-neutral-90); }
+.sch-chip-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--evr-content-primary-highemp);
+}
+.sch-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 2px;
+  border-radius: 9999px;
+  background: var(--evr-neutral-100);
+  border: 1px solid var(--evr-neutral-90);
+  font-size: 11px;
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.sch-chip-trail {
+  display: inline-flex;
+  align-items: center;
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-chip-funnel {
+  display: inline-flex;
+  align-items: center;
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* --- Prev/next paddle (round outlined icon button) --------------------- */
+
+.sch-paddle {
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  color: var(--evr-content-primary-highemp);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sch-paddle:hover { background: var(--evr-surface-primary-hover); }
+.sch-paddle--flush {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--evr-content-primary-medemp);
+}
+.sch-paddle--flush:hover {
+  background: var(--evr-neutral-95);
+  color: var(--evr-content-primary-highemp);
+}
+
+/* --- View dropdown (compact "select") ---------------------------------- */
+
+.sch-viewmenu {
+  position: relative;
+  display: inline-block;
+}
+.sch-viewmenu-trigger {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 10px 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  font-weight: var(--evr-fw-demibold);
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms;
+}
+.sch-viewmenu-trigger:hover {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-neutral-80);
+}
+.sch-viewmenu-trigger[aria-expanded="true"] {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-neutral-80);
+}
+.sch-viewmenu-label { min-width: 36px; }
+.sch-viewmenu-chev {
+  display: inline-flex;
+  color: var(--evr-content-primary-lowemp);
+  transition: transform 140ms ease;
+}
+.sch-viewmenu-chev[data-open="true"] { transform: rotate(180deg); }
+
+.sch-viewmenu-pop {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 140px;
+  padding: 4px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(15, 17, 21, 0.12);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.sch-viewmenu-opt {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  color: var(--evr-content-primary-highemp);
+  cursor: pointer;
+  text-align: left;
+}
+.sch-viewmenu-opt:hover { background: var(--evr-surface-primary-hover); }
+.sch-viewmenu-opt--active {
+  background: var(--evr-interactive-primary-decorative);
+  font-weight: var(--evr-fw-bold);
+}
+.sch-viewmenu-opt--active:hover { background: var(--evr-interactive-primary-decorative); }
+
+/* --- Period stepper (chevrons + label) --------------------------------- */
+
+.sch-rail-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+}
+.sch-rail-period {
+  display: inline-flex;
+  align-items: center;
+  min-width: 180px;
+  justify-content: center;
+  padding: 0 6px;
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+}
+
+/* --- Today quick button ------------------------------------------------- */
+
+.sch-rail-todaybtn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  font-weight: var(--evr-fw-demibold);
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms, color 120ms;
+}
+.sch-rail-todaybtn:hover:not(:disabled) {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-neutral-80);
+}
+.sch-rail-todaybtn:disabled {
+  color: var(--evr-content-primary-lowemp);
+  cursor: default;
+  opacity: 0.65;
+}
+
+/* =====================================================================
+   Calendar grid
+   ===================================================================== */
+
+.sch-grid-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.sch-grid-card--inset {
+  border-radius: 12px;
+}
+
+.sch-grid {
+  display: grid;
+  grid-template-columns: 200px repeat(7, minmax(120px, 1fr));
+}
+
+.sch-grid-row {
+  display: contents;
+}
+
+.sch-grid-cell {
+  min-height: 84px;
+  padding: 12px 16px;
+  border-right: 1px solid var(--evr-border-decorative-lowemp);
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  display: flex;
+  align-items: center;
+  background: var(--evr-surface-primary-default);
+}
+.sch-grid-cell--head {
+  min-height: 40px;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 6px;
+  background: var(--evr-surface-primary-default);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 13px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-grid-cell--rowhead {
+  background: var(--evr-surface-primary-default);
+  border-right: 1px solid var(--evr-border-decorative-default);
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.sch-grid-row--head .sch-grid-cell {
+  min-height: 40px;
+  padding: 8px 16px;
+  background: var(--evr-surface-primary-default);
+}
+
+.sch-grid-head-day {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  letter-spacing: 0.24px;
+}
+.sch-grid-head-num {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  letter-spacing: 0.24px;
+}
+
+.sch-grid-cell:nth-child(8n) { border-right: 0; }
+.sch-grid-row:last-child .sch-grid-cell { border-bottom: 0; }
+
+.sch-grid-cell--span {
+  padding: 12px 8px 12px 0;
+  align-items: stretch;
+}
+
+/* --- Worker row head --------------------------------------------------- */
+
+.sch-worker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.sch-worker-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+.sch-worker-sup {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--evr-surface-primary-default);
+}
+.sch-worker-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sch-worker-name {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 14px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sch-worker-hrs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 12px;
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-worker-hrs > span {
+  display: inline-flex;
+}
+
+.sch-job-name {
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  font-weight: var(--evr-fw-regular);
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+}
+
+/* --- Shift card -------------------------------------------------------- */
+
+.sch-shift {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  /* min-height (not fixed height) so the card grows vertically when the
+     role or time wraps in narrow single-day cells. The grid row uses
+     auto-height, so the whole row grows together. */
+  min-height: 56px;
+  padding: 0;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-primary-default);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.06);
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 120ms;
+}
+.sch-shift:hover {
+  background: var(--evr-surface-primary-hover);
+  box-shadow: var(--evr-depth-02);
+}
+
+.sch-shift-bar {
+  flex-shrink: 0;
+  width: 6px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.sch-shift-bar--teal   { background: var(--evr-teal-400); }
+.sch-shift-bar--yellow { background: var(--evr-yellow-400); }
+.sch-shift-bar--blue   { background: var(--evr-blue-400); }
+
+.sch-shift-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  min-width: 0;
+  justify-content: center;
+  flex: 1;
+}
+.sch-shift-role {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 13px;
+  line-height: 1.25;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+  /* Wrap instead of truncating — narrow single-day cells need both
+     lines of the role to stay readable. */
+  overflow-wrap: anywhere;
+}
+.sch-shift-time {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 12px;
+  line-height: 1.25;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-lowemp);
+  overflow-wrap: anywhere;
+}
+
+/* Off variant — no border, neutral surface */
+.sch-shift--off {
+  background: var(--evr-neutral-96);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  box-shadow: none;
+  cursor: default;
+}
+.sch-shift--off:hover { background: var(--evr-neutral-96); }
+.sch-shift-off-label {
+  font-weight: var(--evr-fw-regular);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* =====================================================================
+   List view — borrows req-table-card; only the grid template differs
+   ===================================================================== */
+
+.sch-list-row {
+  grid-template-columns: 44px 160px 130px minmax(220px, 1fr) minmax(280px, 1.4fr) minmax(220px, 1.2fr) 32px;
+}
+
+.sch-list-id {
+  font-family: var(--evr-font-mono, var(--evr-font-text));
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-weight: var(--evr-fw-regular);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+}
+.sch-list-text {
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+}
+.sch-list-cell--jobs {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.sch-list-cell--chev {
+  justify-content: flex-end;
+  color: var(--evr-content-primary-lowemp);
+}
+
+.req-scroll .sch-list-row { min-width: 1080px; }
+
+/* =====================================================================
+   Booking details
+   ===================================================================== */
+
+.bk-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- Hero card --------------------------------------------------------- */
+
+.bk-hero {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  padding: 24px;
+  overflow: hidden;
+}
+.bk-hero-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.bk-hero-title {
+  margin: 0;
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 32px;
+  letter-spacing: -0.5px;
+  color: var(--evr-content-primary-highemp);
+}
+.bk-hero-loc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.bk-hero-loc-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: var(--evr-green-400);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.bk-hero-loc-name {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 16px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+}
+.bk-hero-meta {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-lowemp);
+}
+.bk-hero-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.bk-hero-meta-row dt {
+  margin: 0;
+}
+.bk-hero-meta-row dd {
+  margin: 0;
+  color: var(--evr-content-primary-highemp);
+}
+.bk-hero-meta-row a {
+  color: var(--evr-content-status-informative-default);
+  text-decoration: none;
+}
+.bk-hero-meta-row a:hover { text-decoration: underline; }
+
+.bk-hero-map {
+  position: relative;
+  width: 280px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--evr-neutral-95);
+}
+/* Scope the background-fill rule so it doesn't also blow up the pin
+   image stacked on top. */
+.bk-hero-map > img:not(.bk-hero-map-pin) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Match the requisition-details map pin (`.det-map-pin`) so both
+   surfaces share one visual treatment for "job-site marker". */
+.bk-hero-map-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 62px;
+  height: 68px;
+  transform: translate(-50%, -50%);
+  display: block;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (max-width: 720px) {
+  .bk-hero { flex-direction: column; }
+  .bk-hero-map { width: 100%; height: 180px; }
+}
+
+/* --- Booking schedule section rail ------------------------------------ */
+
+.bk-sched-rail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  flex-wrap: wrap;
+}
+.bk-sched-rail-left,
+.bk-sched-rail-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Roster table ----------------------------------------------------- */
+
+.bk-search {
+  position: relative;
+  margin-bottom: 16px;
+  max-width: 320px;
+}
+.bk-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--evr-content-primary-lowemp);
+  pointer-events: none;
+}
+.bk-search-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px 0 38px;
+  border-radius: 8px;
+  border: 1px solid var(--evr-border-decorative-default);
+  background: var(--evr-surface-primary-default);
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+  outline: none;
+}
+.bk-search-input:focus {
+  border-color: var(--evr-interactive-primary-default);
+  box-shadow: 0 0 0 3px var(--evr-blue-100);
+}
+
+.bk-roster {
+  display: grid;
+  /* Replaced the `minmax(0, X)` mins (which let columns crush content
+     into wraps) with content-friendly mins so each cell's single-line
+     text has room; if the total grid width exceeds the card, the
+     container scrolls horizontally instead of wrapping. */
+  grid-template-columns: 40px 44px minmax(180px, 1.4fr) minmax(140px, 1fr) 104px 104px 104px 80px 56px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+  background: var(--evr-surface-primary-default);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.bk-roster-row {
+  display: contents;
+}
+.bk-roster-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-primary-highemp);
+  min-width: 0;
+  /* Keep each cell's content on a single line — overflow gets cut
+     off / scrolled by the table's overflow-x rather than wrapping. */
+  white-space: nowrap;
+}
+.bk-roster-row:last-child .bk-roster-cell {
+  border-bottom: 0;
+}
+/* Header — matches the canonical Everest table head (`.req-row--header`
+   in styles.css): white surface, body-2 demibold high-emp text. NOT
+   caption-uppercase / low-emp — that microcopy tier is reserved for
+   eyebrows, not column labels. */
+.bk-roster-row--head .bk-roster-cell {
+  background: var(--evr-surface-primary-default);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  padding: 14px 16px;
+}
+.bk-roster-cell--check {
+  padding-left: 18px;
+}
+/* Trailing actions column hugs the icon button. Pulled tight on the
+   right so the .iconbtn (40px) sits flush with the table edge without
+   the column claiming horizontal real estate. */
+.bk-roster-cell--actions {
+  padding-left: 4px;
+  padding-right: 8px;
+  justify-content: flex-end;
+}
+.bk-roster-cell--num {
+  color: var(--evr-content-primary-lowemp);
+  justify-content: flex-start;
+}
+
+.bk-roster-time {
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-family: var(--evr-font-text);
+  color: var(--evr-content-primary-highemp);
+}
+
+.bk-roster-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+}
+
+.linkbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  letter-spacing: 0.24px;
+  color: var(--evr-content-status-informative-default);
+}
+.linkbtn:hover { background: var(--evr-blue-100); }
+
+/* =====================================================================
+   Scope-aware booking + shift extensions
+   ===================================================================== */
+
+/* Clickable worker rowhead button (used on every schedule grid) */
+.sch-worker--btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sch-worker--btn:hover { background: var(--evr-surface-primary-hover); }
+.sch-worker--btn:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+/* Day-column highlight (date-scope booking + shift) */
+.sch-grid-cell--highlight {
+  background: var(--evr-surface-decorative-low-blue, var(--evr-blue-50));
+}
+
+/* Hint above the worker-scope schedule grid */
+.bk-sched-hint {
+  margin: 0 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+}
+.bk-sched-hint > span { display: inline-flex; }
+
+/* --- Hero variants (worker scope + shift) ------------------------------ */
+
+.bk-hero--worker .bk-hero-info { gap: 14px; }
+.bk-hero-worker {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+.bk-hero-worker-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+.bk-hero-worker-sup {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--evr-surface-primary-default);
+}
+.bk-hero-worker-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.bk-hero-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  color: var(--evr-content-primary-lowemp);
+}
+.bk-hero-sub-strong {
+  color: var(--evr-content-primary-highemp);
+  font-weight: var(--evr-fw-demibold);
+}
+
+/* Shift hero: prominent avatar on the right (replaces the map) */
+.bk-hero--shift .bk-hero-info { gap: 12px; }
+.sh-hero-toprow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.sh-daychip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  color: var(--evr-content-primary-highemp);
+}
+.sh-daychip > span { display: inline-flex; }
+
+.sh-hero-avatar {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sh-hero-avatar-inner {
+  position: relative;
+  display: inline-flex;
+}
+.sh-hero-avatar-sup {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  min-width: 34px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 9999px;
+  border: 3px solid var(--evr-surface-primary-default);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 11px;
+  letter-spacing: 0.6px;
+}
+@media (max-width: 720px) {
+  .sh-hero-avatar { width: 100%; height: 180px; }
+}
+
+/* --- Shifts list (worker-scope booking) -------------------------------- */
+
+.bk-shifts {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.2fr) minmax(180px, 1fr) 160px 160px 130px 32px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.bk-shifts-row {
+  display: contents;
+}
+.bk-shifts-row--btn {
+  /* expand contents-display via cell-level styles */
+  font: inherit;
+  color: inherit;
+}
+.bk-shifts-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--evr-surface-primary-default);
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  min-width: 0;
+}
+.bk-shifts-row:last-child .bk-shifts-cell { border-bottom: 0; }
+.bk-shifts-row--head .bk-shifts-cell {
+  background: var(--evr-surface-secondary-default);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  padding: 10px 16px;
+  letter-spacing: 0.24px;
+}
+.bk-shifts-row--btn .bk-shifts-cell { cursor: pointer; }
+.bk-shifts-row--btn:hover .bk-shifts-cell { background: var(--evr-surface-primary-hover); }
+.bk-shifts-cell--chev {
+  justify-content: flex-end;
+  color: var(--evr-content-primary-lowemp);
+}
+.bk-shifts-cell--day { gap: 12px; }
+.bk-shifts-bar {
+  width: 4px;
+  align-self: stretch;
+  border-radius: 2px;
+  background: var(--evr-teal-400);
+}
+.bk-shifts-bar--teal   { background: var(--evr-teal-400); }
+.bk-shifts-bar--yellow { background: var(--evr-yellow-400); }
+.bk-shifts-bar--blue   { background: var(--evr-blue-400); }
+.bk-shifts-bar--off    { background: var(--evr-neutral-80); }
+.bk-shifts-daylabel {
+  font-weight: var(--evr-fw-demibold);
+}
+.bk-shifts-time {
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* --- Roster clickability ----------------------------------------------- */
+.bk-roster-row--clickable { cursor: pointer; }
+.bk-roster-row--clickable:hover .bk-roster-cell {
+  background: var(--evr-surface-primary-hover);
+}
+
+/* --- Booking table clickable row (requisition details) ----------------- */
+.bk-table-row--clickable { cursor: pointer; }
+.bk-table-row--clickable:hover {
+  background: var(--evr-surface-primary-hover);
+}
+.bk-table-row--clickable:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: -2px;
+}
+
+/* --- Shift details: embedded timesheet timeline view -----------------
+   Reuses the .ts-timeline-* vocabulary from Timesheet details, scoped
+   inside an accordion card. The wrapper trims the accordion's bottom
+   padding and gives the gauge a rounded clip so it nests cleanly. */
+.sh-timeline {
+  margin: 4px -4px 0;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.sh-timeline .ts-timeline-body {
+  position: relative;
+}
+/* Let the white feed card span the body top-to-bottom so its own left
+   border IS the continuous time-axis rail — no separate pseudo-element
+   line needed, no double-line risk. The card's existing internal
+   8px/16px padding keeps items breathing inside. */
+.sh-timeline .ts-timeline-feed-wrap {
+  padding: 0 24px 0 8px;
+}
+.sh-timeline .ts-timeline-feed {
+  height: 100%;
+  border-radius: 0;
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+  padding: 24px 0;
+}
+.sh-timeline-end {
+  padding: 16px 24px;
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 14px;
+  color: var(--evr-content-primary-default);
+  background: var(--evr-surface-primary-default);
+}
+.sh-timeline-start {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+  font-size: 14px;
+  color: var(--evr-content-primary-default);
+  background: var(--evr-surface-primary-default);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Shift details: time tracking grid (legacy) ----------------------- */
+.sh-time-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.sh-time-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: var(--evr-surface-secondary-default);
+  border-radius: 12px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+}
+.sh-time-cell--span {
+  grid-column: span 4;
+}
+.sh-time-label {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  color: var(--evr-content-primary-lowemp);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: var(--evr-fw-demibold);
+}
+.sh-time-val {
+  font-family: var(--evr-font-display);
+  font-size: 22px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.sh-time-val--alert {
+  color: var(--evr-content-status-warning-default);
+}
+
+@media (max-width: 720px) {
+  .sh-time-grid { grid-template-columns: repeat(2, 1fr); }
+  .sh-time-cell--span { grid-column: span 2; }
+  .bk-shifts {
+    grid-template-columns: minmax(140px, 1.2fr) minmax(120px, 1fr) 120px 32px;
+  }
+  .bk-shifts-cell--actual,
+  .bk-shifts-cell--status {
+    display: none;
+  }
+}
+
+/* --- Positions list (multi-day / full-scope bookings) ----------------- */
+
+.bk-positions {
+  display: grid;
+  grid-template-columns: 56px minmax(160px, 1.2fr) minmax(220px, 1.6fr) minmax(180px, 1fr) 32px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.bk-positions-row {
+  display: contents;
+}
+.bk-positions-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--evr-surface-primary-default);
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  min-width: 0;
+}
+.bk-positions-row:last-child .bk-positions-cell { border-bottom: 0; }
+.bk-positions-row--head .bk-positions-cell {
+  background: var(--evr-surface-secondary-default);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  padding: 10px 16px;
+  letter-spacing: 0.24px;
+}
+.bk-positions-row--btn .bk-positions-cell { cursor: pointer; }
+.bk-positions-row--btn:hover .bk-positions-cell { background: var(--evr-surface-primary-hover); }
+.bk-positions-row--btn:focus-visible .bk-positions-cell {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: -2px;
+}
+.bk-positions-cell--num {
+  color: var(--evr-content-primary-lowemp);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.bk-positions-cell--role {
+  font-weight: var(--evr-fw-demibold);
+}
+.bk-positions-cell--worker {
+  gap: 12px;
+}
+.bk-position-worker-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+.bk-position-worker-sup {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid var(--evr-surface-primary-default);
+}
+.bk-position-worker-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.bk-position-worker-name {
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.bk-position-worker-sup-label {
+  font-size: 12px;
+  color: var(--evr-content-primary-lowemp);
+}
+.bk-positions-cell--dates {
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  color: var(--evr-content-primary-lowemp);
+}
+.bk-positions-cell--chev {
+  justify-content: flex-end;
+  color: var(--evr-content-primary-lowemp);
+}
+
+@media (max-width: 720px) {
+  .bk-positions {
+    grid-template-columns: 48px minmax(140px, 1fr) 32px;
+  }
+  .bk-positions-cell--worker,
+  .bk-positions-cell--dates {
+    display: none;
+  }
+}
+
+
+/* =====================================================================
+   Month view — full-month grid (7 × 5/6) showing scheduled shifts
+   ===================================================================== */
+
+.sch-month-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.sch-month-head {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--evr-surface-secondary-default);
+  border-bottom: 1px solid var(--evr-border-decorative-default);
+}
+.sch-month-head-cell {
+  padding: 10px 16px;
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  font-weight: var(--evr-fw-demibold);
+  letter-spacing: 0.24px;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  border-right: 1px solid var(--evr-border-decorative-default);
+}
+.sch-month-head-cell:last-child { border-right: 0; }
+
+.sch-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.sch-month-cell {
+  position: relative;
+  min-height: 96px;
+  padding: 8px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-right: 1px solid var(--evr-border-decorative-default);
+  border-bottom: 1px solid var(--evr-border-decorative-default);
+  background: var(--evr-surface-primary-default);
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sch-month-cell--has-shifts { cursor: default; }
+.sch-month-cell--has-shifts:hover {
+  background: var(--evr-surface-primary-hover);
+}
+.sch-month-cell--today.sch-month-cell--has-shifts:hover {
+  background: var(--evr-surface-decorative-default-blue, var(--evr-blue-100));
+}
+.sch-month-cell:nth-child(7n) { border-right: 0; }
+.sch-month-grid > .sch-month-cell:nth-last-child(-n+7) { border-bottom: 0; }
+
+.sch-month-cell--blank {
+  background: var(--evr-surface-secondary-default);
+}
+.sch-month-cell--today {
+  background: var(--evr-surface-decorative-low-blue, var(--evr-blue-50));
+}
+
+.sch-month-cell-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 2px;
+}
+.sch-month-date {
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.sch-month-date--today {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: var(--evr-interactive-primary-default);
+  color: var(--evr-content-primary-inverse);
+  font-size: 12px;
+}
+.sch-month-count {
+  font-family: var(--evr-font-text);
+  font-size: 11px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-lowemp);
+  padding: 1px 6px;
+  border-radius: 9999px;
+  background: var(--evr-surface-secondary-default);
+}
+
+.sch-month-shifts {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.sch-month-shift {
+  appearance: none;
+  border: 0;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 6px;
+  padding: 4px 6px 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  min-height: 28px;
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sch-month-shift:hover {
+  background: var(--evr-surface-primary-hover);
+}
+.sch-month-shift-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 6px 0 0 6px;
+}
+.sch-month-shift-bar--teal   { background: var(--evr-teal-400); }
+.sch-month-shift-bar--yellow { background: var(--evr-yellow-400); }
+.sch-month-shift-bar--blue   { background: var(--evr-blue-400); }
+.sch-month-shift-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  flex: 1;
+}
+.sch-month-shift-name {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sch-month-shift-role {
+  font-family: var(--evr-font-text);
+  font-size: 11px;
+  color: var(--evr-content-primary-lowemp);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sch-month-more {
+  font-family: var(--evr-font-text);
+  font-size: 11px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-lowemp);
+  padding: 2px 6px;
+}
+
+/* Rollup — single chip per cell summarizing the day's shifts. Replaces
+   the old "first 3 shifts + N more" treatment so the grid stays scannable
+   no matter how many bookings the day carries. */
+.sch-month-rollup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 2px;
+  margin-top: auto;
+}
+.sch-month-rollup-bars {
+  display: flex;
+  gap: 2px;
+  height: 6px;
+  width: 100%;
+}
+.sch-month-rollup-bar {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  min-width: 6px;
+}
+.sch-month-rollup-bar--teal   { background: var(--evr-teal-400); }
+.sch-month-rollup-bar--yellow { background: var(--evr-yellow-400); }
+.sch-month-rollup-bar--blue   { background: var(--evr-blue-400); }
+.sch-month-rollup-bar--purple { background: var(--evr-purple-400); }
+.sch-month-rollup-bar--green  { background: var(--evr-green-400); }
+.sch-month-rollup-label {
+  font-family: var(--evr-font-text);
+  font-size: 11px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-medemp, var(--evr-content-primary-lowemp));
+  letter-spacing: 0.1px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+/* Hover popup — listing of every shift on the day. Each row is a
+   button that deep-links to the shift detail page. */
+.sch-month-hover {
+  position: fixed;
+  z-index: 1000;
+  min-width: 280px;
+  max-width: 360px;
+  padding: 6px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: 12px;
+  box-shadow: var(--evr-depth-04);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: tc-tl-hover-in 120ms ease-out;
+}
+.sch-month-hover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px 4px;
+}
+.sch-month-hover-date {
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.sch-month-hover-count {
+  font-family: var(--evr-font-text);
+  font-size: 11px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-month-hover-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sch-month-hover-row {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sch-month-hover-row:hover {
+  background: var(--evr-surface-secondary-default);
+}
+.sch-month-hover-row:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: -2px;
+}
+.sch-month-hover-bar {
+  flex: none;
+  width: 4px;
+  align-self: stretch;
+  border-radius: 2px;
+}
+.sch-month-hover-bar--teal   { background: var(--evr-teal-400); }
+.sch-month-hover-bar--yellow { background: var(--evr-yellow-400); }
+.sch-month-hover-bar--blue   { background: var(--evr-blue-400); }
+.sch-month-hover-bar--purple { background: var(--evr-purple-400); }
+.sch-month-hover-bar--green  { background: var(--evr-green-400); }
+.sch-month-hover-row-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sch-month-hover-row-name {
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sch-month-hover-row-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--evr-font-text);
+  font-size: 11px;
+  color: var(--evr-content-primary-lowemp);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sch-month-hover-row-meta > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sch-month-hover-row-chev {
+  flex: none;
+  color: var(--evr-content-primary-lowemp);
+  display: inline-flex;
+}
+
+/* Section header inside the month-day hover popup. Only renders when
+   the rail's group-by is anything other than "By worker" (worker is
+   the default flat list). */
+.sch-month-hover-group {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px 2px;
+  font-family: var(--evr-font-text);
+  font-size: 11px;
+  font-weight: var(--evr-fw-demibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-month-hover-group + li .sch-month-hover-row {
+  margin-top: 0;
+}
+.sch-month-hover-group-count {
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* Month label in top-right paddle */
+.sch-month-label {
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  padding: 0 4px;
+  min-width: 130px;
+  text-align: center;
+}
+
+/* =====================================================================
+ * Pending bookings — "Booked" requisitions with unfilled positions/shifts
+ * ===================================================================== */
+
+/* Banner above Positions / Roster on Booked bookings, summarizing how
+   many slots still need a worker. Uses the informative surface palette
+   so it reads as a status callout, not an error. */
+.bk-pending-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 12px 16px;
+  background: var(--evr-surface-status-informative-lowemp);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+}
+.bk-pending-banner-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-status-informative-highemp);
+}
+.bk-pending-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.bk-pending-banner-text strong {
+  font-size: 14px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.bk-pending-banner-text span {
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* Empty avatar placeholder for unassigned positions/roster rows. */
+.bk-position-empty-avatar,
+.bk-roster-empty-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  color: var(--evr-content-primary-lowemp);
+}
+.bk-position-empty-avatar {
+  width: 32px;
+  height: 32px;
+}
+.bk-roster-empty-avatar {
+  width: 28px;
+  height: 28px;
+  margin-right: 4px;
+}
+
+/* Muted name color for unassigned slot. */
+.bk-position-worker-name--empty {
+  color: var(--evr-content-primary-lowemp);
+  font-style: italic;
+  font-weight: var(--evr-fw-regular);
+}
+
+/* Unfilled roster row: no hover lift. White background — same as
+   filled rows — so the table reads as a single flat surface rather
+   than alternating-zone striping. */
+.bk-roster-row--unfilled .bk-roster-cell {
+  background: var(--evr-surface-primary-default);
+  cursor: default;
+}
+.bk-roster-row--unfilled .bk-roster-cell:first-of-type {
+  box-shadow: none;
+}
+.bk-roster-empty-name {
+  color: var(--evr-content-primary-default);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+}
+
+/* Unfilled position row: same idea. */
+.bk-positions-row--unfilled .bk-positions-cell {
+  background: var(--evr-surface-secondary-default);
+  cursor: default;
+}
+.bk-positions-row--unfilled .bk-positions-cell:first-of-type {
+  box-shadow: inset 2px 0 0 var(--evr-content-status-warning-default);
+}
+
+/* Assign worker primary CTA — small secondary button with a leading icon. */
+.bk-assign-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Schedule grid unfilled row. */
+.sch-grid-row--unfilled .sch-grid-cell {
+  background: var(--evr-surface-secondary-default);
+}
+.sch-grid-cell--unfilled-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: inset 2px 0 0 var(--evr-content-status-warning-default);
+}
+.sch-grid-unfilled-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.sch-grid-unfilled-name {
+  font-size: 13px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-default);
+}
+.sch-grid-unfilled-sub {
+  font-size: 12px;
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-grid-unfilled-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.sch-grid-cell--unfilled {
+  justify-content: center;
+  align-items: center;
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-grid-unfilled-dash {
+  font-size: 14px;
+  color: var(--evr-inactive-content);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Section header rows for grouped schedule views (By work assignment,
+   By location, By status, By supplier). Spans the full 8-column grid
+   width and provides a quiet anchor for the worker rows beneath. */
+.sch-grid-row--section + .sch-grid-row .sch-grid-cell { border-top: 0; }
+.sch-grid-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 8px 16px;
+  background: var(--evr-surface-secondary-default);
+  border-bottom: 1px solid var(--evr-border-decorative-default);
+  border-right: 0;
+}
+.sch-grid-section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+}
+.sch-grid-section-label {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  color: var(--evr-content-primary-default);
+}
+.sch-grid-section-sub {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  color: var(--evr-content-primary-lowemp);
+}
+.sch-grid-section-count {
+  margin-left: auto;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-default);
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: 100px;
+}

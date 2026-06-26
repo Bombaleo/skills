@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flex Work VMS — On-/Offboarding Flow Walkthrough · v1.0</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="../styles-strategy.css" />
+  <link rel="stylesheet" href="../styles-msp.css" />
+  <style>
+    /* ============================================================== */
+    /* On-/Offboarding Flow Walkthrough · page-local styles            */
+    /* Reuses the wt-* primitives from the SOW walkthrough so the     */
+    /* two read as a series.                                          */
+    /* ============================================================== */
+    .wt-role {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 22px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-sm);
+      background: var(--evr-surface-primary-default);
+      margin-bottom: 18px;
+    }
+    .wt-role[data-role="admin"]   { border-top: 3px solid var(--evr-blue-400); }
+    .wt-role[data-role="manager"] { border-top: 3px solid #1F8A5B; }
+    .wt-role[data-role="worker"]  { border-top: 3px solid var(--evr-purple-500); }
+    .wt-role[data-role="setup"]   { border-top: 3px solid var(--evr-red-400); }
+    .wt-role[data-role="close"]   { border-top: 3px solid var(--evr-orange-500); }
+    .wt-role-glyph {
+      width: 64px; height: 64px;
+      border-radius: var(--evr-radius-xs);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--evr-font-display);
+      font-weight: 600; font-size: 24px;
+    }
+    .wt-role[data-role="admin"]   .wt-role-glyph { background: var(--evr-surface-decorative-low-blue);   color: var(--evr-blue-400); }
+    .wt-role[data-role="manager"] .wt-role-glyph { background: #DCEFE3;                                  color: #1F5D43; }
+    .wt-role[data-role="worker"]  .wt-role-glyph { background: var(--evr-surface-decorative-low-purple); color: var(--evr-purple-500); }
+    .wt-role[data-role="setup"]   .wt-role-glyph { background: var(--evr-surface-decorative-low-red);    color: var(--evr-red-400); }
+    .wt-role[data-role="close"]   .wt-role-glyph { background: var(--evr-surface-decorative-low-orange); color: var(--evr-orange-700); }
+    .wt-role-eyebrow {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 4px;
+    }
+    .wt-role-name {
+      font-family: var(--evr-font-display);
+      font-weight: 600; font-size: 22px;
+      margin: 0; color: var(--evr-content-primary-highemp);
+    }
+    .wt-role-sub {
+      margin: 4px 0 0;
+      font-size: 13.5px; line-height: 1.5;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .wt-role-jump {
+      align-self: center;
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      text-decoration: none;
+    }
+    .wt-role-jump:hover { background: var(--evr-interactive-primary-decorative); border-color: var(--evr-interactive-primary-default); }
+
+    .wt-steps { list-style: none; counter-reset: step; margin: 0; padding: 0; }
+    .wt-step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 18px;
+      padding: 18px 0;
+      border-top: 1px dashed var(--evr-border-decorative-lowemp);
+    }
+    .wt-step:first-child { border-top: 0; padding-top: 4px; }
+    .wt-step::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--evr-content-primary-lowemp);
+      font-feature-settings: "tnum";
+      text-align: right;
+    }
+    .wt-step-h {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 17px;
+      margin: 0 0 6px;
+      color: var(--evr-content-primary-highemp);
+      line-height: 1.3;
+      text-wrap: balance;
+    }
+    .wt-step-body { font-size: 14px; line-height: 1.6; color: var(--evr-content-primary-default); }
+    .wt-step-body p { margin: 0 0 8px; }
+    .wt-step-body p:last-child { margin-bottom: 0; }
+    .wt-step-body b { color: var(--evr-content-primary-highemp); font-weight: 600; }
+    .wt-step-body ul { margin: 8px 0; padding-left: 22px; }
+    .wt-step-body li { margin-bottom: 4px; }
+    .wt-step-body code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; background: var(--evr-surface-secondary-default); padding: 1px 5px; border-radius: var(--evr-radius-4xs); }
+
+    .wt-path {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      margin-bottom: 8px;
+      border-radius: 999px;
+      background: var(--evr-surface-secondary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--evr-content-primary-default);
+    }
+    .wt-path code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11.5px;
+      background: var(--evr-surface-primary-default);
+      padding: 1px 6px;
+      border-radius: var(--evr-radius-4xs);
+    }
+
+    .wt-tip {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-decorative-low-blue);
+      border-left: 3px solid var(--evr-blue-400);
+      color: var(--evr-content-primary-default);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .wt-tip b { color: var(--evr-blue-400); }
+    .wt-tip--warn { background: var(--evr-surface-decorative-low-orange); border-left-color: var(--evr-orange-500); }
+    .wt-tip--warn b { color: var(--evr-orange-700); }
+    .wt-tip--success { background: #DCEFE3; border-left-color: #1F8A5B; }
+    .wt-tip--success b { color: #1F5D43; }
+
+    /* Surface tag grid for the section preamble.                     */
+    .wt-surfaces {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 6px 10px;
+      margin: 16px 0 8px;
+    }
+    .wt-surfaces span {
+      font: var(--evr-utility2);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--evr-surface-decorative-low-blue);
+      color: var(--evr-blue-400);
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      text-align: left;
+    }
+
+    /* Status badge inline pills used throughout this walkthrough so   */
+    /* readers can see the lifecycle state-machine transitions.       */
+    .wt-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      font-size: 11.5px;
+      letter-spacing: 0.02em;
+      vertical-align: 1px;
+    }
+    .wt-status--onb     { background: #DCEAFE; color: #1A4A8E; }
+    .wt-status--cmp     { background: #DCEFE3; color: #1F5D43; }
+    .wt-status--off     { background: var(--evr-surface-decorative-low-yellow); color: var(--evr-orange-700); }
+    .wt-status--ina     { background: var(--evr-surface-secondary-default); color: var(--evr-content-primary-default); }
+    .wt-status--trm     { background: var(--evr-surface-decorative-low-red); color: var(--evr-red-400); }
+    .wt-status--exp     { background: var(--evr-surface-decorative-low-red); color: var(--evr-red-400); }
+
+    /* Mini comparison grid for parity callouts (Joined Up · Fieldglass)*/
+    .wt-parity {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 12px 0;
+    }
+    .wt-parity-card {
+      padding: 12px 14px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+    }
+    .wt-parity-card h5 {
+      margin: 0 0 4px;
+      font: var(--evr-utility2);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .wt-parity-card p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--evr-content-primary-default); }
+
+    /* State-transition diagram for the closing section. Three rows of */
+    /* pills with arrows between them.                                */
+    .wt-flow {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+      padding: 16px 18px;
+      background: var(--evr-surface-secondary-default);
+      border-radius: var(--evr-radius-2xs);
+      margin-top: 12px;
+      font-family: var(--evr-font-text);
+      font-size: 13px;
+    }
+    .wt-flow-arr { color: var(--evr-content-primary-lowemp); font-weight: 700; }
+    .wt-flow-note {
+      width: 100%;
+      margin-top: 8px;
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* Mobile-tile grid reused for the worker-mobile tab rundown.     */
+    .wt-mobile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .wt-mobile-tile {
+      padding: 12px 14px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+    }
+    .wt-mobile-tile-h {
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      color: var(--evr-content-primary-highemp);
+      margin-bottom: 4px;
+    }
+    .wt-mobile-tile-sub {
+      font-size: 13px;
+      color: var(--evr-content-primary-default);
+      line-height: 1.5;
+    }
+    .wt-mobile-tile-glyph { font-size: 18px; margin-right: 6px; }
+    @media (max-width: 720px) { .wt-mobile-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="sr" data-screen-label="On-/offboarding flow walkthrough">
+
+<div class="sr-shell">
+
+  <!-- ============================================================== -->
+  <!-- Sticky TOC                                                     -->
+  <!-- ============================================================== -->
+  <aside class="sr-toc" aria-label="Sections">
+    <div class="sr-toc-mark">Internal · Walkthrough</div>
+    <div class="sr-toc-title">On-/Offboarding Flow Walkthrough</div>
+    <div class="sr-toc-ver"><code>v1.0</code>May 28, 2026</div>
+    <ol>
+      <li><a href="#setup">Setup · turn on the lifecycle</a></li>
+      <li><a href="#admin">Admin · configure the programs</a></li>
+      <li><a href="#manager-pro">Manager · onboard a Professional</a></li>
+      <li><a href="#manager-fl">Manager · onboard a Frontline worker</a></li>
+      <li><a href="#worker-onb">Worker · self-serve onboarding</a></li>
+      <li><a href="#tracker">Manager · track progress</a></li>
+      <li><a href="#manager-off">Manager · offboard a worker</a></li>
+      <li><a href="#worker-off">Worker · self-serve offboarding</a></li>
+      <li><a href="#closeout">Lifecycle complete</a></li>
+    </ol>
+    <div class="sr-toc-foot">
+      <p><strong>What this is.</strong> A click-by-click walkthrough of the full worker on-/offboarding flow inside Flex Work — Admin configures the two lifecycle programs, Manager onboards a Professional and a direct-sourced Frontline worker side by side, the workers self-serve through their mobile shells, and Manager closes the engagement when it ends. Every surface below ships in the live prototype.</p>
+      <p><strong>Time to run.</strong> ~12 minutes end-to-end.</p>
+      <p><strong>Companion.</strong> <a href="../Competitor Comparisons/Onboarding &amp; Offboarding parity tasks v0.1.html">On-/Offboarding parity tasks</a> — the task list with every surface mapped to its host file.</p>
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- Main column                                                    -->
+  <!-- ============================================================== -->
+  <main class="sr-main">
+
+    <!-- HERO -->
+    <header class="sr-hero">
+      <div class="sr-eyebrow">Flex Work VMS · On-/Offboarding Flow Walkthrough · v1.0</div>
+      <h1 class="sr-title">See the entire worker lifecycle in twelve minutes.</h1>
+      <p class="sr-deck">Nine sections, three roles. Flip one flag, configure two program cards, onboard a Professional consultant under the Fieldglass + VNDLY shape and a Frontline shift worker under the Joined Up shape — all through the same panel host. Follow each worker through the mobile shell as they sign documents, complete RTW, and acknowledge the handbook. Track progress on the worker detail, then walk the same workers out the other end through a scoped end-engagement panel that closes assets, revokes access, and reconciles final pay. Same code path everywhere; zero new top-level pages.</p>
+      <dl class="sr-meta">
+        <div><dt>Audience</dt><dd>Internal demos · release videos · onboarding</dd></div>
+        <div><dt>Time to run</dt><dd>~12 minutes end-to-end</dd></div>
+        <div><dt>Prerequisites</dt><dd><code>professionalWork</code> for Pro · <code>frontlineDirect</code> for Frontline (default off; see Setup)</dd></div>
+        <div><dt>Reset state</dt><dd>Reload the page</dd></div>
+      </dl>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- 01 · SETUP                                                     -->
+    <!-- ============================================================== -->
+    <section id="setup" class="sr-section">
+      <div>
+        <span class="sr-h2-num">01 · Setup · turn on the lifecycle</span>
+        <h2 class="sr-h2">One existing flag for Pro, one new flag for Frontline.</h2>
+      </div>
+      <p class="sr-lead">The Pro lifecycle rides on the existing <code>professionalWork</code> derivation — turn on any Professional engagement type in Settings → Configuration → Engagement types and it lights up. Frontline direct-sourcing sits behind a new flag, <code>frontlineDirect</code>, default off so the existing demo (which doesn't direct-source Frontline) stays byte-identical until you opt in. Both flags broadcast on <code>featureflags:change</code> so every surface re-renders without a reload.</p>
+
+      <div class="wt-role" data-role="setup">
+        <div class="wt-role-glyph">⚑</div>
+        <div>
+          <div class="wt-role-eyebrow">Step 01</div>
+          <h3 class="wt-role-name">Enable the two lifecycle programs</h3>
+          <p class="wt-role-sub">One toggle each. No app reload required.</p>
+        </div>
+        <a class="wt-role-jump" href="#admin">Next: Admin →</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Side nav → <code>Settings</code> → <code>Configuration</code> → <code>Engagement types</code></span>
+            <h3 class="wt-step-h">Open the Engagement types card.</h3>
+            <div class="wt-step-body">
+              <p>The card lists the four canonical engagement types — Shift, Assignment, Project, Statement of Work. Any of Assignment / Project / SOW being on derives <code>professionalWork = true</code>; that's what gates the Pro lifecycle card on the next section.</p>
+              <div class="wt-tip">
+                <b>If you're on Helios Power Generation:</b> all three Pro engagement types ship on by default. Skip to step 03.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Side nav → <code>Settings</code> → <code>Feature flags</code> → <code>Misc</code></span>
+            <h3 class="wt-step-h">Flip Frontline direct sourcing to on.</h3>
+            <div class="wt-step-body">
+              <p>The new <b>Frontline direct sourcing</b> flag sits in the Misc group, default off. Flipping it unlocks three things at once: the Frontline lifecycle program card in Settings, the worker-type variant on the Add panel, and the pool-conditional Onboarding tab on worker mobile. Agency-sourced Frontline workers stay untouched — their lifecycle still belongs to the agency.</p>
+              <div class="wt-tip wt-tip--success">
+                <b>Flag-off contract:</b> turn <code>frontlineDirect</code> back off and the Frontline lifecycle card disappears, the Add panel hides the worker-type segmented control, and worker mobile drops the On-board tab. The existing prototype renders identically to today.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Confirm the surfaces light up.</h3>
+            <div class="wt-step-body">
+              <p>Three things change immediately:</p>
+              <ul>
+                <li>Settings → Configuration grows two new rail items — <b>Pro lifecycle</b> and <b>Frontline lifecycle</b> — alongside the existing SOW program + IC program.</li>
+                <li>The Workforce omnibar Create dropdown gains an <b>Invite Frontline worker</b> action next to <b>Add Professional</b>.</li>
+                <li>Worker detail pages on direct-sourced workers (Internal / Float / Per-diem / Alumni / Professional) gain a new accordion: <b>Onboarding</b> when their status is <span class="wt-status wt-status--onb">Onboarding</span>, <b>Offboarding</b> when <span class="wt-status wt-status--off">Offboarding</span>.</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · ADMIN                                                     -->
+    <!-- ============================================================== -->
+    <section id="admin" class="sr-section">
+      <div>
+        <span class="sr-h2-num">02 · Admin · configure the programs</span>
+        <h2 class="sr-h2">Author the task catalogs, connectors, and approval thresholds — once, for every downstream surface.</h2>
+      </div>
+
+      <div class="wt-role" data-role="admin">
+        <div class="wt-role-glyph">A</div>
+        <div>
+          <div class="wt-role-eyebrow">Role</div>
+          <h3 class="wt-role-name">Tenant admin · program owner</h3>
+          <p class="wt-role-sub">Owns both lifecycle programs. The task catalogs authored here are read by the Add panel (step-3 task set), the OnboardingTracker accordion on every worker detail, and the worker mobile Onboarding tab — one source of truth, three surfaces.</p>
+        </div>
+        <a class="wt-role-jump" href="#manager-pro">Next: Manager →</a>
+      </div>
+
+      <div class="wt-surfaces">
+        <span>Pro lifecycle · Onboarding</span>
+        <span>Pro lifecycle · Offboarding</span>
+        <span>Pro lifecycle · Approval</span>
+        <span>Pro lifecycle · Connectors</span>
+        <span>Frontline lifecycle · same 4 tabs</span>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Settings → <code>Configuration</code> → <code>Pro lifecycle</code></span>
+            <h3 class="wt-step-h">Scroll to the Professional lifecycle card.</h3>
+            <div class="wt-step-body">
+              <p>The card sits between IC program and Program (funding) in the Configuration stack. Four sub-tabs: <b>Onboarding</b> · <b>Offboarding</b> · <b>Approval</b> · <b>Connectors</b>. Card head carries the Restore defaults action.</p>
+              <div class="wt-tip">
+                Mirrors the same composite-card pattern the SOW program and IC program cards use. Same shape, different catalog — the only thing that's new is the task data.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Tour the Onboarding tab.</h3>
+            <div class="wt-step-body">
+              <p>Eleven Fieldglass + VNDLY-shaped tasks seeded by default — <b>MSA</b>, <b>SOW</b>, <b>Mutual NDA</b>, <b>IP assignment</b>, <b>Background check</b>, <b>I-9 / Right to Work</b>, <b>Tax form</b>, <b>Direct deposit</b>, <b>Hardware provisioning</b>, <b>System access (IdP, email)</b>, <b>Orientation</b>. Each task row shows owner (<span class="wt-status wt-status--onb">Worker</span> / <span class="wt-status wt-status--cmp">Shared</span> / Employer), connector chip (E-Sig / BG check / RTW / Payroll / Banking / SSO / Asset / Manual), required flag, and an editable "Due in N days" stepper.</p>
+              <div class="wt-tip">
+                <b>Try:</b> Disable Hardware provisioning, then jump to step 12 (the Add panel) — it won't appear in the worker's task list. Re-enable it to restore.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Switch to the Offboarding tab.</h3>
+            <div class="wt-step-body">
+              <p>Six closeout tasks — <b>Asset return</b>, <b>Revoke system access</b>, <b>Knowledge transfer</b>, <b>Exit interview</b>, <b>Final-pay reconciliation</b>, <b>Do-not-rehire review</b>. Same row shape as Onboarding; default due-days lean longer (5–14d) because closeout has more lead time than launch.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Visit the Approval tab.</h3>
+            <div class="wt-step-body">
+              <p>Four policy fields: <b>BG-check risk threshold</b> for Compliance review (25 / 35 / 50 / 65), <b>Onboarding SLA</b> in days, <b>Severance threshold</b> for HR-Legal review (10K / 25K / 50K / 100K), and <b>Offboarding SLA</b>. Below: a single policy toggle — <b>Do-not-rehire flag requires HR-Legal sign-off</b>, on by default.</p>
+              <div class="wt-tip">
+                Same router primitive the SOW + IC programs already use. The thresholds set here gate the panels the Manager will walk through in sections 03 and 07.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Open the Connectors tab.</h3>
+            <div class="wt-step-body">
+              <p>Seven connector rows — <b>Background check</b> (Checkr · Sterling · HireRight), <b>Right to Work</b> (E-Verify · Sterling RTW · Trust ID), <b>E-Sig</b> (DocuSign · Adobe Sign, reuses SOW config), <b>SSO provisioning</b> (Okta SCIM · Azure AD · Google Workspace), <b>Asset provisioning</b> (JAMF · Manual), <b>Payroll handoff</b> (Dayforce Payroll, reuses IC config), <b>Banking validation</b> (Plaid · Micro-deposit). Each row is an enable toggle + a provider segmented control.</p>
+              <div class="wt-tip wt-tip--success">
+                <b>Reuse pills</b> on E-Sig and Payroll show that the same connector configured for SOW (e-sign) or IC (payroll handoff) is the one this lifecycle uses — change it once on the canonical config card and every downstream program reads the new provider.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Settings → <code>Configuration</code> → <code>Frontline lifecycle</code></span>
+            <h3 class="wt-step-h">Scroll down to the Frontline lifecycle card.</h3>
+            <div class="wt-step-body">
+              <p>Sits directly below the Pro lifecycle card. Same four-tab shell — <b>Onboarding</b> (nine Joined Up–shaped tasks: invite code, ID verification, I-9 / RTW, tax form, direct deposit, handbook ack, orientation video, optional BG check, shift-ready gate), <b>Offboarding</b> (five tasks: last-shift handling, asset return, deactivate mobile access, final-pay note, do-not-rehire flag), <b>Approval</b> (same policy fields, BG threshold defaults to 50 — Frontline roles are more permissive), <b>Connectors</b> (five rows — RTW + BG + Handbook e-Sig + Banking + Payroll, narrower than Pro because direct Frontline doesn't need IP / NDA / SSO).</p>
+              <div class="wt-parity">
+                <div class="wt-parity-card">
+                  <h5>Pro vs Frontline · what differs</h5>
+                  <p>Pro carries MSA + SOW + NDA + IP + SSO + Asset because Professionals get system access and sign IP. Frontline workers don't — their nine-task set is the minimum to take a shift.</p>
+                </div>
+                <div class="wt-parity-card">
+                  <h5>Joined Up shape</h5>
+                  <p>The Frontline catalog mirrors Joined Up's "ready for shifts in days, not weeks" promise — invite code on arrival, complete RTW + tax + banking on the worker phone, watch a 5-minute orientation video, and the shift-ready gate auto-flips green.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · MANAGER · ONBOARD PROFESSIONAL                            -->
+    <!-- ============================================================== -->
+    <section id="manager-pro" class="sr-section">
+      <div>
+        <span class="sr-h2-num">03 · Manager · onboard a Professional</span>
+        <h2 class="sr-h2">Same Add panel that ships today — pre-filled from the accepted offer.</h2>
+      </div>
+
+      <div class="wt-role" data-role="manager">
+        <div class="wt-role-glyph">M</div>
+        <div>
+          <div class="wt-role-eyebrow">Role</div>
+          <h3 class="wt-role-name">Buyer-side hiring manager</h3>
+          <p class="wt-role-sub">Opens the Add Professional panel from the omnibar (or directly from the accepted offer on the Interviews surface), confirms the engagement details, picks the task set, sends the invite. Worker takes it from there on their phone.</p>
+        </div>
+        <a class="wt-role-jump" href="#manager-fl">Next: Frontline →</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Workforce → omnibar <code>Create</code> → <code>Add Professional</code></span>
+            <h3 class="wt-step-h">Open the Add Professional panel.</h3>
+            <div class="wt-step-body">
+              <p>720px side panel with a four-step wizard — <b>Engagement</b> → <b>Compensation</b> → <b>Onboarding</b> → <b>Review</b>. With <code>frontlineDirect</code> on, a segmented control at the top of the panel offers <b>Professional</b> (default) or <b>Frontline (direct)</b>. Leave it on Professional for this section.</p>
+              <div class="wt-tip">
+                The Pro variant is the byte-identical existing flow — every existing demo path still works. We're just borrowing the same shell for the Frontline shape next.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Fill the Engagement step.</h3>
+            <div class="wt-step-body">
+              <p>Eight fields on a two-column grid: <b>Full name</b>, <b>Email</b>, <b>Country of work</b> (drives tax + comp rules — pick US to default the tax form to W-4), <b>Role</b>, <b>Hiring manager</b>, <b>Source</b> (Direct or one of three pre-configured suppliers), <b>Term start</b>, and a read-only <b>Engagement type · Permanent · no end date</b> footer.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Author Compensation.</h3>
+            <div class="wt-step-body">
+              <p>Pick a <b>cadence</b> (Weekly / Monthly / Annual), enter a <b>rate amount</b>, choose <b>currency</b>. The panel auto-calculates the estimated annual value. Optional: pick <b>Timesheet mode</b> (Not required for deliverable-based engagements, or Required for effort logging) and the <b>SOW template</b> (four pre-configured shapes).</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Tour the Onboarding task list.</h3>
+            <div class="wt-step-body">
+              <p>The eleven tasks the admin authored in section 02 show up here as a togglable list, defaults reflecting the Required flag. Disable tasks that don't apply (Hardware provisioning rarely applies to an offshore consultant; Benefits enrollment only for eligible engagements).</p>
+              <div class="wt-tip wt-tip--success">
+                <b>One catalog, three surfaces:</b> the task list rendered here is the same one the worker will see on their mobile shell in section 05, and the same one the OnboardingTracker accordion in section 06 will track progress against.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Review and send the invite.</h3>
+            <div class="wt-step-body">
+              <p>Three review cards summarize the panel's state — Engagement, Compensation, Onboarding tasks. Tap <b>Send invite</b>; the worker is created with status <span class="wt-status wt-status--onb">Onboarding</span>, the email goes out, and the audit log records the actor + timestamp.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 04 · MANAGER · ONBOARD FRONTLINE                               -->
+    <!-- ============================================================== -->
+    <section id="manager-fl" class="sr-section">
+      <div>
+        <span class="sr-h2-num">04 · Manager · onboard a Frontline worker</span>
+        <h2 class="sr-h2">Same panel, Frontline variant — Joined Up parity.</h2>
+      </div>
+
+      <p class="sr-lead">The flag-on segmented control at the top of the Add panel is the only architectural change. Switch the toggle, and every step in the wizard branches to the Frontline shape — invite method picker, hourly + classification compensation, the nine-task Joined Up catalog. Same Interactions bus, same panel host, same four-step shell.</p>
+
+      <div class="wt-role" data-role="manager">
+        <div class="wt-role-glyph">M</div>
+        <div>
+          <div class="wt-role-eyebrow">Role</div>
+          <h3 class="wt-role-name">Buyer-side staffing manager</h3>
+          <p class="wt-role-sub">Brings a direct-sourced Frontline worker on board — Internal / Float / Per-diem / Alumni pools, never agency-sourced. The agency-sourced Frontline lifecycle stays with the agency.</p>
+        </div>
+        <a class="wt-role-jump" href="#worker-onb">Next: Worker →</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Workforce → omnibar <code>Create</code> → <code>Invite Frontline worker</code></span>
+            <h3 class="wt-step-h">Open the panel in Frontline mode.</h3>
+            <div class="wt-step-body">
+              <p>The omnibar action emits <code>openAddFrontline()</code> on the Interactions bus — the same bus the Add Professional action uses, with the worker-type pre-set to <b>Frontline (direct)</b>. Panel title flips to <b>Invite Frontline worker</b>, subtitle reads <b>Direct-sourced · Joined Up parity</b>.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Pick an invite method.</h3>
+            <div class="wt-step-body">
+              <p>A new field at the top of step 1 — four options on a radio row: <b>Email link</b> · <b>SMS link</b> · <b>6-digit code</b> · <b>QR code</b>. Picking SMS / Code / QR swaps the second field on the grid from <b>Email</b> to <b>Phone</b> so the contact field matches the channel.</p>
+              <div class="wt-tip">
+                The 6-digit code and QR code paths are the Joined Up signatures — print the QR at the site, the worker scans on arrival, the app opens with the code pre-filled, and they're walking through the rest of onboarding in minutes.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Fill in the worker's details.</h3>
+            <div class="wt-step-body">
+              <p>Field labels change for the Frontline shape: <b>Job / role</b> instead of <b>Role</b>, <b>Site manager</b> instead of <b>Hiring manager</b>, <b>Pool</b> (Internal / Float pool / Per-diem / Alumni) replaces the Source supplier picker, <b>Start date</b> replaces <b>Term start</b>. The Engagement type footer reads <b>Shift · hourly</b>.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Author Compensation — hourly + classification.</h3>
+            <div class="wt-step-body">
+              <p>Step 2 swaps the cadence picker for a <b>Classification</b> radio (W-2 hourly · W-2 salaried · W-2 tipped — each row tagged with overtime eligibility and time-capture mode). Enter an <b>Hourly rate</b> and <b>currency</b>; the panel calculates an estimated weekly value (40h baseline). The timesheet field is replaced with a read-only <b>Time capture · Clock in / out</b>.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Confirm the Joined Up task set.</h3>
+            <div class="wt-step-body">
+              <p>Step 3 reads its catalog from <code>window.getOnboardingTasks("frontline")</code> instead of the Pro hardcoded list — the nine tasks the admin authored in section 02. Toggle off anything that doesn't apply (BG check is optional and disabled for non-driver / non-cash roles by default).</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Send the invite.</h3>
+            <div class="wt-step-body">
+              <p>Review screen mirrors the Pro shape with Frontline labels. Tap <b>Send invite</b>; the worker enters the roster with <b>pool: Internal</b> (or whichever you picked) and status <span class="wt-status wt-status--onb">Onboarding</span>. Their first app-open will be section 05.</p>
+              <div class="wt-tip wt-tip--success">
+                <b>Same shell, two shapes:</b> the Add panel never forked into a parallel "Add Frontline" page. The same host renders both flows; the variant flag flips ~30 fields, the rest is reused verbatim.
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 05 · WORKER ONBOARDING                                         -->
+    <!-- ============================================================== -->
+    <section id="worker-onb" class="sr-section">
+      <div>
+        <span class="sr-h2-num">05 · Worker · self-serve onboarding</span>
+        <h2 class="sr-h2">A new tab on the mobile shell, surfaced pool- and status-conditional.</h2>
+      </div>
+
+      <p class="sr-lead">Worker mobile already ships a four-tab shell — Home / Shifts / More plus the IC portal variant. Direct-sourced workers (Pro + Frontline direct) whose status is <span class="wt-status wt-status--onb">Onboarding</span> or <span class="wt-status wt-status--off">Offboarding</span> see a new tab prepended to the bar — <b>On-board</b> or <b>Off-board</b> — with a badge counting open tasks. Agency-sourced Frontline workers never see this tab; their onboarding belongs to the agency.</p>
+
+      <div class="wt-role" data-role="worker">
+        <div class="wt-role-glyph">W</div>
+        <div>
+          <div class="wt-role-eyebrow">Role</div>
+          <h3 class="wt-role-name">Worker · mobile-first</h3>
+          <p class="wt-role-sub">Sees the tasks they own — sign documents, complete RTW + tax form, add direct deposit, watch the orientation video, acknowledge the handbook. Employer tasks (asset provisioning, SSO setup) are hidden — the manager sees those on the tracker accordion.</p>
+        </div>
+        <a class="wt-role-jump" href="#tracker">Next: Manager tracker →</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Top-right user menu → <code>View as</code> → pick a worker in <span class="wt-status wt-status--onb">Onboarding</span></span>
+            <h3 class="wt-step-h">Switch into worker mode.</h3>
+            <div class="wt-step-body">
+              <p>The mobile-frame shell takes over the viewport. Pick any direct-sourced worker — Brianna Boone (Internal), Keiko Ozawa (Float pool nurse, on Mercy industry pack), or any Pro consultant you onboarded in section 03.</p>
+              <div class="wt-tip">
+                <b>Visibility gate:</b> if you picked an Agency-sourced Frontline worker by mistake, the On-board tab simply isn't there. That worker's onboarding lives with their agency, not us.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Tap the On-board tab.</h3>
+            <div class="wt-step-body">
+              <p>First tab on the bottom bar with a badge showing the open task count. Tap it and the screen opens with a tonal hero block — eyebrow reads <i>Professional engagement</i> or <i>Joined Up direct sourcing</i> depending on the worker's kind, headline greets them by first name, the progress bar shows completion percent, and the meta row shows <b>X of Y complete · NN%</b>.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Scroll the task list.</h3>
+            <div class="wt-step-body">
+              <p>Tasks render as full-width cards with a colored circular icon on the left (green check for done, blue lightning for in-review, red alert for blocked, gray arrow for pending), the task name, the description + "Due in Nd", and a CTA on the right (<b>Start</b> / <b>In review</b> / <b>Action needed</b> / <b>Done</b>).</p>
+              <div class="wt-mobile-grid">
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">📄</span>E-sign documents</div>
+                  <div class="wt-mobile-tile-sub">NDA, IP assignment, handbook acknowledgement — each opens an inline DocuSign envelope. Signed PDFs land on the worker record and the audit log.</div>
+                </div>
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">🪪</span>I-9 / Right to Work</div>
+                  <div class="wt-mobile-tile-sub">Country-aware — US runs E-Verify, UK runs the Sterling RTW Share Code, EU runs eIDAS. Worker uploads photo ID + live selfie; the connector handles the verification call.</div>
+                </div>
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">💼</span>Tax form</div>
+                  <div class="wt-mobile-tile-sub">W-4 (US) · P45 (UK) · TD1 (CA). Defaults to the country picked at invite; switchable if the worker lives in a different jurisdiction.</div>
+                </div>
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">🏦</span>Direct deposit</div>
+                  <div class="wt-mobile-tile-sub">Single bank for Frontline (Joined Up shape, Plaid validated). Multi-split allowed for Pro (Fieldglass behavior).</div>
+                </div>
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">📺</span>Orientation video</div>
+                  <div class="wt-mobile-tile-sub">Frontline-only · 5 minutes covering role + site safety + harassment policy. Completion tracked automatically.</div>
+                </div>
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">✅</span>Shift-ready gate</div>
+                  <div class="wt-mobile-tile-sub">Auto-checks. Closes the moment every required task above it completes — that's when the worker can start picking up shifts.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Complete a task.</h3>
+            <div class="wt-step-body">
+              <p>Tap any task card — a focused drill opens (in production; toast in the prototype). Submission flips the task to <b>Done</b>, the hero progress bar advances, the badge count on the tab decrements. When every required task is complete the hero copy swaps to <i>You're all set, &lt;first name&gt;.</i> with a CTA pointing back to Home where shifts now appear.</p>
+              <div class="wt-tip wt-tip--success">
+                <b>Joined Up promise kept:</b> a Frontline worker with status <span class="wt-status wt-status--onb">Onboarding</span> can hit the shift-ready gate in a single session — invite code → RTW → tax form → banking → orientation video → done. Status flips to <span class="wt-status wt-status--cmp">Compliant</span>, the On-board tab disappears, the Shifts tab takes over.
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 06 · MANAGER TRACKER                                           -->
+    <!-- ============================================================== -->
+    <section id="tracker" class="sr-section">
+      <div>
+        <span class="sr-h2-num">06 · Manager · track progress</span>
+        <h2 class="sr-h2">One accordion on the worker detail — same catalog the worker sees, plus employer tasks.</h2>
+      </div>
+
+      <div class="wt-role" data-role="manager">
+        <div class="wt-role-glyph">M</div>
+        <div>
+          <div class="wt-role-eyebrow">Role</div>
+          <h3 class="wt-role-name">Manager · watching the cohort</h3>
+          <p class="wt-role-sub">Watches every worker in onboarding from a single accordion on the worker detail page. Sees worker tasks, shared tasks, AND employer tasks (laptop provisioning, SSO group setup) — the worker only sees worker + shared.</p>
+        </div>
+        <a class="wt-role-jump" href="#manager-off">Next: Offboard →</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Workforce → click a worker row → detail page</span>
+            <h3 class="wt-step-h">Open a worker detail.</h3>
+            <div class="wt-step-body">
+              <p>Pick any direct-sourced worker (the same one you onboarded in section 03 or 04, or any seed worker with status <span class="wt-status wt-status--onb">Onboarding</span>). The detail page renders its standard accordion stack — Details, Engagements, Compliance, Performance, Schedule, Blocked sites, Logs.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Spot the new Onboarding accordion.</h3>
+            <div class="wt-step-body">
+              <p>Slots in directly after Details, open by default when status is <span class="wt-status wt-status--onb">Onboarding</span> or <span class="wt-status wt-status--off">Offboarding</span>. Hidden for agency-sourced Frontline workers (their lifecycle belongs to the agency) and for IC contractors (they have their own tracker on the IC detail). Subtitle reads either <i>Professional engagement · task catalog from Settings</i> or <i>Frontline direct sourcing · task catalog from Settings</i>.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Read the head row.</h3>
+            <div class="wt-step-body">
+              <p>Two cells: left shows <b>X / Y complete · NN%</b> in tabular numerals, right shows a one-line projection — <i>~3 days until shift-ready</i> for Onboarding, <i>Off-boarded</i> for closed Offboarding. A progress bar follows, blue when Onboarding, yellow when Offboarding.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Scan the three task groups.</h3>
+            <div class="wt-step-body">
+              <p>Tasks group by owner — <b>Worker tasks</b> first (what the worker is doing now), <b>Employer tasks</b> (laptop, SSO, badge), <b>Shared tasks</b> (orientation, kickoff). Each row shows the task name (struck through when done), a "Due in Nd" stamp, a connector tag, and an inline action button per state — <b>Remind</b> for stalled worker tasks, <b>Retry</b> for blocked tasks, <b>Mark done</b> for in-progress employer tasks.</p>
+              <div class="wt-tip">
+                <b>Try:</b> Tap <b>Remind</b> on a worker task — toast confirms the reminder went to the worker. In production this would email the worker; here it's a prototype hook.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Watch the accordion close on completion.</h3>
+            <div class="wt-step-body">
+              <p>Once the worker side completes every required task in section 05, the accordion's progress bar fills, status flips to <span class="wt-status wt-status--cmp">Compliant</span> on the worker hero, and the accordion auto-collapses to a single check line. The worker is shift-ready.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 07 · MANAGER · OFFBOARD                                        -->
+    <!-- ============================================================== -->
+    <section id="manager-off" class="sr-section">
+      <div>
+        <span class="sr-h2-num">07 · Manager · offboard a worker</span>
+        <h2 class="sr-h2">Same Remove panel that ships today — scope enum lifted from shift to engagement / worker.</h2>
+      </div>
+
+      <p class="sr-lead">The existing <code>RemoveWorkerPanel</code> already covers shift-scoped removal (this shift / upcoming / all / pick specific). We extend the scope enum with two new values — <b>engagement</b> for Pro, <b>worker</b> for direct Frontline — and the panel branches into three new step bodies: effective date + reason picker, offboarding task acknowledgement + final-pay note, review. No new file, no new model, same panel host.</p>
+
+      <div class="wt-role" data-role="close">
+        <div class="wt-role-glyph">↩</div>
+        <div>
+          <div class="wt-role-eyebrow">Role</div>
+          <h3 class="wt-role-name">Manager · ending an engagement</h3>
+          <p class="wt-role-sub">Initiates offboarding from the row menu or the detail-header overflow. For Pro that's the engagement ending (term ran out, role consolidated, voluntary resignation). For direct Frontline that's the assignment ending (seasonal close, end of assignment, performance / for cause).</p>
+        </div>
+        <a class="wt-role-jump" href="#worker-off">Next: Worker exit →</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Workforce → row menu → <code>Offboard worker</code></span>
+            <h3 class="wt-step-h">Initiate from the row menu.</h3>
+            <div class="wt-step-body">
+              <p>Direct-sourced workers (Pro engagement OR Internal / Float / Per-diem / Alumni pool) now show <b>Offboard worker</b> in the row menu instead of <b>Remove worker</b>. Same overflow on the detail-page header. Agency-sourced Frontline workers keep the original "Remove worker" / "Remove from booking" wording — their offboarding belongs to the agency.</p>
+              <div class="wt-tip">
+                <b>Default scope:</b> the menu action pre-sets <code>engagement</code> for Pro workers and <code>worker</code> for direct Frontline. The panel opens already in the right shape — Manager doesn't have to pick scope.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Fill effective date + reason.</h3>
+            <div class="wt-step-body">
+              <p>Step 1 opens with the worker context strip (avatar, name, supplier chip, role), then two date fields side-by-side — <b>Effective date</b> (defaults to 14 days from today) and <b>Last day worked</b>. Below them: the <b>Reason</b> dropdown — twelve options shared across shift + lifecycle scopes:</p>
+              <ul>
+                <li><b>End of engagement term</b> — engagement reached its scheduled end</li>
+                <li><b>Voluntary resignation</b> — worker resigned, with or without notice</li>
+                <li><b>End of assignment</b> · <b>Seasonal close</b> — Frontline specifics</li>
+                <li><b>Reorganization or role elimination</b> — Pro reorg</li>
+                <li><b>Performance or conduct</b> · <b>For cause</b> — gates the do-not-rehire flag on step 2</li>
+                <li><b>Role no longer needed</b> · <b>Other</b></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Pick last-shift handling (Frontline only).</h3>
+            <div class="wt-step-body">
+              <p>For Frontline direct scope, a third section appears — <b>Last-shift handling</b> with three options:</p>
+              <ul>
+                <li><b>Work through-date</b> — honor every shift booked through the effective date</li>
+                <li><b>End after current shift</b> — finish the shift in progress, cancel everything after</li>
+                <li><b>End immediately</b> — cancel all future shifts the moment you confirm</li>
+              </ul>
+              <p>Pro engagements skip this — they don't have shifts.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Tour Step 2 · Tasks &amp; final pay.</h3>
+            <div class="wt-step-body">
+              <p>The panel reads the offboarding catalog from <code>window.getOffboardingTasks(kind)</code> — the same one the admin authored in section 02 — and shows it as an acknowledgement list. Each task is on by default; uncheck to skip with audit-logged justification. Below: a <b>Final-pay note</b> textarea (routed to Dayforce native payroll) and the policy-gated <b>Do-not-rehire flag</b>.</p>
+              <div class="wt-tip wt-tip--warn">
+                <b>DNR gating:</b> the do-not-rehire flag is grayed out unless the reason on step 1 is Performance / For cause / No-show. Voluntary or end-of-term separations can't set this flag — the policy is enforced in the panel, not just on submit.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Review and confirm.</h3>
+            <div class="wt-step-body">
+              <p>Step 3 renders a different headline depending on scope — <i>End &lt;worker&gt;'s engagement?</i> for Pro, <i>Offboard &lt;worker&gt;?</i> for Frontline. Eight rows in the InfoGrid summarize scope, dates, reason, last-shift handling, DNR flag, final-pay note. Tap the acknowledgement checkbox at the bottom; the footer button reads <b>End engagement</b> or <b>Offboard worker</b> depending on the scope.</p>
+              <div class="wt-tip wt-tip--success">
+                <b>State machine:</b> on confirm, the worker transitions from <span class="wt-status wt-status--cmp">Compliant</span> to <span class="wt-status wt-status--off">Offboarding</span> immediately. After every required offboarding task completes, status flips to <span class="wt-status wt-status--ina">Inactive</span> (or <span class="wt-status wt-status--trm">Terminated</span> if DNR was set).
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 08 · WORKER · EXIT                                             -->
+    <!-- ============================================================== -->
+    <section id="worker-off" class="sr-section">
+      <div>
+        <span class="sr-h2-num">08 · Worker · self-serve offboarding</span>
+        <h2 class="sr-h2">Same On-board tab repurposes when status flips to Offboarding.</h2>
+      </div>
+
+      <div class="wt-role" data-role="worker">
+        <div class="wt-role-glyph">W</div>
+        <div>
+          <div class="wt-role-eyebrow">Role</div>
+          <h3 class="wt-role-name">Worker · winding down</h3>
+          <p class="wt-role-sub">Sees a yellow-toned hero replacing the blue onboarding hero, and a shorter task list — acknowledge final pay, confirm asset returns received, optionally complete the exit interview.</p>
+        </div>
+        <a class="wt-role-jump" href="#closeout">Next: Closeout →</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Worker mobile · bottom bar</span>
+            <h3 class="wt-step-h">Spot the Off-board tab.</h3>
+            <div class="wt-step-body">
+              <p>Same tab slot as On-board; label flips to <b>Off-board</b> and the badge count restarts. The tab is the first item in the bar so the worker can't miss it.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Read the yellow hero.</h3>
+            <div class="wt-step-body">
+              <p>Hero block flips from the blue Onboarding gradient to a yellow Offboarding gradient. Headline reads <i>Let's wrap up, &lt;first name&gt;.</i> Sub-line: <i>A few last steps before your final paycheck closes. The app will sign you out once everything is acknowledged.</i></p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Walk the exit task list.</h3>
+            <div class="wt-step-body">
+              <p>Same card shape, shorter list — worker-owned offboarding tasks only. For Pro: knowledge transfer write-up, exit interview link. For Frontline: asset return acknowledgement (badge, uniform, locker key), final-paycheck acknowledgement, P45 download (UK) or final pay statement (US).</p>
+              <div class="wt-mobile-grid">
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">📦</span>Asset return</div>
+                  <div class="wt-mobile-tile-sub">Worker confirms each asset returned. Manager sees the matching employer task auto-close on the tracker accordion.</div>
+                </div>
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">💰</span>Final pay ack</div>
+                  <div class="wt-mobile-tile-sub">Worker reviews the final-pay statement (total amount + breakdown). Routed to Dayforce native payroll on acknowledgement.</div>
+                </div>
+                <div class="wt-mobile-tile">
+                  <div class="wt-mobile-tile-h"><span class="wt-mobile-tile-glyph">🎤</span>Exit interview</div>
+                  <div class="wt-mobile-tile-sub">Optional. Opens an HR-led 30-minute scheduling flow. Skippable; the audit log notes who declined.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Watch the app sign the worker out.</h3>
+            <div class="wt-step-body">
+              <p>When every required exit task is acknowledged, status flips to <span class="wt-status wt-status--ina">Inactive</span> (voluntary / end-of-term) or <span class="wt-status wt-status--trm">Terminated</span> (DNR-flagged offboardings). The Off-board tab disappears, the mobile shell shows a brief farewell screen, the worker is signed out.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 09 · CLOSEOUT                                                  -->
+    <!-- ============================================================== -->
+    <section id="closeout" class="sr-section">
+      <div>
+        <span class="sr-h2-num">09 · Lifecycle complete</span>
+        <h2 class="sr-h2">Six states, three transitions, one audit trail.</h2>
+      </div>
+
+      <p class="sr-lead">The new state machine extends the existing three-state worker enum (<span class="wt-status wt-status--onb">Onboarding</span> / <span class="wt-status wt-status--cmp">Compliant</span> / <span class="wt-status wt-status--exp">Expired</span>) with three new states for the back of the lifecycle — <span class="wt-status wt-status--off">Offboarding</span> · <span class="wt-status wt-status--ina">Inactive</span> · <span class="wt-status wt-status--trm">Terminated</span>. The existing chip palette paints them automatically; no new chip primitive.</p>
+
+      <div class="wt-flow" aria-label="Lifecycle state machine">
+        <span class="wt-status wt-status--onb">Onboarding</span>
+        <span class="wt-flow-arr">→</span>
+        <span class="wt-status wt-status--cmp">Compliant</span>
+        <span class="wt-flow-arr">→</span>
+        <span class="wt-status wt-status--off">Offboarding</span>
+        <span class="wt-flow-arr">→</span>
+        <span class="wt-status wt-status--ina">Inactive</span>
+        <span class="wt-flow-arr">or</span>
+        <span class="wt-status wt-status--trm">Terminated</span>
+        <span class="wt-flow-note"><span class="wt-status wt-status--exp">Expired</span> branches off Compliant when credentials lapse; reachable from Onboarding too if the worker times out on a required task.</span>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Read the audit log.</h3>
+            <div class="wt-step-body">
+              <p>The existing <b>Logs</b> accordion on the worker detail picks up every lifecycle transition automatically — actor + timestamp + payload diff for every task assigned / started / completed / skipped / failed, every status flip, every panel submit. Same <code>writeAudit</code> helper SOW Milestones, Contractor Agreements, and Frontline shift removals already use. The accordion gains a new <b>Lifecycle</b> event-type chip on the filter row.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Check the webhook trail.</h3>
+            <div class="wt-step-body">
+              <p>Five new events on the webhook catalog — <code>worker.onboarding.started</code>, <code>worker.onboarded</code>, <code>worker.offboarding.started</code>, <code>worker.offboarded</code>, <code>worker.terminated</code>. Each carries worker id, worker type, triggering actor, reason code, and the lifecycle task transition payload. Same catalog the existing <code>contractor.*</code> events sit on.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <h3 class="wt-step-h">Reset the demo.</h3>
+            <div class="wt-step-body">
+              <p>Reload the page. localStorage holds the feature-flag state + the lifecycle program catalogs; everything else (worker statuses, panel state) resets to seed.</p>
+              <div class="wt-tip">
+                <b>To clear all customization:</b> open Settings → Configuration → Pro lifecycle (or Frontline lifecycle) and tap <b>Restore defaults</b>. The Admin's hand-authored task tweaks reset to the seed catalogs.
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">End of walkthrough</div>
+        <p>That's the full worker lifecycle inside Flex Work — Admin configures two program cards, Manager onboards under either of two competitor-shaped flows (Fieldglass + VNDLY for Pro, Joined Up for Frontline), Worker self-serves through a single mobile tab that repurposes for exit, Manager tracks progress on a single accordion that picks up every task transition. The 31 parity tasks behind this flow live in <a href="../Competitor Comparisons/Onboarding &amp; Offboarding parity tasks v0.1.html">On-/Offboarding parity tasks</a>; the architectural mapping shows every task hangs off an existing surface — one new top-level file in the IA (the lifecycle program-card host, mirroring SOW + IC).</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>

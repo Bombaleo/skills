@@ -1,0 +1,73 @@
+/* Everest typefaces — Clarika Geometric (display) + Clarika Grotesque (text) */
+
+@font-face {
+  font-family: "Clarika Geometric";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGeometric-Light.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Geometric";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGeometric-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Geometric";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGeometric-Medium.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Geometric";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGeometric-DemiBold.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Geometric";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGeometric-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Clarika Grotesque";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGrotesque-Light.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Grotesque";
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  src: url("./ClarikaGrotesque-LightItalic.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Grotesque";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGrotesque-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Grotesque";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGrotesque-DemiBold.otf") format("opentype");
+}
+@font-face {
+  font-family: "Clarika Grotesque";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("./ClarikaGrotesque-Bold.otf") format("opentype");
+}

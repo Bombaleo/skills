@@ -1,0 +1,1008 @@
+/* =====================================================================
+   Flex Work — Locations page (list + details)
+   Builds on styles.css / styles-req.css / styles-suppliers.css.
+   ===================================================================== */
+
+/* --- Toolbar: search on the left, icon actions on the right.
+   Reuses the shared .inv-toolbar / .inv-search pattern (styles-invoices.css)
+   so Locations matches Suppliers / Workforce. The org-scope filter now
+   renders as an Everest Tabs strip (.evr-tabs) directly below the omnibar. */
+
+/* --- List: table column geometry --------------------------------------
+   Location · Status · Address · Shifts (right) · Spend (right) · ⋮ */
+
+.req-row.loc-row {
+  grid-template-columns:
+    44px                          /* checkbox */
+    minmax(220px, 1.4fr)          /* location */
+    minmax(110px, 0.7fr)          /* status */
+    minmax(220px, 1.6fr)          /* address */
+    80px                          /* shifts */
+    120px                         /* spend */
+    52px;                         /* actions */
+}
+
+.req-scroll .req-row.loc-row { min-width: 1024px; }
+
+.loc-cell--name { flex-wrap: nowrap; }
+.loc-row-name {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-regular);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.loc-cell--addr { flex-wrap: nowrap; }
+.loc-row-addr {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.loc-cell--shifts { justify-content: flex-end; flex-wrap: nowrap; color: var(--evr-content-primary-highemp); }
+.loc-cell--spend  { justify-content: flex-end; flex-wrap: nowrap; }
+.loc-cell--actions { justify-content: flex-end; }
+
+/* =====================================================================
+   Location Details
+   ===================================================================== */
+
+/* --- Hero (text-only, no avatar) -------------------------------------- */
+
+.loc-hero {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+@media (max-width: 720px) {
+  .loc-hero { padding: 24px; }
+}
+
+.loc-hero .req-pill {
+  width: max-content;
+  margin-bottom: 4px;
+}
+.loc-hero-name {
+  margin: 0 0 4px;
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 32px;
+  line-height: 1.2;
+  color: var(--evr-content-primary-highemp);
+  letter-spacing: -0.01em;
+}
+
+.loc-hero-meta {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.loc-hero-meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  min-height: 24px;
+}
+
+/* --- Quick actions grid (2-up) --------------------------------------- */
+
+.loc-quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 720px) {
+  .loc-quick-grid { grid-template-columns: 1fr; gap: 16px; }
+}
+
+.loc-quick-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 112px;
+  justify-content: center;
+}
+.loc-quick-label {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+.loc-quick-value {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  color: var(--evr-content-primary-highemp);
+}
+.loc-quick-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+
+
+/* =====================================================================
+   Org-tree detail page (.ot-*)
+   Used by OrgNodeDetailsPage (pages/org-tree.jsx) for Entity / Division
+   / Sector / Cost Center detail screens.
+   ===================================================================== */
+
+/* Frame — gives the detail body a max width that lines up with the rest
+   of the product chrome. */
+.ot-wf {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 24px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- Breadcrumb ----------------------------------------------------- */
+.ot-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+.ot-breadcrumb-link,
+.ot-breadcrumb-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.ot-breadcrumb-link {
+  background: transparent;
+  border: 0;
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+  font: inherit;
+  transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ot-breadcrumb-link:hover { background: var(--evr-surface-secondary-hover); }
+.ot-breadcrumb-current {
+  color: var(--evr-content-primary-highemp);
+  font-weight: var(--evr-fw-demibold);
+}
+
+/* --- Hero card ------------------------------------------------------ */
+.ot-hero {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.ot-hero-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: flex-start;
+  gap: 20px;
+}
+@media (max-width: 760px) {
+  .ot-hero-row { grid-template-columns: auto 1fr; }
+  .ot-hero-rule { grid-column: 1 / -1; }
+}
+.ot-hero-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-decorative-blue);
+  flex-shrink: 0;
+}
+.ot-hero-icon--entities      { background: var(--evr-surface-decorative-low-purple); color: var(--evr-content-decorative-purple); }
+.ot-hero-icon--divisions     { background: var(--evr-surface-decorative-low-blue);   color: var(--evr-content-decorative-blue); }
+.ot-hero-icon--sectors       { background: var(--evr-surface-decorative-low-teal);   color: var(--evr-content-decorative-teal); }
+.ot-hero-icon--locations     { background: var(--evr-surface-decorative-low-green);  color: var(--evr-content-decorative-green); }
+.ot-hero-icon--cost-centers  { background: var(--evr-surface-decorative-low-yellow); color: var(--evr-content-decorative-yellow); }
+
+.ot-hero-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ot-hero-eyebrow {
+  font: var(--evr-utility2);
+  font-weight: var(--evr-fw-demibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--evr-content-primary-lowemp);
+}
+.ot-hero-name {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+  text-wrap: pretty;
+}
+.ot-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 8px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+}
+.ot-hero-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ot-hero-id { color: var(--evr-content-primary-lowemp); }
+
+.ot-hero-rule {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+  min-width: 220px;
+  max-width: 320px;
+  color: var(--evr-content-primary-default);
+}
+.ot-hero-rule--custom {
+  background: var(--evr-surface-decorative-low-blue);
+  border-color: var(--evr-border-primary-default);
+  color: var(--evr-content-primary-highemp);
+}
+.ot-hero-rule-title {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.ot-hero-rule-sub {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* --- Stat tiles row ------------------------------------------------- */
+.ot-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.ot-stat {
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ot-stat-label {
+  font: var(--evr-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--evr-content-primary-lowemp);
+}
+.ot-stat-value {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 22px;
+  line-height: 1.15;
+  color: var(--evr-content-primary-highemp);
+}
+.ot-stat-sub {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* --- Direct-children chip row -------------------------------------- */
+.ot-direct {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ot-direct-head {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.ot-direct-title {
+  font: var(--evr-body1-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.ot-direct-count {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+.ot-direct-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ot-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 8px 10px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: 999px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+  transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ot-chip:hover {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-border-primary-default);
+}
+.ot-chip-name {
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.ot-chip-meta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--evr-surface-secondary-default);
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* --- Section heading above the tabbed tables ----------------------- */
+.ot-descendants { display: flex; flex-direction: column; gap: 16px; }
+.ot-section-head { display: flex; flex-direction: column; gap: 4px; }
+.ot-section-title {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.ot-section-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+  max-width: 64ch;
+}
+
+/* --- Tabs + search bar above the descendant table ------------------ */
+.ot-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ot-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--evr-surface-secondary-default);
+  border-radius: 12px;
+}
+.ot-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+  transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ot-tab:hover { background: var(--evr-surface-primary-hover); }
+.ot-tab--active {
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  box-shadow: var(--evr-depth-02);
+}
+.ot-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--evr-surface-secondary-hover);
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-lowemp);
+}
+.ot-tab--active .ot-tab-count {
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-decorative-blue);
+}
+
+/* --- Descendant table row state ------------------------------------ */
+.ot-table-card .req-row.ot-row { transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1); }
+.ot-row--selected {
+  background: var(--evr-surface-decorative-low-blue) !important;
+}
+.ot-row--selected:hover {
+  background: var(--evr-surface-decorative-default-blue) !important;
+}
+
+/* --- Empty placeholder used inside the detail page ----------------- */
+.ot-empty {
+  padding: 32px 16px;
+  text-align: center;
+  background: var(--evr-surface-secondary-default);
+  border: 1px dashed var(--evr-border-decorative-default);
+  border-radius: 12px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* --- Supplier rule pill (inherited vs custom) ---------------------- */
+.ot-rule-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+}
+.ot-rule-pill--inherited {
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-lowemp);
+}
+.ot-rule-pill--custom {
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-decorative-blue);
+}
+
+/* --- Sticky bulk-action bar (org-tree detail page) ----------------- */
+.ot-bulk-bar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 30;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--evr-surface-inverse-primary);
+  color: var(--evr-content-primary-inverse);
+  border-radius: 14px;
+  box-shadow: var(--evr-depth-06);
+  flex-wrap: wrap;
+}
+.ot-bulk-bar-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--evr-content-primary-inverse);
+}
+.ot-bulk-bar-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--evr-content-primary-inverse);
+  color: var(--evr-content-primary-highemp);
+  font: var(--evr-body2-bold);
+}
+.ot-bulk-bar-label {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-inverse);
+}
+.ot-bulk-bar-meta .linkbtn {
+  color: var(--evr-content-primary-inverse);
+  opacity: 0.85;
+}
+.ot-bulk-bar-meta .linkbtn:hover { opacity: 1; }
+.ot-bulk-bar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+/* Tertiary buttons need to read on the dark bar — override colors but
+   keep the existing geometry so we don't fight the global `btn` class. */
+.ot-bulk-bar .btn--tertiary {
+  background: rgba(255,255,255,0.06);
+  color: var(--evr-content-primary-inverse);
+  border-color: rgba(255,255,255,0.15);
+}
+.ot-bulk-bar .btn--tertiary:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.25);
+}
+.ot-bulk-bar .btn--secondary {
+  background: var(--evr-content-primary-inverse);
+  color: var(--evr-content-primary-highemp);
+  border-color: var(--evr-content-primary-inverse);
+}
+.ot-bulk-bar .btn--secondary:hover {
+  background: var(--evr-neutral-90);
+  border-color: var(--evr-neutral-90);
+}
+.ot-bulk-bar-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.15);
+}
+.ot-bulk-bar-danger {
+  color: var(--evr-content-status-error-lowemp) !important;
+}
+.ot-bulk-bar-danger:hover {
+  color: var(--evr-content-status-error-highemp) !important;
+}
+
+/* --- org-table-card row spacing tweak ------------------------------ */
+.org-table-card .req-row.org-row { transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* --- MSP tenant filter bar for non-Sites org segments --------------
+   The org segment tables (Corporate / Regions / Districts / Departments)
+   render an empty .req-filters bar so MSP mode can inject its "Tenant"
+   chip into the same .req-filters-left it uses everywhere else. The bar
+   is hidden by default and only revealed when MSP "viewing as" is on
+   (body.msp-mode-on is set synchronously when MSP starts), keeping the
+   standard product chrome byte-identical for non-MSP users. */
+.org-table-card .req-filters.org-msp-filters { display: none; }
+body.msp-mode-on .org-table-card .req-filters.org-msp-filters { display: flex; }
+
+/* ===================================================================
+   Time Capture — site-level setting in Location Details
+   Three stacked sections (mode → method → mobile-geo zone) with a
+   save bar at the foot. Cards behave like radio buttons.
+   ===================================================================== */
+
+.tc {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.tc-sect {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tc-sect-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tc-sect-title {
+  margin: 0;
+  font: 600 16px/22px var(--evr-font-display);
+  color: var(--evr-content-primary-highemp);
+  letter-spacing: -0.1px;
+}
+.tc-sect-sub {
+  margin: 0;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  max-width: 720px;
+}
+
+/* --- Mode / method radio cards -------------------------------------- */
+.tc-cards {
+  display: grid;
+  gap: 12px;
+}
+.tc-cards--4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1080px) {
+  .tc-cards--4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .tc-cards--4 { grid-template-columns: 1fr; }
+}
+
+.tc-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px 1fr 18px;
+  grid-template-areas:
+    "icon  label  check"
+    "icon  short  short"
+    "desc  desc   desc";
+  align-items: start;
+  column-gap: 10px;
+  row-gap: 4px;
+  padding: 14px 14px 14px 14px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs, 8px);
+  background: var(--evr-surface-primary-default);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              background 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tc-card:hover {
+  background: var(--evr-surface-secondary-default);
+  border-color: var(--evr-border-decorative-highemp);
+}
+.tc-card[aria-pressed="true"] {
+  border-color: var(--evr-interactive-primary-default);
+  background: var(--evr-interactive-primary-decorative);
+}
+.tc-card[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--evr-interactive-primary-default);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.tc-card:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-default);
+  outline-offset: 2px;
+}
+
+.tc-card-icon {
+  grid-area: icon;
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-highemp);
+}
+.tc-card[aria-pressed="true"] .tc-card-icon {
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-interactive-primary-default);
+}
+
+.tc-card-label {
+  grid-area: label;
+  font: 600 14px/18px var(--evr-font-text);
+  color: var(--evr-content-primary-highemp);
+}
+.tc-card-short {
+  grid-area: short;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: -2px;
+}
+.tc-card-desc {
+  grid-area: desc;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-default);
+  margin-top: 6px;
+  text-wrap: pretty;
+}
+.tc-card-check {
+  grid-area: check;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px solid var(--evr-border-decorative-default);
+  color: transparent;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tc-card[aria-pressed="true"] .tc-card-check {
+  background: var(--evr-interactive-primary-default);
+  border-color: var(--evr-interactive-primary-default);
+  color: #FFFFFF;
+}
+
+/* --- Country selector ----------------------------------------------- */
+.tc-country {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+.tc-country-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+.tc-country-select {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 32px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs, 8px);
+  background: var(--evr-surface-primary-default)
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='none' stroke='%23656770' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M3 4.5l3 3 3-3'/></svg>")
+    right 8px center / 12px no-repeat;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-highemp);
+  cursor: pointer;
+}
+.tc-country-select:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-default);
+  outline-offset: 2px;
+}
+.tc-country-reset {
+  font: var(--evr-caption);
+}
+
+/* --- Geo zone ------------------------------------------------------- */
+.tc-geo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tc-geo-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.tc-geo-toolbar .recur-seg {
+  width: auto;
+  min-width: 280px;
+}
+
+.tc-map-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: var(--evr-radius-2xs, 8px);
+  overflow: hidden;
+  border: 1px solid var(--evr-border-decorative-default);
+  background: var(--evr-neutral-95);
+}
+.tc-map {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 700 / 320;
+  user-select: none;
+  touch-action: none;
+}
+.tc-hex-handle {
+  transition: r 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tc-hex-handle:hover { r: 12; }
+
+/* --- Radius slider -------------------------------------------------- */
+.tc-radius-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs, 8px);
+  background: var(--evr-surface-secondary-default);
+}
+.tc-radius-label {
+  display: flex;
+  justify-content: space-between;
+  font: 600 13px/18px var(--evr-font-text);
+  color: var(--evr-content-primary-highemp);
+}
+.tc-radius-value {
+  color: var(--evr-interactive-primary-default);
+}
+.tc-radius-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--evr-border-decorative-default);
+  border-radius: 2px;
+  outline: none;
+  margin: 8px 0 4px;
+}
+.tc-radius-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--evr-interactive-primary-default);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.20);
+  cursor: pointer;
+}
+.tc-radius-slider::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--evr-interactive-primary-default);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.20);
+  cursor: pointer;
+}
+.tc-radius-slider:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-default);
+  outline-offset: 4px;
+}
+.tc-radius-ticks {
+  display: flex;
+  justify-content: space-between;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+
+.tc-helper {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--evr-radius-2xs, 8px);
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+}
+.tc-helper .icon {
+  color: var(--evr-content-primary-lowemp);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* --- Save bar ------------------------------------------------------- */
+.tc-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+}
+.tc-dirty {
+  margin-right: auto;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tc-dirty[data-dirty="true"] {
+  color: var(--evr-content-status-warning-default, #B26500);
+}
+.tc-dirty[data-dirty="true"]::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ===================================================================
+   Time Capture — read-only summary view
+   Renders by default on every org-level details page. Edit button
+   lifts the user into the full editor (above).
+   ===================================================================== */
+
+.tc-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tc-summary-inherit {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--evr-radius-2xs, 8px);
+  background: var(--evr-interactive-primary-decorative);
+  border: 1px solid color-mix(in oklab, var(--evr-interactive-primary-default) 35%, transparent);
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-highemp);
+}
+.tc-summary-inherit .icon {
+  color: var(--evr-interactive-primary-default);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.tc-summary-inherit strong {
+  font-weight: var(--evr-fw-demibold, 600);
+}
+
+.tc-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 900px) {
+  .tc-summary-grid { grid-template-columns: 1fr; }
+}
+
+.tc-summary-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs, 8px);
+  background: var(--evr-surface-secondary-default);
+}
+.tc-summary-eyebrow {
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold, 600);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+}
+.tc-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  align-self: flex-start;
+}
+.tc-summary-pill-icon {
+  width: 22px; height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--evr-interactive-primary-decorative);
+  color: var(--evr-interactive-primary-default);
+}
+.tc-summary-pill-label {
+  font: 600 14px/18px var(--evr-font-text);
+  color: var(--evr-content-primary-highemp);
+}
+.tc-summary-desc {
+  margin: 0;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-default);
+  text-wrap: pretty;
+}
+
+.tc-summary-map {
+  border-radius: var(--evr-radius-2xs, 8px);
+  overflow: hidden;
+  border: 1px solid var(--evr-border-decorative-default);
+}
+.tc-map--preview {
+  aspect-ratio: 700 / 220;
+  pointer-events: none;
+}
+
+.tc-summary-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

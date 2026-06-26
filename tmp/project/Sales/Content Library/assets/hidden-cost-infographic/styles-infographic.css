@@ -1,0 +1,92 @@
+/* =====================================================================
+   The hidden cost of unmanaged staffing — infographic poster
+   Loads AFTER ../asset.css (nav + footer reused). Poster body is custom.
+   Scoped under .asset .ig-*. Everest tokens only.
+   ===================================================================== */
+
+.asset { background: var(--evr-surface-secondary-default); }
+
+.ig-wrap { max-width: 760px; margin: 0 auto; padding: clamp(24px, 5vw, 56px) clamp(16px, 4vw, 32px) clamp(40px, 6vw, 72px); }
+
+/* the poster card */
+.ig-poster {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-md);
+  overflow: hidden;
+  box-shadow: var(--evr-depth-04);
+}
+
+/* poster head */
+.ig-head { background: var(--evr-blue-700); color: #fff; padding: clamp(28px, 5vw, 44px) clamp(24px, 5vw, 44px) clamp(26px, 4vw, 38px); }
+.ig-kicker { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.12em; color: var(--evr-blue-200); margin: 0 0 16px; }
+.ig-kicker svg { flex: none; }
+.ig-kicker svg { width: 15px; height: 15px; }
+.ig-head h1 { font: var(--evr-display2); font-size: clamp(28px, 5vw, 44px); line-height: 1.05; letter-spacing: -0.02em; color: #fff; margin: 0 0 14px; text-wrap: balance; }
+.ig-head p { font: var(--evr-body1); font-size: 17px; line-height: 1.55; color: var(--evr-blue-100); margin: 0; max-width: 52ch; }
+
+/* hero number */
+.ig-hero { padding: clamp(28px, 4vw, 40px) clamp(24px, 5vw, 44px); text-align: center; border-bottom: 1px solid var(--evr-border-decorative-lowemp); background: var(--evr-surface-decorative-low-red); }
+.ig-hero-label { font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.1em; color: var(--evr-content-status-error-highemp); margin: 0 0 10px; }
+.ig-hero-v { font: var(--evr-font-display); font-weight: var(--evr-fw-bold); font-size: clamp(56px, 12vw, 104px); line-height: 0.92; letter-spacing: -0.03em; color: var(--evr-content-status-error-highemp); }
+.ig-hero-sub { font: var(--evr-body1); font-size: 17px; color: var(--evr-content-primary-highemp); margin: 14px auto 0; max-width: 46ch; line-height: 1.5; }
+.ig-hero-sub b { font-weight: var(--evr-fw-demibold); }
+.ig-hero-note { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); margin: 10px 0 0; }
+
+/* stat strip */
+.ig-strip { padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 28px) clamp(20px, 3vw, 28px); }
+.ig-strip-title { font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.1em; color: var(--evr-content-primary-lowemp); text-align: center; margin: clamp(20px, 3vw, 28px) 0 clamp(16px, 2vw, 20px); }
+.ig-rows { display: grid; gap: 12px; }
+.ig-row {
+  display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: clamp(14px, 3vw, 24px);
+  padding: clamp(16px, 2.5vw, 22px); border-radius: var(--evr-radius-sm);
+  background: var(--evr-surface-secondary-default);
+}
+.ig-row[data-tone="red"] { background: var(--evr-surface-decorative-low-red); }
+.ig-row[data-tone="orange"] { background: var(--evr-surface-decorative-low-orange); }
+.ig-row[data-tone="yellow"] { background: var(--evr-surface-decorative-low-yellow); }
+.ig-row[data-tone="purple"] { background: var(--evr-surface-decorative-low-purple); }
+.ig-row-v { font: var(--evr-font-display); font-weight: var(--evr-fw-bold); font-size: clamp(30px, 6vw, 46px); line-height: 0.95; letter-spacing: -0.02em; text-align: center; }
+.ig-row[data-tone="red"] .ig-row-v { color: var(--evr-content-status-error-highemp); }
+.ig-row[data-tone="orange"] .ig-row-v { color: var(--evr-content-decorative-orange); }
+.ig-row[data-tone="yellow"] .ig-row-v { color: var(--evr-content-status-warning-highemp); }
+.ig-row[data-tone="purple"] .ig-row-v { color: var(--evr-content-decorative-purple); }
+.ig-row-body .t { font: var(--evr-body1-bold); color: var(--evr-content-primary-highemp); margin: 0 0 4px; }
+.ig-row-body .d { font: var(--evr-body2); color: var(--evr-content-primary-default); margin: 0 0 6px; line-height: 1.45; }
+.ig-row-body .src { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+@media (max-width: 480px) {
+  .ig-row { grid-template-columns: 1fr; gap: 8px; text-align: left; }
+  .ig-row-v { text-align: left; }
+}
+
+/* contrast band */
+.ig-band { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--evr-border-decorative-lowemp); }
+.ig-band > div { padding: clamp(22px, 4vw, 32px) clamp(20px, 4vw, 32px); }
+.ig-band-bad { background: var(--evr-surface-primary-default); border-right: 1px solid var(--evr-border-decorative-lowemp); }
+.ig-band-good { background: var(--evr-blue-700); color: #fff; }
+.ig-band-label { display: inline-flex; align-items: center; gap: 7px; font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 14px; }
+.ig-band-bad .ig-band-label { color: var(--evr-content-status-error-highemp); }
+.ig-band-good .ig-band-label { color: var(--evr-blue-200); }
+.ig-band-label svg { width: 15px; height: 15px; }
+.ig-band ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+.ig-band li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; font: var(--evr-body2); line-height: 1.45; }
+.ig-band-bad li { color: var(--evr-content-primary-default); }
+.ig-band-good li { color: var(--evr-blue-100); }
+.ig-band li svg { width: 16px; height: 16px; margin-top: 2px; }
+.ig-band-bad li svg { color: var(--evr-content-status-error-default); }
+.ig-band-good li svg { color: var(--evr-green-vivid-300); }
+@media (max-width: 560px) { .ig-band { grid-template-columns: 1fr; } .ig-band-bad { border-right: 0; border-bottom: 1px solid var(--evr-border-decorative-lowemp); } }
+
+/* poster foot */
+.ig-foot { padding: clamp(22px, 4vw, 32px) clamp(24px, 5vw, 44px); display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-top: 1px solid var(--evr-border-decorative-lowemp); }
+.ig-foot-brand { display: flex; align-items: center; gap: 12px; }
+.ig-foot-brand img { height: 22px; display: block; }
+.ig-foot-brand span { font: var(--evr-body2); color: var(--evr-content-primary-lowemp); max-width: 28ch; line-height: 1.4; }
+.ig-foot a { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: var(--evr-radius-2xs); background: var(--evr-interactive-primary-default); color: #fff; font: var(--evr-button-lg); text-decoration: none; transition: background-color 150ms; }
+.ig-foot a:hover { background: var(--evr-interactive-primary-hover); }
+.ig-foot a svg { width: 16px; height: 16px; }
+
+/* sources line under poster */
+.ig-sources { margin: 22px auto 0; max-width: 760px; }
+.ig-sources p { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); line-height: 1.55; margin: 0; }
+.ig-sources b { color: var(--evr-content-primary-default); font-weight: var(--evr-fw-demibold); }

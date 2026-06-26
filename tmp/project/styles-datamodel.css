@@ -1,0 +1,827 @@
+/* =====================================================================
+   Flex Work Data Model doc — visualises the post-alignment object map
+   across Dayforce core products. Standalone; pairs with styles-alignment.css
+   but extends it with diagram primitives.
+   ===================================================================== */
+
+* { box-sizing: border-box; }
+html { color-scheme: light; }
+
+body.dm {
+  margin: 0;
+  background: var(--evr-surface-root-primary);
+  color: var(--evr-content-primary-default);
+  font-family: var(--evr-font-text);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.dm a { color: var(--evr-interactive-primary-default); text-decoration: none; border-bottom: 1px solid currentColor; }
+.dm a:hover { color: var(--evr-interactive-primary-hover); }
+
+/* ---------- shell --------------------------------------------------- */
+
+.dm-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 56px;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+  align-items: start;
+}
+@media (max-width: 1020px) {
+  .dm-shell { grid-template-columns: 1fr; gap: 24px; padding: 32px 20px 64px; }
+  .dm-toc { position: static !important; }
+}
+
+/* ---------- sidebar TOC --------------------------------------------- */
+
+.dm-toc {
+  position: sticky;
+  top: 32px;
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.dm-toc-mark {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  margin-bottom: 14px;
+}
+.dm-toc-title {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--evr-content-primary-highemp);
+  margin-bottom: 22px;
+}
+.dm-toc ol { list-style: none; margin: 0; padding: 0; counter-reset: dmc; }
+.dm-toc li {
+  counter-increment: dmc;
+  margin: 0;
+  padding: 6px 0;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+}
+.dm-toc li:last-child { border-bottom: 1px solid var(--evr-border-decorative-lowemp); }
+.dm-toc li a {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  color: var(--evr-content-primary-default);
+  border-bottom: none;
+}
+.dm-toc li a::before {
+  content: counter(dmc, decimal-leading-zero);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  color: var(--evr-content-primary-lowemp);
+  font-weight: 500;
+}
+.dm-toc li a:hover { color: var(--evr-interactive-primary-default); }
+
+/* ---------- main column --------------------------------------------- */
+
+.dm-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+/* hero */
+.dm-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--evr-border-decorative-default);
+}
+.dm-eyebrow {
+  font-family: var(--evr-font-text);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--evr-content-status-informative-default);
+}
+.dm-title {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--evr-content-primary-highemp);
+  text-wrap: balance;
+}
+.dm-deck {
+  font-family: var(--evr-font-display);
+  font-weight: 400;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.4;
+  color: var(--evr-content-primary-default);
+  max-width: 60ch;
+  text-wrap: pretty;
+  margin: 0;
+}
+.dm-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 8px;
+}
+.dm-meta dt {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--evr-content-primary-lowemp);
+}
+.dm-meta dd {
+  margin: 2px 0 0;
+  color: var(--evr-content-primary-highemp);
+  font-weight: 500;
+}
+
+/* ---------- section header ------------------------------------------ */
+
+.dm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  scroll-margin-top: 24px;
+}
+.dm-h2 {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  margin: 0;
+  color: var(--evr-content-primary-highemp);
+  text-wrap: balance;
+}
+.dm-h2-num {
+  font-family: var(--evr-font-text);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: var(--evr-content-status-informative-default);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+.dm-lead {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--evr-content-primary-default);
+  max-width: 70ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ---------- product palette ----------------------------------------- */
+/* Each Dayforce core product gets a stable color slot used across
+   the doc — module headers, badges, swimlane stripes, etc.            */
+:root {
+  --dm-orgsetup: var(--evr-blue-400);
+  --dm-orgsetup-bg: var(--evr-surface-decorative-low-blue);
+  --dm-orgsetup-hi: var(--evr-surface-decorative-default-blue);
+
+  --dm-people: var(--evr-purple-400);
+  --dm-people-bg: var(--evr-surface-decorative-low-purple);
+  --dm-people-hi: var(--evr-surface-decorative-default-purple);
+
+  --dm-position: var(--evr-teal-500);
+  --dm-position-bg: var(--evr-surface-decorative-low-teal);
+  --dm-position-hi: var(--evr-surface-decorative-default-teal);
+
+  --dm-time: var(--evr-green-500);
+  --dm-time-bg: var(--evr-surface-decorative-low-green);
+  --dm-time-hi: var(--evr-surface-decorative-default-green);
+
+  --dm-payroll: var(--evr-orange-500);
+  --dm-payroll-bg: var(--evr-surface-decorative-low-orange);
+  --dm-payroll-hi: var(--evr-surface-decorative-default-orange);
+
+  --dm-recruiting: var(--evr-red-400);
+  --dm-recruiting-bg: var(--evr-surface-decorative-low-red);
+  --dm-recruiting-hi: var(--evr-surface-decorative-default-red);
+
+  --dm-flexwork: var(--evr-neutral-12);
+  --dm-flexwork-bg: var(--evr-neutral-95);
+  --dm-flexwork-hi: var(--evr-neutral-90);
+}
+
+/* ---------- legend strip -------------------------------------------- */
+
+.dm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  padding: 18px 22px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+}
+.dm-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--evr-content-primary-highemp);
+  font-weight: 500;
+}
+.dm-legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--evr-radius-4xs);
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.dm-legend-sub {
+  color: var(--evr-content-primary-lowemp);
+  font-weight: 400;
+  font-size: 12.5px;
+  margin-left: 2px;
+}
+
+/* ---------- universe diagram (section 1) ---------------------------- */
+/* Center "Dayforce core" node with Flex Work objects orbiting and
+   color-coded by destination product. Pure CSS grid (no SVG hairballs). */
+
+.dm-universe {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  padding: 36px 32px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  position: relative;
+}
+@media (max-width: 860px) { .dm-universe { grid-template-columns: 1fr; } }
+
+.dm-uni-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dm-uni-col h4 {
+  font-family: var(--evr-font-display);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  margin: 0 0 4px;
+}
+
+.dm-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-left: 3px solid var(--ac, var(--evr-neutral-40));
+  border-radius: var(--evr-radius-3xs);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dm-card-name {
+  font-family: var(--evr-font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--evr-content-primary-highemp);
+  letter-spacing: -0.005em;
+}
+.dm-card-sub {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--evr-content-primary-lowemp);
+}
+.dm-card-tag {
+  align-self: flex-start;
+  margin-top: 4px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ac, var(--evr-neutral-50));
+  background: var(--ac-bg, transparent);
+  border-radius: var(--evr-radius-4xs);
+  padding: 2px 8px;
+}
+
+.dm-card--orgsetup    { --ac: var(--dm-orgsetup);    --ac-bg: var(--dm-orgsetup-bg); }
+.dm-card--people      { --ac: var(--dm-people);      --ac-bg: var(--dm-people-bg); }
+.dm-card--position    { --ac: var(--dm-position);    --ac-bg: var(--dm-position-bg); }
+.dm-card--time        { --ac: var(--dm-time);        --ac-bg: var(--dm-time-bg); }
+.dm-card--payroll     { --ac: var(--dm-payroll);     --ac-bg: var(--dm-payroll-bg); }
+.dm-card--recruiting  { --ac: var(--dm-recruiting);  --ac-bg: var(--dm-recruiting-bg); }
+.dm-card--flexwork    { --ac: var(--dm-flexwork);    --ac-bg: var(--dm-flexwork-bg); }
+
+/* ---------- module strip (section 2) -------------------------------- */
+/* Each Dayforce core module is one horizontal "lane" with the Flex Work
+   objects that fold into it. */
+
+.dm-lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dm-lane {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  overflow: hidden;
+}
+.dm-lane-head {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 22px;
+  background: var(--lane-bg, var(--evr-surface-secondary-default));
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.dm-lane-mark {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dm-lane-product {
+  font-family: var(--evr-font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lane-ac, var(--evr-content-primary-lowemp));
+}
+.dm-lane-title {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.18;
+  letter-spacing: -0.005em;
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.dm-lane-summary {
+  font-size: 14.5px;
+  color: var(--evr-content-primary-default);
+  line-height: 1.5;
+  max-width: 60ch;
+}
+.dm-lane-strategy {
+  font-family: var(--evr-font-text);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lane-ac, var(--evr-content-primary-default));
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.dm-lane--orgsetup    { --lane-ac: var(--dm-orgsetup);    --lane-bg: var(--dm-orgsetup-bg); }
+.dm-lane--people      { --lane-ac: var(--dm-people);      --lane-bg: var(--dm-people-bg); }
+.dm-lane--position    { --lane-ac: var(--dm-position);    --lane-bg: var(--dm-position-bg); }
+.dm-lane--time        { --lane-ac: var(--dm-time);        --lane-bg: var(--dm-time-bg); }
+.dm-lane--payroll     { --lane-ac: var(--dm-payroll);     --lane-bg: var(--dm-payroll-bg); }
+.dm-lane--recruiting  { --lane-ac: var(--dm-recruiting);  --lane-bg: var(--dm-recruiting-bg); }
+
+.dm-lane-body {
+  padding: 20px 22px 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media (max-width: 760px) { .dm-lane-body { grid-template-columns: 1fr; } }
+.dm-lane-body > div { padding: 0 22px; }
+.dm-lane-body > div:first-child { padding-left: 0; border-right: 1px solid var(--evr-border-decorative-lowemp); }
+@media (max-width: 760px) {
+  .dm-lane-body > div { padding: 0; }
+  .dm-lane-body > div:first-child { padding-bottom: 16px; border-right: none; border-bottom: 1px solid var(--evr-border-decorative-lowemp); margin-bottom: 16px; }
+}
+
+.dm-lane-sub {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  margin: 0 0 12px;
+}
+
+.dm-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
+.dm-pair {
+  display: grid;
+  grid-template-columns: 1fr 24px 1fr;
+  gap: 10px;
+  align-items: start;
+  font-size: 13.5px;
+}
+.dm-pair-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dm-pair-side code {
+  font-family: var(--evr-font-mono);
+  font-size: 12px;
+  color: var(--evr-content-primary-highemp);
+  background: var(--evr-surface-secondary-default);
+  padding: 1px 6px;
+  border-radius: var(--evr-radius-4xs);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  align-self: flex-start;
+}
+.dm-pair-side .dm-pair-note {
+  font-size: 12px;
+  color: var(--evr-content-primary-lowemp);
+  line-height: 1.4;
+}
+.dm-pair-arrow {
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--lane-ac, var(--evr-content-primary-lowemp));
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.dm-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dm-bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--evr-content-primary-highemp);
+}
+.dm-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 9px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--lane-ac, var(--evr-content-primary-lowemp));
+}
+
+/* ---------- lifecycle / lineage flow (section 3) -------------------- */
+
+.dm-flow {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  padding: 36px 28px 32px;
+  overflow-x: auto;
+}
+.dm-flow-track {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(140px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+  min-width: 0;
+}
+@media (max-width: 980px) {
+  .dm-flow-track { grid-template-columns: repeat(7, 180px); min-width: 1320px; }
+}
+.dm-flow-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  padding: 14px 14px 16px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-top: 3px solid var(--ac, var(--evr-neutral-40));
+  border-radius: var(--evr-radius-3xs);
+}
+.dm-flow-step + .dm-flow-step::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  background: var(--evr-content-primary-lowemp);
+}
+.dm-flow-step + .dm-flow-step::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  margin-top: -3px;
+  border: 3px solid transparent;
+  border-left-color: var(--evr-content-primary-lowemp);
+}
+.dm-flow-step--orgsetup    { --ac: var(--dm-orgsetup); }
+.dm-flow-step--people      { --ac: var(--dm-people); }
+.dm-flow-step--position    { --ac: var(--dm-position); }
+.dm-flow-step--time        { --ac: var(--dm-time); }
+.dm-flow-step--payroll     { --ac: var(--dm-payroll); }
+.dm-flow-step--flexwork    { --ac: var(--dm-flexwork); }
+.dm-flow-tag {
+  font-family: var(--evr-font-text);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ac, var(--evr-content-primary-lowemp));
+}
+.dm-flow-name {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.dm-flow-id {
+  font-family: var(--evr-font-mono);
+  font-size: 11.5px;
+  color: var(--evr-content-primary-lowemp);
+  word-break: break-all;
+}
+.dm-flow-fields {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--evr-font-mono);
+  font-size: 11px;
+  color: var(--evr-content-primary-default);
+}
+.dm-flow-caption {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--evr-content-primary-lowemp);
+  max-width: 80ch;
+}
+
+/* ---------- ownership grid (section 4) ------------------------------ */
+
+.dm-own {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 760px) { .dm-own { grid-template-columns: 1fr; } }
+.dm-own-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  padding: 22px 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dm-own-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dm-own-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.dm-own-head h4 {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.005em;
+  margin: 0;
+  color: var(--evr-content-primary-highemp);
+}
+.dm-own-card .dm-own-sub {
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  margin: -8px 0 0;
+}
+.dm-own-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dm-own-list li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--evr-content-primary-highemp);
+}
+.dm-own-list li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--evr-content-primary-lowemp);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.dm-own-list code {
+  font-family: var(--evr-font-mono);
+  font-size: 12.5px;
+  color: var(--evr-content-primary-highemp);
+  background: var(--evr-surface-secondary-default);
+  padding: 1px 5px;
+  border-radius: var(--evr-radius-4xs);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+}
+.dm-own-card--flex .dm-own-mark { background: var(--dm-flexwork); }
+.dm-own-card--shared .dm-own-mark { background: var(--dm-position); }
+.dm-own-card--core .dm-own-mark { background: var(--dm-orgsetup); }
+.dm-own-card--retired .dm-own-mark { background: var(--evr-content-status-error-default); }
+
+/* ---------- inventory table (section 5) ----------------------------- */
+
+.dm-inv-wrap {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  overflow: hidden;
+}
+.dm-inv {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.dm-inv th, .dm-inv td {
+  text-align: left;
+  padding: 12px 14px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.dm-inv thead th {
+  font-family: var(--evr-font-text);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  background: var(--evr-surface-secondary-default);
+  border-bottom: 1px solid var(--evr-border-decorative-default);
+}
+.dm-inv tbody tr:last-child td { border-bottom: none; }
+.dm-inv tbody tr:hover td { background: var(--evr-surface-primary-hover); }
+.dm-inv td code, .dm-inv th code {
+  font-family: var(--evr-font-mono);
+  font-size: 12px;
+  color: var(--evr-content-primary-highemp);
+  background: var(--evr-surface-secondary-default);
+  padding: 1px 6px;
+  border-radius: var(--evr-radius-4xs);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+}
+.dm-inv-product {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--evr-content-primary-highemp);
+}
+.dm-inv-product::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--prod, var(--evr-neutral-50));
+}
+.dm-inv-product--orgsetup    { --prod: var(--dm-orgsetup); }
+.dm-inv-product--people      { --prod: var(--dm-people); }
+.dm-inv-product--position    { --prod: var(--dm-position); }
+.dm-inv-product--time        { --prod: var(--dm-time); }
+.dm-inv-product--payroll     { --prod: var(--dm-payroll); }
+.dm-inv-product--recruiting  { --prod: var(--dm-recruiting); }
+.dm-inv-product--flexwork    { --prod: var(--dm-flexwork); }
+
+/* ---------- xref ring (section 6) ----------------------------------- */
+
+.dm-xref {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  padding: 28px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 860px) { .dm-xref { grid-template-columns: 1fr; } }
+.dm-xref h4 {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.003em;
+  margin: 0 0 12px;
+  color: var(--evr-content-primary-highemp);
+}
+.dm-xref pre {
+  margin: 0;
+  font-family: var(--evr-font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--evr-content-primary-highemp);
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-3xs);
+  padding: 16px 18px;
+  overflow-x: auto;
+}
+.dm-xref-key { color: var(--evr-content-decorative-blue); }
+.dm-xref-val { color: var(--evr-content-status-success-default); }
+.dm-xref-comment { color: var(--evr-content-primary-lowemp); font-style: italic; }
+
+/* ---------- callout / footer ---------------------------------------- */
+
+.dm-callout {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 28px;
+  align-items: start;
+  padding: 22px 28px;
+  background: var(--evr-surface-decorative-low-blue);
+  border-radius: var(--evr-radius-sm);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+}
+.dm-callout-tag {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--evr-content-decorative-blue);
+}
+.dm-callout p {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--evr-content-primary-highemp);
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+
+.dm-footer {
+  padding-top: 32px;
+  border-top: 1px solid var(--evr-border-decorative-default);
+  font-size: 13px;
+  color: var(--evr-content-primary-lowemp);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.dm-footer strong { color: var(--evr-content-primary-default); font-weight: 600; }
+
+/* link between this doc and the alignment recommendations doc */
+.dm-pair-doclink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--evr-content-status-informative-default);
+  margin-left: 8px;
+  font-weight: 600;
+}
+.dm-pair-doclink::after {
+  content: "↗";
+  font-size: 13px;
+  margin-left: 2px;
+}

@@ -1,0 +1,2419 @@
+ AI Assistant Admin
+You can localize the disclaimer for each culture that is enabled in your Dayforce environment. The
+list of disclaimers shows you which culture is the default for your organization. If an employee is
+
+-- 236 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 237 of 0
+using Dayforce in a culture that doesn’t have a disclaimer configured, they see the disclaimer for
+the default culture. The default culture is configured in Site Setup > Client, in the Cultures tab.
+A good disclaimer clearly states what AI Assistant can and can’t do, recommends that users verify
+important information, and provides links for these details. For example, “Content might not be
+specific to your terms of employment. Confirm by checking your company's policies or applicable
+contracts.” If you don’t customize the disclaimer, AI Assistant shows a generic disclaimer by
+default.
+Add a Disclaimer
+To add a disclaimer:
+1. Go to AI Assistant Admin and click the Disclaimers tab.
+2. Click New disclaimer.
+3. Select the culture for the new disclaimer.
+4. Enter the disclaimer text. You can click the link icon to add links to the text.
+5. Click Save.
+Edit a Disclaimer
+To edit a disclaimer:
+1. Go to AI Assistant Admin and click the Disclaimers tab.
+2. In the list of disclaimers, find the one that you want to update and click the more actions
+icon next to it.
+3. Click Edit.
+4. In the Edit disclaimer dialog box, update the text and click Save changes.
+Delete a Disclaimer
+To delete a disclaimer:
+1. Go to AI Assistant Admin and click the Disclaimers tab.
+2. In the list of disclaimers, find the one that you want to delete and click the more actions icon
+next to it.
+3. Click Delete.
+4. In the confirmation dialog box, click Delete disclaimer.
+Configure Messages for AI Assistant
+In AI Assistant Admin, in the Messages tab, administrators can configure a custom message that
+helps employees to find assistance when AI Assistant can’t give an appropriate response. The
+message could contain contact details for their HR department or other information to help
+employees find what they need. The message is shown when an employee uses the thumbs
+down icon and submits negative feedback about AI Assistant.
+
+-- 237 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 238 of 0
+Before You Begin: If your organization uses HR Service Delivery, you don’t need to configure a
+message because AI Assistant shows the Create a Case button instead of the message.
+Role feature access: AI Assistant Admin
+You can add a message for each culture that is enabled in your Dayforce environment. The list of
+messages shows you which culture is the default for your organization. If an employee is using
+Dayforce in a culture that doesn’t have a message configured, they see the message for the
+default culture. The default culture is configured in Site Setup > Client, in the Cultures tab.
+Add a Message
+To add a message:
+1. Go to AI Assistant Admin and click the Messages tab.
+2. Click New message.
+3. Select the culture for the new message.
+4. Enter the message text. You can use the text editor to format the message as needed.
+5. Click Save.
+Edit a Message
+To edit a message:
+1. Go to AI Assistant Admin and click the Messages tab.
+2. In the list of messages, find the one that you want to update.
+3. Click the more actions icon next to the message in the list.
+4. Click Edit.
+5. In the Edit message dialog box, update the message and click Save changes.
+Delete a Message
+To delete a message:
+1. Go to AI Assistant Admin and click the Messages tab.
+2. In the list of messages, find the one that you want to delete.
+3. Click the more actions icon next to the message in the list.
+4. Click Delete.
+5. In the confirmation dialog box, click Delete message.
+Configure Content Settings for AI Assistant
+In AI Assistant Admin, in the Content Settings tab, administrators can specify whetherAI
+Assistant's responses include Dayforce guide content. When you allow guide content, AI
+Assistant's responses can include information about features that your organization doesn't use. If
+
+-- 238 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 239 of 0
+you don’t want your employees to see this kind of user guide content, you can exclude that
+content from AI Assistant's responses.
+Role feature access: AI Assistant Admin
+The Content Settings tab contains the Use Dayforce user guides switch. With the switch set to on,
+AI Assistant uses Dayforce guide content when it generates responses to employee questions.
+With the switch set to off, AI Assistant doesn't use Dayforce user guide content when it generates
+responses.
+Configure Disclaimers
+Disclaimers are messages that Dayforce shows when you first log in. Dayforce prompts you to
+accept the message before you can finish logging in.
+To configure disclaimers:
+1. Go to System Admin > Disclaimer and click Add.
+2. Enter information in the Disclaimer Name, Disclaimer, Effective From, and Effective To fields.
+3. To choose your organization, click Add in the grid below and then click the Organization
+field. The organization hierarchy window opens, where you select and add your
+organization.
+4. Select the Display to Everyone checkbox.
+5. Note: Selecting this checkbox shows the disclaimer to everyone in the associated
+organization, regardless of whether the Show Disclaimer checkbox in System Admin > User
+is selected for a given user.
+5. (Optional) To localize the disclaimer message in the language of your choice:
+a. Select your disclaimer and then click Localize.
+b. In the Localize Disclaimer dialog box, click Add.
+c. In the Language drop-down list, select your desired language.
+d. Enter a name and, optionally, a description.
+e. Click Save.
+6. Click Save.
+When you log in, Dayforce shows your disclaimer:
+
+-- 239 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 240 of 0
+When you click Next, Dayforce shows the Home page. If you click Cancel, Dayforce takes you
+back to the login page.
+Configure Exchange Rates
+You can configure base currency and exchange rates in System Admin > Exchange Rates.
+To configure base currency and exchange rates:
+1. Go to System Admin > Exchange Rates.
+2. In the General section, select an option in the Base Currency drop-down list.
+3. Note: Dayforce doesn't convert currencies until currency conversion is enabled. After
+currency conversion is enabled, you can't change the base currency.
+3. In the Exchange Rates section, click Add.
+4. Select an option in the Currency drop-down list.
+5. Enter a value in the Exchange Rate field. This is the amount of the associated currency that
+is exchanged for 1 USD.
+6. Enter a date in the Effective From field and, optionally, the Effective To field.
+7. Click Save.
+Localization
+In Dayforce, you can localize your organization's data, label/buttons, alert messages, and feature
+names. Dayforce automatically shows localized text in many areas, based on the user's language
+preferences (also called a culture setting). See Client Cultures.
+Some areas of Dayforce aren't automatically translated, such as data created by users (for
+example, pay categories, pay types, job names, and relationship types). For this data, you can
+"localize" Dayforce to suit your organization's needs, meaning that you can customize your
+organization's data according to a specific culture.
+There are two reasons that you might want to use the localization feature:
+
+-- 240 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 241 of 0
+To localize the text that isn’t already translated (that is, user-created data).
+To customize the text that is already provided. For example, you could change the New
+button to Create.
+This section includes the following tasks:
+Localize Data
+Localize Labels
+Localize Notifications
+Show Localization Keys
+Localize Data
+In Dayforce, you can localize your organization’s data. Data refers to the information that you enter
+to customize Dayforce, such as pay categories, pay types, job names, and relationship types.
+Role feature access: Application Container > Main Application UI > Localization
+To localize data:
+1. Go to the feature that you want to localize.
+2. Click the data that you want to change. For example, to display a job title in French, click
+the job name, such as Assistant Manager:
+3. Click Localize. A dialog box opens that shows the existing localizations for the selected
+data.
+4. Click Add.
+5. In the Language drop-down list, select a language. See Client Cultures.
+6. In the Name field, enter the label as you want it to appear to the user.
+7. In the Description field, enter the description as you want it to appear to the user.
+8. Click Save.
+
+-- 241 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 242 of 0
+Note: To view your changes, you must have a user profile set up for the selected culture and log in
+using that profile in a new session. See View User Accounts.
+Show Localization Keys
+Before you can localize labels or alerts, you must show localization keys. See Localize Labels and
+Localize Notifications.
+You can show localization keys by clicking the localize icon ( ) in the Dayforce header bar.
+Click the localize button again to hide the keys.
+Here’s an example showing the Save button in normal mode and in localization mode:
+1.
+Localization modes
+Normal Mode 	Localization Mode
+Role feature access: Application Container > Main Application UI > Localize Interface
+Continue to the steps described in Localize Labels.
+Localize Labels
+In Dayforce, you can localize labels including buttons, column headers, and field names. For
+example, you could change the Add button to Create.
+Before You Begin: Ensure that you completed the steps described in Show Localization Keys.
+Role feature access: Application Container > Main Application UI > Localization
+To localize labels:
+1. Go to the feature that you want to localize.
+2. Locate the label that you want to localize and take note of the KEY: label
+3. Click the user icon ( ) at the top right of the screen.
+4. Click KEY: lblLocalize. The lblOverrideLabelStrings dialog box opens, which shows a list of
+the existing label overrides.
+5. Click Key: lblNew.
+6. In the %%%Label%%% column, enter the name of the label that you want to change using
+the same name displayed in localization mode. For example, to localize the New button,
+enter lblNew.
+7. In the KEY: Value column, enter the label as you want it to appear to the user. For example,
+if you want the New button to display as Create, enter Create.
+
+-- 242 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 243 of 0
+8. In the KEY: Language column, select a language from the drop-down list. See Client
+Cultures.
+9. Click Save.
+Note: To view your changes, you must have a user profile set up for the selected language and
+log in using that profile in a new session. See View User Accounts.
+Localize Notifications
+Dayforce provides default messages for all notifications but you can localize the text in the subject
+and body of notifications.
+Most messages contain tokens, or variables, (such as, {0} or {1}) that Dayforce replaces with
+information when the notification is sent. For example, to change the default message to alert the
+user when associates are overdue for a meal or break, you can set up a message that includes
+the names of the associates: "The following associates are due for a meal: {0}", where {0}
+represents the names of the associates.
+Before You Begin: You must assign the Application Container > Main Application UI > Localization
+feature to the user roles responsible for localizing labels and notifications. See Role Features. You
+also need to display the localization keys. See Show Localization Keys.
+Important: Removing or modifying tokens significantly changes the meaning of the notification.
+Edit tokens with caution.
+To localize notifications:
+1. Go to System Admin > System Notifications.
+2. In the Subscriptions tab, click the notification that you want to localize.
+3. Click the user icon at the top right of the screen.
+
+-- 243 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 244 of 0
+4. Click KEY: lblLocalize. The lblOverrideLabelStrings dialog box opens, which shows a list of
+the existing label overrides.
+5. Click KEY: lbl New.
+6. In the %%% Label %%% column, enter the notification label. For example, to change the
+message that Dayforce shows to associates when they’re due for a meal, enter
+alertMealBreakOverDueAlertContent.
+7. In the KEY: Value column, enter the notification as you want it to appear to the user. For
+example, The following employees must be hungry: {0}.
+8. In the KEY: Language column, select a language from the drop-down list. See Client
+Cultures.
+9. Click Save.
+Localizable notifications
+Notification 	Purpose 	Default Text
+alert90DayReviewContentAlert
+The message sent by
+the Ninety Day Review
+notification.
+Alert. Emp #{0},
+{1} {2}, {3} {4},
+Payclass: {5},
+Status: {6}.
+alert90DayReviewSMSAlert
+The SMS message sent
+by the Ninety Day
+Review notification.
+ALERT! There are
+{0} employees
+due for their 90
+day review.
+alertBatchForecastFailureAlertContent
+The message sent by
+the Batch Forecast
+Completion notification
+when the batch forecast
+fails.
+Batch forecast
+'{0}' failed. Please
+review the logs for
+further details.
+alertBatchForecastFailureAlertSMS
+The SMS message sent
+by the Batch Forecast
+Completion notification
+when the batch forecast
+fails.
+Batch forecast
+'{0}' failed.
+alertBatchForecast SuccessAlertContent
+The message sent by
+the Batch Forecast
+
+-- 244 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 245 of 0
+Completion notification
+when the batch forecast
+completes successfully.
+Batch forecast '{0}'
+completed with {1}
+failures.
+alertBatchForecast
+SuccessAlertSMS The SMS
+message sent by the Batch
+Forecast Completion
+notification when the batch
+forecast completes
+successfully.
+Batch forecast '{0}'
+completed.
+alertHoursWorkedAlertBody The message sent by the
+Hours Worked notification.
+alertEmployeeAuthorizationAlertBody1
+The message sent by the
+Employee Authorization
+notification with 1 in the
+Message Escalation Level
+setting.
+This is a reminder there
+are unauthorized records
+that need approval.
+Please log in to the
+system and approve the
+records for the following
+pay periods {0}.
+alertEmployeeAuthorizationAlertBody2
+The message sent by the
+Employee Authorization
+notification with 2 in the
+Message Escalation Level
+setting.
+This is a second
+reminder there are
+unauthorized records that
+need approval. Please
+log in to the system and
+approve the records for
+the following pay periods
+{0}.
+
+-- 245 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 246 of 0
+alertEmployeeAuthorizationAlertBody3
+The message sent by the
+Employee Authorization
+notification with 3 in the
+Message Escalation Level
+setting.
+This is an urgent
+reminder there are
+unauthorized records that
+need approval. Please
+log in to the system and
+approve the records for
+the following pay periods
+{0}.
+alertHoursWorked
+AlertSMSBody The SMS
+message sent by the Hours
+Worked notification.
+Worked Hours Alert for:
+{0}
+alertMealBreakOverDueAlertContent
+The message sent by the
+Meal / Break Overdue
+notification.
+The following employees
+are due for a meal or
+break: {0}
+alertOfflineClockAlertContent
+The body of the message
+sent by the Offline Clock
+notification; these tokens
+represent the MAC address
+and name of the clocks that
+are offline and shouldn't be
+removed.
+{0} ({1})
+alertOfflineClockAlertHeader
+The header of the message
+sent by the Offline Clock
+notification if multiple
+clocks are offline.
+{0} clocks are offline
+alertOfflineClockAlertHeader1
+The header of the message
+sent by the Offline Clock
+notification if one clock is
+offline.
+{0} clock is offline
+alertOvertimeProximityAlertBody
+The message sent by the
+Overtime Proximity
+notification.
+The following employees
+are about to get overtime:
+{0}
+
+-- 246 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 247 of 0
+alertOvertimeProximityAlertSMSBody
+The SMS message sent by
+the Overtime Proximity
+notification.
+Overtime Proximity Alert
+for: {0}
+alertPlanNotPublishedAlertHeader
+The header of the message
+sent by the Plan Not
+Published notification.
+Unpublished plan for
+{0} starting {1:d}.
+alertScheduleNotPublishedAlertBody
+The body of the message
+sent by the Plan Not
+Published notification.
+This is a reminder there
+are unpublished
+schedules for {0} for the
+period starting {1:d}.
+alertScheduleNotPublishedAlertHeader
+The header of the message
+sent by the Schedule Not
+Published notification.
+Unpublished schedule
+for {0} starting {1:d}.
+alertStaffNotScheduledAlertBody
+The message sent by the
+Staff Not Scheduled
+notification.
+Following employees
+not scheduled: {0}
+alertUpcomingTAFWAlertContent
+The message sent by the
+Upcoming TAFW
+notification.
+The following
+employees have
+upcoming time off: {0}
+lblAvailabilityChangeApprovedDetails
+The message sent by the
+Employee Availability
+Change Approval
+notification when an
+availability change was
+approved.
+{0} has been approved.
+
+-- 247 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 248 of 0
+lblAvailabilityChangeApprovedManagerComments
+The message sent by
+the Employee
+Availability Change
+Approval notification
+when an availability
+change was approved
+with comments.
+{0} has been
+approved. {1}
+Manager
+Comment: {2}
+lblAvailabilityChangeDeniedDetails
+The message sent by
+the Employee
+Availability Change
+Approval notification
+when an availability
+change was denied.
+{0} has been
+denied.
+lblAvailabilityChangeDeniedManagerComments
+The message sent by
+the Employee
+Availability Change
+Approval notification
+when an availability
+change was denied
+with comments.
+{0} has been
+denied.{1}
+Manager
+Comment: {2}
+lblBidScheduleClosedContent
+The message sent by
+the Bid Processor
+notification when a bid
+window closes.
+The Bid Window
+{0} in which you
+participated has
+now closed.
+lblBidScheduleOpenedContent
+The message sent by
+the Bid Processor
+notification when a bid
+window opens.
+The Bid Window
+{0} in which you
+will participate
+has now been
+opened.
+
+-- 248 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 249 of 0
+lblBidScheduleToCloseContent
+The message sent by the
+Bid Processor notification
+when a bid window is
+about to close.
+The Bid Window {0}
+in which you are
+scheduled to
+participate will close
+on {1}.
+lblBidScheduleToOpenContent
+The message sent by the
+Bid Processor notification
+when a bid window is
+about to open.
+The Bid Window {0}
+in which you are
+scheduled to
+participate will open
+on {1}.
+lblChangeScheduledAlert
+The message sent by the
+Change Schedule
+notification.
+{0} changed the
+schedule for the
+period: {1:d} to {2:d}.
+The following days
+were modified:
+lblEmployeeNoShowAlertContent
+The body of the message
+sent by the Employee No
+Show notification.
+The following
+employees are
+available for call in:
+{0}{1} {2} {3}{4}{5}{6}
+lblEmployeeNoShowAlertHeader
+The header of the
+message sent by the
+Employee No Show
+notification.
+ALERT! {0}{1}{2}
+hasn’t clocked in for
+shift: {4} {5:d}{6:t} -
+{7:t}
+lblEmployeeTAFWAlertHeaderCancelDenied
+The header of the
+message sent by the
+Employee TAFW
+notification in the case
+that a manager denies a
+cancellation request.
+Cancellation request
+for {0} has been
+denied.
+lblEmployeeTAFWAlertCancelDenied The body of the message
+sent by the Employee
+TAFW notification in the
+
+-- 249 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 250 of 0
+case that a manager denies
+a cancellation request.
+{0} your
+cancellation
+request has been
+denied by {2}.
+{3}
+lblEmployeeTAFWAlertHeader
+The header of the message
+sent by the Employee TAFW
+notification in all cases other
+than when the manager
+denies a cancellation
+request.
+Time off request
+for {0} has been
+{1}.
+lblEmployeeTAFWAlert
+The body of the message
+sent by the Employee TAFW
+notification in all cases other
+than when the manager
+denies a cancellation
+request.
+{0} your time off
+request has been
+{1} by {2}.
+{3}
+lblNewAttendanceIncidentAlertHeader
+The header of the message
+sent by the Incident Violation
+Notification for an incident.
+An Incident has
+been logged.
+lblNewAttendanceIncidentAlertManagerBody
+The body of the message
+sent to managers by the
+Incident Violation Notification
+for an incident.
+An Incident of
+type {0} has
+been logged for
+{1} on {2}.
+lblNewAttendanceIncidentAlertEmpBody
+The body of the message
+sent to employees by the
+Incident Violation Notification
+for an incident.
+An Incident of
+type {0} has
+been logged on
+{1}.
+lblNewAttendanceViolationtAlertHeader
+The header of the message
+sent by the Incident Violation
+Notification for a violation.
+A violation has
+been logged.
+
+-- 250 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 251 of 0
+lblNewAttendanceViolationAlertManagerBody
+The body of the
+message sent to
+managers by the
+Incident Violation
+Notification for a
+violation.
+A violation of type {0}
+has been logged for
+{1} on {2}, with an
+HRIncident of type {3}
+and {4) as the action.
+lblNewAttendanceViolationAlertEmpBody
+The body of the
+message sent to
+employees by the
+Incident Violation
+Notification for a
+violation.
+A violation of type {0}
+has been logged on
+{1}, with an HRIncident
+of type {2} and {3) as
+the action.
+lblPendingTimeOffRequestAlertContent
+The body of the
+message sent by the
+Pending Time Off
+Request notification.
+{0} time off request(s)
+pending approval for
+{1} employee(s).
+lblPendingTimeOffRequestAlertSubject
+The header of the
+message and the
+subject of email
+messages sent by the
+Pending Time Off
+Request notification.
+{0} Time Off Request(s)
+Pending.
+lblPendingTimeOffRequestEmailContent
+The body of the
+message sent by the
+Pending Time Off
+Request notification.
+{0} time off request(s)
+pending approval for
+{1} employee(s).
+Dayforce can be
+accessed here: {2}.
+lblShiftTradeAcceptedAlert
+The message sent by
+the Shift Trade
+notification when a
+trade was accepted.
+Your shift on {0:d} {1:t}
+- {2:t} has been
+accepted by {3}.
+
+-- 251 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 252 of 0
+lblShiftTradeAlertOffer
+The message sent by the Shift
+Trade notification when a trade
+was offered.
+{0} has offered you shift on
+{1:D} {2:t} - {3:t}.
+lblShiftTradeAlertPartialOffer
+The message sent by the Shift
+Trade notification when part of a
+shift was offered.
+{0} has offered you partial shift
+on {1:D} {2:t} - {3:t}.
+lblShiftTradeAlertPartialPost
+The message sent by the Shift
+Trade notification when part of a
+shift was posted.
+{0} has posted partial shift on
+{1:D} {2:t} - {3:t}.
+lblShiftTradeAlertPost
+The message sent by the Shift
+Trade notification when a shift
+was posted.
+{0} has posted shift on {1:D}
+{2:t} - {3:t}.
+lblShiftTradeAlertSwap
+The message sent by the Shift
+Trade Alert when a shift swap
+was offered.
+{0} has offered to swap shift on
+{1:D} {2:t} - {3:t} with your shift
+on {4:D} {5:t} - {6:t}.
+lblShiftTradeApprovedAlert
+The message sent by the Shift
+Trade notification when a trade
+was approved.
+The trade of shift on {0:d} {1:t} -
+{2:t} between {3} and {4} has
+been approved.
+lblShiftTradeDeclinedAlert
+The message sent by the Shift
+Trade notification when a trade
+was declined.
+Your offer to trade the shift on
+{0:d} {1:t} - {2:t} has been
+declined by {3}.
+lblShiftTradeDeniedAlert
+The message sent by the Shift
+Trade notification when a trade
+was denied.
+The trade of shift on {0:d} {1:t} -
+{2:t} between {3} and {4} has
+been denied.
+msgAlertContent
+The body of the message sent
+by the Timecard Comment
+notification.
+{0} Comment for {1:MMM-dd}:
+{2}.
+
+-- 252 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 253 of 0
+msgAlertHeader
+The header of the
+message sent by
+the Timecard
+notification.
+{0} has updated
+comment on
+Time Card for
+{1:MMM-dd}.
+msgEmailBody
+The body of the
+email message
+sent by the
+Timecard
+Comment
+notification.
+{0}
+msgEmailSubject
+The subject of the
+email message
+sent by the
+Timecard
+Comment
+notification.
+{0} has updated
+comment on
+Time Card for {1:
+MMM dd}.
+msgLMSCertificateToBeExpiredEEAlertMessageHeader
+The header of the
+message sent by
+the Certification
+Expiration
+Approaching -
+Employee
+notification.
+Your certification
+is expiring soon:
+{Certification
+Name}
+
+-- 253 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 254 of 0
+If you have any
+questions,
+please contact
+your
+administrator.
+msgLMSCertificateToBeExpiredMgrAlertMessageHeader
+The message
+content for the
+Certification
+Expiration
+Approaching -
+Manager
+notification.
+Certification
+Approaching
+Expiration -
+Manager Alert
+msgLMSCertificateToBeExpiredMgrAlertMessage
+The message
+content for the
+Certification
+Approaching
+Expiration -
+Manager
+notification.
+The following
+employee(s)
+have
+certification(s)
+that are about
+to expire.
+msgLMSCertificateToBeExpiredAdminAlertMessageHeader
+The header of
+the message
+sent by the
+Certification
+Expiration
+Approaching -
+Administrator
+notification.
+Certification
+Approaching
+Expiration -
+Administrator
+Alert
+msgLMSCertificateToBeExpiredAdminAlertMessage
+The message
+content for the
+Certification
+Expiration
+Approaching -
+Administrator
+notification.
+The following
+employee
+certification(s)
+are
+approaching
+their expiration
+date
+
+-- 254 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 255 of 0
+msgLMSCertificateExpiredEEAlertMessageHeader
+The header for
+the Certification
+Expiration -
+Employee
+notification.
+It's time to renew
+your certification:
+{Certification Name}
+msgLMSCertificateExpiredEEAlertMessage
+The content for
+the Certification
+Expiration -
+Employee
+notification.
+Your certification
+has expired:
+{Certification name}
+on {Expiration
+Date}.
+Please click on the
+name of the
+certification to
+access and renew
+your certificate.
+If you have any
+questions, please
+contact your
+administrator.
+msgLMSCertificateExpiredMgrAlertMessageHeader
+The header for
+the Certification
+Expiration -
+Manager
+notification.
+Certification
+Expiration -
+Manager Alert
+msgLMSCertificateExpiredMgrAlertMessage
+The message
+content for the
+Certification
+Expiration -
+Manager
+notification.
+The following
+employee(s) have
+certification(s) that
+have expired
+msgLMSCertificateExpiredAdminAlertMessageHeader
+The header for
+the Certification
+Expiration -
+
+-- 255 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 256 of 0
+Administrator
+notification.
+Certification
+Expiration -
+Administrator Alert
+msgLMSCertificateExpiredAdminAlertMessage
+The content for the
+Certification Expiration
+- Administrator
+notification.
+The following
+employee
+certification(s) have
+expired
+msgLMSSkillExpiredEEAlertMessageHeader
+The header for the
+Skill Expiration -
+Employee notification.
+Skill Expiration
+msgLMSSkillExpiredEEAlertMessage
+The content for the
+Skill Expiration -
+Employee notification.
+The following skill(s)
+have expired
+msgLMSSkillExpiredMgrAlertMessageHeader
+The header for the
+Skill Expiration -
+Manager notification.
+Skill Expiration -
+Manager Alert
+msgLMSSkillExpiredMgrAlertMessage
+The content for the
+Skill Expiration -
+Manager notification.
+The following
+employee(s) have
+skill(s) that have
+expired
+msgLMSSkillExpiredAdminAlertMessageHeader
+The header for the
+Skill Expiration -
+Administrator
+notification.
+Skill Expiration -
+Administrator Alert
+
+-- 256 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 257 of 0
+msgLMSSkillExpiredAdminAlertMessage
+The content for the
+Skill Expiration -
+Administrator
+notification.
+The following
+employee skill(s)
+have expired
+msgLMSCourseCompletedEMAlertMessageHeader
+The header of the
+notification sent to
+managers
+regarding all
+completed courses
+by their employees.
+{0} has completed a
+course
+msgLMSCourseCompletedEMAlertMessage
+The body of the
+notification sent to
+managers
+regarding all
+completed courses
+by their employees.
+{0} completed {1} on
+{2}
+msgLMSCourseEnrollmentEEAlertMessageHeader
+The header of the
+notification sent
+when an employee
+has been enrolled
+in a course.
+You have been
+enrolled in a course
+msgLMSCourseEnrollmentEEAlertMessage
+The message sent
+to employees
+regarding a course
+they have been
+enrolled in.
+You are now
+enrolled in: {Course
+Name}. Your course
+starts on:
+{Enrollment Date}.
+You can access the
+course on Learning
+> My Courses and
+Learning Plans. If
+you have any
+questions, contact
+your company's
+Dayforce
+
+-- 257 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 258 of 0
+Learning
+administrator.
+msgLMSCourseApproachingDeadlineEEAlertMessageHeader
+The header of
+the message
+sent to
+employees
+regarding a
+course(s)
+approaching
+deadlines.
+Action
+Required:
+Please
+complete {0}
+Course by {1}
+msgLMSCourseApproachingDeadlineEEAlertMessage
+The body of
+the message
+sent to
+employees
+regarding a
+course(s)
+approaching
+deadlines.
+You haven’t
+completed the
+{0} Course
+that has been
+assigned to
+you. Please
+complete the
+training by {1}
+deadline
+msgLMSCourseApproachingDeadlineMgrAlertMessageHeader
+The header
+for the
+Course
+Approaching
+Enrollment
+Deadline -
+Manager
+notification.
+Your
+employee(s)
+are
+approaching
+course
+enrollment
+deadline
+
+-- 258 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 259 of 0
+mgrAlertContentPartOne
+Part one of the
+content for the
+Course
+Approaching
+Enrollment
+Deadline -
+Manager
+notification.
+{0}:
+mgrAlertContentPartTwo
+Part two of the
+content for the
+Course
+Approaching
+Enrollment
+Deadline -
+Manager
+notification.
+{1} is
+approaching
+deadline on
+{2} for this
+course.
+msgLMSCoursePastDueDeadlineEEAlertMessageHeaderOne
+The header of
+the message
+sent to
+employees
+regarding
+courses that
+are past due
+deadlines.
+Important
+Alert: Your {0}
+Course is {1}
+msgLMSCoursePastDueDeadlineEEAlertMessageOne
+The body of the
+message sent
+to employees
+regarding
+courses that
+are past due
+deadlines.
+The {0}
+Course that
+has been
+assigned to
+you is {1}
+msgLMSCoursePastDueDeadlineEMAlertMessageHeaderOne
+The header of
+the message
+sent to
+managers
+
+-- 259 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 260 of 0
+regarding
+employees who
+have courses that
+are past due date
+deadlines.
+Important
+Alert: Your
+employees
+Course(s)
+are {0}
+msgLMSCoursePastDueMgrAlertMessage
+Part one of the
+content for the
+Course Enrollment
+Deadline Past Due
+- Manager
+notification
+{0} Course:
+{0} = Course
+Name
+msgLMSCoursePastDueDeadlineEMAlertMessagePartOne
+Part two of the
+content for the
+Course Enrollment
+Deadline Past Due
+- Manager
+notification.
+{0} is
+{0} =
+Employee
+Name
+msgLMSCoursePastDueDeadlineEMAlertMessagePartTwo
+Part three of the
+content for the
+Course Enrollment
+Deadline Past Due
+– Manager
+notification.
+{0} days past
+due for this
+course
+{0} =
+Expiration
+Days
+EE_Added_Waitlist_Msg_Title1
+Part one of the
+header for the
+Learning Waiting
+List - Employee
+notification that is
+sent when a
+learner is added to
+a course waiting
+list.
+You have
+been added
+to a waiting
+list for the
+
+-- 260 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 261 of 0
+EE_Added_Waitlist_Msg_Title2
+Part two of the header for the
+Learning Waiting List -
+Employee notification that is
+sent when a learner is added
+to a course waitlist.
+{0} course
+EE_Added_Waitlist_Msg1
+Part one of the content for the
+Learning Waiting List -
+Employee notification that is
+sent when a learner is added
+to a course waiting list.
+You have been added to a
+waiting list for the
+EE_Added_Waitlist_Msg2
+Part two of the content for the
+Learning Waiting List -
+Employee notification that is
+sent when a learner is added
+to a course waitlist.
+{0} course on {1}
+{0} = Course Name
+{1} = Session Date
+EE_Added_Waitlist_Msg3
+Part three of the content for
+the Learning Waiting List -
+Employee notification that is
+sent when a learner is added
+to a course waitlist.
+If you didn’t register for this
+course or require additional
+information, contact your
+Learning Administrator
+EE_Removed_Waitlist_Msg_Title1
+Part one of the header for the
+Learning Waiting List -
+Employee notification that is
+sent when a learner is
+removed from a course
+waitlist.
+You have been removed
+from a waiting list for the
+EE_Removed_Waitlist_Msg_Title2
+Part two of the header for the
+Learning Waiting List -
+Employee notification that is
+sent when a learner is
+removed from a course
+waitlist.
+{0} course
+{0} = Course Name
+
+-- 261 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 262 of 0
+EE_Removed_Waitlist_Msg1
+Part one of the content for the
+Learning Waiting List - Employee
+notification that is sent when a
+learner is removed from a course
+waitlist.
+You have been removed
+from the waiting list for the
+EE_Removed_Waitlist_Msg2
+Part two of the content for the
+Learning Waiting List - Employee
+notification that is sent when a
+learner is removed from a course
+waitlist.
+{0} course on {1}
+{0} = Course Name
+{1} = Session Date
+EE_Removed_Waitlist_Msg3
+Part three of the content for the
+Learning Waiting List - Employee
+notification, sent when a learner is
+removed from a course waitlist.
+Contact your Learning
+Administrator if you have
+additional questions
+regarding this status
+change
+EE_Course_Cancelled_Title1
+Part one of the header for the
+Learning Waiting List - Employee
+notification, sent when the course
+session in which a learner was
+enrolled has been cancelled.
+The {0}
+{0} = Course Name
+EE_Course_Cancelled_Title2
+Part two of the header for the
+Learning Waiting List - Employee
+notification, sent when the course
+session in which a learner was
+enrolled has been cancelled.
+Course on {0}
+{0} = Session Date
+EE_Course_Cancelled_Title3
+Part three of the header for the
+Learning Waiting List - Employee
+notification, sent when the course
+session in which a learner was
+enrolled has been cancelled.
+has been cancelled
+EE_Course_Cancelled_Msg1 Part one of the content for the
+Learning Waiting List - Employee
+
+-- 262 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 263 of 0
+notification, sent when the
+course session in which a
+learner was enrolled has been
+cancelled.
+The {0}
+{0} = Course Name
+EE_Course_Cancelled_Msg2
+Part two of the content for the
+Learning Waiting List -
+Employee notification, sent
+when the course session in
+which a learner was enrolled
+has been cancelled.
+course on {0}
+{0} = Session Date
+EE_Course_Cancelled_Msg3
+Part three of the content for the
+Learning Waiting List -
+Employee notification, sent
+when the course session in
+which a learner was enrolled
+has been cancelled.
+has been cancelled
+EE_Course_Cancelled_Msg4
+Part four of the content for the
+Learning Waiting List -
+Employee notification, sent
+when the course session in
+which a learner was enrolled
+has been cancelled.
+You are no longer required to
+attend this session. Contact
+your Learning Administrator if
+you have additional questions
+regarding this status change
+Cross-Reference Codes
+Cross-reference codes, sometimes referred to as reference codes or XREF codes, are used in
+import and export files as unique identifiers for elements and entries being imported or exported.
+For example, these cross-reference codes can uniquely identify each element of an org unit,
+individual pay groups, or specific entries in employee records.
+You can add many cross-reference codes directly to entries that you’re making in Dayforce, like
+the Reference Code column for a legal entity in Org Setup > Org Payroll Setup > Legal Entity, or
+the Reference Code field in Pay Setup > Pay Groups, in the Pay Group Properties tab.
+System cross-reference codes can’t be added or edited in Dayforce, but must be included in
+import and export files.
+See the following topics:
+
+-- 263 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 264 of 0
+Cross-Reference Codes
+System-Defined Cross-Reference Codes
+Cross-Reference Codes
+Cross-reference codes, also known as reference codes and XREF codes, are used by Dayforce in
+imports and exports to integrate into other applications and systems used by your organization.
+Cross-reference codes can also help you identify the different elements in the application in the
+scripts and processes that export your organization's data from Dayforce.
+You enter cross-reference codes in Dayforce for the elements in the application that you're
+creating that will be included in imports and exports, such as your organization's jobs or
+departments.
+As a best practice, it’s recommended that you enter a cross-reference code that logically
+represents the element that you’re creating. For example, if you’re configuring a Clerk Job in
+Dayforce, you might use Clerk_Job as the cross-reference code. As long as each element has a
+unique code, it can be used in exports of those elements to another system.
+Elements in Dayforce don’t always need cross-reference codes to work properly, unless those
+elements will be used in imports or exports, in which case, you only need to include reference
+codes for those elements to be imported or exported. Nevertheless, it’s best practice to include
+cross-reference codes in all entries for which you can in Dayforce in case the entries are ever
+used for imports or exports.
+System-Defined Cross-Reference Codes
+Some fields don’t have cross-reference codes that can be edited or viewed in the Dayforce user
+interface. To ensure that the required information is included in imports, you must include the
+appropriate cross-reference codes for those elements. Some of these system-defined cross-
+reference codes are described in the following sections:
+EEO-1 Job Category
+FLSA Status Cross-Reference Codes
+KldB Job Classification
+HR Incident Body Parts
+HR Incident Injuries
+Safety and Health Types
+EEO-1 Job Category
+The EEO-1 Job Category drop-down list is found in the Additional Job Details section of the Jobs
+and Job Assignments tab in Org Setup > Jobs and Job Assignments.
+EEO-1 job categories
+
+-- 264 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 265 of 0
+Field Value 	Cross-Reference Code
+1.1 - Executive/Senior Level Officials and Managers 	1.1
+1.2 - First/Mid Level Officials and Managers 	1.2
+2 - Professionals 	2
+3 - Technicians 	3
+4 - Sales Workers 	4
+5 - Administrative Support Workers 	5
+6 - Craft Workers 	6
+7 - Operatives 	7
+8 - Laborers and Helpers 	8
+9 - Service Workers 	9
+FLSA Status Cross-Reference Codes
+The FLSA Status drop-down list is found in the Additional Job Details section of the Jobs and Job
+Assignments tab in Org Setup > Jobs and Job Assignments.
+FLSA statuses
+Field Value 	Cross-Reference Code
+Exempt 	EXEMPT
+Non-exempt 	NON-EXEMPT
+KldB Job Classification
+The KldB Job Classification drop-down list is found in the Additional Job Details section of the
+Jobs and Job Assignments tab in Org Setup > Jobs and Job Assignments. The
+JobClassificationGlobalXRefCode is an 8-digit number comprised of the following:
+Digits 1-5 represent the 5 digit KldB job classification code. These are listed on the Federal
+Employment Agency's statistics website here. These are the numbers listed in the KldB Job
+Classification drop-down list.
+Digits 6-8 are 000 and are reserved for future use. When you import these codes, you must
+ensure that the zeros have been included with the Federal Employment Agency's 5-digit
+number for the job.
+For example, the JobClassificationGlobalXRefCode for the job “Commissioned officers” is
+01104000.
+HR Incident Body Parts
+These values are found in the Body Part drop-down list of safety and health incidents entered in
+the Employment > Safety and Health Incidents screen of People and the Safety & Health
+(USA) form.
+
+-- 265 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 266 of 0
+HR incident body part codes
+Field Value 	Cross-Reference Code
+Back - Disk 	BackDisk
+Back - Lower 	BackLower
+Back - Multiple Injuries 	BackMultipleInjuries
+Back - Spine 	BackSpine
+Back - Tailbone 	BackTailbone
+Back - Upper 	BackUpper
+Back - Vertebrae 	BackVertebrae
+Face - Ear (1) 	FaceEar
+Face - Ears (Both) 	FaceEars
+Face - Eye (1) 	FaceEye
+Face - Eyes (Both) 	FaceEyes
+Face - Mouth 	FaceMouth
+Face - Multiple 	FaceMultiple
+Face - Nose 	FaceNose
+Head Injury 	HeadInjury
+Internal - Cardiovascular 	InternalCardiovascular
+Internal - Gastral 	InternalGastral
+Internal - Multiple 	InternalMultiple
+Internal - Neurological 	InternalNeurological
+Internal - Other 	InternalOther
+Internal - Reproductive 	InternalReproductive
+Internal - Respiratory 	InternalRespiratory
+Limbs - Ankle 	LimbsAnkle
+Limbs - Arm 	LimbsArm
+Limbs - Elbow 	LimbsElbow
+Limbs - Finger 	LimbsFinger
+Limbs - Foot 	LimbsFoot
+Limbs - Hand 	LimbsHand
+Limbs - Knee 	LimbsKnee
+Limbs - Leg 	LimbsLeg
+Limbs - Multiple Lower 	LimbsMultipleLower
+Limbs - Multiple Upper 	LimbsMultipleUpper
+Limbs - Toe 	LimbsToe
+Limbs - Wrist 	LimbsWrist
+Miscellaneous 	Miscellaneous
+
+-- 266 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 267 of 0
+Neck Injury 	NeckInjury
+Skin 	Skin
+Torso - Abdomen 	TorsoAbdomen
+Torso - Chest 	TorsoChest
+Torso - Hips 	TorsoHips
+Torso - Lower 	TorsoLower
+Torso - Multiple 	TorsoMultiple
+Torso - Ribs 	TorsoRibs
+Torso - Shoulders 	TorsoShoulders
+Torso - Upper 	TorsoUpper
+HR Incident Injuries
+These values are found in the Injury drop-down list of safety and health incidents entered in the
+Employment > Safety and Health Incidents screen of People and the Safety & Health (USA) form.
+HR incident injury codes
+Field Value 	Cross-Reference Code
+Burn - Chemical 	BurnChemical
+Burn - Thermal 	BurnThermal
+Cut 	Cut
+Cut - Blood contaminated obj. 	CutB
+Cut - Laceration 	CutL
+Cut - Puncture 	CutP
+Cut - Scratch 	CutS
+Disorder - Mental 	DisorderM
+Disorder - Nervous 	DisorderN
+Disorder - Sexual 	DisorderS
+Disorder - Skin 	DisorderSkin
+Ear - Deafness Permanent 	EarDP
+Ear - Deafness Temporary 	EarDT
+Ear - Disorder 	EarD
+Ear - Hearing Impairment 	EarHI
+Eye - Blindness Permanent 	EyeBP
+Eye - Blindness Temporary 	EyeBT
+Eye - Disorder 	EyeD
+Eye - Visual Impairment 	EyeVI
+Ill - Dust Disease of Lungs 	IllDDL
+
+-- 267 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 268 of 0
+Ill - Occ. Skin Disorder 	IllOSD
+Ill - Other Occupational Ill 	IllOOI
+Ill - Physical Agent Disorder 	IllPAD
+Ill - Poisoning - Systemic 	IllPS
+Ill - Repeated Trauma Disorder 	IllRTD
+Ill - Respiratory Cond - Toxic 	IllRCT
+Ill - Tuberculosis Infection 	IllTI
+Illness - Occupational 	IllnessO
+Internal - Concussion 	InternalC
+Internal - Electric Shock 	InternalES
+Internal - Heart Attack 	InternalHA
+Internal - Hypothermia 	InternalH
+Internal - Poisoned 	InternalP
+Internal - Radiation 	InternalR
+Limb - Broken Bone 	LimbBB
+Limb - Fracture 	LimbF
+Limb - Impairment 	LimbI
+Limb - Loss 	LimbL
+Limb - Sprain 	LimbS
+Needlestick - Blood Contaminated 	NBC
+Other - General Injury 	OtherGI
+Other - Impairment 	OtherI
+Other - Loss Body Parts 	OtherLBP
+Respiratory - Asphyxiation 	RespiratoryA
+Respiratory - Dust 	RespiratoryD
+Respiratory - General 	RespiratoryG
+Respiratory - Toxic Agents 	RespiratoryTA
+Safety and Health Types
+These values are found in the Injury or Illness Type drop-down list of safety and health incidents
+recorded in the Employment > Safety and Health Incidents screen of People and the Safety
+& Health (USA) form.
+HR incident illness type codes
+Value 	Cross-Reference Code
+Hearing Loss 	HearingLoss
+Injury 	Injury
+Other Illness 	OtherIllness
+
+-- 268 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 269 of 0
+Poisoning 	Poisoning
+Respiratory Condition 	RespiratoryCondition
+Skin Disorder 	SkinDisorder
+
+-- 269 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 270 of 0
+Security Configuration
+Dayforce security settings are used to determine which users can access various areas of
+Dayforce, such as department managers accessing Schedules but not People, and what
+information they can access, create, or update.
+Users need a user name to log in to Dayforce. The user name is associated with one or more user
+roles. The user role determines which features the role has access to and the authorizations that
+determine what the role can do in those features.
+User names are configured in System Admin > User.
+User roles are configured in System Admin > Roles.
+Features are configured in System Admin > Roles in the Features tab.
+Authorizations are configured in System Admin > Roles in the Authorizations tab.
+This following topics describe these concepts in more detail:
+User Roles
+Role Features
+Configure User Role Authorizations
+Password Policies
+User Roles
+User roles control which features users can access in Dayforce, and they play an important part in
+the security of Dayforce. User roles are assigned to user names. Security Configuration describes
+the differences between user roles and user names.
+You can configure as many user roles as your organization requires in System Admin > Roles. The
+more granular the access requirements, the more user roles you'll need to configure.
+For example, if your organization needed to provide access to a different set of features for
+corporate management, location managers, assistant managers, and employees, you'd configure
+four user roles, one for each of those groups.
+Note that the term ESS (employee self-service) is used throughout Dayforce documentation.
+Configurations can be different, depending on the needs of your organization, but ESS generally
+refers to features that individual employees can access directly. These can include individual
+earning statements, annual tax forms, timesheets, and various forms they can use to update tax or
+other records.
+When you’re creating user roles, you can arrange them in a hierarchy of parent and child roles.
+Users with the highest level of access can assign features to other roles, and child roles can only
+
+-- 270 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 271 of 0
+use features to which they have been assigned access. Users can only assign features to other
+user roles at or below their own role's level in the hierarchy.
+See Configure User Roles.
+User Role Properties
+You can configure several different properties for each user role.
+User role properties
+Name 	Description
+Name 	The name for the user role.
+Description 	The description of the user role.
+Parent Role 	The role under which the new role will be nested in the hierarchy.
+Password Policy
+The password policy that will govern the role. Required. This setting is
+automatically populated with the default password policy, which is
+configured in System Admin > Password Policy. See Password Policies.
+ESS Role
+Allows users with the role to access Dayforce through Employee Self-
+Service.
+With this checkbox selected, new users assigned this role don’t need to
+be assigned additional security settings that are needed for other roles
+that manage organizational units. This means that when this role is
+selected while onboarding a new employee, Dayforce disables the
+Location Visibility drop-down list in the New Hire form.
+Termination Role
+Allows users with the role to have limited access to required features of
+Dayforce after their employment has been terminated.
+You can only configure one termination role. If you select the
+Termination Role checkbox when a termination role already exists,
+Dayforce displays a prompt confirming if you want to change the current
+termination role.
+You must configure the termination role with the appropriate limited role
+features and access authorizations. For example, if employees need to
+access their historical earnings statements and year-end tax forms after
+
+-- 271 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 272 of 0
+their employment has been terminated, only these features and
+authorizations should be assigned to the termination role.
+The termination role functionality relies on the User Account Employee
+Status Job to assign the role to terminated employees. See User
+Account Employee Status Job.
+Reference Code
+The cross-reference code for the role. Cross-reference codes are used
+to import and export data from Dayforce to other applications. See
+Cross-Reference Codes.
+Onboarding Role
+Identifies the role as an onboarding role.
+Onboarding roles allow new employees to access Dayforce before their
+first day. This functionality is especially useful in the Onboarding
+module, so that new hires can access these features before they
+officially start work.
+For more information, see the Onboarding Guide.
+
+-- 272 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 273 of 0
+access Dayforce using their Dayforce-specific credentials after
+their SSO account is removed.
+If your organization has the OData reporting feature enabled,
+users with access to OData must have this option enabled to
+retrieve data from Dayforce. OData doesn't support SSO users.
+Exclude Employees
+with this Role
+from Delegation
+Designates the user role as ineligible for delegation. With this option
+selected, users with this role aren't displayed when configuring
+delegation.
+Anonymize TAFW for
+employees with this
+role
+Select this checkbox and Dayforce restricts some time away requests
+for the role. When this checkbox is selected and there’s a time away
+request that involves a pay code that’s configured with the Is
+TAFW and Is Anonymized checkboxes selected in Pay Setup > Pay
+Code, Dayforce does the following for the role:
+Hides the request in Approvals.
+Shows the request in features such as Multi-Week Calendar,
+Schedules, and Timesheets, but without the unique time away
+reason (for example, Sick or Personal).
+See Anonymization for Time Away Pay Codes.
+Related topics:
+Configure User Roles
+Role Features
+Configure User Role Authorizations
+Configure User Roles
+Before You Begin: Ensure that you're familiar with the general concepts about user roles in
+Dayforce. See User Roles.
+To configure a user role:
+1. Go to System Admin > Roles.
+2. Click Add.
+3. In the General tab, configure the user role properties as required.
+4. Click Save.
+To continue configuring the user role, you need to complete these tasks:
+
+-- 273 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 274 of 0
+Role Features
+Configure User Role Authorizations
+After you configure user roles, you must assign them to users as part of the user configuration
+process. See User Configuration.
+Role Features
+Role features map areas (or features) in Dayforce to the roles that can use them. You might
+configure the role features for the location manager role type with access to both Schedules and
+People, and configure the assistant manager role type with access to Schedules only.
+Important: Not all features are displayed for all roles. Child roles can only view and update the role
+features that have been assigned to them by their parent role. For more information on configuring
+role hierarchies, see User Roles.
+Each role you set up needs to be assigned to at least one feature in the Features tab of System
+Admin > Roles.
+In the following screenshot, the Employee Profile, Organization Chart, People List, and Reports
+features, under the People feature, are assigned to the Canadian Manager role:
+Feature Types
+After features are assigned to a role they are either displayed or not displayed in the navigation
+panel. To distinguish these two feature types, Dayforce displays two icons in the feature tree.
+Feature type icons
+Icon 	Description
+
+-- 274 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 275 of 0
+Navigation Panel Feature: A feature is considered a navigation panel feature if it’s shown in
+the navigation panel. Navigation panel features are generally one of the following:
+Features that map to feature screens.
+Containers for features, for example, System Admin, or HCM Anywhere.
+Feature Component: A feature is considered a feature component if it doesn’t have a target
+Dayforce screen associated with it, and can't be used as a link in the navigation panel.
+Feature components are generally one of the following:
+Tabs.
+Control flags that determine the display of a section or data point on a screen.
+Something that controls part of the functionality of a screen.
+Validation
+Dayforce uses validation to prevent you from mapping containers for features to the navigation
+panel and Favorite Features tab if they don’t contain features that map to feature screens.
+Dayforce displays validation errors if you attempt to save the following changes:
+An empty container for a feature, for example, System Admin.
+A container for a feature where the role doesn't have access to the subfeature. For example,
+if a role that has access to a feature but not the subfeature, users who are assigned that role
+won’t see the subfeatures.
+Validation error messages specify the navigation panel features that need to be fixed. You can
+make corrections in the feature tree either by clearing the checkbox for the empty container, or by
+selecting at least one navigation panel feature that is mapped to a feature screen.
+See Assign Role Features.
+Assign Role Features
+To view descriptions of each feature and subfeature, see Appendix: Role Feature Library.
+Before You Begin: Make sure that you're familiar with the general concepts associated with role
+features. See Role Features.
+To assign features and subfeatures to a role:
+1. Go to System Admin > Roles and select a role.
+2. Click the Features tab.
+3. Select the checkboxes next to the features that you want to assign to the role. Most features
+have subfeatures (children) underneath them. You need to first select the top (parent)
+
+-- 275 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 276 of 0
+feature and then assign the appropriate subfeatures. To assign subfeatures:
+a. Click the expand arrow ( ) next to the parent feature to show the list of its subfeatures.
+b. Select the checkbox corresponding with its associated subfeature. For example, in
+People, you need to assign the Reports subfeature to grant the user role the ability to
+run reports.
+4. Click Save.
+Order the Features
+In Dayforce, you can define the order in which the features for a role are shown in the navigation
+panel in and the order in which each feature's children are shown.
+You can determine the feature order in System Admin > Roles, in the Features tab, using the
+Manage Display Order for Features and Feature Components panel. Additionally, you can change
+the order of feature components (such as tabs or reports) by selecting the Show Feature
+Components checkbox.
+In the example below, the Show Feature Components checkbox is selected. If the checkbox was
+cleared, the Benefits feature wouldn't show any features under it, because those features are
+components. The Show Feature Components checkbox is cleared by default:
+For more information on feature components, see Role Features.
+To define the feature display order:
+1. Go to System Admin > Roles and select a role.
+2. Click the Features tab.
+3. The Manage Display Order for Features and Feature Components panel lists the features
+that are assigned to that role.
+3. (Optional) Select the Show Feature Components checkbox to show feature components.
+4. Select the feature that you want to move.
+5. Click Move Up or Move Down until the feature is in the desired order. Features are moved
+one position up or down while maintaining the same level of hierarchy.
+
+-- 276 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 277 of 0
+6. Alternatively, select Move To in the drop-down list and select Move to Top or Move to
+Bottom. Features are moved to the top or bottom of the list while maintaining the same level
+of hierarchy.
+7. Click Save.
+Configure Role Feature Parameters
+You can configure parameters for features in the Features tab of System Admin > Roles. The
+parameters configuration icon ( ) appears on the right side of the features that have parameter
+configuration. The icon only appears when the associated feature is enabled. Here is an example
+of parameter configuration for the Approvals feature:
+Parameter configuration is available for the following features in the Features tab of System Admin
+> Roles:
+Application Container > Approvals
+Application Container > Approvals > Reports > Employee TAFW Report
+Application Container > Approvals > Reports > TAFW Calendar Report
+Application Container > Approvals > Time Off
+Manager Timesheet
+Multi-Week Calendar > Reports > Employee TAFW Report
+Multi-Week Calendar > Reports > TAFW Calendar Report
+Plan
+Schedules
+Schedules > Coverage Pane > Suggestion List
+Schedules > Manage Time Off > Time Off Reports > Employee TAFW Report
+Schedules > Manage Time Off > Time Off Reports > TAFW Calendar Report
+Schedules > Reports > Daily Coverage Report
+Schedules > Reports > Manager Coverage Report
+Schedules > Reports > Printed Schedule Report
+Schedules > Reports > Schedule Audit Report
+Schedules > Schedule Trend
+Time Review > Timesheet
+Timesheets
+
+-- 277 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 278 of 0
+Feature configuration parameters
+Feature 	Parameter
+Approvals Specify if the default view is by manager or
+location.
+Daily Coverage Report, Manager Coverage
+Report, Printed Schedule Report, TAFW
+Calendar Report
+Configure various report options.
+Time Off Specify the number of weeks ahead for time
+away requests.
+Manager Timesheet Configure the number of days for the
+lookback period and the totals to show.
+Schedules, Plan Specify the value for the number of weeks
+ahead.
+Suggestion List Enable defaults, disable editing, specify the
+max results and max severity.
+Employee TAFW Report Enable defaults, specify the start and end
+date range.
+Schedule Audit Report Enable defaults, disable editing, specify the
+date range and sort criteria.
+Schedule Trend 	Specify the number of prior weeks.
+Timesheet
+Configure the totals to show and specify the
+number of days that you can edit the
+lookback period.
+Timesheets 	Configure the totals to show in Timesheets.
+To configure feature parameters for a role:
+1. Go to System Admin > Roles and select a role.
+2. Select the Features tab and then select the applicable feature.
+3. Click the parameters configuration icon ( ) beside the feature to open the parameters
+configuration window.
+4. Make your selections.
+5. Click OK.
+Configure the Weeks Ahead Value
+For certain features and subfeatures that allow users to load future data, you can load schedules
+for future weeks. Optionally, you can restrict the number of weeks into the future that users can
+load, based on user role. For example, you can configure Dayforce so that managers can load
+schedules up to eight weeks in the future, and regional managers can load schedules up to 26
+
+-- 278 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 279 of 0
+weeks in the future. This functionality exists for Plan and Schedules. You can configure the weeks
+ahead value using the Number of weeks ahead field:
+To configure the Number of weeks ahead value:
+1. Go to System Admin > Roles and select a role.
+2. In the Features tab, go to Plan or Schedules.
+3. Click the parameters configuration icon ( ).
+4. In the Number of weeks ahead field, enter the maximum number of weeks into the future
+that users can load data.
+5. Note: By default, the Number of weeks ahead field is set to 26, which restricts all users to
+loading 26 weeks into the future in Plan or Schedules.
+5. Click OK.
+Migrate Role Configurations
+You can migrate role configurations from one Dayforce environment to another Dayforce
+environment. This is achieved by exporting role configurations from a Dayforce environment and
+importing the exported role configurations into another Dayforce environment. When you export
+role configurations, a .dat file is downloaded to your computer. This file contains the following
+information:
+Note: The items in this list refer to the tabs in System Admin > Roles and the information that they
+contain.
+General
+Features and Feature Parameters
+Authorizations
+Web Services Field-Level Access
+New Hire Assignments
+Role Culture
+Migrating role configurations provides an alternative to manually moving role configurations from
+one Dayforce environment to another Dayforce environment. This feature is especially useful when
+working with a large number of role changes.
+
+-- 279 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 280 of 0
+When importing role configurations, you have the ability to add or edit the role configuration.
+However, you don’t have the ability to delete entire roles. One of the following operations are
+preformed when you export role configurations from a Dayforce environment and imported into
+another Dayforce environment:
+Note: The Role Reference Code is the unique identifier that determines which operation to
+perform.
+The role configuration is created if the role doesn't already exist in the target Dayforce
+environment.
+The role configuration is updated if the role already exists in the target Dayforce
+environment.
+The following sections contain information about how to export and import role configurations in
+Dayforce.
+Export Role Configurations
+Import Role Configurations
+Export Role Configurations
+Exporting role configurations allows you to migrate role configurations from one Dayforce
+environment to another. For information about importing role configurations, see Import Role
+Configurations.
+Before You Begin: Your user role must be assigned access to the Export/Import feature in System
+Admin > Roles.
+Note: Only users who don’t have a parent role assigned to their role can use the export role
+configuration feature in Dayforce. Additionally, the migration of system roles isn’t supported by the
+export role configuration feature, because they can’t be edited and are standard across all
+Dayforce environments.
+To export role configurations:
+1. Go to System Admin > Roles.
+2. Click Export. The Export Role dialog box opens.
+3. Note: The file size can’t exceed 10mb.
+3. In the Roles drop-down list, select one or more roles.
+4. Click Download. The role configuration details are downloaded as a .dat file.
+Note: The export role configuration feature doesn’t support the ability to migrate custom V2
+reports and workflows setup in Workflow Administration > Role Privileges. The migration of
+standard fixed format reports and standard ad hoc reports is supported in the export role
+configurations feature.
+
+-- 280 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 281 of 0
+Import Role Configurations
+You can use the import functionality to migrate role configurations from one Dayforce environment
+to another. For information about exporting role configurations, see Export Role Configurations.
+Before You Begin: Your user role must be assigned access to the Export/Import feature in System
+Admin > Roles.
+Note: Only users who don’t have a parent role assigned to their role can import role configurations
+in Dayforce. Also, the role configuration import doesn’t support the migration of system roles
+because they can't be edited and are standard across all Dayforce environments.
+To import role configurations:
+1. Go to System Admin > Roles.
+2. Click Import. The Import Role File dialog box opens.
+3. Click Select File. The file can't be larger than 10 MB.
+4. In your computer's file directory, select the role configuration .dat file you want to import and
+then click Open.
+5. Important: It’s your responsibility to make sure that the file you’re importing is from a trusted
+source.
+5. Click Upload. When Dayforce completes the uploading process, close the dialog box.
+Make sure that the role configuration is correct after importing the file, and that all changes were
+applied as expected.
+Note: The import role configuration feature doesn't support migrating custom V2 reports and
+workflows setup in Workflow Administration > Role Privileges. The migration of standard fixed-
+format reports and standard ad hoc reports is supported in the import role configurations feature.
+Configure Favorite Features
+You can configure the default features that Dayforce shows on the Home screen so that users can
+quickly access the features they use most often. You can also drag the features into different
+positions to show them in a different order.
+Only navigation panel features that are enabled for the selected role in the Features tab of System
+Admin > Roles are shown in the Favorite Features tab. For more information on navigation panel
+features, see Role Features.
+If you don’t configure favorite features for a role, Dayforce lists the favorite features in alphabetical
+order by default. Configure default favorite features in the Favorite Features tab in System Admin
+> Roles. You can select up to six favorite features. Dayforce doesn't automatically add any
+
+-- 281 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 282 of 0
+additional favorite features if you select fewer than six. If a role is assigned many features, you can
+use the Search Features field to find the features you want to add as favorites.
+To configure the default favorite features for a role:
+1. Go to System Admin > Roles and click the Favorite Features tab.
+2. Note: Only navigation panel features that are enabled for the selected role are shown in the
+Favorite Features tab.
+2. Select a user role in the sidebar.
+3. Drag a feature listed at the bottom portion of the tab to the top portion.
+4. Click Save.
+Configure User Role Authorizations
+Role authorizations define what access rights a role has to different types of information in
+Dayforce. You can assign four types of authorizations:
+Can Create: The role can add new items of the associated information.
+Can Read: The role can read items of the associated information.
+Can Update: The role can edit the details of existing items of the associated information.
+Can Delete: The role can delete items of the associated information.
+See Apply Access Authorizations to Grids.
+When you assign the Can Create, Can Update, or Can Delete access authorization, you should
+also assign the Can Read authorization to ensure that the user role can view the information that
+the role will access.
+
+-- 282 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 283 of 0
+Not all access authorizations are shown for all roles. Child roles can only view and update the
+access authorizations that were assigned to them by their parent role. See User Roles.
+Each role can have one, several, or no authorizations for a type of information in Dayforce. For
+example, you could grant access to a Payroll Administrator role to all four authorizations for the
+Pay Export Configuration item, which means users assigned the Payroll Administrator role can
+read the Pay Export XML definitions configured in Pay Setup, change them, create an export
+definition, or delete existing definitions, while a user with the Store Manager role that has only Can
+Read access can view the export definitions but can't add, update, or delete Pay Export
+XML definitions.
+A role's authorizations can impact different areas of Dayforce. For example, the Pay Information
+authorization impacts the ability to view employee pay rates and amounts in several timesheets
+features. Roles without Can Read access for this authorization can't view this pay data, even when
+they’re assigned role access to the features.
+Access authorizations also control permissions for forms. When a user with a role that has
+authorization to access to a form is assigned Can Create access, but not Can Update or Can
+Delete access for the associated authorization, that user can create new employee records but
+can't edit or delete existing records.
+You can define as many role authorizations as you need to implement appropriate information
+security. To assign role authorizations to role types:
+1. Go to System Admin > Roles and select a role in the list.
+2. Click the Authorizations tab.
+3. Select the checkboxes for Can Create, Can Read, Can Update, or Can Delete
+corresponding with each authorization to grant access permissions to the selected role.
+4. Click Save.
+Define New Hire Role Assignment Access
+This section describes how to define the role access of the user roles configured in Dayforce. Role
+access is used to describe what roles users can assign to new hires they set up in People.
+Typically, users can only assign roles with equal or less access than their own. For example, you
+would configure the manager role to be able to assign the manager, assistant manager, and
+employee roles.
+Roles are used to define what access users have in Dayforce; whether they can create schedules,
+review time and attendance, or edit employee records are all common examples of the kinds of
+access they provide.
+For example, if you define the Manager role as being assigned role access to the Employee role
+when users with the Manager role set up new hires in People, they can assign the Employee role
+
+-- 283 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 284 of 0
+to the new hires. In turn, those new hires can access Dayforce according to the Employee role's
+security access.
+To define new hire role access:
+1. Go to System Admin > Roles and select a role.
+2. Click the New Hire Role Assignments tab.
+3. Click Add.
+4. Select the role that you want to grant access to from the drop-down list under the Role
+heading.
+5. Enter the effective from and effective to dates for the role.
+6. Click Save.
+Create Custom Login Algorithms
+You can define a custom format for generating new employee user names in System Admin
+> Client Properties using the Login Algorithm Custom Format field. This gives your organization
+the flexibility to use its preferred custom format instead of a predefined one (that is, F.Last,
+LAST.FIRST, and so on). For example, you can create a custom format that includes the
+employee's first initial, followed by last name and then employee number.
+Before You Begin: Login algorithms can generate user names only for employees hired through
+the new hire workflow and not for employees added to Dayforce via HR Import.
+To define a custom login algorithm format:
+1. Go to System Admin > Client Properties.
+2. Click the Properties tab and then go to the Employee section.
+3. In the Login Algorithm Custom Format field, enter any of the following tokens, in any
+combination, depending on what format you want the user name to follow:
+{FIRST}: Employee first name.
+{LAST}: Employee last name.
+{F}: First letter of employee first name.
+{EMPLOYEENUMBER}: Employee number.
+4. (Optional) Enter any of the following characters in combination with the tokens described in
+step 3:
+English alphabet characters (a–z)
+Note: Letter case doesn't matter when creating user names because they aren't case
+sensitive.
+Base 10 digits (0–9)
+Non-alphanumeric characters (such as, !._@,%$)
+Unicode symbols (such as, éù£)
+5. Click Save.
+
+-- 284 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 285 of 0
+Examples
+The following screenshots show examples of custom formats for an employee named Allan Jones
+whose employee number is 123456.
+The following example format includes only tokens and no characters. Tokens used include the
+employee's first initial followed by last name and employee number:
+Using this format, Dayforce generates the following user name for Allan Jones: ajones123456
+The next example also includes two tokens and one character, a period, between the tokens:
+Here, Dayforce generates the following user name for Allan: jones.123456
+Finally, the following example includes the company name (companyxyz), which isn’t a token, with
+the employee number token:
+Here, Allan is given the following user name: companyxyz123456
+Note:
+Dayforce doesn't require you to include a minimum or maximum number of tokens.
+However, be sure to define a user name format so that it generates a unique user name for
+each employee. For example, using only the {FIRST} token can be problematic because
+many employees can have the same name.
+User names can't exceed 128 characters or contain spaces.
+User names are never case sensitive, regardless of the letter case that users type in the
+Login Algorithm Custom Format field. For example, if you define this field with
+CompanyXYZ{EMPLOYEENUMBER}, the user name generated won't require the employee to
+enter any parts of their user name in uppercase letters.
+Password Policies
+
+-- 285 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 286 of 0
+In Dayforce, you can define the password policies that you want to enforce for logging in and
+using the application. To help secure Dayforce user accounts, you can use several optional
+security features.
+You must define at least one password policy. If necessary, you can define multiple password
+policies that are assigned to different user roles. For example, you could have two password
+policies, so that managers and administrators are assigned a stronger password policy than
+employees.
+In cases where a user has multiple user roles, and the roles are assigned different password
+policies, Dayforce uses the strongest password policy assigned for that user. For example, if a
+user is assigned both the Administrator and Manager user roles, but the Administrator user role
+has a stronger password policy, Dayforce uses the password policy associated with the
+Administrator role for that user. This means that when that user tries to change their password or
+their PIN, Dayforce enforces the requirements defined in the Administrator password policy.
+Note: Password policies impact every user that logs in to Dayforce and any changes to the policy
+come into effect immediately; typically, a password policy is defined and configured before
+Dayforce is in use by end users, but if you do need to make a change to the policy after users
+have been logging on, ensure that it’s communicated to them in advance.
+Add Password Policies
+To add new password policies:
+1. Go to System Admin > Password Policy.
+2. Click Add.
+3. Set the password policy security features by configuring the settings described in Password
+Policy Parameters.
+4. Click Save.
+Password Policy Parameters
+Properties
+Name
+The name for the password policy.
+Description
+A brief description of the password policy.
+Default
+Select this checkbox if this policy should be assigned by default.
+
+-- 286 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 287 of 0
+Default Password
+Defines the default password assigned to new user accounts. Default passwords can contain any
+of the following characters:
+English uppercase characters (A through Z)
+English lowercase characters (a through z)
+Base 10 digits (0 through 9)
+Nonalphabetic characters (for example, !, $, #, %)
+Unicode symbols (for example, é, ù, £)
+Default passwords must contain at least one token. Dayforce doesn’t allow you to save a
+password policy if its default password doesn't contain any tokens. Examples of invalid
+passwords include L0g1n! or P@33word123 or any combination of just letters, numbers, and
+symbols.
+You can use any of the available tokens, combined with other characters or on their own, to create
+default passwords that are specific to each user.
+Password tokens
+Token 	Description
+{BIRTHYEAR} 	Dayforce inserts the user's birth year into their default password.
+{BIRTHMONTH} 	Dayforce inserts the user's birth month into their default password.
+{BIRTHDAY} Dayforce inserts the user's birth day (for example, 25) into their
+default password.
+{FIRSTNAME} 	Dayforce inserts the user's first name into their default password.
+{LASTNAME} 	Dayforce inserts the user's last name into their default password.
+{LAST3SSN} Dayforce inserts the last three digits of the user's Social Security
+number into their default password.
+{LAST4SSN} Dayforce inserts the last four digits of the user's Social Security
+number into their default password.
+{EMPLOYEENUMBER} Dayforce inserts the user's employee number into their default
+password.
+For example, with the default password {BIRTHYEAR}Pass, new users are assigned default
+passwords that are their birth year, plus the characters Pass. In this example, an employee who
+was born in 1978 would have a default password of 1978Pass.
+Note: When a new system user (for example, a system administrator, or other user who doesn't
+have an employee record) is added in System Admin > User, Dayforce doesn't use the default
+password from a password policy. Instead, the administrator enters a password in the Password
+field when they create the user account in System Admin > User. See Add User Accounts.
+
+-- 287 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 288 of 0
+Default PIN
+Enter the default PIN that Dayforce uses for new user accounts. Dayforce only accepts numeric
+characters (that is, 0 to 9) and numeric tokens (for example, {BIRTHYEAR}).
+Enforcement
+Require Reset on Login
+This checkbox controls whether users must change their password after it has been changed by
+an administrator (typically when a system administrator resets the password). Select the checkbox
+and users must reset their password the next time they log in after it has been changed by an
+administrator.
+Note: If the Enable Password Reset checkbox is selected in the Messages section of the
+Properties tab in System Admin > Client Properties, this checkbox is enabled by default and can't
+be changed. If the Enable Password Reset checkbox isn’t selected, you can clear the Require
+Reset on Login checkbox and users don’t have to change their password the first time they log in.
+However, if a default password is configured, Dayforce selects this checkbox by default when you
+save the policy. This ensures that users who are provided a default password by the password
+policy must change their password when they first log in.
+Require Complex Password
+This checkbox controls whether users must use complex or strong passwords when they’re
+prompted to change their password.
+Select the checkbox and users must use complex passwords. Clear the checkbox and complex
+passwords aren't enforced.
+Complex passwords must meet the following requirements:
+The password might not contain any part of the user's full name or user account that is
+greater than two characters long. Dayforce parses the user's full name for commas, dashes,
+spaces, and other characters and checks for each separate section if any exist. For
+example, a full name of Parr, Margaret H is parsed so that passwords can't contain 'Parr' or
+'Margaret'; however passwords can contain the letter 'H' (the middle initial is 'skipped'
+because it’s less than two characters long).
+The password must contain characters from three of the following five categories:
+English uppercase characters (A through Z)
+English lowercase characters (a through z)
+Base 10 digits (0 through 9)
+Non-alphabetic characters (for example, !, $, #, %)
+Unicode symbols (for example, é, ù,£ )
+
+-- 288 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 289 of 0
+History Duration
+Enter the number of unique passwords (up to 24) a user account must specify before an old
+password can be reused. The password history only checks for exact password matches when
+determining if the user has specified a unique password. Enter 0 and the unique passwords
+requirement isn’t enforced. Old passwords can always be reused.
+Password
+Minimum Length
+Enter the minimum length (in number of characters) for the password. Passwords must be the
+specified length (or longer). This value can't be blank or lower than six, and can't exceed the Max
+Length value.
+Maximum Length
+Enter the maximum length (in number of characters) for the password. Passwords can't be the
+longer than the specified length. This value can't be less than the Min Length value.
+If you leave this field blank, Dayforce uses the default maximum length of 32 characters.
+Minimum Age
+Enter the number of days (up to 998) a new password must be used before the user can change
+it. This value must be less than the Max Age value if Max Age isn’t set to 0. Enter 0 and the
+minimum age requirement isn’t enforced; passwords can always be changed.
+Important: Without a minimum password age, the unique password requirement set with the
+History Duration parameter can't be enforced; users can cycle through passwords repeatedly until
+they get to an old favorite.
+Note: If the Require Reset on Login parameter is configured, Dayforce temporarily skips the Min
+Age parameter, allowing for the user to create a new password on the first login. After the
+password change, Dayforce continues to respect the Min Age parameter.
+Maximum Age
+Enter the maximum number of days a user can keep a password before it expires and they’re
+prompted to change it. Enter 0 and passwords don’t expire.
+Default Password Life (Hours)
+Defines the amount of time, in hours, after which default passwords expire. Dayforce tracks when
+default passwords are assigned to newly onboarded employees, either through an HR Import,
+
+-- 289 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 290 of 0
+People, or Self-Service forms, and only considers the password valid for the amount of time
+specified.
+For example, a system administrator could define that default passwords expire after 48 hours. An
+employee is onboarded through the New Hire form on Monday, at 1:00 PM but that employee
+doesn't attempt to log in to Dayforce until Friday morning. Because more than 48 hours have
+elapsed since the default password was assigned, it has expired and the employee is prevented
+from logging in to Dayforce.
+If the employee logs in within 48 hours, in this example, and resets their password (or has it reset
+by an administrator through System Admin > User), they can then log in normally using their new
+password.
+By default, this field is blank and default passwords don’t expire. With a value specified, Dayforce
+expires default passwords after the specified number of hours have elapsed from when the
+default password was first assigned to a new employee.
+Note: The maximum value of the Default Password Life (hours) field is 720.
+Password Lockout Rules
+Failed Login attempts before Lockout
+Enter the number of failed login attempts (up to 999) a user account can make before it’s locked
+out. Enter 0 and Dayforce doesn't lock out user accounts for any number of failed login attempts.
+Lock Account for (minutes)
+Enter the number of minutes (up to 99,999) a user account remains locked out if it triggered the
+Failed Login attempts before Lockout feature.
+Enter 0 and the account is locked out indefinitely; it’s only unlocked when a system administrator
+explicitly unlocks it.
+Note: This parameter is only used if the Failed Login attempts before Lockout field has a value.
+Employee Badge PIN
+Minimum PIN Length
+Enter the minimum number of characters for PINs. For example, to require PINs to be at least four
+characters, enter 4.
+Maximum PIN Length
+Enter the maximum number of characters for PINs. For example, to limit PINs to four characters or
+fewer, enter 4.
+
+-- 290 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 291 of 0
+Reorder Password Policies
+Dayforce uses the order that password policies are arranged in to determine which password
+policies are strongest. For this reason, you need to sort password policies by strength, so that the
+strongest policy is at the top of the list.
+When all of the necessary password policies are added, you can rearrange them using the Move
+Up and Move Down buttons in System Admin > Password Policy:
+Note: After you define the necessary password policies and sort them in the correct order, you
+must assign the correct policy to each user role. See User Roles.
+Two-Factor Authentication
+Two-factor authentication (TFA) can be described as both "knowing" something and "having"
+something. A user must know their user name and password, and they must have a device that is
+registered to them. With two-factor authentication, Dayforce users log in to Dayforce as they
+normally would, and then they’re prompted to verify their identity using a device registered to
+them. This is especially useful for users who might have access to sensitive tasks like committing
+payroll. However, it can be enabled for any user. This functionality can also be used with the
+mobile app.
+The following topics contain more details about how to use two-factor authentication with
+Dayforce:
+Duo Security Overview
+Set Up Duo Security Accounts
+Create the Dayforce Application in Duo Security
+Enable Two-Factor Authentication in Dayforce
+User Experience Using Two-Factor Authentication
+Reset or Remove Users in Duo Security
+Duo Security Overview
+Dayforce uses Duo Security, a third-party provider, as one option for two-factor authentication. To
+use this functionality, organizations need to create an account with Duo. The type of account
+depends on the size of the organization. This is determined between Duo Security and the
+organization.
+
+-- 291 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 292 of 0
+Note: Dayforce doesn't administer Duo accounts on behalf of its customers. Customers must
+create an account with Duo and maintain it themselves to use two-factor authentication.
+Administrators have access to a dashboard within their Duo account, where they can perform a
+number of tasks including managing their enrolled users and customizing Duo's guided process.
+For more information on Duo Security integration and services, see https://www.duosecurity.com/.
+Service Level Agreement
+One concern of integrating with a third party during the login process is that Dayforce is subject to
+that third party’s availability. If the third party is offline, then Dayforce might be inaccessible (see
+the section below regarding Fail Open vs. Fail Closed).
+Duo publishes their SLA at https://www.duosecurity.com/sla. Per Mathew Varghese of Duo, their
+uptime since inception is 99.995%. They have made improvements recently to increase uptime,
+such as now being able to do upgrades without taking the system offline.
+Set Up Duo Security Accounts
+Before you can enable two-factor authentication, you must first set up an account with Duo
+Security, enable that account for the appropriate API access, and generate the access keys.
+Dayforce uses these APIs to allow users to log in using the Duo provided UI workflow process for
+enrolling users the first time, and for authenticating them on subsequent logins.
+The type of Duo Security account depends on the size of your organization, and must be
+arranged by you and Duo Security.
+It's critical that the account must support Web SDK integration and Admin API Integration. At the
+time of writing, this is a Duo Security “Enterprise” account. You must ask Duo Security to
+specifically enable Admin API integration because it isn’t enabled by default. Duo does this
+because enabling it can allow customers to make large and irreversible changes to their account
+programmatically. Dayforce uses the Admin API integration to enable the two-factor authentication
+functionality in System Admin > User.
+Web SDK Integration
+This integration is required to allow users to log in using the Duo provided UI workflow process for
+enrolling users the first time, and for authenticating them on subsequent logins.
+Admin API Integration
+This integration is required to enable functionality on the User Admin page to reset (delete) users
+in the Duo system. This integration is also used on the Admin page where the TFA configuration
+keys are entered to verify the keys are correct.
+
+-- 292 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 293 of 0
+Create the Dayforce Application in Duo Security
+After you create a Duo Security account, you must configure Dayforce and API integration within
+DUO Security.
+Create the Web Application
+1. In the Duo Security menu, click Applications.
+2. Click Protect an Application, and do the following:
+a. Select Web SDK and click Protect this Application.
+b. Enter Dayforce Web as Dayforce name.
+c. Review the settings of Dayforce. Ensure that Require Enrollment is selected in the
+Policy section. Other settings should remain at their default values.
+d. Create a document with your word processing application and copy/paste the
+integration key, secret key and API hostname into it. You’ll need these keys to set up
+Dayforce.
+e. Click Save Changes.
+Create the Admin API Application
+1. In the Duo Security menu, click Applications.
+2. Click Protect an Application, and do the following:
+a. Locate Admin API, and click Protect this Application.
+b. Enter Dayforce Admin as Dayforce name.
+c. Enable Grant read resource and Grant write resource.
+d. Copy/paste the integration key and secret key int

@@ -1,0 +1,199 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": []
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Gilroy))/i]",
+        "message": "Font not provided by the design system. Available: Gilroy."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--background-0",
+      "--background-1",
+      "--border-0",
+      "--border-1",
+      "--border-2",
+      "--chart-coral",
+      "--chart-gold",
+      "--chart-green",
+      "--chart-peach",
+      "--chart-purple",
+      "--chart-red",
+      "--chart-teal",
+      "--error-0",
+      "--error-1",
+      "--error-2",
+      "--font-body",
+      "--font-display",
+      "--fs-body",
+      "--fs-display",
+      "--fs-h1",
+      "--fs-h2",
+      "--fs-h3",
+      "--fs-sm",
+      "--fs-xs",
+      "--fw-bold",
+      "--fw-extrabold",
+      "--fw-heavy",
+      "--fw-light",
+      "--fw-medium",
+      "--fw-regular",
+      "--fw-semibold",
+      "--grayscale-0",
+      "--grayscale-1",
+      "--grayscale-2",
+      "--grayscale-3",
+      "--grayscale-4",
+      "--grayscale-5",
+      "--grayscale-6",
+      "--info-0",
+      "--primary-0",
+      "--primary-1",
+      "--primary-10",
+      "--primary-2",
+      "--primary-3",
+      "--radius-btn",
+      "--radius-card",
+      "--radius-input",
+      "--radius-md",
+      "--radius-pill",
+      "--radius-pill-sm",
+      "--secondary-0",
+      "--secondary-1",
+      "--shadow-card",
+      "--shadow-notification",
+      "--shadow-pop",
+      "--space-1",
+      "--space-2",
+      "--space-3",
+      "--space-4",
+      "--space-5",
+      "--space-6",
+      "--success-0",
+      "--success-1",
+      "--success-bg",
+      "--teal-0",
+      "--teal-1",
+      "--teal-2",
+      "--text-0",
+      "--text-1",
+      "--warning-0",
+      "--warning-1",
+      "--warning-bg"
+    ],
+    "tokenKinds": {
+      "--primary-0": "color",
+      "--primary-1": "color",
+      "--primary-2": "color",
+      "--primary-3": "color",
+      "--primary-10": "color",
+      "--secondary-0": "color",
+      "--secondary-1": "color",
+      "--grayscale-0": "color",
+      "--grayscale-1": "color",
+      "--grayscale-2": "color",
+      "--grayscale-3": "color",
+      "--grayscale-4": "color",
+      "--grayscale-5": "color",
+      "--grayscale-6": "color",
+      "--text-0": "font",
+      "--text-1": "font",
+      "--background-0": "color",
+      "--background-1": "color",
+      "--border-0": "color",
+      "--border-1": "color",
+      "--border-2": "color",
+      "--success-0": "color",
+      "--success-1": "color",
+      "--success-bg": "color",
+      "--error-0": "color",
+      "--error-1": "color",
+      "--error-2": "color",
+      "--warning-0": "color",
+      "--warning-1": "color",
+      "--warning-bg": "color",
+      "--info-0": "color",
+      "--teal-0": "color",
+      "--teal-1": "color",
+      "--teal-2": "color",
+      "--chart-purple": "color",
+      "--chart-teal": "color",
+      "--chart-green": "color",
+      "--chart-peach": "color",
+      "--chart-coral": "color",
+      "--chart-gold": "color",
+      "--chart-red": "color",
+      "--font-display": "font",
+      "--font-body": "font",
+      "--fw-light": "font",
+      "--fw-regular": "font",
+      "--fw-medium": "font",
+      "--fw-semibold": "font",
+      "--fw-bold": "font",
+      "--fw-extrabold": "font",
+      "--fw-heavy": "font",
+      "--fs-display": "spacing",
+      "--fs-h1": "spacing",
+      "--fs-h2": "spacing",
+      "--fs-h3": "spacing",
+      "--fs-body": "spacing",
+      "--fs-sm": "spacing",
+      "--fs-xs": "spacing",
+      "--radius-pill": "radius",
+      "--radius-btn": "radius",
+      "--radius-card": "radius",
+      "--radius-md": "radius",
+      "--radius-input": "radius",
+      "--radius-pill-sm": "radius",
+      "--shadow-card": "shadow",
+      "--shadow-notification": "shadow",
+      "--shadow-pop": "shadow",
+      "--space-1": "spacing",
+      "--space-2": "spacing",
+      "--space-3": "spacing",
+      "--space-4": "spacing",
+      "--space-5": "spacing",
+      "--space-6": "spacing"
+    },
+    "fontFamilies": [
+      "Gilroy"
+    ]
+  }
+}

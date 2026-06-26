@@ -1,0 +1,3016 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rate Automation · Prototype changelog</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <!--
+    ─────────────────────────────────────────────────────────────────────
+    Rate Automation · Prototype changelog
+    ─────────────────────────────────────────────────────────────────────
+    ISOLATED, PER-PROTOTYPE changelog. This file tracks ONLY the
+    Rate Automation feature prototype (prototype/Rate Automation.html).
+    It is intentionally separate from the project-wide
+    `Flex Work v2 Changelog.html` and from every other prototype's
+    changelog — same structure and behaviour, different scope.
+
+    Maintenance contract:
+      • Update this file in the same turn you ship a change to the
+        Rate Automation prototype (a new surface, a behavioural change,
+        a fix). Do NOT log unrelated app changes here.
+      • Prepend a new <li class="cl-entry"> to today's
+        <section data-day="YYYY-MM-DD">; create the day section if it
+        does not exist yet. Newest day first, newest change on top.
+      • Same entry markup as the main changelog: tag (add / change /
+        fix / remove / system), verb-led sentence-case title, a
+        one-sentence detail, a meta row (area + version) and a real
+        teammate as author (data-author + the Author: span must match).
+      • Reactions and comments persist under a prototype-scoped
+        localStorage key so this log's social state never collides
+        with the main changelog or any other prototype.
+    ─────────────────────────────────────────────────────────────────────
+  -->
+  <style>
+    /* ===== Page shell ============================================== */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--evr-surface-root-primary);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-body1);
+    }
+    .cl-page {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 56px 32px 96px;
+    }
+
+    /* ===== Author filter =========================================== */
+    .cl-authors {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 28px;
+      padding: 14px 16px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+    }
+    .cl-authors-label {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      margin-right: 4px;
+    }
+    .cl-author-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 30px;
+      padding: 0 12px 0 4px;
+      border-radius: 999px;
+      border: 1px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-primary-default);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-body2);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms, color 150ms;
+    }
+    .cl-author-chip[data-author="all"] {
+      padding: 0 14px;
+    }
+    .cl-author-chip:hover {
+      background: var(--evr-surface-secondary-default);
+    }
+    .cl-author-chip.is-active {
+      background: var(--evr-interactive-primary-default);
+      border-color: var(--evr-interactive-primary-default);
+      color: #fff;
+    }
+    .cl-author-chip.is-active .cl-avatar {
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.35);
+    }
+    .cl-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font: var(--evr-utility2);
+      font-weight: 700;
+      letter-spacing: 0;
+      color: #fff;
+      flex: none;
+    }
+    .cl-authors-count {
+      margin-left: auto;
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* Hidden entries / day sections when filtered out */
+    .cl-entry[hidden],
+    .cl-day[hidden] {
+      display: none;
+    }
+
+    /* Inline avatar in the meta row */
+    .cl-entry-author {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cl-entry-author .cl-avatar {
+      width: 16px;
+      height: 16px;
+      font-size: 9px;
+    }
+
+    /* ===== Top bar ================================================= */
+    .cl-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 40px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-topbar a {
+      color: var(--evr-interactive-primary-default);
+      text-decoration: none;
+      font: var(--evr-body2-bold);
+    }
+    .cl-topbar a:hover { text-decoration: underline; }
+    .cl-crumb {
+      font: var(--evr-utility2);
+      color: var(--evr-content-primary-lowemp);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ===== Header ================================================== */
+    .cl-header { margin-bottom: 40px; }
+    .cl-eyebrow {
+      font: var(--evr-utility2);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--evr-interactive-primary-default);
+      margin: 0 0 8px;
+    }
+    .cl-title {
+      font: var(--evr-h1);
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+    }
+    .cl-sub {
+      font: var(--evr-body1);
+      color: var(--evr-content-primary-default);
+      max-width: 64ch;
+      margin: 0 0 20px;
+    }
+    .cl-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-meta-row b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+
+    /* ===== Day section ============================================= */
+    .cl-day {
+      display: grid;
+      grid-template-columns: 168px 1fr;
+      gap: 32px;
+      padding: 32px 0;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-day:first-of-type { border-top: 0; padding-top: 0; }
+
+    .cl-day-rail {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+    }
+    .cl-day-date {
+      font: var(--evr-h4);
+      color: var(--evr-content-primary-highemp);
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+    .cl-day-weekday {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      margin-top: 4px;
+    }
+    .cl-day-count {
+      margin-top: 12px;
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* ===== Entry list ============================================== */
+    .cl-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cl-entry {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: var(--evr-radius-2xs);
+      align-items: start;
+    }
+    .cl-entry + .cl-entry {
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-entry:hover {
+      background: var(--evr-surface-secondary-default);
+    }
+    .cl-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      white-space: nowrap;
+      width: max-content;
+    }
+    .cl-tag--add {
+      background: #E7F1EA;
+      color: #1F6B41;
+    }
+    .cl-tag--change {
+      background: #E6EEFB;
+      color: #1F4ED1;
+    }
+    .cl-tag--fix {
+      background: #FBEFD9;
+      color: #7A5210;
+    }
+    .cl-tag--remove {
+      background: #F6E2E1;
+      color: #92211B;
+    }
+    .cl-tag--system {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+    }
+    .cl-entry-body {
+      min-width: 0;
+    }
+    .cl-entry-title {
+      font: var(--evr-body1-bold);
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 4px;
+      text-wrap: pretty;
+    }
+    .cl-entry-detail {
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      margin: 0 0 6px;
+      text-wrap: pretty;
+    }
+    .cl-entry-meta {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .cl-entry-meta span + span::before {
+      content: "·";
+      margin-right: 12px;
+      color: var(--evr-content-primary-lowemp);
+    }
+
+    /* ===== Screenshots / image gallery ============================= */
+    .cl-shots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 12px;
+    }
+    .cl-shot {
+      margin: 0;
+      position: relative;
+      width: 176px;
+      border-radius: var(--evr-radius-2xs);
+      overflow: hidden;
+      border: 1px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-secondary-default);
+      cursor: zoom-in;
+      transition: border-color 150ms, box-shadow 150ms, transform 150ms;
+    }
+    .cl-shot:hover {
+      border-color: var(--evr-interactive-primary-default);
+      box-shadow: var(--evr-depth-04);
+      transform: translateY(-1px);
+    }
+    .cl-shot:focus-visible {
+      outline: none;
+      border-color: var(--evr-interactive-primary-default);
+      box-shadow: 0 0 0 3px var(--evr-surface-decorative-low-blue);
+    }
+    .cl-shot-thumb {
+      display: block;
+      width: 100%;
+      height: 108px;
+      object-fit: cover;
+      object-position: top left;
+      background: var(--evr-surface-secondary-default);
+    }
+    .cl-shot figcaption {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+      padding: 6px 9px;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cl-shot-zoom {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--evr-radius-3xs);
+      background: rgba(16, 19, 26, 0.58);
+      color: #fff;
+      opacity: 0;
+      transition: opacity 150ms;
+    }
+    .cl-shot-zoom svg { width: 14px; height: 14px; }
+    .cl-shot:hover .cl-shot-zoom,
+    .cl-shot:focus-visible .cl-shot-zoom { opacity: 1; }
+
+    /* override controls — reader can swap the proposed screenshot */
+    .cl-shot-tools {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 150ms;
+      z-index: 2;
+    }
+    .cl-shot:hover .cl-shot-tools,
+    .cl-shot:focus-within .cl-shot-tools { opacity: 1; }
+    .cl-shot-tool {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: var(--evr-radius-3xs);
+      background: rgba(16, 19, 26, 0.58);
+      color: #fff;
+      cursor: pointer;
+      transition: background 150ms;
+    }
+    .cl-shot-tool:hover { background: rgba(16, 19, 26, 0.85); }
+    .cl-shot-tool:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+    .cl-shot-tool svg { width: 13px; height: 13px; }
+    .cl-shot-flag {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      margin-right: 6px;
+      font-weight: 600;
+      color: var(--evr-content-status-informative-highemp);
+    }
+    .cl-shot-flag svg { width: 11px; height: 11px; }
+    .cl-shot.is-custom .cl-shot-flag { display: inline-flex; }
+    .cl-shot.is-custom { border-color: var(--evr-border-status-success); }
+
+    /* ===== Lightbox =============================================== */
+    .cl-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 40px;
+      background: rgba(16, 19, 26, 0.84);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+    .cl-lightbox.is-open { opacity: 1; pointer-events: auto; }
+    .cl-lightbox-figure {
+      margin: 0;
+      max-width: min(1180px, 94vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .cl-lightbox-img {
+      display: block;
+      max-width: min(1180px, 94vw);
+      max-height: 78vh;
+      border-radius: var(--evr-radius-xs);
+      background: #fff;
+      box-shadow: var(--evr-depth-06);
+    }
+    .cl-lightbox-cap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font: var(--evr-body2);
+      color: rgba(255, 255, 255, 0.92);
+      text-align: center;
+    }
+    .cl-lightbox-count {
+      font: var(--evr-caption);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .cl-lb-btn {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: var(--evr-radius-circle);
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 150ms;
+    }
+    .cl-lb-btn:hover { background: rgba(255, 255, 255, 0.24); }
+    .cl-lb-btn svg { width: 22px; height: 22px; }
+    .cl-lb-close { top: 24px; right: 24px; }
+    .cl-lb-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+    .cl-lb-next { right: 24px; top: 50%; transform: translateY(-50%); }
+    .cl-lightbox[data-single] .cl-lb-prev,
+    .cl-lightbox[data-single] .cl-lb-next { display: none; }
+
+    /* ===== Backlog (pre-changelog history) ========================= */
+    .cl-backlog {
+      margin-top: 56px;
+      padding: 24px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-sm);
+      background: var(--evr-surface-primary-default);
+    }
+    .cl-backlog-h {
+      font: var(--evr-h4);
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 6px;
+    }
+    .cl-backlog-sub {
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-lowemp);
+      margin: 0 0 18px;
+    }
+    .cl-backlog ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cl-backlog li {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 16px;
+      align-items: baseline;
+    }
+    .cl-backlog .cl-ver {
+      font: var(--evr-body2-bold);
+      color: var(--evr-interactive-primary-default);
+      letter-spacing: 0.02em;
+    }
+    .cl-backlog p {
+      margin: 0;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+    }
+    .cl-backlog p b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+
+    /* ===== Footer note ============================================= */
+    .cl-foot {
+      margin-top: 48px;
+      padding: 18px 20px;
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-secondary-default);
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+    }
+    .cl-foot b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+    .cl-foot code {
+      font-family: var(--evr-font-mono);
+      font-size: 0.92em;
+      padding: 1px 6px;
+      background: var(--evr-surface-primary-default);
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: 4px;
+    }
+
+    /* ===== Topbar persona selector ================================ */
+    .cl-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .cl-persona { position: relative; }
+    .cl-persona-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 34px;
+      padding: 0 10px 0 5px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: 999px;
+      background: var(--evr-surface-primary-default);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-body2);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms;
+    }
+    .cl-persona-btn:hover { background: var(--evr-surface-secondary-default); }
+    .cl-persona-label {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-persona-chev {
+      width: 14px;
+      height: 14px;
+      color: var(--evr-content-primary-lowemp);
+      flex: none;
+    }
+    .cl-persona-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      min-width: 248px;
+      padding: 6px;
+      background: var(--evr-surface-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      box-shadow: var(--evr-depth-04);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .cl-persona-menu[hidden] { display: none; }
+    .cl-persona-menu-label {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      padding: 8px 10px 4px;
+    }
+    .cl-persona-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 10px;
+      border: 0;
+      background: transparent;
+      border-radius: var(--evr-radius-3xs);
+      cursor: pointer;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      text-align: left;
+    }
+    .cl-persona-item:hover { background: var(--evr-surface-secondary-default); }
+    .cl-persona-item.is-current {
+      background: var(--evr-surface-decorative-low-blue);
+      font-weight: 600;
+    }
+    .cl-persona-item .cl-check {
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+      color: var(--evr-interactive-primary-default);
+      flex: none;
+    }
+    .cl-avatar--sm { width: 28px; height: 28px; font-size: 11px; }
+    .cl-avatar--xs { width: 20px; height: 20px; font-size: 9px; }
+
+    /* inline "Commenting as" picker, lives in the composer */
+    .cl-as-picker { position: relative; }
+    .cl-as-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px 3px 4px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: 999px;
+      background: var(--evr-surface-primary-default);
+      color: var(--evr-content-primary-default);
+      font: var(--evr-caption);
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms;
+    }
+    .cl-as-btn:hover { background: var(--evr-surface-secondary-default); }
+    .cl-as-btn .cl-as-pre { color: var(--evr-content-primary-lowemp); }
+    .cl-as-btn b { font-weight: 600; }
+    .cl-as-chev {
+      width: 13px;
+      height: 13px;
+      color: var(--evr-content-primary-lowemp);
+      flex: none;
+    }
+    .cl-as-picker .cl-persona-menu {
+      bottom: calc(100% + 6px);
+      top: auto;
+      left: 0;
+      right: auto;
+    }
+
+    /* ===== Social: reactions, comments, threads ==================== */
+    .cl-social {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cl-social-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .cl-react-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cl-react-list:empty { display: none; }
+    .cl-react-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 11px;
+      border-radius: 999px;
+      border: 1px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-primary-default);
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      line-height: 1;
+      cursor: pointer;
+      transition: background-color 150ms, border-color 150ms;
+    }
+    .cl-react-chip:hover { background: var(--evr-surface-secondary-default); }
+    .cl-react-chip.is-mine {
+      background: var(--evr-surface-decorative-low-blue);
+      border-color: var(--evr-interactive-primary-default);
+      color: var(--evr-content-status-informative-highemp);
+    }
+    .cl-react-emoji { font-size: 15px; }
+    .cl-react-count {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+    }
+
+    .cl-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 28px;
+      padding: 0 11px;
+      border-radius: 999px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      background: transparent;
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-lowemp);
+      cursor: pointer;
+      transition: background-color 150ms, color 150ms, border-color 150ms;
+    }
+    .cl-icon-btn:hover {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+    }
+    .cl-icon-btn.is-open {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border-color: var(--evr-border-decorative-default);
+    }
+    .cl-icon-btn svg { width: 16px; height: 16px; flex: none; }
+    .cl-icon-btn .cl-count-badge {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .cl-react-add-wrap { position: relative; display: inline-flex; }
+    .cl-react-palette {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 0;
+      display: flex;
+      gap: 2px;
+      padding: 6px;
+      background: var(--evr-surface-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      box-shadow: var(--evr-depth-04);
+      z-index: 30;
+    }
+    .cl-react-palette[hidden] { display: none; }
+    .cl-react-palette button {
+      border: 0;
+      background: transparent;
+      font-size: 20px;
+      line-height: 1;
+      padding: 6px;
+      border-radius: var(--evr-radius-3xs);
+      cursor: pointer;
+    }
+    .cl-react-palette button:hover { background: var(--evr-surface-secondary-default); }
+
+    /* ----- Thread ----- */
+    .cl-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 4px 0 2px 16px;
+      border-left: 2px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-thread[hidden] { display: none; }
+    .cl-comment { display: flex; gap: 10px; }
+    .cl-comment-main { min-width: 0; flex: 1; }
+    .cl-comment-head {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .cl-comment-author {
+      font: var(--evr-body2-bold);
+      color: var(--evr-content-primary-highemp);
+    }
+    .cl-comment-time {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-comment-text {
+      font: var(--evr-body2);
+      color: var(--evr-content-primary-default);
+      margin: 3px 0 0;
+      white-space: pre-wrap;
+      text-wrap: pretty;
+      overflow-wrap: anywhere;
+    }
+    .cl-comment-actions {
+      margin-top: 5px;
+      display: flex;
+      gap: 14px;
+    }
+    .cl-link-btn {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      font: var(--evr-caption);
+      font-weight: 600;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-link-btn:hover {
+      color: var(--evr-interactive-primary-default);
+      text-decoration: underline;
+    }
+    .cl-link-btn.cl-link-danger:hover { color: var(--evr-content-status-error-default); }
+    .cl-comment-replies {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-left: 14px;
+      border-left: 2px solid var(--evr-border-decorative-lowemp);
+    }
+    .cl-comment-replies:empty { display: none; }
+
+    /* ----- Composer ----- */
+    .cl-composer {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .cl-composer.cl-composer--reply { margin-top: 12px; }
+    .cl-composer[hidden] { display: none; }
+    .cl-composer-fields { flex: 1; min-width: 0; }
+    .cl-composer textarea {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 38px;
+      resize: vertical;
+      font: var(--evr-body2);
+      font-family: var(--evr-font-text);
+      color: var(--evr-content-primary-default);
+      padding: 9px 12px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-3xs);
+      background: var(--evr-surface-primary-default);
+    }
+    .cl-composer textarea::placeholder { color: var(--evr-content-primary-lowemp); }
+    .cl-composer textarea:focus {
+      outline: none;
+      border-color: var(--evr-interactive-primary-default);
+      box-shadow: 0 0 0 3px var(--evr-surface-decorative-low-blue);
+    }
+    .cl-composer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .cl-composer-as {
+      font: var(--evr-caption);
+      color: var(--evr-content-primary-lowemp);
+    }
+    .cl-composer-as b {
+      color: var(--evr-content-primary-default);
+      font-weight: 600;
+    }
+    .cl-composer-btns { display: flex; gap: 8px; }
+    .cl-btn-primary {
+      height: 34px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: var(--evr-radius-3xs);
+      background: var(--evr-interactive-primary-default);
+      color: #fff;
+      font: var(--evr-button-sm);
+      cursor: pointer;
+      transition: background-color 150ms;
+    }
+    .cl-btn-primary:hover { background: var(--evr-interactive-primary-hover); }
+    .cl-btn-primary:disabled {
+      background: var(--evr-inactive-surface);
+      color: var(--evr-inactive-content);
+      cursor: default;
+    }
+    .cl-btn-ghost {
+      height: 34px;
+      padding: 0 14px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-3xs);
+      background: transparent;
+      color: var(--evr-content-primary-default);
+      font: var(--evr-button-sm);
+      cursor: pointer;
+      transition: background-color 150ms;
+    }
+    .cl-btn-ghost:hover { background: var(--evr-surface-secondary-default); }
+
+    @media (max-width: 720px) {
+      .cl-page { padding: 32px 20px 64px; }
+      .cl-day {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .cl-day-rail { position: static; }
+      .cl-entry {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cl-page">
+
+    <!-- Top bar -->
+    <nav class="cl-topbar" aria-label="Document navigation">
+      <span class="cl-crumb">Flex Work v2 · Prototype docs</span>
+      <a href="Rate Automation.html">← Back to prototype</a>
+    </nav>
+
+    <!-- Header -->
+    <header class="cl-header">
+      <p class="cl-eyebrow">Prototype changelog</p>
+      <h1 class="cl-title">Rate Automation</h1>
+      <p class="cl-sub">
+        Running log of every change shipped into the Rate Automation
+        feature prototype only — isolated from the project-wide
+        Flex Work v2 changelog and from every other prototype's log.
+        Entries are grouped by day, newest first, and this file is
+        updated as part of every change to this prototype.
+      </p>
+      <div class="cl-meta-row">
+        <span><b>Prototype</b> Rate Automation</span>
+        <span><b>IA version</b> V1</span>
+        <span><b>Current version</b> v0.63</span>
+        <span><b>Last updated</b> <time datetime="2026-06-08">June 8, 2026</time></span>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         CHANGELOG ENTRIES — reverse chronological by day.
+         To append a new entry on a new day, prepend a new <section>
+         here. To append to today, add a new <li> at the top of the
+         existing day's <ul>.
+
+         Author tracking — every <li class="cl-entry"> carries a
+         data-author="Firstname Lastname" attribute that matches the
+         Author: span in its meta row. The filter chips below read
+         from data-author to narrow the visible entries; an author
+         not represented in any entry is dropped from the chip row.
+         Add a new teammate by giving them a unique chip color in
+         the AUTHORS map at the bottom of this file.
+         ============================================================ -->
+    <main>
+
+      <!-- Author filter — chips render from the AUTHORS map + the
+           set of data-author values found on entries below. -->
+      <div class="cl-authors" id="cl-authors" role="group" aria-label="Filter by author">
+        <span class="cl-authors-label">Author</span>
+        <!-- chips injected by script — keeps the markup honest -->
+        <span class="cl-authors-count" data-authors-count></span>
+      </div>
+
+      <!-- ============ 2026-06-08 ============ -->
+      <section class="cl-day" data-day="2026-06-08" aria-label="June 8, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 8, 2026</h2>
+          <div class="cl-day-weekday">Monday</div>
+          <div class="cl-day-count" data-day-count>12 changes</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Made value source a choice on every authorable rule</h3>
+              <p class="cl-entry-detail">The Custom (in-engine) versus Rate card source choice is no longer limited to a hardcoded set of rules &mdash; every author-owned value now carries it, while statutory-pack values stay read-only. The default is by level: a global org-wide constant defaults to Custom, a per-dimension value to Rate card. The compiled rate-card schema includes a column only for Rate card-sourced values, so flipping a value to Custom removes its column.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.63</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Relabelled the in-engine source to Custom and noted which version it bumps</h3>
+              <p class="cl-entry-detail">The source option once called "Rate Engine" is now "Custom", which reads clearly against the surface name. Each value states which version a change ties to &mdash; Custom values version with the engine, Rate card values with the card &mdash; and banded rules keep their independent per-band source choice.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.63</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added agency engine binding with a coverage-gated lifecycle</h3>
+              <p class="cl-entry-detail">An agency now binds one rate engine (pinned to a version by default, or live auto-follow) in a new Pricing Configuration Contract section; the rate card resolves through that shared engine. The lifecycle is Draft, Invited, Active, Deactivated, and Invite and Activate are hard-blocked until an engine is bound, a card exists, and every position by location in scope resolves to a rate. The active contract stamps the engine and card versions it ran against.</p>
+              <div class="cl-entry-meta">
+                <span>Agencies &middot; v0.62</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a coverage panel that classifies and routes pricing gaps</h3>
+              <p class="cl-entry-detail">Each uncovered position by location pair is listed and classified as out-of-engine-scope (fixed by a new engine version) or no-rate-row (fixed by a new rate-card version), with the fix action on the row. Editing an agency's operating scope opens a new contract version and re-runs coverage; gaps warn non-blocking in Draft and block at invite or activate.</p>
+              <div class="cl-entry-meta">
+                <span>Agencies &middot; v0.62</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a pay/bill component model with named special components</h3>
+              <p class="cl-entry-detail">The rate engine now separates a component's treatment from who receives it. Five flags &mdash; paid to the worker, part of the taxable base, flows into the bill, agency markup applies, output tax applies &mdash; drive the math. The rule library gained ready-made components (Tips, Mileage / reimbursement, Bonus, Per-diem / allowance, One-off payout) under friendly headings; each carries a plain-language note and lands in an Additional payments group. Tips are paid but untaxed and unbilled; mileage is billed at cost with no markup.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.61</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added an Advanced escape-hatch for component treatment</h3>
+              <p class="cl-entry-detail">A collapsed "Advanced &mdash; how this is treated" section in the rule editor exposes the five raw treatment flags for authoring custom components. It stays closed for every catalogued component, and validation now flags components that go nowhere or carry markup/VAT without being billed.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.61</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added in-group conflict resolution to the rate engine</h3>
+              <p class="cl-entry-detail">Every rule group now declares how overlapping rules combine &mdash; all apply (stack), highest applies, lowest applies, first match applies, or only one may apply. A selector and a plain-language consequence sit on each non-locked group, the active policy prints next to the group name, and the policy travels in the compiled rate-card schema. Order is the tiebreaker within the chosen policy.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.60</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Rules can now be added more than once and resolved by policy</h3>
+              <p class="cl-entry-detail">Retired the hard single-instance block in the rule library. Overlapping premiums, overtime and holiday rules can be added several times to a group; each copy gets a distinguishing name and is combined by the group's resolution policy. Exclusive groups with provably overlapping conditions are flagged at config time.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.60</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added remove action to rate cards</h3>
+              <p class="cl-entry-detail">A "Remove rate card" button now appears on the rate card detail header; clicking it opens a confirmation dialog before permanently deleting the card and all its version history from the engine.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.59</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added remove action to rate engine configurations</h3>
+              <p class="cl-entry-detail">Each pricing configuration in the rate engine list now has a trash-can icon button; the detail view also exposes a "Remove" button. Both trigger a confirmation dialog before permanently deleting the configuration and all its versions.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.59</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added conditions panel to rate engine version detail</h3>
+              <p class="cl-entry-detail">Each rate engine version now shows a read-only conditions panel listing which lookup chain values (legal entity, tenure status, location, position, job type) the version applies to. Creating a new version shows a purple conditions form with multi-select checkboxes per chain type before committing the new draft.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.58</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Rate engine rows are now clickable and open an engine detail page</h3>
+              <p class="cl-entry-detail">Clicking a rate engine row navigates to a detail page showing the engine name, active version and the full window.RE structure editor. Inline edit and delete buttons removed from the list. Legal entity options updated to Evri Ltd and Evri Premium Ltd.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.57</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Rate engine list now shows name, active version and lookup chain columns</h3>
+              <p class="cl-entry-detail">The rate engine table replaces the structure-only window.RE view with a dynamic table whose columns match the active lookup chain (name · active version · one column per lookup type). Inline editor lets you add or edit engines with name, version and key values per chain type. Three seed engines pre-populate the list.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.56</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Restyled rate engine lookup chain to match rate card lookup panel</h3>
+              <p class="cl-entry-detail">The lookup chain panel now uses the same purple proto-lookup visual language as the Rate Cards custom lookup (numbered chips, arrows, purple border and tinted background). Each chip shows its priority number and a × remove button; an Add type button appends to the chain. No locked fields.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.55</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Rebuilt rate engine lookup as a draggable type chain with dynamic rules table</h3>
+              <p class="cl-entry-detail">Settings &rarr; Rate Engine now has a reorderable lookup chain (drag types to set priority, add or remove from a predefined set: legal entity, tenure status, location, position, job type) and a rules table whose columns are dynamically generated from the selected chain types, each rule showing its key values and engine configuration (margin, OT, rounding, status).</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.54</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added rate engine lookup panel above engine list</h3>
+              <p class="cl-entry-detail">Settings &rarr; Rate Engine now shows a context lookup panel above the engine list with five selectors: legal entity, tenure status, location, position, and job type. Selecting values sets the context and surfaces a confirmation badge; the engine list below remains unchanged.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.54</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Reverted rate engine lookup table — restored original structure-only view</h3>
+              <p class="cl-entry-detail">Removed the lookup-driven rules table added earlier today and restored Settings &rarr; Rate Engine to its previous state (the structure-only engine view mounting window.RE into #re-root).</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.53</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added rate engine lookup table to Settings &rarr; Rate Engine</h3>
+              <p class="cl-entry-detail">Settings &rarr; Rate Engine now shows a lookup-driven rules table mapping legal entity, tenure status, locations and positions to a pay rate engine configuration (margin, OT multiplier, rounding, on-cost components). Rules evaluate top-down; the first match applies. Full inline editor to add, edit and delete rules; rules persist across sessions.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.53</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ============ 2026-06-07 ============ -->
+      <section class="cl-day" data-day="2026-06-07" aria-label="June 7, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 7, 2026</h2>
+          <div class="cl-day-weekday">Sunday</div>
+          <div class="cl-day-count" data-day-count>11 changes</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Version rows now open rate card detail; Changes tab removed</h3>
+              <p class="cl-entry-detail">Clicking a version row in the list-page expand panel navigates to the full detail view for that version with rates hidden by default. In the detail view, clicking a version row selects it and reveals the rate table. The Changes tab is removed. Version history tables now show Rate card as the first column with Note removed.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.52</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added inline rate card table when clicking a version row</h3>
+              <p class="cl-entry-detail">Clicking a version row in the expanded rate card panel now reveals the full pay or bill rate table for that version inline, with a pay/bill tab bar and line count. Clicking the same row again collapses it.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.51</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Renamed base pay rule to Base Pay Rate and updated bill carry-in</h3>
+              <p class="cl-entry-detail">The pay-side base rule is now &ldquo;Base Pay Rate&rdquo;; the bill-side carry-in rule is now &ldquo;Total Worker Pay&rdquo; and clicking it opens an info panel explaining it is the resolved pay rate carried in from the pay rate card, with no configuration of its own. Holiday pay is no longer added as a default rule.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.50</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added value and threshold inputs to Employer NI, Pension and Apprenticeship levy rules</h3>
+              <p class="cl-entry-detail">Employer NI and Pension auto-enrolment now show rate and threshold value inputs when sourced from the Pricing engine, and show rate card template columns when sourced from Rate card. Apprenticeship levy removes the value type picker (always percentage) and adds a rate input for the Pricing engine source.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.47</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added rate card template column preview to rule detail panel</h3>
+              <p class="cl-entry-detail">When a rule&rsquo;s value source is set to Rate card, the rule panel now shows a live inline preview of the exact template columns that rule will contribute — key columns from the lookup plus the rule&rsquo;s value column(s) — so operators can see the template structure without leaving the rule editor.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.47</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--fix">Fix</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Prevent duplicate single-instance rules in Add rule library</h3>
+              <p class="cl-entry-detail">Shift differential, Day Specific Pay, Daily overtime, Weekly overtime and WTR holiday pay now show &ldquo;Already in configuration&rdquo; and cannot be added a second time. Fixed a scoping bug that caused the in-use check to scan the wrong side&rsquo;s groups.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.47</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added rate engine version selector to rate card upload flow</h3>
+              <p class="cl-entry-detail">Step 1 of the new rate card and new version upload flows now shows a &ldquo;Rate engine version&rdquo; picker &mdash; Active or Draft &mdash; so the uploaded rate card is explicitly tied to the correct engine structure before validation begins.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.47</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added remove action for scheduled rate card versions</h3>
+              <p class="cl-entry-detail">Scheduled versions in the rate card version history now show a &ldquo;Remove&rdquo; button on row hover. Only scheduled versions can be removed &mdash; active and archived versions are protected.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.47</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Renamed worker pay rule to Total Worker Pay Rate</h3>
+              <p class="cl-entry-detail">The base pay rule in Settings &rarr; Rate Engine is now labelled &ldquo;Total Worker Pay Rate&rdquo; across the pricing rules stack, the calculation view, the rate card template, and the add-rule library.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.48</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Renamed value source "Pricing rule" to "Pricing engine"</h3>
+              <p class="cl-entry-detail">All value source toggles and read-only labels across uplift, overtime, holiday, day-specific, sick pay and shift differential rules now read "Pricing engine / Rate card". Rules sourced from the Pricing engine are excluded from the rate card template column set.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.47</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added rate card template column preview to rule detail panel</h3>
+              <p class="cl-entry-detail">When a rule&rsquo;s value source is set to Rate card, the rule panel now shows a live inline preview of the exact template columns that rule will contribute — key columns from the lookup plus the rule&rsquo;s value column(s) — so operators can see the template structure without leaving the rule editor.</p>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added Holiday pay as a mapped fillable column in the rate card</h3>
+              <p class="cl-entry-detail">A &ldquo;Holiday pay&rdquo; rule now lives in the Total Worker Pay Rate group; it appears as a fill-in input column on the Pay Rates sheet of both the pay and bill templates so the accrual amount is captured per row alongside the base rate.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.48</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added table view to Rate Cards list with engine version column</h3>
+              <p class="cl-entry-detail">The Rate Cards landing is now a permanent table view — no toggle — showing rate engine, engine version, rate card, active rate card note, version, effective date and line count. Clicking a row opens the card detail directly.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.47</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added value type and source config to uplift, overtime and day-specific rules</h3>
+              <p class="cl-entry-detail">Uplift, daily overtime, weekly overtime and day-specific pay rules now each have a Pricing rule / Rate card source toggle and a value type picker (Percentage, Markup, Deduction, Absolute). When Absolute is selected, a &ldquo;&rarr; Worker&rdquo; label confirms the recipient. Rate card mode shows the template column name.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.46</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added &ldquo;&rarr; Worker&rdquo; absolute rate label to shift differential time bands</h3>
+              <p class="cl-entry-detail">When a shift differential band is configured with Absolute value type, the value label changes to &ldquo;Absolute rate&rdquo; and a &ldquo;&rarr; Worker&rdquo; note is shown inline to confirm the recipient.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.46</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+              <p class="cl-entry-detail">Band source is now a two-button toggle (Pricing rule / Rate card). When Pricing rule is selected, a Value type dropdown appears (Percentage, Markup, Deduction, Absolute) alongside the value input. When Rate card is selected, the template column name is shown inline. Legacy band source values are normalised automatically.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.45</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Renamed &ldquo;Config&rdquo; source option to &ldquo;Pricing rule&rdquo; across all rules</h3>
+              <p class="cl-entry-detail">The source toggle on daily overtime, weekly overtime and holiday pay rules now reads &ldquo;Pricing rule&rdquo; instead of &ldquo;Config&rdquo;, consistent with the new shift differential band language.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.45</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added time-band config to shift differential</h3>
+              <p class="cl-entry-detail">The shift differential rule now has a time-band builder: add named bands with from/to times (validated for overlaps), and set each band&rsquo;s value as a pricing-rule value or sourced from the rate card.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.44</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added value-source toggle to overtime and holiday pay</h3>
+              <p class="cl-entry-detail">Daily overtime, weekly overtime and holiday pay rules now have a Pricing rule / Rate card source toggle. Rate card mode replaces the param fields with a template-column note.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.44</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added multiplier field to holiday pay</h3>
+              <p class="cl-entry-detail">The holiday pay rule now exposes a multiplier param alongside its accrual percentage, sourced from the pricing rule or the rate card.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.44</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Renamed &ldquo;Published&rdquo; version status to &ldquo;Active&rdquo;</h3>
+              <p class="cl-entry-detail">The published status pill and version menu now read &ldquo;Active&rdquo; to better reflect that it is the live, in-use structure.</p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.44</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ============ 2026-06-06 ============ -->
+      <section class="cl-day" data-day="2026-06-06" aria-label="June 6, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 6, 2026</h2>
+          <div class="cl-day-weekday">Saturday</div>
+          <div class="cl-day-count" data-day-count>23 changes</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added type-to-search to the pricing-rule library</h3>
+              <p class="cl-entry-detail">
+                The Add pricing rule dialog now has a search box that filters the library by rule name as you type, matching the name and its one-line description. It auto-focuses on open, keeps focus while typing, clears with one button, and shows a &ldquo;no rules match&rdquo; state when nothing fits &mdash; so finding a rule no longer means scanning every scope.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.43</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added drag, rename and remove for rule groups</h3>
+              <p class="cl-entry-detail">
+                Rule groups in the Rate Engine&rsquo;s Pricing configuration can now be reordered by dragging the group grip, renamed inline in the group header, and removed (with their rules) on a draft version. Locked groups &mdash; base pay, Markup and Taxes &mdash; stay fixed; reordering keeps them pinned at the ends.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added drag-and-drop reordering for pricing rules</h3>
+              <p class="cl-entry-detail">
+                Rules in the Rate Engine&rsquo;s Pricing configuration can now be reordered by dragging the grip handle on a draft version, with a drop line showing where the rule will land. Reordering is within a group (the calculation order); removing a rule from the configuration stays available from the rule head or its detail.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added edit and remove for rules in Pricing configuration</h3>
+              <p class="cl-entry-detail">
+                Any unlocked rule in the Rate Engine&rsquo;s Pricing configuration can now be edited or removed on a draft version &mdash; expand a rule to rename it and change its calculation type, recipient, condition and value level, or remove it from the rule head or its detail. Locked rules (base pay, markup, VAT) stay protected.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a scoped pricing-rule library to the Rate Engine</h3>
+              <p class="cl-entry-detail">
+                The Pricing configuration tab now has an Add pricing rule button that opens a library of available rules grouped by scope &mdash; Global (markup, holiday, shift differential, seasonal uplift, geo uplift, sick pay, tenure margin), Region (Europe: VAT), Country (UK: pension, WTR, employer NI, apprenticeship levy) and Organization (a blank custom rule). Picking one drops a draft into the right group; rules already in the configuration are flagged, and the library is read-only on published versions.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Removed the NMW floor rule from the Rate Engine</h3>
+              <p class="cl-entry-detail">
+                The locked NMW floor group has been dropped from the pricing rules and the rate-card template no longer carries its column. The pay and bill builds and the Calculation view update accordingly.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Made the Rate Engine pricing-rules surface responsive</h3>
+              <p class="cl-entry-detail">
+                The pricing tabs, rule rows and the new library modal now reflow on narrow viewports &mdash; tabs wrap, rule chips and the payable toggle wrap under the rule name, and library rows stack their action below the description.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added Job type to the Rate Card custom lookup</h3>
+              <p class="cl-entry-detail">
+                The Rate Engine&rsquo;s custom lookup now offers a Job type key (values drawn from the rate cards), active by default as the second key after Position. It reorders, removes and feeds the rate-card key columns like the other conditions.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Restructured the Rate Engine into three pricing tabs</h3>
+              <p class="cl-entry-detail">
+                The Rate Engine&rsquo;s pricing rules now open on a Pricing configuration tab listing every rule, each with a Payable to workers toggle. The Pay rate tab shows only the rules marked payable, and the Bill rate tab keeps the full chain through to VAT. The Calculation view follows the active tab and tracks the toggles live.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added Job type to the rate-card custom lookup</h3>
+              <p class="cl-entry-detail">
+                Job type (HGV Driver, Warehouse, Van Driver) is now a rate-card condition and a step in the custom lookup, so a rate line can resolve by job type alongside location, agency and parity. It also appears as a condition in the Rate Simulator.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.42</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Reworked the rate-card uploader into a background queue with a scalable validate screen</h3>
+              <p class="cl-entry-detail">
+                Uploading a rate card no longer blocks you in a wizard. A file now enters an Uploads queue on the Rate Cards landing with a live Uploading status; once uploaded you open it to run validation. The validate screen is built for 100K+ rate lines and 10K+ errors: an error-type summary to scan issues by category, a virtualized row list that keeps only the visible window in the DOM, severity and type filters with free-text search, and a downloadable CSV error report. A clean file can be applied or carried into the existing configuration steps; a file with errors is blocked until fixed and re-uploaded.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; uploads &middot; v0.41</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Removed Legal entity from the rate-card lookup</h3>
+              <p class="cl-entry-detail">
+                Legal entity is now set at the pricing-configuration level, so it is no longer a rate-card condition or lookup field. It has been dropped from the rate-grid custom lookup and condition columns and from the stored-rates Rate card custom lookup, leaving location, agency and parity.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; v0.40</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Set the Rate Engine legal entities to Evri and Evri Premium</h3>
+              <p class="cl-entry-detail">
+                The Rate Engine now carries two legal entities, Evri and Evri Premium, matching the legal-entity dimension on the rate cards. Each keeps its own version history; Evri has five versions and Evri Premium three.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.39</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Removed the Contract Dates bar from the agency detail</h3>
+              <p class="cl-entry-detail">
+                The Contract Dates bar and its Update this contract link have been dropped from both the generic and Staffline agency detail views, so the page now leads straight with the agency hero.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; agency detail &middot; v0.38</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Collapsed the Rate Engine sections by default</h3>
+              <p class="cl-entry-detail">
+                Both the Pricing rules and Rate Card custom Lookup sections now open collapsed, so the engine lands as a compact two-row overview; expand whichever section you want to work in.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.37</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Made the Rate Engine sections collapsible</h3>
+              <p class="cl-entry-detail">
+                The Pricing rules and Rate Card custom Lookup sections can now be expanded and collapsed from their headers (click or keyboard), with a chevron showing the state, so you can fold away whichever half you are not working on.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.36</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Split the Rate Engine into Pricing rules and a Rate Card custom lookup</h3>
+              <p class="cl-entry-detail">
+                The engine now reads as two connected sections. Section 1, Pricing rules, is the existing rule stack. Section 2, Rate Card custom Lookup, sets the keys a rate card varies pay by &mdash; Position is locked first and you add, remove and reorder Tenure status, Legal entity, Location and Agency. A live preview shows the resulting columns (keys from the lookup, value columns from the pricing rules) and a Download CSV template button emits a header keyed by your lookup. The calculation view and the View template sheet now key by the lookup too.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.35</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Keyed Rate Engine pricing configurations to a legal entity</h3>
+              <p class="cl-entry-detail">
+                A pricing configuration is now identified by its legal entity (Evri UK Ltd, DPD Group UK Ltd, Amazon UK Services Ltd, Tesco Stores Ltd) rather than a free-text name, so each legal entity has one configuration. The header eyebrow, switcher and menu now read Legal entity / Legal entities, and the per-configuration version history is unchanged.
+              </p>
+              <div class="cl-shots">
+                <figure class="cl-shot">
+                  <img class="cl-shot-thumb" src="screenshots/re-04-entitymenu.png" alt="Rate Engine header reading Legal entity with the legal-entities menu open, listing four legal entities with status pills and version counts" loading="lazy" />
+                  <figcaption>Configuration per legal entity</figcaption>
+                </figure>
+              </div>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.34</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Split tenure into its own column on the agency Rate cards tab</h3>
+              <p class="cl-entry-detail">
+                The agency Rate cards table now carries a dedicated Tenure column with Pre-Parity / Post-Parity values and a matching Tenure filter and group-by; parity is no longer shown inline on the Job type cell. The rate-card version selector was also restyled to the Everest select used across the design system.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; agency detail &middot; v0.33</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added multiple pricing configurations, each with its own versions</h3>
+              <p class="cl-entry-detail">
+                The Rate Engine now holds a registry of named pricing configurations (Evri, DPD, Amazon UK logistics, Tesco) behind a header switcher, and each configuration carries its own version history tagged published, draft or archived. Only a draft is editable; published and archived versions are read-only, and you can create a new version from any version or publish a draft to make it live.
+              </p>
+              <div class="cl-shots">
+                <figure class="cl-shot">
+                  <img class="cl-shot-thumb" src="screenshots/re-02-cfgmenu.png" alt="Rate Engine header with the configuration switcher open, listing four pricing configurations with status pills and version counts" loading="lazy" />
+                  <figcaption>Configuration switcher</figcaption>
+                </figure>
+                <figure class="cl-shot">
+                  <img class="cl-shot-thumb" src="screenshots/re-03-vermenu.png" alt="Version history menu for the Evri configuration showing v5 draft and v4 published with dates, authors and notes" loading="lazy" />
+                  <figcaption>Per-configuration version history</figcaption>
+                </figure>
+              </div>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.32</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Sourced the Positions catalogue from the rate card</h3>
+              <p class="cl-entry-detail">
+                Settings &rarr; Positions now reads its positions and job types directly from the uploaded rate card&rsquo;s pay rate roles &mdash; so, for example, Warehouse Operative AM appears as a position under the Warehouse job type. The 13 rate-card roles group under Warehouse, HGV Driver and Van Driver; custom positions and job types still layer on top.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Reshaped the agency Rate cards tab to the agency rate (pay) table</h3>
+              <p class="cl-entry-detail">
+                The Rate cards tab on an agency detail now shows the same agency rate recipe table used in Rate Cards &rarr; version detail, read-only and scoped to that one agency. The Supplier column is dropped, Market is renamed Location with a working location filter, Labor category is renamed Job type, the Applied / Not applied flag is gone, and a rate-card version selector mirrors the version history in Settings &rarr; Rate Cards.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; agency detail &middot; v0.31</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+              <p class="cl-entry-detail">
+                Settings &rarr; Positions now groups positions under a job-type header row (with a per-group count) by default, and the Source column has been removed. Custom positions still carry their remove control.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Removed the pre-parity / post-parity selection from the Rate Engine</h3>
+              <p class="cl-entry-detail">
+                The Rate Engine configuration header no longer carries the Pre-parity / Post-parity variant tabs, the Post-parity inheritance note, or the per-rule Post override marking. The engine stays structure-only and parity remains a keyed dimension of the pay table; only the variant view switcher is gone.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Engine &middot; v0.30</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a Positions catalogue under Settings &rarr; Configuration</h3>
+              <p class="cl-entry-detail">
+                Settings &rarr; Positions now lists every position and the job type it belongs to, seeded from the rate cards (job titles and job types), grouped by job type. You can add a new position &mdash; picking an existing job type or creating one inline &mdash; and add a standalone job type; the job-type picker draws its options straight from the rate cards. Custom positions and job types persist locally and custom positions can be removed.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &middot; v0.29</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added captured-rates tables to the rate card version detail</h3>
+              <p class="cl-entry-detail">
+                The rate card version detail page now shows the captured rates behind two tabs &mdash; Pay rate and Agency rate &mdash; reusing the upload wizard&rsquo;s Pay rate configuration and Agency rate configuration tables so the read-only snapshot matches what was uploaded. Both tables render read-only on this page.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; version detail &middot; v0.29</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--fix">Fix</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Lined up the row dividers on the agencies list</h3>
+              <p class="cl-entry-detail">
+                The Priority cell used a flex layout that pulled its bottom border out of the table row, so the dividers under that column sat at the wrong height. The grip and value are now aligned inline, so every row divider runs straight across all columns.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; Active Agencies list &middot; v0.29</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a Rate cards tab to the agency detail</h3>
+              <p class="cl-entry-detail">
+                Each agency detail now carries a Rate cards tab that reuses the rate-card uploader&rsquo;s Rate cards output, scoped to that agency by supplier &mdash; so it shows only that agency&rsquo;s priced lines from the current rate card, grouped by market, with bill rate as the anchor and an expandable tier-tagged waterfall (pay &rarr; engine on-costs &rarr; markup &rarr; bill) on every row. Read-only, and group-by is limited to Market and Labor category since the supplier is fixed.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; agency detail &middot; v0.28</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Removed the Rate Configuration tab from the agency detail</h3>
+              <p class="cl-entry-detail">
+                The Rate Configuration accordion has been dropped from both the generic and Staffline agency detail views, replaced by the new Rate cards tab. The deep link from Settings &rarr; Rate Cards (&ldquo;Open agency engine settings&rdquo;) now opens the Rate cards tab instead.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; agency detail &middot; v0.28</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ============ 2026-06-04 ============ -->
+      <section class="cl-day" data-day="2026-06-04" aria-label="June 4, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 4, 2026</h2>
+          <div class="cl-day-weekday">Thursday</div>
+          <div class="cl-day-count" data-day-count>12 changes</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Opened Agency Rate Configuration as a faithful template mirror</h3>
+              <p class="cl-entry-detail">
+                Step 4 now opens exactly as the uploaded agency template &mdash; a flat, ungrouped list of all 117 lines showing every template column in template order (Supplier, Site, Job type, Weekly hours, Nominal net pay, WTR, Employer NI, Pension %, Pension &pound;, Levy incl, Levy &pound;, Sick pay, Direct cost, Markup, Bill pre-VAT, VAT, Bill incl VAT), with the Supplier, Site and Job type keys pinned to the left and the spreadsheet scrolling horizontally, so the first thing a user sees is recognition that nothing was lost or rearranged on upload. A new All columns option leads the Columns control and is the default; Inputs &amp; bill and Burden build are kept as optional focus modes, Group by defaults to None, no filters are active, and the status line reads &ldquo;117 lines &middot; template view&rdquo; until the view is transformed. Group by, filters, a new click-to-sort on any column header (ascending &rarr; descending &rarr; back to template order, sorting within groups when grouped) and the focus modes are now opt-in transforms from that baseline, and a Reset to template view control restores the flat all-columns mirror in one click &mdash; distinct from Reset all to uploaded, which discards staged edits. Per-line scoped editing with unlink-to-override, the Editable / From pay / Derived treatment, the NRC pay-source-gap and pension-below-3% banners, read-only net pay and statutory columns, and staged-until-Activate edits are all unchanged.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; upload wizard &middot; v0.27</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Opened Pay Rate Configuration as a faithful template mirror</h3>
+              <p class="cl-entry-detail">
+                Step 3 now opens exactly as the uploaded template &mdash; a flat, ungrouped list showing every template column in template order (Site, Tier, Job type, Role, Parity, Weekly hours, Hourly rate, Hourly geo, Basic + geo, NMW floor, Standard, Friday, Saturday, Sunday, Overtime), with the Site key pinned to the left and the spreadsheet scrolling horizontally, so the first thing a user sees is recognition that nothing was lost or rearranged on upload. A new All columns option leads the COLUMNS control and is the default, with Net pay by day-type and Rate build kept as optional focus modes; Group by defaults to None and no filters are active, and the status line reads &ldquo;79 rates &middot; template view&rdquo; until the view is transformed. Group by, filters, a new click-to-sort on any column header (ascending &rarr; descending &rarr; back to template order, sorting within groups when grouped) and the focus modes are now opt-in transforms layered on that baseline, and a Reset to template view control returns the table to the flat, all-columns, unsorted, ungrouped, unfiltered mirror in one click. The input-versus-derived treatment, floored and clears markers, base-versus-direct duality, read-only recipe and staged edits are all unchanged.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; upload wizard &middot; v0.26</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Showed the full agency recipe, by dimension, in Agency Rate Configuration</h3>
+              <p class="cl-entry-detail">
+                Step 4 now renders the bill template&rsquo;s own columns populated with the uploaded values for every supplier &times; site &times; job-type line &mdash; the same 117 lines the rate engine compiles &mdash; instead of the per-supplier contract page that surfaced the recipe only as a footnote. A column-group switch beside Group by flips between Inputs &amp; bill (weekly hours, nominal net pay, pension %, sick pay, levy incl, markup, bill incl VAT) and Burden build (nominal net pay &rarr; WTR &rarr; employer NI &rarr; pension &pound; &rarr; levy &pound; &rarr; sick &rarr; direct cost &rarr; markup &rarr; bill pre-VAT &rarr; VAT &rarr; bill incl VAT), with the bill recomputing live as inputs change. The five agency inputs are editable in place and propagate to their natural scope &mdash; markup, pension % and hours across the supplier&rsquo;s position group, sick and levy across the whole supplier, with the scope named on edit &mdash; and a per-line override breaks propagation for a genuinely different line and is flagged. Parity folds into a flag rather than a Warehouse Parity job type with no duplicate input rows, NRC lines flag a pay-source gap instead of a blank net pay, net pay and the statutory columns stay read-only, and edits stage until Activate.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; upload wizard &middot; v0.25</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Showed the full pay recipe, by dimension, in Pay Rate Configuration</h3>
+              <p class="cl-entry-detail">
+                Step 3 now renders the recipe&rsquo;s own columns populated with the uploaded values instead of the reduced base &rarr; pay-rate view. A column-group switch beside Group by flips between Net pay by day-type (Standard, Friday, Saturday, Sunday, Overtime &mdash; with the weekend uplift now visible and distinct from Standard) and Rate build (Hourly rate, Hourly geo, Basic + geo, NMW floor, Standard, reproducing the old derivation). Role joins the keyed-by line and Group by, Weekly hours becomes an editable pinned column, roles with no base read &ldquo;&mdash; &middot; direct&rdquo;, and the recipe stays read-only with value edits staged until Activate.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; upload wizard &middot; v0.24</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Split Rate model into two steps and renamed the cards step</h3>
+              <p class="cl-entry-detail">
+                The upload wizard’s old sub-tabbed Rate model step is now two standalone steps &mdash; Pay Rate Configuration and Agency Rate Configuration &mdash; so the stepper runs Upload, Validate, Pay Rate Configuration, Agency Rate Configuration, Rate Cards, Activate; the Pay rate engine label retires, which also separates it cleanly from the upstream Rate Engine setup phase. Step 4 Agency rate cards and the Rate Model section/tab are both renamed Rate Cards.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Rate Cards &middot; upload wizard &middot; v0.23</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a Rate Engine settings section</h3>
+              <p class="cl-entry-detail">
+                A new Settings &rarr; Configuration &rarr; Rate Engine surface defines how a pay rate and a bill rate are calculated and at what levels &mdash; structure only, never the values: an ordered, reorderable stack of groups and rules, each rule shown by its generic type, calculation method, recipient and the level at which its value is later supplied, with explicit PAY and BILL boundary markers, Pre/Post-parity variant tabs with override-only inheritance, and a right rail that compiles the value-free rate-card schema, precedence policy and config-time validation. It is independent of and changes nothing in Rate Model or Rate Simulator.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Engine &middot; v0.22</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Rebuilt the pay rate engine step as one editable, grouped table</h3>
+              <p class="cl-entry-detail">
+                Step 3.1 now shows every one of the client's pay rates in a single table with no mandatory scope, re-cut by a group-by control (region tier, site, job type, parity) and sliced by tier/site/job-type/parity filters plus floored, data-gap, has-overtime and my-edits quick filters; each rate's build reads base &rarr; NMW floor &rarr; pay rate in-row with a tier-tagged build drawer on expand, pay data is now editable inline and in bulk with the NMW floor enforced live and edits staged, and the recipe is rendered as a read-only input.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Rate model &middot; Pay rate engine &middot; v0.21</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Seth Pelletier">
+            <span class="cl-tag cl-tag--fix">Fix</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Fixed unreadable pricing-configured pill in the agency list</h3>
+              <p class="cl-entry-detail">
+                The "Pricing configured" status pill next to Staffline Group was white text on a light green surface; its label and check icon now use the default success content color for an accessible contrast pairing.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; Active Agencies &middot; v0.20</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Seth Pelletier">SP</span>Seth Pelletier</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added compare-with-version diff to the upload preview</h3>
+              <p class="cl-entry-detail">
+                The upload preview can now compare the staged rate card against an already-applied version instead of listing every rate &mdash; rate lines are matched by position and condition, and shown as added, removed, changed or unchanged with old &rarr; new values, a signed delta and a summary count, defaulting to a changes-only view that the reader can switch to all rates.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.19</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Aligned the seeded version history to the current condition model</h3>
+              <p class="cl-entry-detail">
+                The seeded active version now uses the same legal entity, location, agency and parity conditions as the sample card so an upload diffs cleanly against it; local version history is reset once to pick up the new seed.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.19</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added filtering to captured rate tables</h3>
+              <p class="cl-entry-detail">
+                A version's captured-rates table gains a filter bar with one dropdown per field &mdash; position and every condition the card varies pay by &mdash; so a reader can narrow to the lines matching a value; active filters show as removable chips with a running "showing N of M lines" count, an "[ALL] lines" option isolates the catch-all rows, filters compose with grouping, and a no-match state offers a one-click clear.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.18</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added grouping to captured rate tables</h3>
+              <p class="cl-entry-detail">
+                A version's captured-rates table can now be grouped by position or any condition the card varies pay by &mdash; location, agency, legal entity or parity status &mdash; with a header row per group, the grouped column tinted, and lines that are [ALL] for that condition collected into an "Any" group sorted last so base rates stay visible.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.17</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Made the sample rate card apply every condition and pay element</h3>
+              <p class="cl-entry-detail">
+                The sample loaded during upload, and the downloadable template, now ship with all four conditions applied as columns — legal entity, location, agency and parity status — plus the season uplift pay element on, with sample rate lines exercising each one so the full template structure is visible end to end.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.16</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ============ 2026-06-03 ============ -->
+      <section class="cl-day" data-day="2026-06-03" aria-label="June 3, 2026">
+        <div class="cl-day-rail">
+          <h2 class="cl-day-date">June 3, 2026</h2>
+          <div class="cl-day-weekday">Wednesday</div>
+          <div class="cl-day-count" data-day-count>17 changes</div>
+        </div>
+        <ul class="cl-list">
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Flattened the upload preview so position is the first column</h3>
+              <p class="cl-entry-detail">
+                The rate table shown while uploading a file now treats position as a plain first field instead of a per-position group header, so the preview is one flat row per rate line whose columns match the conditions configured in Advanced settings and the uploaded file; the base rate is the [ALL] row and position gains its own column filter.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.15</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Re-sequenced the Pricing Simulator output around the hourly rate card</h3>
+              <p class="cl-entry-detail">
+                The breakdown now builds the hourly rate card first &mdash; worker pay rate, then the statutory on-costs (WTR holiday pay, employer NI, pension, apprenticeship levy and a new sick pay line) to a total hourly direct cost, then the agency margin as a flat pounds-per-hour fee to reach the total hourly charge rate &mdash; before a second step applies the booking duration and VAT, mirroring the Evri rate-card workbook so pricing reads the same way the rate cards are built.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Pricing Simulator &middot; v0.14</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Showed position as the first column on captured rate tables</h3>
+              <p class="cl-entry-detail">
+                The captured-rates tables in version history now treat position as a plain first field instead of a grouping header, so each line is one flat row whose columns match the conditions configured in Advanced settings and the uploaded file; the base rate is the row whose conditions are all marked [ALL].
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.13</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Removed the Master Rate Card detail page</h3>
+              <p class="cl-entry-detail">
+                The editable Master Rate Card page, and the row and Open rate card button that opened it, are gone; rates now change only by uploading a new version, and the upload wizard returns to the Rate Cards list with the new version expanded.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.12</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Showed version history on the Rate Cards landing</h3>
+              <p class="cl-entry-detail">
+                Below the unchanged upload section, the Rate Cards page now lists the date-effective version history directly, replacing the single-row card list; clicking a version expands the rates it captured inline.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.12</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Iryna Kosakovska">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Made Add condition a picker on the rate cards grid</h3>
+              <p class="cl-entry-detail">
+                Add condition on the rate cards grid now opens a menu to choose which condition to add as a column, instead of auto-adding the next one; existing condition columns can still be dragged to reorder and removed.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Rate Cards &middot; v0.11</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Iryna Kosakovska">IK</span>Iryna Kosakovska</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Iryna Kosakovska">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a pricing configuration selector to the Pricing Simulator and removed peak-season gating</h3>
+              <p class="cl-entry-detail">
+                The Pricing Simulator gains a Pricing configuration selector — Manufacturing &mdash; Pilot, Warehouse &mdash; Standard and Distribution &mdash; Premium — that loads each configuration’s on-costs and markup into the editable assumptions. The peak-season date controls are gone; the rate card’s own season uplift now always feeds the Seasonal allowance line.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Pricing Simulator &middot; v0.10</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Iryna Kosakovska">IK</span>Iryna Kosakovska</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Renamed Booking Simulator to Pricing Simulator</h3>
+              <p class="cl-entry-detail">
+                The Settings &rarr; Configuration &rarr; Booking Simulator surface is now labelled Pricing Simulator across the sidebar, breadcrumb and page heading; its behaviour is unchanged.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &middot; v0.9</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dmitry Grechko">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Renamed the Pricing menu item to Rate Cards</h3>
+              <p class="cl-entry-detail">
+                The Settings &rarr; Configuration &rarr; Pricing nav item is now labelled Rate Cards in the sidebar and breadcrumb to match the page it opens; routing is unchanged.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &middot; v0.9</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dmitry Grechko">DG</span>Dmitry Grechko</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Iryna Kosakovska">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added a Booking Simulator under Pricing</h3>
+              <p class="cl-entry-detail">
+                A new Settings &rarr; Configuration &rarr; Booking Simulator resolves a booking &mdash; position, parity, location, agency, legal entity, date(s), shift time and worker age, tenure and hours already worked this week &mdash; against the rate cards grid, then shows the full pay-to-bill breakdown: worker pay, WTR holiday pay, employer NI above its secondary threshold, pension, apprenticeship levy, the rate card’s seasonal uplift in peak season, agency markup as a percentage or a flat pound per hour, and VAT, over an editable assumptions panel. It was moved here from the V2 app so it lives next to the rate cards grid it reads.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Configuration &rarr; Booking Simulator &middot; v0.8</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Iryna Kosakovska">IK</span>Iryna Kosakovska</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Seth Pelletier">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Agency markup fields show two decimal places</h3>
+              <p class="cl-entry-detail">
+                The by-position-group markup inputs on the Pricing Configuration Contract now render to two decimals so a trailing zero shows (3.50 instead of 3.5), with a 0.01 step for penny-level entry.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; Pricing Configuration Contract &middot; v0.7</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Seth Pelletier">SP</span>Seth Pelletier</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--remove">Remove</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Stripped supplier-scoped cards from Pricing to leave just the pay rate</h3>
+              <p class="cl-entry-detail">
+                Settings &rarr; Pricing now only calculates the pay rate, since rate cards are configured as overrides at the agency level. Removed the Control Panel summary, the Net Pay Table grid and the per-supplier computed rate card, and dropped supplier and agency wording from the upload copy and the applied-card banner. The worker simulator is the only surface that still names an agency. The applicable-from date and Apply action moved into a dedicated Apply this rate card panel.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Pricing &middot; v0.6</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Seth Pelletier">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Tidied the agency contract on-costs and removed participation toggles</h3>
+              <p class="cl-entry-detail">
+                Removed the Include in rate card and Charge rate formulas available toggles from the Pricing Configuration Contract, fixed the on-cost percent fields so two-decimal values like 12.07 no longer clip behind the percent sign, and corrected Employer's National Insurance to the 15% secondary Class 1 rate effective April 2025. Holiday accrual (12.07%), workplace pension (3%) and apprenticeship levy (0.5%) are unchanged.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; Pricing Configuration Contract &middot; v0.5</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Seth Pelletier">SP</span>Seth Pelletier</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Seth Pelletier">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Restored by-position-group pricing on the agency contract</h3>
+              <p class="cl-entry-detail">
+                Brought back the agency markup by position group (Driver, Transport and Warehouse groups, each a flat pound-per-hour added to pay cost) and its live charge-rate preview on the Pricing Configuration Contract, replacing the single fixed-or-percent margin formula introduced earlier today. The agency column in the computed rate card and the worked example now use the per-group markup again; other suppliers keep their own negotiated margin.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Agencies &rarr; Pricing Configuration Contract &middot; v0.4</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Seth Pelletier">SP</span>Seth Pelletier</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Added rate card versioning with applicable start dates</h3>
+              <p class="cl-entry-detail">
+                Applying an uploaded card now creates an immutable version stamped with an applicable-from date. A versions timeline on Settings &rarr; Pricing tracks every card as scheduled, active or superseded by date, opens the rates captured in any past version, and can roll back a superseded card as a new version effective today. A scheduled card can be cancelled before it takes effect.
+              </p>
+              <div class="cl-shots">
+                <figure class="cl-shot">
+                  <img class="cl-shot-thumb" src="../screenshots/rate-versioning-timeline.png" alt="Rate card versions timeline showing a scheduled, an active and a superseded card with their applicable dates" loading="lazy" />
+                  <figcaption>Versions timeline &mdash; scheduled / active / superseded</figcaption>
+                </figure>
+              </div>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Pricing &middot; v0.3</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Seth Pelletier">
+            <span class="cl-tag cl-tag--change">Change</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Reworked Pricing and the agency contract around the rate-card tool model</h3>
+              <p class="cl-entry-detail">
+                Aligned the prototype to the source rate-card workbook (NMW July 2025 HUBS Temp Labour Rate Card Tool). Settings &rarr; Pricing now previews a Control Panel summary, an editable Net Pay Table with a pre-parity and post-parity row per job title (AWR 12-week rule) and a selectable Net Pay Reference column, and a per-supplier computed rate card that flags valid bids and the lowest bid with "No bid" where an agency can't price a job type. The Agencies &rarr; Staffline Group &rarr; Pricing Configuration Contract was reshaped into supplier participation (include in card, charge-rate formulas available), a fixed-pound or percent margin formula, statutory on-costs, and a parity-aware live preview.
+              </p>
+              <div class="cl-shots">
+                <figure class="cl-shot">
+                  <img class="cl-shot-thumb" src="../screenshots/01-rc-pricing.png" alt="Control Panel summary tiles and the Net Pay Reference selector on the Pricing tab" loading="lazy" />
+                  <figcaption>Control Panel + Net Pay Reference</figcaption>
+                </figure>
+                <figure class="cl-shot">
+                  <img class="cl-shot-thumb" src="../screenshots/03-rc-pricing.png" alt="Per-supplier computed rate card with pre and post parity rows, valid bids and No bid cells" loading="lazy" />
+                  <figcaption>Per-supplier rate card</figcaption>
+                </figure>
+                <figure class="cl-shot">
+                  <img class="cl-shot-thumb" src="../screenshots/02-rc-agency-contract.png" alt="Agency Pricing Configuration Contract with participation toggles and a fixed or percent margin formula" loading="lazy" />
+                  <figcaption>Agency contract pricing</figcaption>
+                </figure>
+              </div>
+              <div class="cl-entry-meta">
+                <span>Settings &rarr; Pricing &middot; Agencies &middot; v0.2</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Seth Pelletier">SP</span>Seth Pelletier</span>
+              </div>
+            </div>
+          </li>
+          <li class="cl-entry" data-author="Dominic Esposito">
+            <span class="cl-tag cl-tag--add">Add</span>
+            <div class="cl-entry-body">
+              <h3 class="cl-entry-title">Created the Rate Automation feature prototype</h3>
+              <p class="cl-entry-detail">
+                Stood up an isolated V1-shell prototype with two clickable surfaces &mdash; an Agencies &rarr; WorkWhile detail (contract-dates bar, agency hero with a copyable GUID and expandable cards) and a Settings &rarr; Pricing rate-automation upload flow that downloads a pre-filled rate-card template and parses a dropped .xlsx, .xls or .csv into a preview table before applying.
+              </p>
+              <div class="cl-entry-meta">
+                <span>Prototype &middot; v0.1</span>
+                <span class="cl-entry-author"><span class="cl-avatar" data-author-avatar="Dominic Esposito">DE</span>Dominic Esposito</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <p class="cl-foot">
+      <b>Updating this prototype changelog.</b> This log tracks the
+      <b>Rate Automation</b> prototype only. Land each change as a new
+      <code>&lt;li class="cl-entry"&gt;</code> at the top of today's
+      <code>&lt;section data-day&gt;</code>, creating the day section if
+      one does not exist yet. It is isolated from the main
+      <code>Flex Work v2 Changelog.html</code> and from every other
+      prototype's changelog. See the comment at the top of this file for
+      the full contract.
+    </p>
+
+  </div>
+
+  <script>
+    // ---------------------------------------------------------------
+    // Authors registry — extend by adding a new entry here. The
+    // `color` is the avatar background. Anyone present in
+    // data-author but missing here falls back to a neutral chip.
+    // ---------------------------------------------------------------
+    var AUTHORS = {
+      "Dominic Esposito": { color: "#2A6FDB" },
+      "Elijah Bilokur":   { color: "#1F8A5B" },
+      "Dmitry Grechko":   { color: "#C2602F" },
+      "Seth Pelletier":   { color: "#6A3FB5" },
+      "Iryna Kosakovska": { color: "#0F8C8C" }
+    };
+
+    (function () {
+      // 1. Day-count auto-sync (counts only currently-visible entries).
+      function refreshDayCounts() {
+        document.querySelectorAll("[data-day]").forEach(function (day) {
+          var visible = day.querySelectorAll(".cl-entry:not([hidden])").length;
+          var total = day.querySelectorAll(".cl-entry").length;
+          var counter = day.querySelector("[data-day-count]");
+          if (!counter) return;
+          if (visible === total) {
+            counter.textContent = total + (total === 1 ? " change" : " changes");
+          } else {
+            counter.textContent = visible + " of " + total + (total === 1 ? " change" : " changes");
+          }
+          // Hide the whole day if nothing visible inside.
+          day.hidden = visible === 0;
+        });
+      }
+
+      // 2. Color every author avatar (entry rows + chips) by the
+      // AUTHORS map. Unknown names get a neutral slate.
+      function initials(name) {
+        return name.split(" ").map(function (p) { return p[0]; }).join("").toUpperCase();
+      }
+      function colorFor(name) {
+        return (AUTHORS[name] && AUTHORS[name].color) || "#5A6273";
+      }
+      document.querySelectorAll("[data-author-avatar]").forEach(function (el) {
+        el.style.background = colorFor(el.getAttribute("data-author-avatar"));
+      });
+
+      // 3. Gather the set of authors that actually appear in entries,
+      // in the order they first appear (most recent → oldest, since
+      // the doc is reverse-chron). Render a chip for each.
+      var seen = new Set();
+      var ordered = [];
+      document.querySelectorAll(".cl-entry[data-author]").forEach(function (li) {
+        var name = li.getAttribute("data-author");
+        if (!seen.has(name)) { seen.add(name); ordered.push(name); }
+      });
+      // Stable alphabetical order so the row doesn't reshuffle as
+      // history grows — easier to find a teammate by name.
+      ordered.sort();
+
+      var bar = document.getElementById("cl-authors");
+      var countEl = bar.querySelector("[data-authors-count]");
+
+      function makeChip(name, opts) {
+        opts = opts || {};
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cl-author-chip";
+        btn.setAttribute("data-author", name);
+        if (opts.active) btn.classList.add("is-active");
+        if (opts.allChip) {
+          btn.textContent = "All";
+        } else {
+          var av = document.createElement("span");
+          av.className = "cl-avatar";
+          av.style.background = colorFor(name);
+          av.textContent = initials(name);
+          btn.appendChild(av);
+          btn.appendChild(document.createTextNode(name));
+        }
+        btn.addEventListener("click", function () { applyFilter(name); });
+        return btn;
+      }
+
+      var allChip = makeChip("all", { active: true, allChip: true });
+      bar.insertBefore(allChip, countEl);
+      ordered.forEach(function (name) {
+        bar.insertBefore(makeChip(name), countEl);
+      });
+
+      function applyFilter(name) {
+        // Toggle chip state
+        bar.querySelectorAll(".cl-author-chip").forEach(function (c) {
+          c.classList.toggle("is-active", c.getAttribute("data-author") === name);
+        });
+        var total = 0, shown = 0;
+        document.querySelectorAll(".cl-entry").forEach(function (li) {
+          total++;
+          var match = name === "all" || li.getAttribute("data-author") === name;
+          li.hidden = !match;
+          if (match) shown++;
+        });
+        refreshDayCounts();
+        if (name === "all") {
+          countEl.textContent = total + (total === 1 ? " entry" : " entries");
+        } else {
+          countEl.textContent = shown + " of " + total + " by " + name;
+        }
+      }
+
+      // Initial render.
+      applyFilter("all");
+    })();
+  </script>
+
+  <!-- ===============================================================
+       Reactions, comments & threaded replies.
+       • Persisted in localStorage under STORE_KEY — survives reload.
+       • Each entry is keyed by a stable hash of its title, so reordering
+         or filtering the changelog never orphans a thread.
+       • "Commenting as" persona is read from the AUTHORS map above and
+         stamped onto every reaction and comment the user makes.
+       =============================================================== -->
+  <script>
+    (function () {
+      var STORE_KEY = "flexwork-proto-rate-automation-social-v1";
+      var EMOJI = ["👍", "❤️", "🎉", "🚀", "👀", "🙌"];
+      var NAMES = Object.keys(AUTHORS);
+
+      // ---- store -------------------------------------------------
+      function load() {
+        try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+        catch (e) { return {}; }
+      }
+      var store = load();
+      store.reactions = store.reactions || {};   // { entryId: { emoji: [name,…] } }
+      store.threads   = store.threads   || {};   // { entryId: [ comment,… ] }
+      store.shots     = store.shots     || {};   // { entryId: { idx: dataURL } } — reader screenshot overrides
+      if (!store.currentUser || NAMES.indexOf(store.currentUser) < 0) {
+        store.currentUser = NAMES[0];
+      }
+      function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {} }
+
+      // ---- helpers ----------------------------------------------
+      function initials(name) {
+        return name.split(" ").map(function (p) { return p[0]; }).join("").toUpperCase();
+      }
+      function colorFor(name) {
+        return (AUTHORS[name] && AUTHORS[name].color) || "#5A6273";
+      }
+      function avatar(name, cls) {
+        var a = document.createElement("span");
+        a.className = "cl-avatar" + (cls ? " " + cls : "");
+        a.style.background = colorFor(name);
+        a.textContent = initials(name);
+        a.setAttribute("title", name);
+        return a;
+      }
+      function uid() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+      }
+      function hashStr(str) {
+        var h = 5381;
+        for (var i = 0; i < str.length; i++) { h = (((h << 5) + h) ^ str.charCodeAt(i)) >>> 0; }
+        return h.toString(36);
+      }
+      function timeAgo(ts) {
+        var s = (Date.now() - ts) / 1000;
+        if (s < 45) return "just now";
+        var m = s / 60; if (m < 60) return Math.floor(m) + "m ago";
+        var h = m / 60; if (h < 24) return Math.floor(h) + "h ago";
+        var d = h / 24; if (d < 7) return Math.floor(d) + "d ago";
+        return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      }
+      function svg(paths) {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round">' + paths + '</svg>';
+      }
+      var ICON_COMMENT = svg('<path d="M5 5h14v10h-9l-4 3v-3H5z"/>');
+      var ICON_FACE = svg('<circle cx="12" cy="12" r="8"/><path d="M9 10h.01M15 10h.01"/><path d="M9 14c.8.9 1.9 1.4 3 1.4s2.2-.5 3-1.4"/>');
+      var ICON_CHEV = svg('<path d="M6 9l6 6 6-6"/>');
+      var ICON_CHECK = svg('<path d="M5 12.5l4.5 4.5L19 7"/>');
+
+      function totalComments(list) {
+        var n = 0;
+        (list || []).forEach(function (c) { n += 1 + (c.replies ? c.replies.length : 0); });
+        return n;
+      }
+
+      // ---- persona picker (lives inside each composer) ----------
+      var rerenderers = []; // called when the active persona changes
+
+      function makeAsPicker() {
+        var wrap = document.createElement("div");
+        wrap.className = "cl-as-picker";
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cl-as-btn";
+        btn.setAttribute("aria-haspopup", "true");
+        function label() {
+          btn.innerHTML = '<span class="cl-as-pre">as</span>';
+          btn.appendChild(avatar(store.currentUser, "cl-avatar--xs"));
+          var b = document.createElement("b");
+          b.textContent = store.currentUser;
+          btn.appendChild(b);
+          var chev = document.createElement("span");
+          chev.className = "cl-as-chev";
+          chev.innerHTML = ICON_CHEV;
+          btn.appendChild(chev);
+        }
+        label();
+
+        var menu = document.createElement("div");
+        menu.className = "cl-persona-menu";
+        menu.hidden = true;
+        var lbl = document.createElement("div");
+        lbl.className = "cl-persona-menu-label";
+        lbl.textContent = "Commenting as";
+        menu.appendChild(lbl);
+        NAMES.forEach(function (name) {
+          var item = document.createElement("button");
+          item.type = "button";
+          item.className = "cl-persona-item";
+          item.appendChild(avatar(name, "cl-avatar--sm"));
+          item.appendChild(document.createTextNode(name));
+          var chk = document.createElement("span");
+          chk.className = "cl-check";
+          chk.innerHTML = ICON_CHECK;
+          item.appendChild(chk);
+          item.addEventListener("click", function () {
+            store.currentUser = name; save();
+            menu.hidden = true;
+            rerenderers.forEach(function (fn) { fn(); });
+          });
+          menu.appendChild(item);
+        });
+
+        function syncCurrent() {
+          menu.querySelectorAll(".cl-persona-item").forEach(function (it, i) {
+            it.classList.toggle("is-current", NAMES[i] === store.currentUser);
+          });
+        }
+        syncCurrent();
+
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          menu.hidden = !menu.hidden;
+        });
+        document.addEventListener("click", function (e) {
+          if (!wrap.contains(e.target)) menu.hidden = true;
+        });
+
+        wrap.appendChild(btn);
+        wrap.appendChild(menu);
+        rerenderers.push(function () { label(); syncCurrent(); });
+        return wrap;
+      }
+
+      // ---- composer ---------------------------------------------
+      // onPost(text) → returns true if accepted (clears + collapses)
+      function makeComposer(opts) {
+        opts = opts || {};
+        var form = document.createElement("div");
+        form.className = "cl-composer" + (opts.reply ? " cl-composer--reply" : "");
+
+        form.appendChild(avatar(store.currentUser, "cl-avatar--sm js-me-avatar"));
+
+        var fields = document.createElement("div");
+        fields.className = "cl-composer-fields";
+
+        var ta = document.createElement("textarea");
+        ta.rows = opts.reply ? 2 : 2;
+        ta.placeholder = opts.placeholder || "Add a comment";
+        fields.appendChild(ta);
+
+        var row = document.createElement("div");
+        row.className = "cl-composer-row";
+        row.appendChild(makeAsPicker());
+
+        var btns = document.createElement("div");
+        btns.className = "cl-composer-btns";
+        if (opts.onCancel) {
+          var cancel = document.createElement("button");
+          cancel.type = "button";
+          cancel.className = "cl-btn-ghost";
+          cancel.textContent = "Cancel";
+          cancel.addEventListener("click", function () { opts.onCancel(); });
+          btns.appendChild(cancel);
+        }
+        var post = document.createElement("button");
+        post.type = "button";
+        post.className = "cl-btn-primary";
+        post.textContent = opts.postLabel || "Comment";
+        post.disabled = true;
+        btns.appendChild(post);
+        row.appendChild(btns);
+        fields.appendChild(row);
+        form.appendChild(fields);
+
+        ta.addEventListener("input", function () { post.disabled = !ta.value.trim(); });
+        function submit() {
+          var t = ta.value.trim();
+          if (!t) return;
+          opts.onPost(t);
+          ta.value = ""; post.disabled = true;
+        }
+        post.addEventListener("click", submit);
+        ta.addEventListener("keydown", function (e) {
+          if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submit();
+        });
+
+        // keep the composer avatar fresh on persona change
+        rerenderers.push(function () {
+          var av = form.querySelector(".js-me-avatar");
+          if (av) {
+            av.style.background = colorFor(store.currentUser);
+            av.textContent = initials(store.currentUser);
+            av.setAttribute("title", store.currentUser);
+          }
+        });
+        if (opts.autofocus) setTimeout(function () { ta.focus(); }, 0);
+        return form;
+      }
+
+      // ---- comment rendering ------------------------------------
+      function renderComment(entryId, comment, parentId, rerenderThread) {
+        var el = document.createElement("div");
+        el.className = "cl-comment";
+        el.appendChild(avatar(comment.author, "cl-avatar--sm"));
+
+        var main = document.createElement("div");
+        main.className = "cl-comment-main";
+
+        var head = document.createElement("div");
+        head.className = "cl-comment-head";
+        var au = document.createElement("span");
+        au.className = "cl-comment-author";
+        au.textContent = comment.author;
+        var tm = document.createElement("span");
+        tm.className = "cl-comment-time";
+        tm.textContent = timeAgo(comment.ts);
+        head.appendChild(au); head.appendChild(tm);
+        main.appendChild(head);
+
+        var txt = document.createElement("p");
+        txt.className = "cl-comment-text";
+        txt.textContent = comment.text;
+        main.appendChild(txt);
+
+        var actions = document.createElement("div");
+        actions.className = "cl-comment-actions";
+        // Reply only on top-level comments (one level of threading)
+        if (!parentId) {
+          var replyBtn = document.createElement("button");
+          replyBtn.type = "button";
+          replyBtn.className = "cl-link-btn";
+          replyBtn.textContent = "Reply";
+          actions.appendChild(replyBtn);
+        }
+        if (comment.author === store.currentUser) {
+          var del = document.createElement("button");
+          del.type = "button";
+          del.className = "cl-link-btn cl-link-danger";
+          del.textContent = "Delete";
+          del.addEventListener("click", function () {
+            removeComment(entryId, comment.id, parentId);
+            rerenderThread();
+          });
+          actions.appendChild(del);
+        }
+        if (actions.children.length) main.appendChild(actions);
+
+        // replies + inline reply composer
+        if (!parentId) {
+          var repliesWrap = document.createElement("div");
+          repliesWrap.className = "cl-comment-replies";
+          (comment.replies || []).forEach(function (r) {
+            repliesWrap.appendChild(renderComment(entryId, r, comment.id, rerenderThread));
+          });
+          main.appendChild(repliesWrap);
+
+          replyBtn.addEventListener("click", function () {
+            if (main.querySelector(".cl-composer--reply")) return;
+            var composer = makeComposer({
+              reply: true, autofocus: true, postLabel: "Reply",
+              placeholder: "Reply to " + comment.author,
+              onPost: function (text) {
+                addComment(entryId, comment.id, text);
+                rerenderThread();
+              },
+              onCancel: function () { composer.remove(); }
+            });
+            main.appendChild(composer);
+          });
+        }
+
+        main && el.appendChild(main);
+        return el;
+      }
+
+      // ---- data ops ---------------------------------------------
+      function addComment(entryId, parentId, text) {
+        var list = store.threads[entryId] = store.threads[entryId] || [];
+        var node = { id: uid(), author: store.currentUser, text: text, ts: Date.now() };
+        if (parentId) {
+          var p = list.filter(function (c) { return c.id === parentId; })[0];
+          if (!p) return;
+          p.replies = p.replies || [];
+          p.replies.push(node);
+        } else {
+          node.replies = [];
+          list.push(node);
+        }
+        save();
+      }
+      function removeComment(entryId, commentId, parentId) {
+        var list = store.threads[entryId] || [];
+        if (parentId) {
+          var p = list.filter(function (c) { return c.id === parentId; })[0];
+          if (p && p.replies) p.replies = p.replies.filter(function (r) { return r.id !== commentId; });
+        } else {
+          store.threads[entryId] = list.filter(function (c) { return c.id !== commentId; });
+        }
+        save();
+      }
+      function toggleReaction(entryId, emoji) {
+        var me = store.currentUser;
+        var r = store.reactions[entryId] = store.reactions[entryId] || {};
+        var arr = r[emoji] = r[emoji] || [];
+        var i = arr.indexOf(me);
+        if (i >= 0) arr.splice(i, 1); else arr.push(me);
+        if (arr.length === 0) delete r[emoji];
+        save();
+      }
+
+      // ---- per-entry social block -------------------------------
+      function buildSocial(entry) {
+        var title = entry.querySelector(".cl-entry-title");
+        var entryId = hashStr(((title && title.textContent) || "").trim());
+        entry.setAttribute("data-entry-id", entryId);
+        var body = entry.querySelector(".cl-entry-body");
+        if (!body) return;
+
+        var social = document.createElement("div");
+        social.className = "cl-social";
+
+        var bar = document.createElement("div");
+        bar.className = "cl-social-bar";
+
+        var reactList = document.createElement("div");
+        reactList.className = "cl-react-list";
+        bar.appendChild(reactList);
+
+        // add-reaction button + palette
+        var addWrap = document.createElement("div");
+        addWrap.className = "cl-react-add-wrap";
+        var addBtn = document.createElement("button");
+        addBtn.type = "button";
+        addBtn.className = "cl-icon-btn";
+        addBtn.setAttribute("aria-label", "Add reaction");
+        addBtn.innerHTML = ICON_FACE + "<span>React</span>";
+        var palette = document.createElement("div");
+        palette.className = "cl-react-palette";
+        palette.hidden = true;
+        EMOJI.forEach(function (em) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = em;
+          b.addEventListener("click", function (e) {
+            e.stopPropagation();
+            toggleReaction(entryId, em);
+            palette.hidden = true;
+            renderReactions();
+          });
+          palette.appendChild(b);
+        });
+        addBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          palette.hidden = !palette.hidden;
+        });
+        document.addEventListener("click", function (e) {
+          if (!addWrap.contains(e.target)) palette.hidden = true;
+        });
+        addWrap.appendChild(addBtn);
+        addWrap.appendChild(palette);
+        bar.appendChild(addWrap);
+
+        // comment toggle
+        var commentBtn = document.createElement("button");
+        commentBtn.type = "button";
+        commentBtn.className = "cl-icon-btn";
+        bar.appendChild(commentBtn);
+
+        social.appendChild(bar);
+
+        // thread
+        var thread = document.createElement("div");
+        thread.className = "cl-thread";
+        thread.hidden = true;
+        social.appendChild(thread);
+
+        function renderReactions() {
+          reactList.innerHTML = "";
+          var r = store.reactions[entryId] || {};
+          EMOJI.forEach(function (em) {
+            var users = r[em];
+            if (!users || !users.length) return;
+            var chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "cl-react-chip";
+            if (users.indexOf(store.currentUser) >= 0) chip.classList.add("is-mine");
+            chip.title = users.join(", ");
+            chip.innerHTML = '<span class="cl-react-emoji">' + em + '</span><span class="cl-react-count">' + users.length + '</span>';
+            chip.addEventListener("click", function () {
+              toggleReaction(entryId, em);
+              renderReactions();
+            });
+            reactList.appendChild(chip);
+          });
+        }
+        function renderCommentBtn() {
+          var n = totalComments(store.threads[entryId]);
+          commentBtn.classList.toggle("is-open", !thread.hidden);
+          commentBtn.innerHTML = ICON_COMMENT +
+            "<span>" + (n ? "Comments" : "Comment") + "</span>" +
+            (n ? '<span class="cl-count-badge">' + n + "</span>" : "");
+        }
+        function renderThread() {
+          thread.innerHTML = "";
+          (store.threads[entryId] || []).forEach(function (c) {
+            thread.appendChild(renderComment(entryId, c, null, renderThread));
+          });
+          thread.appendChild(makeComposer({
+            placeholder: "Add a comment",
+            onPost: function (text) { addComment(entryId, null, text); renderThread(); }
+          }));
+          renderCommentBtn();
+        }
+        commentBtn.addEventListener("click", function () {
+          thread.hidden = !thread.hidden;
+          if (!thread.hidden && !thread.childElementCount) renderThread();
+          renderCommentBtn();
+        });
+
+        renderReactions();
+        renderCommentBtn();
+        rerenderers.push(function () {
+          renderReactions();
+          if (!thread.hidden) renderThread();
+        });
+
+        body.appendChild(social);
+      }
+
+      // ---- screenshot gallery + lightbox ------------------------
+      // Authoring: PROPOSE the screenshots that best show a change by
+      // dropping a <div class="cl-shots"> inside .cl-entry-body
+      // (between the detail and meta) holding 1–3 <figure class="cl-shot">,
+      // each with an <img class="cl-shot-thumb" src alt> and an optional
+      // <figcaption>. This script makes each thumbnail open a shared
+      // lightbox (prev/next, counter, Esc + arrow keys) AND adds hover
+      // controls so any reader can override a proposed shot with their
+      // own upload or revert to it — overrides persist per entry in
+      // localStorage and never touch the authored markup.
+      var ICON_ZOOM = svg('<path d="M4 9V4h5"/><path d="M20 15v5h-5"/><path d="M15 4h5v5"/><path d="M9 20H4v-5"/>');
+      var ICON_X = svg('<path d="M6 6l12 12M18 6L6 18"/>');
+      var ICON_ARR_L = svg('<path d="M15 5l-7 7 7 7"/>');
+      var ICON_ARR_R = svg('<path d="M9 5l7 7-7 7"/>');
+      var ICON_SWAP = svg('<path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 20h16"/>');
+      var ICON_UNDO = svg('<path d="M9 14l-5-5 5-5"/><path d="M4 9h10a6 6 0 0 1 0 12H8"/>');
+
+      var lb = null, lbState = { list: [], i: 0 };
+      function buildLightbox() {
+        if (lb) return lb;
+        lb = document.createElement("div");
+        lb.className = "cl-lightbox";
+        lb.setAttribute("role", "dialog");
+        lb.setAttribute("aria-modal", "true");
+        lb.setAttribute("aria-label", "Screenshot viewer");
+        lb.innerHTML =
+          '<button type="button" class="cl-lb-btn cl-lb-close" aria-label="Close">' + ICON_X + '</button>' +
+          '<button type="button" class="cl-lb-btn cl-lb-prev" aria-label="Previous">' + ICON_ARR_L + '</button>' +
+          '<button type="button" class="cl-lb-btn cl-lb-next" aria-label="Next">' + ICON_ARR_R + '</button>' +
+          '<figure class="cl-lightbox-figure">' +
+            '<img class="cl-lightbox-img" alt="" />' +
+            '<figcaption class="cl-lightbox-cap"><span class="cl-lightbox-text"></span><span class="cl-lightbox-count"></span></figcaption>' +
+          '</figure>';
+        document.body.appendChild(lb);
+        lb.querySelector(".cl-lb-close").addEventListener("click", closeLightbox);
+        lb.querySelector(".cl-lb-prev").addEventListener("click", function (e) { e.stopPropagation(); stepLightbox(-1); });
+        lb.querySelector(".cl-lb-next").addEventListener("click", function (e) { e.stopPropagation(); stepLightbox(1); });
+        lb.addEventListener("click", function (e) { if (e.target === lb) closeLightbox(); });
+        return lb;
+      }
+      function showLightbox() {
+        var node = buildLightbox();
+        var shot = lbState.list[lbState.i];
+        node.querySelector(".cl-lightbox-img").src = shot.full;
+        node.querySelector(".cl-lightbox-img").alt = shot.alt || shot.caption || "";
+        node.querySelector(".cl-lightbox-text").textContent = shot.caption || "";
+        var count = node.querySelector(".cl-lightbox-count");
+        count.textContent = lbState.list.length > 1 ? (lbState.i + 1) + " / " + lbState.list.length : "";
+        node.toggleAttribute("data-single", lbState.list.length < 2);
+      }
+      function openLightbox(list, i) {
+        lbState.list = list; lbState.i = i;
+        var node = buildLightbox();
+        showLightbox();
+        requestAnimationFrame(function () { node.classList.add("is-open"); });
+        document.addEventListener("keydown", onLbKey);
+      }
+      function closeLightbox() {
+        if (lb) lb.classList.remove("is-open");
+        document.removeEventListener("keydown", onLbKey);
+      }
+      function stepLightbox(d) {
+        var n = lbState.list.length;
+        lbState.i = (lbState.i + d + n) % n;
+        showLightbox();
+      }
+      function onLbKey(e) {
+        if (e.key === "Escape") closeLightbox();
+        else if (e.key === "ArrowRight") stepLightbox(1);
+        else if (e.key === "ArrowLeft") stepLightbox(-1);
+      }
+
+      function buildShots(entry) {
+        var wrap = entry.querySelector(".cl-shots");
+        if (!wrap) return;
+        var title = entry.querySelector(".cl-entry-title");
+        var entryId = hashStr(((title && title.textContent) || "").trim());
+        var figs = Array.prototype.slice.call(wrap.querySelectorAll(".cl-shot"));
+
+        // one hidden file input shared by every thumbnail in this entry
+        var fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.style.display = "none";
+        wrap.appendChild(fileInput);
+        var pendingIdx = -1;
+        fileInput.addEventListener("change", function () {
+          var f = fileInput.files && fileInput.files[0];
+          fileInput.value = "";
+          if (!f || pendingIdx < 0) return;
+          var rd = new FileReader();
+          rd.onload = function () {
+            (store.shots[entryId] = store.shots[entryId] || {})[pendingIdx] = rd.result;
+            save();
+            refresh();
+          };
+          rd.readAsDataURL(f);
+        });
+
+        function buildList() {
+          return figs.map(function (fig) {
+            var img = fig.querySelector("img");
+            var capText = fig.querySelector(".cl-shot-cap-text");
+            return {
+              full: fig.getAttribute("data-full") || (img && img.getAttribute("src")) || "",
+              alt: img ? img.getAttribute("alt") : "",
+              caption: capText ? capText.textContent.trim() : (img ? img.getAttribute("alt") : "")
+            };
+          });
+        }
+
+        figs.forEach(function (fig, idx) {
+          var img = fig.querySelector("img");
+          // remember the proposed (authored) source so revert can restore it
+          if (!fig.hasAttribute("data-proposed")) {
+            fig.setAttribute("data-proposed", fig.getAttribute("data-full") || (img && img.getAttribute("src")) || "");
+          }
+          // restructure the caption once to hold a "Custom" flag + the text
+          var cap = fig.querySelector("figcaption");
+          if (cap && !cap.querySelector(".cl-shot-cap-text")) {
+            var txt = cap.textContent.trim();
+            cap.innerHTML = '<span class="cl-shot-flag">Custom</span><span class="cl-shot-cap-text"></span>';
+            cap.querySelector(".cl-shot-cap-text").textContent = txt;
+          }
+          if (!fig.querySelector(".cl-shot-zoom")) {
+            var badge = document.createElement("span");
+            badge.className = "cl-shot-zoom";
+            badge.innerHTML = ICON_ZOOM;
+            fig.appendChild(badge);
+          }
+          // replace / revert tools
+          if (!fig.querySelector(".cl-shot-tools")) {
+            var tools = document.createElement("div");
+            tools.className = "cl-shot-tools";
+
+            var replace = document.createElement("button");
+            replace.type = "button";
+            replace.className = "cl-shot-tool";
+            replace.title = "Replace with your own screenshot";
+            replace.setAttribute("aria-label", "Replace this screenshot with your own image");
+            replace.innerHTML = ICON_SWAP;
+            replace.addEventListener("click", function (e) {
+              e.stopPropagation();
+              pendingIdx = idx;
+              fileInput.click();
+            });
+
+            var revert = document.createElement("button");
+            revert.type = "button";
+            revert.className = "cl-shot-tool js-revert";
+            revert.title = "Revert to the proposed screenshot";
+            revert.setAttribute("aria-label", "Revert to the proposed screenshot");
+            revert.innerHTML = ICON_UNDO;
+            revert.addEventListener("click", function (e) {
+              e.stopPropagation();
+              if (store.shots[entryId]) { delete store.shots[entryId][idx]; save(); }
+              refresh();
+            });
+
+            tools.appendChild(replace);
+            tools.appendChild(revert);
+            fig.appendChild(tools);
+          }
+
+          fig.setAttribute("role", "button");
+          fig.setAttribute("tabindex", "0");
+          fig.addEventListener("click", function (e) {
+            if (e.target.closest(".cl-shot-tools")) return;
+            openLightbox(buildList(), idx);
+          });
+          fig.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(buildList(), idx); }
+          });
+        });
+
+        function refresh() {
+          figs.forEach(function (fig, idx) {
+            var img = fig.querySelector("img");
+            var ov = (store.shots[entryId] || {})[idx];
+            var src = ov || fig.getAttribute("data-proposed");
+            if (img) img.setAttribute("src", src);
+            fig.setAttribute("data-full", src);
+            fig.classList.toggle("is-custom", !!ov);
+            var rev = fig.querySelector(".js-revert");
+            if (rev) rev.style.display = ov ? "" : "none";
+            var capText = fig.querySelector(".cl-shot-cap-text");
+            var label = (capText && capText.textContent.trim()) || "screenshot";
+            fig.setAttribute("aria-label", "View screenshot: " + label + (ov ? " (custom)" : ""));
+          });
+        }
+        refresh();
+      }
+
+      document.querySelectorAll(".cl-entry").forEach(function (entry) {
+        buildShots(entry);
+        buildSocial(entry);
+      });
+    })();
+  </script>
+</body>
+</html>

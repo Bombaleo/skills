@@ -70,12 +70,12 @@ esac
 python3 -c "import sys; assert sys.version_info >= (3,9); print('Python OK', sys.version.split()[0])"
 ```
 
-**Chrome** (needed for the confirmation walks unless the project has no renderable HTML):
+**Chrome** (needed for Stage 3 confirmation walks unless the project has no renderable HTML):
 ```bash
 ls "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" 2>/dev/null \
   || which google-chrome 2>/dev/null || which chromium 2>/dev/null || echo "CHROME_NOT_FOUND"
 ```
-If `CHROME_NOT_FOUND`: stop and tell the user to install Chrome or set `CHROME_PATH`.
+If `CHROME_NOT_FOUND`: issue a WARNING — Chrome is required only if Stage 3 confirmation walks will run. Source-only runs (no walkable HTML) will skip Stage 3 and proceed normally. If the run does need Chrome and it is missing, the hard stop happens at the start of Stage 3.
 
 **Locate this pipeline's scripts:**
 ```bash
@@ -137,17 +137,27 @@ Read `.specwork/catalog/map.json`. Confirm it is valid JSON with a non-empty `en
 (each entity having `slug`, `name`, `role`, `features`). If empty/invalid, stop and report.
 
 ### Stage 3 — Targeted confirmation walks
-**Skip this stage entirely if `unmapped: true`** (the fallback already walked in Stage 2). Print:
+**Skip this stage entirely if `unmapped: true`** (the fallback already walked in Stage 2). 
+
+**Chrome gate:** If `CHROME_NOT_FOUND` from Stage 0 and this run is NOT source-only (has renderable HTML), stop now: "Confirmation walks need Chrome. Install Chrome or set CHROME_PATH."
+
+Print:
 > ⟳ S3 — confirming features with scoped walks (one short headless-Chrome walk per entry point).
 > No live output appears until each walk returns.
+
+Start from an empty walk directory:
+```bash
+rm -rf /tmp/proto-walk
+```
 
 Collect the distinct `entry_hint` paths from `map.json` (`entities[].features[].entry_hint`),
 dedupe, and drop empties. For each distinct entry-hint, run a **scoped** walk that accumulates
 into `/tmp/proto-walk`:
 ```bash
-python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk \
+python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk --append \
   --nav "<comma-joined entry_hint labels>" --max-screens 40 --depth 4 --per-screen 30
 ```
+(`--append` makes each scoped walk accumulate into the shared `/tmp/proto-walk` index instead of overwriting it; the first walk simply creates it.)
 - A walk whose `--nav` path is not clickable prints an error and exits non-zero — record that
   entry-hint as **unreached** (its features stay Partial) and continue; do not stop the pipeline.
 - Cap total scoped walks at the number of distinct entry-hints; if that exceeds ~30, walk the 30
@@ -160,7 +170,7 @@ For each entity in `map.json`, delegate **entity-lifecycle-analyst** (in paralle
 - `entity_name`, `entity_slug`, `role` (from the entity entry)
 - `map_path`: `.specwork/catalog/map.json`
 - `evidence_screens`: the walk `.txt` files relevant to this entity (from `/tmp/proto-walk/index.json`
-  — match by the entity's `entry_hint` paths / titles; pass all if unsure)
+  — match by the entity's `entry_hint` paths / titles; pass all if unsure). In a source-only run (no walk), there are no walk files — pass an empty list; the analyst then marks render-status features Partial.
 - `walk_dir`: `/tmp/proto-walk`
 - `src_dir`: `/tmp/proto-src` (mention if absent)
 - `context_path`: `.specwork/context.md` (mention if absent)
@@ -181,7 +191,7 @@ Delegate **gap-synthesizer** with:
 - `catalog_dir`: `.specwork/catalog/`
 - `app_name`, `app_slug`
 - `prototype_source`: the resolved URL or path
-- `unverified`: true only if `unmapped` (no source) — carry the caveat
+- `unverified`: true if the run was source-only (no walkable HTML, skipped Stage 3) OR unmapped (no source) — i.e. whenever renders did not confirm features. Keep `unmapped` as its own separate caveat in the final report for no-source fallback runs.
 - `context_path`: `.specwork/context.md` (mention if absent)
 - `catalog_md_path`: `.specwork/catalog/entity-catalog.md`
 - `report_json_path`: `.specwork/catalog/entities-report.json`

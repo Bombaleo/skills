@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flex Work VMS — Project Engagement Flow Walkthrough · v1.0</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="../styles-strategy.css" />
+  <link rel="stylesheet" href="../styles-msp.css" />
+  <style>
+    /* ============================================================== */
+    /* Project Engagement Flow Walkthrough · page-local styles        */
+    /* Inherits sr-* (Strategy Review) shell; mirrors the Interview   */
+    /* Flow Walkthrough wt-* idiom.                                   */
+    /* ============================================================== */
+
+    .wt-role {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 22px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-sm);
+      background: var(--evr-surface-primary-default);
+      margin-bottom: 18px;
+    }
+    .wt-role[data-role="setup"]    { border-top: 3px solid var(--evr-red-400); }
+    .wt-role[data-role="admin"]    { border-top: 3px solid var(--evr-purple-500); }
+    .wt-role[data-role="manager"]  { border-top: 3px solid var(--evr-blue-400); }
+    .wt-role[data-role="agency"]   { border-top: 3px solid var(--evr-orange-500); }
+    .wt-role[data-role="worker"]   { border-top: 3px solid var(--evr-teal-500); }
+    .wt-role[data-role="teardown"] { border-top: 3px solid var(--evr-content-primary-lowemp); }
+    .wt-role-glyph {
+      width: 64px; height: 64px;
+      border-radius: var(--evr-radius-xs);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--evr-font-display);
+      font-weight: 600; font-size: 24px;
+    }
+    .wt-role[data-role="setup"]    .wt-role-glyph { background: var(--evr-surface-decorative-low-red);    color: var(--evr-red-400); }
+    .wt-role[data-role="admin"]    .wt-role-glyph { background: var(--evr-surface-decorative-low-purple); color: var(--evr-purple-500); }
+    .wt-role[data-role="manager"]  .wt-role-glyph { background: var(--evr-surface-decorative-low-blue);   color: var(--evr-blue-400); }
+    .wt-role[data-role="agency"]   .wt-role-glyph { background: var(--evr-surface-decorative-low-orange); color: var(--evr-orange-700, var(--evr-orange-500)); }
+    .wt-role[data-role="worker"]   .wt-role-glyph { background: var(--evr-surface-decorative-low-teal);   color: var(--evr-teal-500); }
+    .wt-role[data-role="teardown"] .wt-role-glyph { background: var(--evr-surface-secondary-default);    color: var(--evr-content-primary-lowemp); }
+    .wt-role-eyebrow {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 4px;
+    }
+    .wt-role-name {
+      font-family: var(--evr-font-display);
+      font-weight: 600; font-size: 22px;
+      margin: 0; color: var(--evr-content-primary-highemp);
+    }
+    .wt-role-sub {
+      margin: 4px 0 0;
+      font-size: 13.5px; line-height: 1.5;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .wt-role-jump {
+      align-self: center;
+      font-family: var(--evr-font-text);
+      font-weight: 600; font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 8px 14px; border-radius: 999px;
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      text-decoration: none;
+    }
+    .wt-role-jump:hover { background: var(--evr-interactive-primary-decorative, var(--evr-surface-decorative-low-blue)); border-color: var(--evr-interactive-primary-default); }
+
+    .wt-steps { list-style: none; counter-reset: step; margin: 0; padding: 0; }
+    .wt-step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 18px;
+      padding: 18px 0;
+      border-top: 1px dashed var(--evr-border-decorative-lowemp);
+    }
+    .wt-step:first-child { border-top: 0; padding-top: 4px; }
+    .wt-step::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: var(--evr-font-display);
+      font-weight: 600; font-size: 28px;
+      line-height: 1;
+      color: var(--evr-content-primary-lowemp);
+      font-feature-settings: "tnum";
+      text-align: right;
+    }
+    .wt-step-h {
+      font-family: var(--evr-font-display);
+      font-weight: 600; font-size: 17px;
+      margin: 0 0 6px;
+      color: var(--evr-content-primary-highemp);
+      line-height: 1.3;
+      text-wrap: balance;
+    }
+    .wt-step-body {
+      font-size: 14px; line-height: 1.6;
+      color: var(--evr-content-primary-default);
+    }
+    .wt-step-body p { margin: 0 0 8px; }
+    .wt-step-body p:last-child { margin-bottom: 0; }
+    .wt-step-body b { color: var(--evr-content-primary-highemp); font-weight: 600; }
+    .wt-step-body ul { margin: 8px 0; padding-left: 22px; }
+    .wt-step-body li { margin-bottom: 4px; }
+    .wt-step-body code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12.5px;
+      background: var(--evr-surface-secondary-default);
+      padding: 0 5px;
+      border-radius: var(--evr-radius-4xs);
+    }
+
+    .wt-path {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; margin-bottom: 8px;
+      border-radius: 999px;
+      background: var(--evr-surface-secondary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      font-family: var(--evr-font-text);
+      font-weight: 600; font-size: 12px;
+      color: var(--evr-content-primary-default);
+    }
+    .wt-path code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11.5px;
+      background: var(--evr-surface-primary-default);
+      padding: 1px 6px; border-radius: var(--evr-radius-4xs);
+    }
+
+    .wt-tip {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-decorative-low-blue);
+      border-left: 3px solid var(--evr-blue-400);
+      color: var(--evr-content-primary-default);
+      font-size: 13px; line-height: 1.55;
+    }
+    .wt-tip b { color: var(--evr-blue-400); }
+    .wt-tip--warn {
+      background: var(--evr-surface-decorative-low-orange);
+      border-left-color: var(--evr-orange-500);
+    }
+    .wt-tip--warn b { color: var(--evr-orange-700, var(--evr-orange-500)); }
+    .wt-tip--ok {
+      background: var(--evr-surface-decorative-low-green);
+      border-left-color: var(--evr-green-500);
+    }
+    .wt-tip--ok b { color: var(--evr-green-600); }
+
+    .wt-shot {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-secondary-default);
+    }
+    .wt-shot-h {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 8px;
+    }
+    .wt-shot img {
+      display: block;
+      max-width: 100%;
+      border-radius: var(--evr-radius-4xs);
+      border: 1px solid var(--evr-border-decorative-default);
+      background: var(--evr-surface-primary-default);
+    }
+
+    .wt-surfaces {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 6px 10px;
+      margin-top: 10px;
+    }
+    .wt-surfaces span {
+      font: var(--evr-utility2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border: 1px solid var(--evr-border-decorative-default);
+      text-align: center;
+    }
+
+    .wt-anchor { display: block; position: relative; top: -16px; visibility: hidden; }
+  </style>
+</head>
+<body class="sr msp" data-screen-label="Project flow walkthrough">
+
+<div class="sr-shell">
+
+  <!-- ============================================================== -->
+  <!-- Sticky TOC                                                     -->
+  <!-- ============================================================== -->
+  <aside class="sr-toc" aria-label="Sections">
+    <div class="sr-toc-mark">Internal · Walkthrough</div>
+    <div class="sr-toc-title">Project engagement — step-by-step</div>
+    <div class="sr-toc-ver"><code>v1.0</code>May 28, 2026</div>
+    <ol>
+      <li><a href="#setup">Setup &middot; turn on the engagement type</a></li>
+      <li><a href="#admin">Admin &middot; configure once</a></li>
+      <li><a href="#manager">Manager &middot; create, staff, run, close</a></li>
+      <li><a href="#agency">Agency &middot; propose, manage, bill</a></li>
+      <li><a href="#worker">Worker &middot; accept, log time, close</a></li>
+      <li><a href="#teardown">Teardown &middot; turn it back off</a></li>
+    </ol>
+    <div class="sr-toc-foot">
+      <p><strong>What this is.</strong> A click-by-click walkthrough of the Project engagement type across all four roles. Use it to demo the flag end-to-end, onboard a new teammate, or screencast a release video. Every step names the page, the exact navigation path, and the surface that appears.</p>
+      <p><strong>Companions.</strong>
+        <a href="../Competitor Comparisons/Project Engagement Type Parity v0.1.html">Parity task list</a> &middot;
+        <a href="../Competitor Comparisons/Project Parity Architecture Map.html">Architecture map</a> &middot;
+        <a href="Flex Work Interview Flow Walkthrough.html">Interview flow walkthrough</a>
+      </p>
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- Main column                                                    -->
+  <!-- ============================================================== -->
+  <main class="sr-main">
+
+    <!-- HERO -->
+    <header class="sr-hero">
+      <div class="sr-eyebrow">Flex Work VMS · Project Engagement Flow Walkthrough · v1.0</div>
+      <h1 class="sr-title">See the entire Project engagement flow in twelve minutes.</h1>
+      <p class="sr-deck">Six sections, all four roles. Start by flipping one engagement-type toggle; finish with a closed project archived to audit. Every step below names the page you land on, the click you make, and the surface that appears. The Helios Power Generation tenant seeds four sample projects so you don't need to create one from scratch &mdash; though the walkthrough's <a href="#manager">Manager</a> section does walk through creation too.</p>
+      <dl class="sr-meta">
+        <div><dt>Audience</dt><dd>Internal demos &middot; release videos &middot; onboarding</dd></div>
+        <div><dt>Time to run</dt><dd>~12 minutes end-to-end</dd></div>
+        <div><dt>Prerequisites</dt><dd>Signed in to the Helios tenant (default), or any tenant with <code>engProject</code> on</dd></div>
+        <div><dt>Reset state</dt><dd>Clear <code>flexwork.projects.v2.*</code> from localStorage, or reload</dd></div>
+      </dl>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- 01 · SETUP                                                     -->
+    <!-- ============================================================== -->
+    <section id="setup" class="sr-section">
+      <div>
+        <span class="sr-h2-num">01 &middot; Setup &middot; turn on the engagement type</span>
+        <h2 class="sr-h2">Enable Project under Settings &rarr; Configuration.</h2>
+      </div>
+      <p class="sr-lead">Every Project surface across Admin, Manager, Agency, and Worker is gated behind one toggle. Helios ships with it on by default. Turning it off hides every surface listed below without breaking the rest of the app.</p>
+
+      <div class="wt-role" data-role="setup">
+        <div class="wt-role-glyph">&#x2713;</div>
+        <div>
+          <div class="wt-role-eyebrow">Step 01</div>
+          <h3 class="wt-role-name">Confirm engProject is on</h3>
+          <p class="wt-role-sub">Settings &rarr; Configuration &rarr; Engagement types is the canonical home. Lives in <code>pages/engagement-types-config.jsx</code>.</p>
+        </div>
+        <a class="wt-role-jump" href="#admin">Then jump to &sect;02 &rarr;</a>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Side nav &rarr; <code>Settings</code></span>
+            <h3 class="wt-step-h">Open Settings.</h3>
+            <div class="wt-step-body">
+              <p>From any page, open the global side nav and click <b>Settings</b>. The Settings dock appears.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Settings dock &rarr; <code>Configuration</code></span>
+            <h3 class="wt-step-h">Click Configuration.</h3>
+            <div class="wt-step-body">
+              <p>The Configuration page renders the standard left rail. Look for the <b>Engagement types</b> entry near the top.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Configuration &rarr; <code>Engagement types</code></span>
+            <h3 class="wt-step-h">Confirm the Project row is on.</h3>
+            <div class="wt-step-body">
+              <p>The Engagement types card lists four rows: <b>Shift</b>, <b>Assignment</b>, <b>Project</b>, and <b>Statement of Work</b>. On Helios, Project is on by default; the toggle is green. On a fresh tenant, click the Project row toggle to enable.</p>
+              <p>The moment the toggle flips, the rest of this walkthrough's surfaces become reachable &mdash; no reload required.</p>
+              <div class="wt-tip"><b>What happens behind the scenes.</b> <code>pages/engagement-types-config.jsx</code> writes the flag to <code>flexwork.engagementTypes.{orgId}.engProject</code> and dispatches <code>featureflags:change</code>. Every downstream surface re-reads in place.</div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Configuration left rail</span>
+            <h3 class="wt-step-h">Notice the new "Project settings" rail entry.</h3>
+            <div class="wt-step-body">
+              <p>A new <b>Project settings</b> item appears in the left rail when <code>engProject</code> is on. That's the next stop, in &sect;02.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · ADMIN                                                     -->
+    <!-- ============================================================== -->
+    <section id="admin" class="sr-section">
+      <div>
+        <span class="sr-h2-num">02 &middot; Admin &middot; configure once</span>
+        <h2 class="sr-h2">Set the number sequence, approval matrix, burn alerts, and policies.</h2>
+      </div>
+      <p class="sr-lead">Helios ships with sensible defaults so the rest of the walkthrough works without touching anything here. But this is where the admin team customises how Projects behave for the tenant &mdash; nine sub-sections covering numbering, approvals, alerts, task catalog, closeout, supplier visibility, and per-role permissions.</p>
+
+      <div class="wt-role" data-role="admin">
+        <div class="wt-role-glyph">A</div>
+        <div>
+          <div class="wt-role-eyebrow">Section 02 &middot; Admin</div>
+          <h3 class="wt-role-name">Project settings panel</h3>
+          <p class="wt-role-sub">Lives in <code>&lt;ProjectAdminPanel /&gt;</code> from <code>pages/project-engagement-views.jsx</code>, mounted by <code>pages/settings-config.jsx</code>.</p>
+        </div>
+        <a class="wt-role-jump" href="#manager">Then jump to &sect;03 &rarr;</a>
+      </div>
+
+      <div class="wt-surfaces">
+        <span>Number sequence</span>
+        <span>Budget approval matrix</span>
+        <span>Change-order policy</span>
+        <span>Burn-alert thresholds</span>
+        <span>Task catalog</span>
+        <span>Closeout policy</span>
+        <span>Supplier visibility</span>
+        <span>Role permissions</span>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Configuration &rarr; <code>Project settings</code></span>
+            <h3 class="wt-step-h">Open the Project settings card.</h3>
+            <div class="wt-step-body">
+              <p>Click the <b>Project settings</b> rail item that appeared in &sect;01. The full <code>ProjectAdminPanel</code> renders &mdash; one card with nine collapsible sub-sections, in order. The header carries a green "Live" pill confirming the engagement type is on.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 02 &middot; numbering</code></span>
+            <h3 class="wt-step-h">Confirm the number sequence.</h3>
+            <div class="wt-step-body">
+              <p>Three fields: <b>Prefix</b> (default <code>PRJ</code>), <b>Format</b> (default <code>{`{prefix}-{YYYY}-{####}`}</code>), <b>Next sequence</b> (default <code>27</code> on Helios after the four seeded projects). A live preview shows the next ID that will mint.</p>
+              <p>Toggle <b>External ID required</b> if you want Treasury / PMO IDs at intake; the validator dropdown picks <code>treasury-cip</code> (the <code>CIP-YYYY-###</code> pattern Helios uses).</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 03 &middot; approval matrix</code></span>
+            <h3 class="wt-step-h">Inspect the budget approval thresholds.</h3>
+            <div class="wt-step-body">
+              <p>Four tiers, smallest first. Each tier has a "less than" budget amount and a chip-list of approvers. Helios defaults:</p>
+              <ul>
+                <li>T1 &middot; budget &lt; $50K &rarr; <b>Project owner</b>, <b>Department head</b></li>
+                <li>T2 &middot; &lt; $250K &rarr; +<b>CFO</b></li>
+                <li>T3 &middot; &lt; $1M &rarr; +<b>CHRO</b></li>
+                <li>T4 &middot; above all &rarr; +<b>CEO</b></li>
+              </ul>
+              <p>The "Above all" tier always sits at the bottom and is non-numeric &mdash; it carries the global escalation.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 04 &middot; amendments</code></span>
+            <h3 class="wt-step-h">Tune the change-order policy.</h3>
+            <div class="wt-step-body">
+              <p>Three controls: <b>Auto-approve up to</b> (default <code>10%</code>), <b>Manager approve up to</b> (default <code>25%</code>), <b>Require justification</b> (default on). The reason-code chip-list at the bottom carries five defaults (<b>Scope add</b>, <b>Scope reduce</b>, <b>Date extension</b>, <b>Resource swap</b>, <b>Rate adjustment</b>); add or remove freely.</p>
+              <p>Any amendment whose <code>|deltaBudget| / project.budget</code> exceeds the manager threshold routes back through the budget approval tiers in Section 03.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 05 &middot; alerts</code></span>
+            <h3 class="wt-step-h">Confirm burn-alert thresholds.</h3>
+            <div class="wt-step-body">
+              <p>Three rows: <b>75% / Info / Project owner</b>, <b>90% / Warning / + Department head</b>, <b>100% / Critical / + Finance</b>. Tweak the percentages, severity, and notify lists per row. The header toggle disables the entire alert pipeline without losing the configuration.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 06 &middot; task catalog</code></span>
+            <h3 class="wt-step-h">Review the task catalog.</h3>
+            <div class="wt-step-body">
+              <p>Nine seeded chargeable task codes: <b>Discovery</b>, <b>Design</b>, <b>Build</b>, <b>Test / QA</b>, <b>UAT support</b>, <b>Hypercare</b>, <b>Project mgmt</b>, <b>Training</b>, <b>Travel time</b>. These are the list workers pick from at time entry. <i>Travel time</i> is the only non-billable default.</p>
+              <p>Add a row, edit a name, or toggle billable. Reusable across every Project on the tenant.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 07 &middot; closeout</code></span>
+            <h3 class="wt-step-h">Confirm closeout preconditions.</h3>
+            <div class="wt-step-body">
+              <p>Six toggles plus an "archive after" days field. Defaults: all timesheets approved (on), all invoices paid (on), milestones accepted (off &mdash; fires only on milestone billing), supplier acknowledge (on), send supplier survey (on), archive after 30 days. These drive the precondition checklist on the Manager's Closeout tab in &sect;03.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 08 &middot; supplier transparency</code></span>
+            <h3 class="wt-step-h">Pick supplier burn visibility.</h3>
+            <div class="wt-step-body">
+              <p>A three-value segmented control: <b>Hidden</b>, <b>Summary</b> (% consumed only, the Helios default), <b>Full</b> (budget, actuals, NTE proximity). Whatever you pick is honoured by the Agency card in &sect;04 &mdash; switch to <i>Full</i> and the supplier sees a complete burn read-out; switch to <i>Hidden</i> and the burn block disappears entirely.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project settings &rarr; <code>Section 09 &middot; roles</code></span>
+            <h3 class="wt-step-h">Inspect the role permissions matrix.</h3>
+            <div class="wt-step-body">
+              <p>Five default Helios roles (<b>Program owner</b>, <b>Project manager</b>, <b>Finance partner</b>, <b>Compliance</b>, <b>Site manager</b>) across six capabilities (<b>Create</b>, <b>Approve</b>, <b>Amend</b>, <b>Close</b>, <b>View burn</b>, <b>Swap workers</b>). Site manager has nothing on by default; Program owner has everything on. Flip a cell and the affected role's surface updates on the next render.</p>
+              <div class="wt-tip wt-tip--ok"><b>Long-term direction.</b> When the global Settings &rarr; Roles surface gains a Project sub-section, this matrix migrates there &mdash; for now it sits inside <code>ProjectAdminPanel</code> so it ships in lockstep with the rest of Project config.</div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · MANAGER                                                   -->
+    <!-- ============================================================== -->
+    <section id="manager" class="sr-section">
+      <div>
+        <span class="sr-h2-num">03 &middot; Manager &middot; create, staff, run, close</span>
+        <h2 class="sr-h2">From budget intake to closeout sign-off.</h2>
+      </div>
+      <p class="sr-lead">The buyer side, end-to-end. Open one of Helios's seeded projects, run a burn dashboard read-out, swap a worker on the roster, submit an amendment, file a status report, and sign off the closeout. Or, if you'd rather start from scratch, the very last step creates a fresh project under the v0.86 intake fields.</p>
+
+      <div class="wt-role" data-role="manager">
+        <div class="wt-role-glyph">M</div>
+        <div>
+          <div class="wt-role-eyebrow">Section 03 &middot; Manager</div>
+          <h3 class="wt-role-name">Project detail body &middot; eight tabs</h3>
+          <p class="wt-role-sub">Lives in <code>&lt;ProjectVariantBody /&gt;</code> from <code>pages/project-engagement-views.jsx</code>, registered with the unified detail router under channel <code>"Project"</code> + id prefix <code>"PRJ-"</code>.</p>
+        </div>
+        <a class="wt-role-jump" href="#agency">Then jump to &sect;04 &rarr;</a>
+      </div>
+
+      <div class="wt-surfaces">
+        <span>Burn dashboard</span>
+        <span>Roster</span>
+        <span>Timesheets</span>
+        <span>Amendments</span>
+        <span>Status reports</span>
+        <span>Documents</span>
+        <span>Comments</span>
+        <span>Audit</span>
+        <span>Closeout</span>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Side nav &rarr; <code>Requisitions</code></span>
+            <h3 class="wt-step-h">Open the Requisitions list.</h3>
+            <div class="wt-step-body">
+              <p>The list contains every requisition on the tenant, including the four seeded Project rows (IDs starting with <code>PRJ-2026-</code>) merged in alongside the Shift requisitions.</p>
+              <div class="wt-shot">
+                <div class="wt-shot-h">Requisitions list &middot; with Project rows merged in</div>
+                <img src="../screenshots/proj-01-reqs-list.png" alt="Requisitions list with engagement type chip-bar and table" />
+              </div>
+              <div class="wt-tip"><b>How Project rows land here.</b> <code>pages/project-engagement.jsx</code> projects its records into <code>window.REQUISITIONS</code> on load, so the existing list filters, pagination, and engagement-type chip-bar Just Work without any host-page edits.</div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Requisitions &rarr; <code>PRJ-2026-018</code></span>
+            <h3 class="wt-step-h">Open the seeded WMS rollout.</h3>
+            <div class="wt-step-body">
+              <p>Click the <b>DC Alpha &mdash; WMS rollout</b> row. The unified detail router dispatches to <code>ProjectVariantBody</code> via the variant registry (id prefix <code>PRJ-</code>). The detail page mounts with a project-flavoured header: <b>Active</b> state pill, project + external IDs, owner, supplier, currency, billing basis, and state-transition action buttons (On hold, Closing, Cancelled).</p>
+              <div class="wt-shot">
+                <div class="wt-shot-h">Project detail &middot; header + Burn dashboard stat cards</div>
+                <img src="../screenshots/proj-02-detail-burn.png" alt="Project detail page header with state actions and four stat cards" />
+              </div>
+              <p>Four stat cards: <b>Spent</b> ($728K, 86% of $850K budget), <b>Remaining</b> ($122K, 78% against NTE $935K), <b>Hours logged</b> (2,568h of 4,140h planned), <b>Days remaining</b> (120, ending Sep 24).</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Burn dashboard &middot; scroll</span>
+            <h3 class="wt-step-h">Read the burn chart and phase outline.</h3>
+            <div class="wt-step-body">
+              <p>Scroll down. The cumulative burn chart plots actual (solid blue) against planned (dashed grey) week by week, with the NTE level as a marker. Below it the phase outline shows the five phases (Discovery / Design / Build / Test &amp; UAT / Hypercare) as horizontal bars timed against the project's total week count, each carrying its phase budget.</p>
+              <div class="wt-shot">
+                <div class="wt-shot-h">Burn dashboard &middot; cumulative chart + phase strip</div>
+                <img src="../screenshots/proj-02b-burn-chart.png" alt="Cumulative spend chart against plan plus phase outline strip" />
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Roster</code></span>
+            <h3 class="wt-step-h">Manage the roster.</h3>
+            <div class="wt-step-body">
+              <p>Six workers on the project. Each row carries: avatar + name, role, task code (live select &mdash; re-assign right there), allocation %, hours-to-date vs planned, progress bar, start &middot; end dates, and Swap / End-date actions.</p>
+              <div class="wt-shot">
+                <div class="wt-shot-h">Roster tab &middot; six workers, live task selectors, swap + end-date</div>
+                <img src="../screenshots/proj-03-roster.png" alt="Roster tab table with six named workers, allocation, hours, progress" />
+              </div>
+              <p>Click <b>Swap</b> on any row. The <code>ResourceSwapModal</code> opens with the worker pre-loaded, a reason-code select (sourced from <code>config.resourceSwap.reasonCodes</code>), and an optional note to supplier. The same modal serves the Agency side too &mdash; the <code>tenantRole</code> prop inverts the copy.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Roster</code> &rarr; <code>Review supplier proposal</code></span>
+            <h3 class="wt-step-h">Review a supplier team proposal (on the budget-pending project).</h3>
+            <div class="wt-step-body">
+              <p>Switch to <b>PRJ-2026-024 &middot; Helios HQ &mdash; accessibility audit &amp; remediation</b> (state: Budget pending). On the Roster tab, the header carries an extra <b>Review supplier proposal</b> button because <code>project.teamProposal.submitted</code> is set on this seed project.</p>
+              <p>Click it. The <code>TeamProposalReviewModal</code> opens listing each candidate (synthesised from the team shape: 1 UX lead, 2 Frontend devs) with name, role, allocation, planned hours, rate, fit chip, and a segmented <b>Accept / Hold / Reject</b> decision per row.</p>
+              <p>Click <b>Commit decisions</b>. The audit log records "Team proposal reviewed &middot; N accepted of M" &mdash; accepted candidates would land on the project roster in a production wiring.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Timesheets</code></span>
+            <h3 class="wt-step-h">Approve the weekly burn rollup.</h3>
+            <div class="wt-step-body">
+              <p>Back on <b>PRJ-2026-018</b>. The Timesheets tab shows the trailing six weeks as a roll-up: hours, burn, variance vs plan, and state pill. The latest week is marked <b>pending</b> with an <b>Approve</b> button. Earlier weeks are already approved.</p>
+              <p>One sheet, all six workers. Approve once, every worker's individual time clears alongside it.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Amendments</code></span>
+            <h3 class="wt-step-h">Submit a change order.</h3>
+            <div class="wt-step-body">
+              <p>The Amendments tab lists existing amendments as cards with their ID, reason, delta, justification, submitter, approver, and state pill. One amendment already exists on PRJ-2026-018: <b>AMD-001 &middot; Scope add &middot; +$60K</b>, approved by Renée Patel.</p>
+              <p>Click <b>+ Submit change order</b>. The modal opens with a segmented control at the top: <b>Budget / schedule delta</b> (the default mode) and <b>Phase budget reallocation</b> (v0.88).</p>
+              <ul>
+                <li><b>Delta mode</b>: pick a reason, set budget delta (positive to add, negative to release), schedule delta in weeks, justification. The routing chip at the bottom updates live as you type the delta &mdash; "Auto-approve" under 10%, "Manager approval" 10&ndash;25%, "Full re-approval" above 25%.</li>
+                <li><b>Reallocation mode</b>: pick a from-phase and to-phase, set the amount to move, optional justification. Auto-approves on submit because the total budget is unchanged &mdash; phase budgets shift accordingly, and an audit entry records the reallocation.</li>
+              </ul>
+              <div class="wt-tip"><b>Behind the scenes.</b> Each submission writes to <code>project.amendments[]</code> and appends a row to <code>project.audit[]</code>. The supplier sees pending amendments via the Agency card in &sect;04, and individual workers see them on the Worker Updates tab in &sect;05.</div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Status reports</code></span>
+            <h3 class="wt-step-h">Draft and send a weekly status report.</h3>
+            <div class="wt-step-body">
+              <p>Two seeded reports on PRJ-2026-018: the latest is a green-RAG <b>draft</b> dated week 20; the previous is an amber-RAG <b>sent</b> report dated week 19. Click <b>+ Draft new report</b> and a fresh draft auto-populates from the current burn ledger, recent comments, and any open amendments.</p>
+              <p>The report carries four chip-list fields: <b>Accomplishments</b>, <b>Risks</b>, <b>Next week</b>, <b>Recipients</b>. Click <b>Edit</b> on a draft to tune any of them; <b>Send</b> flips state to <i>sent</i>, captures the send date and recipient list, and writes "Status report sent" to the audit log.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Documents</code></span>
+            <h3 class="wt-step-h">Browse the project documents.</h3>
+            <div class="wt-step-body">
+              <p>Four seeded files: <b>DC Alpha SOW v2.pdf</b>, <b>Kickoff deck.pdf</b>, <b>Risk register week 12.xlsx</b>, <b>UAT entry criteria.pdf</b>. Each carries an uploader, date, and size. Click <b>+ Upload</b> to add a stub document; the audit log captures the upload.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Comments</code></span>
+            <h3 class="wt-step-h">Read and post in the project thread.</h3>
+            <div class="wt-step-body">
+              <p>Three seeded comments thread through PRJ-2026-018's late-April put-away discussion. Click into the composer at the bottom, post your own message &mdash; it lands instantly with your handle and date. Single thread per project; one source of truth for decisions that don't belong in email.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Audit</code></span>
+            <h3 class="wt-step-h">Read the audit trail.</h3>
+            <div class="wt-step-body">
+              <p>Append-only feed of every state change, budget change, roster change, amendment, status-report send, document upload, and comment. PRJ-2026-018 carries seven seeded entries from creation through the 75% burn alert. Newest entries surface at the top.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail tabs &rarr; <code>Closeout</code></span>
+            <h3 class="wt-step-h">Walk the two-party closeout checklist.</h3>
+            <div class="wt-step-body">
+              <p>Switch to <b>PRJ-2026-009 &middot; Substation 12</b> (state: Closed) to see a fully-met checklist. On PRJ-2026-018 (state: Active), the same checklist surfaces with "Not met" pills next to each unmet precondition.</p>
+              <p>Preconditions read live from <code>config.closeout</code> (set in &sect;02): timesheets approved, invoices paid, milestones accepted (when applicable), supplier acknowledgement. Once all are met, the <b>Sign off &amp; close</b> button enables and the next click flips the project to <i>Closed</i>, with an audit entry recording the manager sign-off.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Requisitions &rarr; <code>+ Create</code></span>
+            <h3 class="wt-step-h">Or: create a fresh project from scratch.</h3>
+            <div class="wt-step-body">
+              <p>If you'd rather not use one of the seeded projects, head back to Requisitions and click <b>+ Create</b>. On the New Requisition page, the <b>Engagement type picker</b> sits as the first card; pick <b>Project</b>.</p>
+              <p>The <code>ProjectIntakeFields</code> card appears beneath the picker: <b>External ID</b> (required when policy is on), <b>Currency</b>, <b>Billing basis</b> (Fixed or Milestone), <b>Budget</b>, <b>NTE cushion</b> (% above budget), <b>NTE amount</b> (auto-computed). Below the fields, a live "Routes to" line names the approval tier the budget falls into &mdash; pulled from the matrix you set in &sect;02.</p>
+              <p>On Review commit, <code>PSProjects.createProject()</code> mints a new <code>PRJ-{YYYY}-{####}</code> ID using the configured number sequence, writes the record to <code>flexwork.projects.v2.{orgId}</code>, and re-injects it into <code>window.REQUISITIONS</code> so it appears in the list immediately.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 04 · AGENCY                                                    -->
+    <!-- ============================================================== -->
+    <section id="agency" class="sr-section">
+      <div>
+        <span class="sr-h2-num">04 &middot; Agency &middot; propose, manage, bill</span>
+        <h2 class="sr-h2">The supplier side of the engagement.</h2>
+      </div>
+      <p class="sr-lead">Switch to the Agency role and the Requisitions list grows an Agency Projects card at the top. Pending team-proposal requests rank by due date; active projects show roster + burn (gated by the supplier-visibility policy from &sect;02). Every action shares its underlying component with the Manager side via <code>tenantRole</code> &mdash; submitted change orders route through the same policy tiers, swap requests share the same reason-code list.</p>
+
+      <div class="wt-role" data-role="agency">
+        <div class="wt-role-glyph">S</div>
+        <div>
+          <div class="wt-role-eyebrow">Section 04 &middot; Agency</div>
+          <h3 class="wt-role-name">Agency Projects card</h3>
+          <p class="wt-role-sub">Lives in <code>&lt;AgencyProjectsTab /&gt;</code> from <code>pages/project-engagement-views.jsx</code>, mounted above the Requisitions list on agency tenants.</p>
+        </div>
+        <a class="wt-role-jump" href="#worker">Then jump to &sect;05 &rarr;</a>
+      </div>
+
+      <div class="wt-surfaces">
+        <span>Pending proposals</span>
+        <span>Team proposal modal</span>
+        <span>Active project roster</span>
+        <span>Burn visibility (gated)</span>
+        <span>Weekly time roll-up</span>
+        <span>Supplier amendment</span>
+        <span>Resource swap</span>
+        <span>Closeout acknowledge</span>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Header avatar &rarr; <code>Viewing as &rarr; Agency</code></span>
+            <h3 class="wt-step-h">Switch to the Agency role.</h3>
+            <div class="wt-step-body">
+              <p>Open the avatar menu top-right and pick <b>Viewing as &middot; Agency</b>. The app reloads under the Acme Professional supplier tenant. The next time the Requisitions list renders, an Agency Projects card appears above the standard table.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Requisitions &middot; top card</span>
+            <h3 class="wt-step-h">Read the open team-proposal requests.</h3>
+            <div class="wt-step-body">
+              <p>One pending proposal in the Helios seed: <b>PRJ-2026-024 &middot; Helios HQ accessibility audit</b>, due 29 May, budget envelope $180K, team shape "<b>1&times; UX lead</b> &middot; 50% &middot; 260h plus <b>2&times; Frontend dev</b> &middot; 100% &middot; 520h each". A "Team proposal due" pill marks the urgency.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Pending card &rarr; <code>Propose team</code></span>
+            <h3 class="wt-step-h">Propose three candidates against the team shape.</h3>
+            <div class="wt-step-body">
+              <p>Click <b>Propose team</b>. The modal renders one row per (role &times; count) in the team shape &mdash; in this case three rows, each capturing candidate name, rate, and start date. Click <b>Submit proposal</b> to write <code>project.teamProposal.submitted</code> with today's date and append "Team proposal submitted &middot; 3 candidates" to the project audit.</p>
+              <p>The Manager side picks it up immediately via the <i>Review supplier proposal</i> button on their Roster tab (see &sect;03).</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Active projects list</span>
+            <h3 class="wt-step-h">Open an active project's card.</h3>
+            <div class="wt-step-body">
+              <p>Below the pending card, the active projects list shows projects assigned to the supplier. Each card carries the state pill, project name + ID, start date, roster count, and (depending on the supplier-visibility policy from &sect;02) a burn block.</p>
+              <ul>
+                <li><b>Hidden</b>: burn block disappears entirely.</li>
+                <li><b>Summary</b> (Helios default): single line "<b>X%</b> of budget consumed".</li>
+                <li><b>Full</b>: progress bar with spent / budget / NTE values.</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Active card footer &rarr; <code>Weekly time roll-up</code></span>
+            <h3 class="wt-step-h">Submit a consolidated weekly timesheet.</h3>
+            <div class="wt-step-body">
+              <p>Click <b>Weekly time roll-up</b>. The <code>AgencyConsolidatedTimesheet</code> modal opens with a workers &times; days grid &mdash; one row per worker on the roster, columns Mon&ndash;Fri, plus a row total and a grand total in the footer. Type hours into each cell.</p>
+              <p>Click <b>Submit week (N h)</b>. The system fans out into per-worker timesheets and appends "Supplier submitted consolidated weekly time &middot; N workers &middot; H h total" to the audit. The Manager sees the burn shift in the next render.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Active card footer &rarr; <code>Submit amendment</code></span>
+            <h3 class="wt-step-h">Raise a supplier-initiated change order.</h3>
+            <div class="wt-step-body">
+              <p>The <code>AgencyAmendmentModal</code> is the supplier-side counterpart to the Manager's amendment form. Same fields (reason, budget delta, schedule delta, justification), routed through the same policy tiers. The routing chip explicitly says "<b>Auto-route to buyer</b>" / "<b>Buyer manager review</b>" / "<b>Buyer full re-approval</b>" so the supplier knows what to expect.</p>
+              <p>Submit. The amendment lands in <code>project.amendments[]</code> with <code>submittedBy: "Agency"</code> and <code>state: "pending"</code>; the buyer reviews it on the Manager Amendments tab.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Active card footer &rarr; <code>Resource swap</code></span>
+            <h3 class="wt-step-h">Propose a worker swap with a reason code.</h3>
+            <div class="wt-step-body">
+              <p>Clicking <b>Resource swap</b> opens the same <code>ResourceSwapModal</code> the Manager uses, but with <code>tenantRole="supplier"</code> &mdash; copy inverts ("Propose swap" instead of "Send to supplier"), and an extra <b>Replacement candidate</b> field appears (required by policy by default). Reason codes come from the org-level list set in <code>config.resourceSwap.reasonCodes</code>.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Active card footer &rarr; <code>Closeout acknowledge</code></span>
+            <h3 class="wt-step-h">Acknowledge closeout (when the project is closing).</h3>
+            <div class="wt-step-body">
+              <p>Visible only when the project state is <i>Active</i> or <i>Closing</i> and no supplier ack exists yet. The modal asks the supplier to confirm "no further billing claim" against the project. On submit, <code>project.supplierClosed</code> gets stamped, the Manager's Closeout checklist flips its "Supplier acknowledgement" precondition to met, and if the project was already in <i>Closing</i> state it auto-transitions to <i>Closed</i>.</p>
+              <div class="wt-tip wt-tip--ok"><b>Two-party closeout, one component.</b> Both Manager <code>CloseoutTab</code> and Agency <code>AgencyCloseoutModal</code> read and write the same precondition checklist. Per Principle 08 of the Architecture Map: two-party flows share components.</div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 05 · WORKER                                                    -->
+    <!-- ============================================================== -->
+    <section id="worker" class="sr-section">
+      <div>
+        <span class="sr-h2-num">05 &middot; Worker &middot; accept, log time, close</span>
+        <h2 class="sr-h2">The worker app, project-flavoured.</h2>
+      </div>
+      <p class="sr-lead">Switch to a worker on a Project roster and the mobile experience grows two things: a Project assignment banner on Home, and a Projects tile on More. The Projects screen has five tabs &mdash; Log time, Expenses, Scope, Updates, Info &mdash; carrying the worker through the engagement from acknowledgement through weekly time and expense capture to amendment acknowledgement at end-of-engagement.</p>
+
+      <div class="wt-role" data-role="worker">
+        <div class="wt-role-glyph">W</div>
+        <div>
+          <div class="wt-role-eyebrow">Section 05 &middot; Worker</div>
+          <h3 class="wt-role-name">Worker mobile &middot; Projects panel</h3>
+          <p class="wt-role-sub">Lives in <code>&lt;WorkerProjectScreen /&gt;</code> from <code>pages/project-engagement-views.jsx</code>, mounted by <code>pages/worker-mobile.jsx</code> behind a "Projects" tile in the More screen and a home-tab banner.</p>
+        </div>
+        <a class="wt-role-jump" href="#teardown">Then jump to &sect;06 &rarr;</a>
+      </div>
+
+      <div class="wt-surfaces">
+        <span>Home banner</span>
+        <span>Project list</span>
+        <span>Log time</span>
+        <span>Expense entry</span>
+        <span>Scope ack</span>
+        <span>Updates feed</span>
+        <span>Info</span>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Header avatar &rarr; <code>Viewing as &rarr; Worker</code></span>
+            <h3 class="wt-step-h">Switch to a worker on a project roster.</h3>
+            <div class="wt-step-body">
+              <p>The Helios seed maps a handful of workers to project rosters by first name. Switch to a worker like <b>Maya</b>, <b>Marcus</b>, or <b>Nadia</b> to see the Project surfaces light up.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Worker mobile &middot; Home tab</span>
+            <h3 class="wt-step-h">Spot the Project assignment banner.</h3>
+            <div class="wt-step-body">
+              <p>On the Home tab, above the Shift invites section, a blue banner appears with the pill "<b>N project assignment(s)</b>", the project name, and the worker's role. Tap it &rarr; you jump straight into the More tab and the Projects panel.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Worker mobile &middot; <code>More &rarr; Projects</code></span>
+            <h3 class="wt-step-h">Open the Projects panel.</h3>
+            <div class="wt-step-body">
+              <p>Or tap the <b>Projects</b> tile directly from the More screen. The list shows every project this worker is rostered on, each card carrying state pill, project ID, name, the worker's role, allocation %, hours-to-date progress bar, and a "logged / planned" line.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Project list &rarr; tap a project</span>
+            <h3 class="wt-step-h">Land on the project detail with five tabs.</h3>
+            <div class="wt-step-body">
+              <p>Tap any project to open <code>WorkerProjectDetail</code>. The header carries the project ID, name, role, allocation, and supplier label. Five tabs sit below it: <b>Log time</b>, <b>Expenses</b>, <b>Scope</b>, <b>Updates</b>, <b>Info</b>.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail &rarr; <code>Log time</code></span>
+            <h3 class="wt-step-h">Enter weekly hours per task code.</h3>
+            <div class="wt-step-body">
+              <p>The Log time tab opens with a "<b>N hours remaining</b>" banner pulled from <code>plannedHours - hoursToDate</code>. A weekly grid spans Mon&ndash;Fri across the first three billable task codes (Discovery / Design / Build by default). Type hours into each cell. The footer totals live as you type; tap <b>Submit week</b>.</p>
+              <div class="wt-tip"><b>No budget dollars shown to the worker.</b> The worker sees only their own hours, not the supplier-burn or budget figures. Whether the supplier sees those is a separate policy (&sect;02 &middot; Section 08).</div>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail &rarr; <code>Expenses</code></span>
+            <h3 class="wt-step-h">Submit a phase-and-task-tagged expense.</h3>
+            <div class="wt-step-body">
+              <p>The Expenses tab opens a mobile form: <b>Category</b> (Travel / Equipment / Meals / Lodging / Misc), <b>Amount</b>, <b>Phase</b>, <b>Task</b>, <b>Description</b>. Submit. The expense lands on <code>project.expenses[]</code> with state <i>pending</i>, audit logged, and appears in the "My recent expenses" list below the form, tagged with the state pill.</p>
+              <p>PRJ-2026-018 has three seeded expenses for Jian Ren, Marcus Bukenya, and Nadia El-Sayed &mdash; switch to one of those workers to see the recent-expenses list populated.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail &rarr; <code>Scope</code></span>
+            <h3 class="wt-step-h">Acknowledge the project scope.</h3>
+            <div class="wt-step-body">
+              <p>The Scope tab shows the project summary, the full phase list with week ranges, and a checkbox: "<b>I acknowledge I've read the scope and any compliance docs</b>". Tap, then <b>Submit acknowledgement</b>. The acknowledgement gates first time entry in a production wiring.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail &rarr; <code>Updates</code></span>
+            <h3 class="wt-step-h">Acknowledge a change-order update.</h3>
+            <div class="wt-step-body">
+              <p>The Updates tab reads from <code>project.amendments[]</code> and surfaces those that touch this worker's planned hours or end date. Each item carries the amendment title, delta, justification, submission date, and an <b>Acknowledge</b> button. On tap the row flips to "<b>Acknowledged</b>" &mdash; the worker has now consented to the new shape and can log time against it.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Detail &rarr; <code>Info</code></span>
+            <h3 class="wt-step-h">Reference card &mdash; managers, supplier lead, dates.</h3>
+            <div class="wt-step-body">
+              <p>The Info tab is the worker's at-a-glance reference: project manager, supplier lead, the worker's own role and task code, allocation %, start &amp; end dates. Useful when the worker needs to call out to either side.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 06 · TEARDOWN                                                  -->
+    <!-- ============================================================== -->
+    <section id="teardown" class="sr-section">
+      <div>
+        <span class="sr-h2-num">06 &middot; Teardown &middot; turn it back off</span>
+        <h2 class="sr-h2">Flip Project off and the surface disappears cleanly.</h2>
+      </div>
+      <p class="sr-lead">Closing the demo &mdash; or testing that the engagement type degrades gracefully &mdash; means flipping the toggle from &sect;01 back off. Every Project surface across all four roles is gated; with the toggle off the prototype is byte-identical to the pre-Project ship.</p>
+
+      <div class="wt-role" data-role="teardown">
+        <div class="wt-role-glyph">&#xd7;</div>
+        <div>
+          <div class="wt-role-eyebrow">Step 06</div>
+          <h3 class="wt-role-name">Turn off engProject</h3>
+          <p class="wt-role-sub">Same path as &sect;01 in reverse. No data is destroyed &mdash; flipping the toggle back on restores every surface and every seeded record.</p>
+        </div>
+      </div>
+
+      <ol class="wt-steps">
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">Settings &rarr; Configuration &rarr; <code>Engagement types</code></span>
+            <h3 class="wt-step-h">Toggle Project off.</h3>
+            <div class="wt-step-body">
+              <p>Same card as &sect;01. The toggle flips back to grey; <code>featureflags:change</code> fires; every consumer re-resolves in place.</p>
+            </div>
+          </div>
+        </li>
+        <li class="wt-step">
+          <div>
+            <span class="wt-path">All routes</span>
+            <h3 class="wt-step-h">Walk back through every surface.</h3>
+            <div class="wt-step-body">
+              <p>The Configuration left rail loses its <b>Project settings</b> entry. The Requisitions list no longer carries the PRJ rows. The Agency Projects card disappears from the agency-side requisitions hub. The More screen on worker-mobile loses its Projects tile, and the Home banner stops rendering. The variant registry no longer routes PRJ-* ids to the Project body &mdash; though there are none in the list, so no detail-route attempt arises.</p>
+              <div class="wt-tip wt-tip--ok"><b>Storage is preserved.</b> Project records still sit at <code>flexwork.projects.v2.{orgId}</code>; per-org config is still at <code>flexwork.projectConfig.v2.{orgId}</code>. Flipping the toggle back on resurfaces everything immediately.</div>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="sr-callout" style="margin-top: 24px;">
+        <div class="sr-callout-tag">What good looks like</div>
+        <p>A clean run of this walkthrough &mdash; toggle on, four roles, toggle back off &mdash; takes about twelve minutes and exercises 48 of the 53 surfaces in the <a href="../Competitor Comparisons/Project Engagement Type Parity v0.1.html">Project Engagement Type Parity v0.1</a> task list. The two remaining open items (team-fill distribution mode and per-project compliance docs) are host-page extensions called out as future direction in the <a href="../Competitor Comparisons/Project Parity Architecture Map.html">architecture map</a>.</p>
+      </div>
+    </section>
+
+    <footer class="sr-foot">
+      <div>Flex Work VMS &middot; Project Engagement Flow Walkthrough &middot; v1.0</div>
+      <div>May 28, 2026 &middot; Internal walkthrough</div>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>

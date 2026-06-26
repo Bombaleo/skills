@@ -1,0 +1,147 @@
+/* =====================================================================
+   What is a VMS, and why now — 90-second animated explainer
+   Loads AFTER ../asset.css (nav reused). Player + scenes are custom.
+   Scoped under .asset .vx-*. Everest tokens only.
+   A fixed 16:9 stage uses container queries (cqw) so scene type scales
+   with the stage width. Controls live OUTSIDE the stage.
+   ===================================================================== */
+
+.asset { background: var(--evr-surface-root-secondary, var(--evr-neutral-96)); }
+
+.vx-wrap { max-width: 1040px; margin: 0 auto; padding: clamp(20px, 4vw, 44px) clamp(16px, 4vw, 32px) clamp(36px, 6vw, 64px); }
+
+.vx-intro { margin: 0 0 clamp(16px, 3vw, 24px); }
+.vx-intro .eyebrow { font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.1em; color: var(--evr-interactive-primary-default); margin: 0 0 10px; }
+.vx-intro h1 { font: var(--evr-display2); font-size: clamp(26px, 4vw, 40px); line-height: 1.07; letter-spacing: -0.015em; color: var(--evr-content-primary-highemp); margin: 0 0 10px; text-wrap: balance; }
+.vx-intro p { font: var(--evr-body1); font-size: 17px; line-height: 1.55; color: var(--evr-content-primary-default); margin: 0; max-width: 64ch; }
+
+/* ---- the stage ---- */
+.vx-stage {
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  background: var(--evr-blue-700);
+  border-radius: var(--evr-radius-md);
+  overflow: hidden;
+  box-shadow: var(--evr-depth-06);
+  color: #fff;
+}
+.vx-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); border-radius: inherit; }
+
+/* scene base — instant show/hide (clean cuts); entrance flair is on .vx-rise */
+.vx-scene {
+  position: absolute; inset: 0;
+  display: none; flex-direction: column; justify-content: center;
+  padding: 7cqw 8cqw;
+}
+.vx-scene.is-active { display: flex; }
+
+.vx-eyebrow { font-size: 2.1cqw; text-transform: uppercase; letter-spacing: 0.18em; color: var(--evr-blue-200); margin: 0 0 3cqw; font-family: var(--evr-font-text); font-weight: var(--evr-fw-bold); }
+.vx-h { font-family: var(--evr-font-display); font-weight: var(--evr-fw-bold); font-size: 6.4cqw; line-height: 1.04; letter-spacing: -0.02em; margin: 0; color: #fff; max-width: 20ch; text-wrap: balance; }
+.vx-sub { font-size: 2.7cqw; line-height: 1.45; color: var(--evr-blue-100); margin: 3cqw 0 0; max-width: 46ch; font-family: var(--evr-font-text); }
+
+/* big number */
+.vx-bignum { font-family: var(--evr-font-display); font-weight: var(--evr-fw-bold); font-size: 16cqw; line-height: 0.9; letter-spacing: -0.03em; color: #fff; }
+.vx-bignum .accent { color: var(--evr-teal-vivid-300); }
+.vx-stats { display: flex; gap: 6cqw; margin-top: 4cqw; }
+.vx-stat .v { font-family: var(--evr-font-display); font-weight: var(--evr-fw-bold); font-size: 7cqw; line-height: 1; color: #fff; letter-spacing: -0.02em; }
+.vx-stat .l { font-size: 2cqw; color: var(--evr-blue-100); margin-top: 1.5cqw; font-family: var(--evr-font-text); max-width: 22ch; }
+
+/* entrance helpers — VISIBLE is the base state. The animation plays FROM
+   hidden only while running (fill-mode none → resting state is always the
+   visible base), and every tier has a delay, so a render frozen at t=0
+   (print, throttled paint, reduced-motion) shows content, never opacity:0. */
+.vx-rise { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .vx-scene.is-active .vx-rise { animation: vxRise 620ms cubic-bezier(0.4,0,0.2,1) 80ms; }
+  .vx-scene.is-active .vx-rise.d1 { animation-delay: 200ms; }
+  .vx-scene.is-active .vx-rise.d2 { animation-delay: 360ms; }
+  .vx-scene.is-active .vx-rise.d3 { animation-delay: 520ms; }
+  .vx-scene.is-active .vx-rise.d4 { animation-delay: 680ms; }
+}
+@keyframes vxRise { from { opacity: 0; transform: translateY(2.4cqw); } to { opacity: 1; transform: none; } }
+
+/* pillar grid (scene 2) */
+.vx-pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.4cqw; margin-top: 4.5cqw; }
+.vx-pillar { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 2cqw; padding: 3cqw 2.6cqw; }
+.vx-pillar svg { width: 6cqw; height: 6cqw; color: var(--evr-teal-vivid-300); stroke-width: 1.6; }
+.vx-pillar .pt { font-family: var(--evr-font-text); font-weight: var(--evr-fw-bold); font-size: 2.4cqw; color: #fff; margin: 2cqw 0 1cqw; }
+.vx-pillar .pd { font-size: 1.9cqw; line-height: 1.4; color: var(--evr-blue-100); font-family: var(--evr-font-text); }
+
+/* loop flow (scene 3) */
+.vx-flow { display: flex; align-items: stretch; gap: 1.8cqw; margin-top: 4.5cqw; }
+.vx-step { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 2cqw; padding: 2.8cqw 2.2cqw; display: flex; flex-direction: column; gap: 1.4cqw; }
+.vx-step .sn { width: 5.4cqw; height: 5.4cqw; border-radius: 50%; background: var(--evr-teal-vivid-300); color: var(--evr-blue-700); display: flex; align-items: center; justify-content: center; font-family: var(--evr-font-display); font-weight: var(--evr-fw-bold); font-size: 2.6cqw; }
+.vx-step .st { font-family: var(--evr-font-text); font-weight: var(--evr-fw-bold); font-size: 2.2cqw; color: #fff; line-height: 1.2; }
+.vx-arrow { display: flex; align-items: center; color: var(--evr-blue-200); }
+.vx-arrow svg { width: 3cqw; height: 3cqw; }
+@container (max-width: 620px) { .vx-flow { flex-wrap: wrap; } .vx-arrow { display: none; } .vx-step { flex: 1 1 40%; } }
+
+/* where flex work fits (scene 4) */
+.vx-fit { display: flex; align-items: center; gap: 6cqw; }
+.vx-fit-text { flex: 1; }
+.vx-platform { flex: none; width: 34cqw; display: grid; gap: 1.6cqw; }
+.vx-layer { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 1.6cqw; padding: 2.2cqw 2.4cqw; font-family: var(--evr-font-text); font-weight: var(--evr-fw-demibold); font-size: 2.2cqw; color: var(--evr-blue-100); display: flex; align-items: center; gap: 1.8cqw; }
+.vx-layer.is-flex { background: var(--evr-teal-vivid-300); color: var(--evr-blue-700); border-color: transparent; font-weight: var(--evr-fw-bold); }
+.vx-layer .dot { width: 2.4cqw; height: 2.4cqw; border-radius: 50%; background: currentColor; opacity: 0.6; flex: none; }
+.vx-layer.is-flex .dot { opacity: 1; }
+
+/* CTA scene */
+.vx-scene--cta { align-items: center; text-align: center; }
+.vx-scene--cta .vx-h { max-width: 24ch; }
+.vx-logo { height: 5cqw; margin-bottom: 4cqw; filter: brightness(0) invert(1); }
+.vx-pill { display: inline-flex; align-items: center; gap: 1.6cqw; margin-top: 4cqw; background: #fff; color: var(--evr-blue-700); font-family: var(--evr-font-text); font-weight: var(--evr-fw-bold); font-size: 2.6cqw; padding: 2.2cqw 3.6cqw; border-radius: 100px; }
+.vx-pill svg { width: 3cqw; height: 3cqw; }
+
+/* scene chrome: chapter label + watermark */
+.vx-chapter { position: absolute; top: 5cqw; right: 6cqw; font-size: 1.8cqw; font-family: var(--evr-font-text); font-weight: var(--evr-fw-bold); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+.vx-watermark { position: absolute; bottom: 4.5cqw; left: 8cqw; height: 3cqw; opacity: 0.7; filter: brightness(0) invert(1); }
+.vx-scene--cta .vx-watermark, .vx-scene--hook .vx-chapter { display: none; }
+
+/* progress within stage (thin top bar) */
+.vx-progress { position: absolute; top: 0; left: 0; height: 4px; background: var(--evr-teal-vivid-300); width: 0; z-index: 5; transition: width 120ms linear; }
+
+/* ---- controls (outside stage) ---- */
+.vx-controls { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
+.vx-play {
+  flex: none; width: 52px; height: 52px; border-radius: 50%;
+  border: 0; background: var(--evr-interactive-primary-default); color: #fff;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background-color 150ms;
+}
+.vx-play:hover { background: var(--evr-interactive-primary-hover); }
+.vx-play svg { width: 22px; height: 22px; }
+.vx-scrub-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+.vx-time { font: var(--evr-body2); font-variant-numeric: tabular-nums; color: var(--evr-content-primary-default); min-width: 84px; }
+.vx-time b { color: var(--evr-content-primary-highemp); font-weight: var(--evr-fw-demibold); }
+.vx-scrub {
+  -webkit-appearance: none; appearance: none; flex: 1; height: 6px; border-radius: 100px;
+  background: var(--evr-border-decorative-default); cursor: pointer;
+}
+.vx-scrub::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--evr-interactive-primary-default); cursor: pointer; border: 2px solid var(--evr-surface-primary-default); box-shadow: var(--evr-depth-02); }
+.vx-scrub::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--evr-interactive-primary-default); cursor: pointer; border: 2px solid var(--evr-surface-primary-default); }
+.vx-restart { flex: none; height: 40px; padding: 0 14px; border: 1px solid var(--evr-border-decorative-default); background: var(--evr-surface-primary-default); color: var(--evr-content-primary-highemp); border-radius: var(--evr-radius-2xs); font: var(--evr-button-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: background-color 150ms; }
+.vx-restart:hover { background: var(--evr-surface-secondary-default); }
+.vx-restart svg { width: 15px; height: 15px; }
+
+/* chapter rail */
+.vx-chapters { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.vx-chip { flex: 1 1 auto; min-width: 120px; text-align: left; border: 1px solid var(--evr-border-decorative-lowemp); background: var(--evr-surface-primary-default); border-radius: var(--evr-radius-2xs); padding: 11px 13px; cursor: pointer; transition: border-color 150ms, background-color 150ms; }
+.vx-chip:hover { border-color: var(--evr-border-decorative-highemp); }
+.vx-chip.is-active { border-color: var(--evr-interactive-primary-default); background: var(--evr-surface-decorative-low-blue); }
+.vx-chip .cn { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-variant-numeric: tabular-nums; }
+.vx-chip .ct { font: var(--evr-body2-bold); color: var(--evr-content-primary-highemp); margin-top: 2px; line-height: 1.2; }
+.vx-chip.is-active .ct { color: var(--evr-interactive-primary-default); }
+
+/* caption / narration */
+.vx-caption { margin-top: 18px; padding: 16px 18px; background: var(--evr-surface-primary-default); border: 1px solid var(--evr-border-decorative-lowemp); border-radius: var(--evr-radius-sm); }
+.vx-caption .l { font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.08em; color: var(--evr-content-primary-lowemp); margin: 0 0 6px; }
+.vx-caption p { font: var(--evr-body1); color: var(--evr-content-primary-highemp); margin: 0; line-height: 1.5; }
+
+/* source note */
+.vx-note { margin-top: 16px; font: var(--evr-caption); color: var(--evr-content-primary-lowemp); line-height: 1.55; }
+.vx-note b { color: var(--evr-content-primary-default); font-weight: var(--evr-fw-demibold); }
+
+@media (prefers-reduced-motion: reduce) {
+  .vx-scene.is-active { animation: none; }
+  .vx-rise { transform: none; opacity: 1; animation: none; }
+}

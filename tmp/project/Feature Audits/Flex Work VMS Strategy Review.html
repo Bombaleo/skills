@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flex Work VMS — Strategy Review · v1.0</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="../styles-strategy.css" />
+</head>
+<body class="sr">
+
+<div class="sr-shell">
+
+  <!-- ============================================================== -->
+  <!-- Sticky TOC                                                     -->
+  <!-- ============================================================== -->
+  <aside class="sr-toc" aria-label="Sections">
+    <div class="sr-toc-mark">Internal · Strategy review</div>
+    <div class="sr-toc-title">Flex Work VMS — Strategy Review</div>
+    <div class="sr-toc-ver"><code>v1.0</code>May 22, 2026</div>
+    <ol>
+      <li><a href="#thesis">Thesis &amp; three verdicts</a></li>
+      <li><a href="#frontline">Frontline VMS — beat JoinedUp</a></li>
+      <li><a href="#overall">Overall VMS — Helios all-flags-on</a></li>
+      <li><a href="#dayforce">Dayforce integration — the moat</a></li>
+      <li><a href="#sequencing">Sequencing &amp; bets</a></li>
+    </ol>
+    <div class="sr-toc-foot">
+      <p><strong>What this is.</strong> A strategic read on the current Flex Work product against the three customers Dayforce has to win: high-volume frontline buyers, generalist enterprise VMS buyers, and Dayforce HCM customers consolidating their labor stack.</p>
+      <p><strong>Companion to</strong> the v1.4 Architecture doc. This document does <em>not</em> propose UI changes — only a directional read of capability gaps and the order to close them in.</p>
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- Main column                                                    -->
+  <!-- ============================================================== -->
+  <main class="sr-main">
+
+    <!-- HERO -->
+    <header class="sr-hero">
+      <div class="sr-eyebrow">Flex Work VMS · Strategy Review · v1.0</div>
+      <h1 class="sr-title">Three customers, three verdicts.</h1>
+      <p class="sr-deck">The platform's three-rung strategy is right. <b>The architecture is ready for it.</b> The product reality is uneven: frontline is competitive but still missing the table-stakes worker-engagement layer JoinedUp built its category on. The broader VMS surface is wide but shallow — the shapes exist, the depth does not. And the Dayforce integration story is brilliant on paper but barely visible on screen: we adopted the data models, we have not yet shipped the moments where Dayforce + Flex Work is undeniably better than either alone.</p>
+      <dl class="sr-meta">
+        <div><dt>Audience</dt><dd>Product · Sales · Design leadership</dd></div>
+        <div><dt>Published</dt><dd>May 22, 2026</dd></div>
+        <div><dt>Status</dt><dd>Reference · for review</dd></div>
+        <div><dt>Companion</dt><dd>Architecture v1.4</dd></div>
+      </dl>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- 01 · THESIS                                                    -->
+    <!-- ============================================================== -->
+    <section id="thesis" class="sr-section">
+      <div>
+        <span class="sr-h2-num">01 · Thesis &amp; three verdicts</span>
+        <h2 class="sr-h2">Win frontline now. Earn Dayforce-native. Take the broader market.</h2>
+      </div>
+      <p class="sr-lead">Each rung is a real fight against a real incumbent. We grade ourselves separately on each, because the same product is a different competitor in each room.</p>
+
+      <div class="sr-rungs">
+
+        <div class="sr-rung-card" data-rung="1">
+          <span class="sr-rung-tag">Rung 1 · Frontline VMS</span>
+          <h3 class="sr-rung-name">Beat JoinedUp by Beeline.</h3>
+          <p class="sr-rung-body">High-volume agency shift work — manufacturing, hospitality, retail, healthcare, logistics. Bread-and-butter Flex Work today. JoinedUp set the modern bar with worker-mobile-first ops; we have the data model, not the experience.</p>
+          <div class="sr-rung-foot"><b>Verdict.</b> B+ on data + admin tooling. C on the worker-facing comms loop that decides whether a 5am shift actually gets filled.</div>
+        </div>
+
+        <div class="sr-rung-card" data-rung="2">
+          <span class="sr-rung-tag">Rung 2 · Overall VMS</span>
+          <h3 class="sr-rung-name">Take Vndly's market.</h3>
+          <p class="sr-rung-body">Generalist enterprise VMS: Assignment + Project + SOW + IC + EOR. Helios is the seeded tenant with every flag on — and it shows the shapes are present but the depth that converts Vndly evaluations isn't there yet.</p>
+          <div class="sr-rung-foot"><b>Verdict.</b> B− on breadth. C− on depth — SOW change orders, IC compliance engine, rate intelligence, candidate matching.</div>
+        </div>
+
+        <div class="sr-rung-card" data-rung="3">
+          <span class="sr-rung-tag">Rung 3 · Dayforce integration</span>
+          <h3 class="sr-rung-name">Make Dayforce the only credible total-labor pitch.</h3>
+          <p class="sr-rung-body">Embed inside Dayforce Core, adopt every shared data model, ship the demoable cross-product moments that no standalone VMS can clone. The architecture is done. The visible product moments aren't.</p>
+          <div class="sr-rung-foot"><b>Verdict.</b> A− on contract design. C on lived experience — the customer can't <em>see</em> the integration in the product yet.</div>
+        </div>
+
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The bet</div>
+        <p><b>The three rungs are not parallel investments.</b> Rung 1 funds Rung 2 (frontline references buy us the right to talk Professional / SOW). Rung 2 funds Rung 3 (a complete VMS is a more attractive consolidation target). Rung 3 defends Rungs 1 and 2 (no standalone VMS can clone the Dayforce-native pitch). Cut Rung 1, the others starve. Skip Rung 3, we're a feature company competing with Vndly on features — which we lose for the next 24 months.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · FRONTLINE                                                 -->
+    <!-- ============================================================== -->
+    <section id="frontline" class="sr-section">
+      <div>
+        <span class="sr-h2-num">02 · Frontline VMS</span>
+        <h2 class="sr-h2">Beat JoinedUp where JoinedUp lives — on the worker's phone.</h2>
+      </div>
+      <p class="sr-lead">JoinedUp by Beeline wins frontline because it treats the <b>worker</b> as the primary user of the system, not the buyer. SMS-first comms, sub-60s shift offer-to-accept loops, predictive fill scoring, geofenced clock — these aren't fancy features, they're the table stakes a frontline ops director will ask about in the first 15 minutes of every demo. Fieldglass is a non-starter here (built for procurement, not ops). Vndly is roughly where we are: solid data model, light worker experience.</p>
+
+      <div class="sr-verdict" data-tone="watch">
+        <div>
+          <div class="sr-verdict-label">Verdict</div>
+          <div class="sr-verdict-grade">B+ <small>· in the room with JoinedUp; not winning it</small></div>
+        </div>
+        <p class="sr-verdict-body">The buyer-side surfaces — requisition intake, supplier distribution waves, timesheet approval, supplier tiers, late-cancel fee tiers — are <b>genuinely competitive</b>. What's missing is the worker-side conversion engine: broadcast → response → confirm → arrive → clock, run inside 10 minutes for a 5am shift. We have <code>worker-mobile.jsx</code>, <code>talent-pools.jsx</code>, <code>credentialing.jsx</code>, <code>remove-worker-panel.jsx</code> with SLA tiers, <code>schedule-console.jsx</code>, <code>roster builder</code>. We do not have the SMS broadcast loop, the no-show prediction, the geofenced clock, or the worker self-scheduling marketplace.</p>
+      </div>
+
+      <!-- Strengths vs gaps -->
+      <div class="sr-cols">
+        <div class="sr-col" data-tone="strong">
+          <div class="sr-col-h">
+            <h4>What we already do well</h4>
+            <span class="sr-col-count">8 strengths</span>
+          </div>
+          <ul>
+            <li><b>Multi-supplier distribution with cascading rounds.</b> <code>DistributionRule</code> + <code>SupplierTier</code> + manual overrides. Tighter than Fieldglass; on par with JoinedUp.</li>
+            <li><b>Site-manager-first timesheet approval.</b> One queue across contingent and badged via Dayforce Pay Approval Structure — JoinedUp can't claim this.</li>
+            <li><b>Late-cancel SLA tiering on worker removal.</b> <code>RW_SLA_TIERS</code> in <code>remove-worker-panel.jsx</code> auto-resolves fee based on hours-to-shift — Vndly and JoinedUp both still do this in spreadsheets.</li>
+            <li><b>Talent pools as first-class.</b> <code>talent-pools.jsx</code> + <code>talent-pool-rules.jsx</code> separate eligibility from execution — the right shape.</li>
+            <li><b>Credentialing tied to Dayforce Qualifications.</b> Single source of truth, not a parallel state machine.</li>
+            <li><b>Bulk-action surfaces on every list.</b> <code>bulk-actions.jsx</code> + <code>view-customizer.jsx</code> — the dense-data UX is genuinely good.</li>
+            <li><b>MSP-program switcher</b> in the omnibar — the right primitive for enterprise procurement teams running multiple programs.</li>
+            <li><b>Schedule console</b> with multi-day shift view — denser and faster than JoinedUp's current calendar.</li>
+          </ul>
+        </div>
+
+        <div class="sr-col" data-tone="gap">
+          <div class="sr-col-h">
+            <h4>Where JoinedUp pulls ahead</h4>
+            <span class="sr-col-count">9 gaps</span>
+          </div>
+          <ul>
+            <li><b>SMS-first worker comms.</b> JoinedUp blasts open shifts via SMS to ranked pool members and accepts replies as confirmations. We have no broadcast channel and no SMS provider integration.</li>
+            <li><b>Worker self-scheduling marketplace.</b> Workers see open shifts in their app and self-claim. Today our worker mobile is view-only on the schedule.</li>
+            <li><b>Geofenced + biometric clock-in.</b> Required RFP item for every frontline procurement deal &gt; 1,000 workers. We currently have no geofence enforcement.</li>
+            <li><b>No-show prediction.</b> JoinedUp ranks workers by reliability + late-cancel history and surfaces "fill confidence: 62%" 24h before shift. We track none of these signals.</li>
+            <li><b>Direct-source-first fills.</b> Open shifts go to internal pool / past workers <em>before</em> distribution to suppliers — saves 8–15% markup. We always start with the supplier tier.</li>
+            <li><b>Re-engagement of past workers.</b> "Workers who clocked at this site &gt;3× in last 90d" is one-click for JoinedUp; we have no surface for it.</li>
+            <li><b>Pattern-based bulk requisitions.</b> "10 workers × 12 shifts/week × 4 weeks at Plant #02" as a single request. We have requisition templates but not pattern intake.</li>
+            <li><b>In-shift live board.</b> Walk-on capture, no-show flagging, real-time confirmed-vs-clocked count. Our schedule console is a pre-shift tool, not a during-shift one.</li>
+            <li><b>Incentive overlays on hard-to-fill shifts.</b> JoinedUp lets ops add a $5/hr surge for a thin shift; we have no surge primitive in Pricing.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Competitor matrix -->
+      <div class="sr-comp">
+        <table>
+          <thead>
+            <tr>
+              <th>Frontline capability</th>
+              <th>Flex Work</th>
+              <th>JoinedUp (Beeline)</th>
+              <th>Fieldglass</th>
+              <th>Vndly</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="sr-comp-cap">Multi-supplier distribution + tiers</td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">SMS broadcast / open-shift offer</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Worker self-scheduling app</td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Geofenced / biometric clock</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">No-show / fill-confidence prediction</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Talent-pool first sourcing</td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Site-mgr unified time approval</td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">SLA-tiered late-cancel fees</td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Site-manager mobile approvals</td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Surge / incentive pricing on shifts</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- The must-ships -->
+      <div>
+        <h3 class="sr-h3" style="margin-bottom:14px;">The must-ships to win frontline procurement RFPs</h3>
+        <div class="sr-recs">
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 01</span>
+              <span class="sr-rec-pri" data-p="P0">P0 · this quarter</span>
+            </div>
+            <h4 class="sr-rec-h">SMS broadcast loop on the open shift.</h4>
+            <p class="sr-rec-body">Twilio/Sinch integration that fires when a shift goes unfilled inside the cascade window. Targets ranked workers from the talent pool first, then suppliers' rosters. Replies post back as <code>WorkAssignment</code> drafts pending site-mgr 1-tap confirm. <b>This is the single biggest gap to JoinedUp parity.</b></p>
+            <div class="sr-rec-foot"><span data-tag="new">New surface</span><span>Talent pools</span><span>Worker mobile</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 02</span>
+              <span class="sr-rec-pri" data-p="P0">P0 · this quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Geofenced clock with break enforcement.</h4>
+            <p class="sr-rec-body">Worker mobile records lat/long on punch; out-of-radius punches flag for site-manager review. Honors Dayforce Time Entry Policy's break rules — we do not re-implement. Hardware-free; phone-based. <b>Required-item on every healthcare and warehouse RFP we lose.</b></p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend worker mobile</span><span>Dayforce TimePair</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 03</span>
+              <span class="sr-rec-pri" data-p="P0">P0 · this quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Worker reliability score &amp; fill-confidence.</h4>
+            <p class="sr-rec-body">Roll up clock-vs-scheduled-start, late-cancel rate, no-show count, tenure into a single 0–100 score on every <code>Employee</code> row. Surface it in talent-pool sorting and on the requisition's fill-confidence header ("12 of 15 likely · 92% fill confidence"). Closes the JoinedUp prediction gap with one composite metric.</p>
+            <div class="sr-rec-foot"><span data-tag="new">New derivation</span><span>Workforce</span><span>Schedule console</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 04</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Direct-source-first cascade.</h4>
+            <p class="sr-rec-body">New distribution wave that runs <em>before</em> the supplier tiers: pool workers (past-shift, alumni, internal float). Lands the shift cheaper (no markup) and faster. Make the wave configurable per <code>DistributionRule</code> alongside supplier tiers. Pure margin upside for the buyer; existing supplier panel stays intact for fallback.</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend distribution</span><span>Talent pools</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 05</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Worker self-scheduling marketplace.</h4>
+            <p class="sr-rec-body">Workers see eligible open shifts in their mobile app and self-claim. Eligibility is the existing talent-pool-rules intersect (job, certs, site, distance). Site-manager confirms 1-tap or auto-confirms if site policy allows. The frontline equivalent of "Apply" — and the surface JoinedUp's customers love most.</p>
+            <div class="sr-rec-foot"><span data-tag="new">New surface</span><span>Worker mobile</span><span>Talent pools</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 06</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Pattern-based bulk requisitions.</h4>
+            <p class="sr-rec-body">Intake mode where a manager declares the <em>shape</em> ("10× Material Handler, Mon–Fri 6am–3pm, weeks of Jun 1 + Jun 8") and we explode into Position / JobRequisition records. The current requisition templates are close — pattern intake is the layer on top. Halves the time to publish a multi-week order.</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend new-requisition</span><span>Templates</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 07</span>
+              <span class="sr-rec-pri" data-p="P2">P2 · later this year</span>
+            </div>
+            <h4 class="sr-rec-h">In-shift live board for site managers.</h4>
+            <p class="sr-rec-body">Real-time view of confirmed-vs-clocked, no-show flags as workers miss the 15-min grace, walk-on capture (an unscheduled worker shows up; site-mgr taps "Add to shift"). The during-shift companion to the pre-shift schedule console. Distinguishes us from every VMS that ends at the punch-in.</p>
+            <div class="sr-rec-foot"><span data-tag="new">New surface</span><span>Schedule console</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 08</span>
+              <span class="sr-rec-pri" data-p="P2">P2 · later this year</span>
+            </div>
+            <h4 class="sr-rec-h">Shift surge pricing overlay.</h4>
+            <p class="sr-rec-body">Pricing rule that bumps bill rate +$N/hr or +X% on shifts the cascade marks as hard-to-fill (low historical fill rate, &lt; 24h to start, weekend). Surfaces in worker comms ("Bonus shift: +$5/hr"). The <code>PricingRule</code> engine already exists; this is one rule type.</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend pricing rules</span></div>
+          </article>
+
+        </div>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The frontline closing argument</div>
+        <p><b>Three of the four highest-leverage frontline gaps are user-experience layers on top of data we already have.</b> Reliability score → derive from <code>TimePair</code> history. Pattern intake → templates + a loop. Direct-source-first → reorder existing cascade waves. The fourth (geofenced clock) is a worker-mobile extension with one new field on the punch payload.</p>
+        <p>None of this is platform work. It's product work. The architecture's already paid for.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · OVERALL VMS                                               -->
+    <!-- ============================================================== -->
+    <section id="overall" class="sr-section">
+      <div>
+        <span class="sr-h2-num">03 · Overall VMS</span>
+        <h2 class="sr-h2">Helios with every flag on — the breadth is right, the depth is not.</h2>
+      </div>
+      <p class="sr-lead">Helios Power Generation is the seeded tenant designed to prove Rung 3: every engagement type on, every supplier type on, Frontline + Professional job catalogs, supplier-funded. It is the right shape — one Requisitions list with Shift / Assignment / Project / SOW chips, one Workforce list with Agency / IC / EOR axis, one Invoices list spanning hourly and milestone billing. <b>The shape is what wins Rung 3 evals on slide one.</b> Where we lose them is slides three through eight, when a Vndly demo gets specific about SOW change orders, IC compliance, rate intelligence, and AI-ranked candidate proposals.</p>
+
+      <div class="sr-verdict" data-tone="watch">
+        <div>
+          <div class="sr-verdict-label">Verdict</div>
+          <div class="sr-verdict-grade">B− <small>· competitive on the org chart; thin on the deals that close</small></div>
+        </div>
+        <p class="sr-verdict-body">Helios proves the type-blind data model works — universal scopes filter cleanly across surfaces with engagement-type chip-bars and supplier-type axes. The Professional flow exists (<code>professional-work.jsx</code>, <code>professional-req-details.jsx</code>, <code>professional-onboard.jsx</code>); the SOW flow exists (<code>sow.jsx</code>, <code>sow-dashboard.jsx</code>, milestones, change-order panels referenced); IC and EOR onboarding flows exist. But every one of these is a shape that needs to harden into a workflow before it survives an enterprise evaluation against Vndly.</p>
+      </div>
+
+      <!-- Strengths vs gaps -->
+      <div class="sr-cols">
+        <div class="sr-col" data-tone="strong">
+          <div class="sr-col-h">
+            <h4>What Helios already proves</h4>
+            <span class="sr-col-count">7 strengths</span>
+          </div>
+          <ul>
+            <li><b>One Requisitions list, four engagement types.</b> Chip-bar filter, not separate destinations. Vndly still ships SOW as a sibling tab to Worker Requests; we don't.</li>
+            <li><b>One Workforce list with Agency / IC / EOR axis.</b> Native axis filter via <code>axis-scope-bar.jsx</code>; supplier-type axis derived from <code>supplier-types-config.jsx</code>. Genuinely modern.</li>
+            <li><b>Per-org engagement-type configuration.</b> Settings → Configuration → Engagement Types. The right place; tenant-scoped; flips activate downstream lists.</li>
+            <li><b>SOW with milestones + supplier-funding pre-selected.</b> Helios ships supplier-funded; <code>SOWAgreement</code> + <code>MilestoneAcceptance</code> are first-class.</li>
+            <li><b>Project burn ledger.</b> <code>ProjectBudget</code> + <code>BurnLedgerEntry</code> — the right primitive for T&amp;M-against-budget. Fieldglass still doesn't ship a burn view this clean.</li>
+            <li><b>Supplier contract rate-card + markup engine.</b> <code>SupplierContract</code> + <code>PricingRule</code> + <code>MarkupRule</code> write to <code>ContingentEngagement.billRate</code> — the right composition.</li>
+            <li><b>AI assistant scoped to live data.</b> <code>ai-chat.jsx</code> reads from workforce / invoices / requisitions / timesheets / suppliers — answers "what did we spend last week at the Reactor Yard" with real numbers, not a chatbot script.</li>
+          </ul>
+        </div>
+
+        <div class="sr-col" data-tone="gap">
+          <div class="sr-col-h">
+            <h4>Where Vndly wins the deal today</h4>
+            <span class="sr-col-count">10 gaps</span>
+          </div>
+          <ul>
+            <li><b>SOW change-order workflow.</b> Vndly's SOW carries draft → redline → amendment → countersign with full version history. We have the agreement object; we don't have the lifecycle.</li>
+            <li><b>IC classification engine.</b> Vndly runs a ~25-question worker-classification questionnaire that produces a risk score and audit log. We have an IC supplier type and an onboarding flow; we don't have the compliance defensibility.</li>
+            <li><b>Co-employment &amp; tenure alerts.</b> Auto-track days-on-assignment per worker; alert before 18-month / 24-month limits; force off-board policy. We don't track tenure as a worker-level state.</li>
+            <li><b>Rate benchmark intelligence.</b> Vndly markets "market rate by skill × location × tenure" pulled from program data. Our rate cards are configured; we don't surface benchmarks.</li>
+            <li><b>AI-ranked candidate proposals.</b> Supplier proposes 5 candidates; system ranks them against the requisition's must-haves and historical fill quality. We list proposals; we don't score them.</li>
+            <li><b>Conditional approval routing.</b> "Over $50K → CFO; over $150K → CFO + CHRO; remote SOW → Legal." Vndly's approval builder is a drag-drop graph. Our <code>workflows.jsx</code> is closer to linear approval chains.</li>
+            <li><b>Reusable SOW catalog by service category.</b> Pre-priced services with standard deliverables ("WordPress migration · $18K · 4 wks"). Buyers consume from a catalog, not draft from blank.</li>
+            <li><b>Multi-currency + FX handling on invoices.</b> Invoices have a currency field; cross-currency consolidation, FX-as-of date, and rolled-up GL push aren't there.</li>
+            <li><b>VAT / global indirect tax.</b> <code>salesTax</code> flag is a US-style overlay. Enterprise European and APAC deals require multi-jurisdiction VAT with reverse-charge logic.</li>
+            <li><b>Resource forecasting.</b> Vndly's "next-quarter contingent need" forecast pulls from BU plans + historical fills. We don't forecast.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Competitor matrix -->
+      <div class="sr-comp">
+        <table>
+          <thead>
+            <tr>
+              <th>Overall VMS capability</th>
+              <th>Flex Work (Helios)</th>
+              <th>Vndly (Workday)</th>
+              <th>Fieldglass (SAP)</th>
+              <th>Beeline (core)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="sr-comp-cap">Type-blind universal lists</td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">SOW lifecycle (draft → amend → close)</td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Project burn against budget</td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">IC classification &amp; compliance</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Tenure / co-employment alerts</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Rate benchmark intelligence</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">AI candidate ranking</td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Conditional approval graphs</td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Multi-currency + VAT</td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Supplier scorecards + QBR automation</td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+              <td><span class="sr-comp-grade" data-g="lead">Lead</span></td>
+            </tr>
+            <tr>
+              <td class="sr-comp-cap">Resource forecasting</td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+              <td><span class="sr-comp-grade" data-g="par">Par</span></td>
+              <td><span class="sr-comp-grade" data-g="behind">Behind</span></td>
+              <td><span class="sr-comp-grade" data-g="off">Missing</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- The must-ships -->
+      <div>
+        <h3 class="sr-h3" style="margin-bottom:14px;">The must-ships to compete with Vndly head-up</h3>
+        <div class="sr-recs">
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 09</span>
+              <span class="sr-rec-pri" data-p="P0">P0 · this quarter</span>
+            </div>
+            <h4 class="sr-rec-h">SOW lifecycle: draft → redline → amend → close.</h4>
+            <p class="sr-rec-body">Extend <code>SOWAgreement</code> with versioned states, change-order child records, and a redline viewer. Every SOW deal we don't win is lost on this object — Vndly's SOW screen converts the eval. Pair with reusable SOW templates per service category.</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend SOW</span><span>Templates</span><span>Workflows</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 10</span>
+              <span class="sr-rec-pri" data-p="P0">P0 · this quarter</span>
+            </div>
+            <h4 class="sr-rec-h">IC classification questionnaire + risk score.</h4>
+            <p class="sr-rec-body">~20 country-aware questions on the IC onboarding flow that produce a per-worker risk score (Low / Medium / High) and a defensible audit log. High-risk workers force re-route to EOR. This is the single largest "is it compliant?" objection at the procurement table — and a one-screen feature.</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend contractor onboard</span><span>Compliance</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 11</span>
+              <span class="sr-rec-pri" data-p="P0">P0 · this quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Tenure tracking &amp; co-employment alerts.</h4>
+            <p class="sr-rec-body">Derive worker tenure from <code>ContingentEngagement</code> + <code>WorkAssignment</code> history. Per-org policy ("18 months max · then 90-day cooldown") with alerts at 80% / 95% / 100%. Compliance/legal won't approve a US enterprise rollout without this.</p>
+            <div class="sr-rec-foot"><span data-tag="new">New derivation</span><span>Settings policies</span><span>Workforce</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 12</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Rate benchmark surface on every requisition.</h4>
+            <p class="sr-rec-body">Cross-program rollup: for a Senior Java Developer in Chicago, what's the p25 / p50 / p75 bill rate from the last 12 months of Helios + other Flex Work tenants? Show on intake, show on supplier proposals. The product becomes more valuable as more tenants ship.</p>
+            <div class="sr-rec-foot"><span data-tag="new">New analytics surface</span><span>Pricing</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 13</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">AI candidate ranking on proposals.</h4>
+            <p class="sr-rec-body">When suppliers propose candidates, rank them against the requisition's must-haves, certifications, distance, historical site fit. Surface as a score chip alongside each proposal. Reuses the data the <code>ai-chat.jsx</code> assistant already exposes; new surface, no new pipeline.</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend distribution</span><span>AI assistant</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 14</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Conditional approval graphs.</h4>
+            <p class="sr-rec-body">Workflow builder that routes by dollar amount, BU, supplier, location, engagement type — not just a linear chain. Output composes into the existing <code>workflows.jsx</code> engine and writes to Dayforce's native Workflow approvals (Integration 05 in the architecture doc).</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend workflows</span><span>Dayforce workflow</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 15</span>
+              <span class="sr-rec-pri" data-p="P2">P2 · later this year</span>
+            </div>
+            <h4 class="sr-rec-h">Multi-currency &amp; VAT depth.</h4>
+            <p class="sr-rec-body">FX-as-of-invoice-date, cross-currency tenant rollup, multi-jurisdiction VAT calc (with reverse-charge logic for EU intra-community). Unblocks any deal with European or APAC subsidiaries. The <code>salesTax</code> flag is the right starting point; this is the depth layer.</p>
+            <div class="sr-rec-foot"><span data-tag="extend">Extend invoices</span><span>Sales tax</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 16</span>
+              <span class="sr-rec-pri" data-p="P2">P2 · later this year</span>
+            </div>
+            <h4 class="sr-rec-h">Resource forecasting.</h4>
+            <p class="sr-rec-body">Quarterly contingent-need forecast per BU + job family, derived from historical fills + open requisitions + Dayforce workforce plans (when integration 03 + 04 mature). Anchors the conversation with procurement leadership — and only Dayforce can credibly build it because we own both sides of the labor plan.</p>
+            <div class="sr-rec-foot"><span data-tag="df">Dayforce-leveraged</span><span>Insights</span></div>
+          </article>
+
+        </div>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The overall-VMS closing argument</div>
+        <p>Helios already wins the <em>"can your VMS handle our four engagement types in one product?"</em> question. It loses the <em>"can it handle our four engagement types <b>defensibly</b>?"</em> question — the SOW change-order trail, the IC classification audit log, the tenure-policy enforcement, the conditional approvals. <b>Each of these is a workflow on an object we already model.</b> No new top-level tables. We are 6–9 months of disciplined product work from a serious Vndly fight, not a re-platform.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 04 · DAYFORCE INTEGRATION                                      -->
+    <!-- ============================================================== -->
+    <section id="dayforce" class="sr-section">
+      <div>
+        <span class="sr-h2-num">04 · Dayforce integration</span>
+        <h2 class="sr-h2">The data models are adopted. The killer moments aren't.</h2>
+      </div>
+      <p class="sr-lead">The architecture is excellent: Flex Work runs as its own Rails monolith + Postgres + deploy pipeline, embeds in Dayforce Core via iframe with SSO + theming + <code>postMessage</code>, and adopts the Dayforce data model for every shared primitive — <code>Employee</code>, <code>OrgUnit</code>, <code>Job</code>, <code>JobAssignment</code>, <code>Position</code>, <code>WorkAssignment</code>, <code>TimePair</code>, <code>LaborMetricCode</code>, <code>JobRequisition</code>, <code>UserRole</code>. The eight SOAP integrations in the architecture doc cover the wire. <b>What's missing is the lived product moment</b> — the screens where a customer feels that Flex Work + Dayforce is a single labor strategy, not two systems shaking hands behind a curtain.</p>
+
+      <div class="sr-verdict" data-tone="watch">
+        <div>
+          <div class="sr-verdict-label">Verdict</div>
+          <div class="sr-verdict-grade">B− <small>· brilliant on paper; mostly invisible to the customer today</small></div>
+        </div>
+        <p class="sr-verdict-body">Adopting the data model is necessary, not sufficient. The Dayforce-native pitch is won or lost on a handful of demoable cross-product moments — a unified inbox, an integrated WFM-to-contingent forecast handoff, a temp-to-perm flow that takes 30 seconds, a total-workforce headcount number that includes contingent. None of these require new platform work. They are product surfaces that compose primitives we already adopt.</p>
+      </div>
+
+      <!-- Killer moments -->
+      <div>
+        <h3 class="sr-h3" style="margin-bottom:14px;">The eight cross-product moments — what no standalone VMS can build</h3>
+        <div class="sr-moments">
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">01</div>
+            <div>
+              <h4>WFM demand forecast → auto-draft contingent requisitions.</h4>
+              <p>Dayforce Workforce Management forecasts a Friday-shift gap of 24 heads at Plant #02 from historical demand. Flex Work consumes the forecast (via the <code>EmployeeWorkAssignment</code> + scheduling integration), pre-drafts a Shift requisition with role / qty / time / site, and surfaces it in the manager's inbox for one-tap publish. <b>Vndly cannot ship this — they don't own WFM.</b></p>
+              <p>Needs: read access to WFM forecasts (new Dayforce-side report XRefCode); a draft state on <code>JobRequisition</code> wired to the WFM event bus.</p>
+            </div>
+          </article>
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">02</div>
+            <div>
+              <h4>Total workforce headcount — one number, badged + contingent.</h4>
+              <p>Dayforce HR Analytics' headcount tile reads <code>Employee</code> rows including <code>workerType = ContingentWorker</code>. Add a 1-line filter chip on the tile ("Include contingent: On") and finance leadership sees the only honest total-workforce number in the market. Today most enterprises stitch this from spreadsheets.</p>
+              <p>Needs: Dayforce-side tile filter; nothing on Flex Work — the rows already sync via Integration 02.</p>
+            </div>
+          </article>
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">03</div>
+            <div>
+              <h4>Unified manager inbox across HR + contingent.</h4>
+              <p>A site manager today has two inboxes: Dayforce approvals (PTO, schedule changes, badged time) and Flex Work approvals (timesheet, supplier confirm, late-cancel waiver). One inbox in Dayforce Core, items badged by source, click-through deep-links into the right surface. The <code>postMessage</code> contract is already there; the inbox aggregator isn't.</p>
+              <p>Needs: a Dayforce-side inbox aggregator that consumes Flex Work's workflow events; the events are already firing via Integration 05.</p>
+            </div>
+          </article>
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">04</div>
+            <div>
+              <h4>Temp-to-perm in 30 seconds.</h4>
+              <p>The architecture document defines Integration 06 — flip <code>workerType</code> from <code>ContingentWorker</code> to <code>Employee</code>, end-date the contingent assignment, open the primary <code>WorkAssignment</code>, drop from the supplier's invoice scope. <b>Make this a single guided panel</b> in the worker detail screen, not an Implementation-Guide procedure. The most emotional moment in the contingent lifecycle deserves a real product surface.</p>
+              <p>Needs: a guided conversion panel on Worker detail; tenure + qualifications + headcount validation surfaced inline; one approval submit calls the workflow chain. <code>contractor-onboard.jsx</code> is the model.</p>
+            </div>
+          </article>
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">05</div>
+            <div>
+              <h4>Skills round-trip with Dayforce Talent.</h4>
+              <p>Dayforce Talent maintains a skills cloud per employee. Contingent workers come in with skills from the supplier; we should write them back to the Employee row (filtered for tenure / verification). On the buyer side, the requisition's must-have skills should pull from Talent's ontology so a "Senior Java Developer" means the same thing on a badged JR and a contingent JR.</p>
+              <p>Needs: bidirectional skills sync; reuse <code>JobAssignment.Qualifications</code> as the carrier. Closes the loop between contingent-as-talent-pipeline and badged hiring.</p>
+            </div>
+          </article>
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">06</div>
+            <div>
+              <h4>Contingent on the Dayforce org chart.</h4>
+              <p>Today the Dayforce Org Chart shows badged employees. Add contingent workers (visually distinguished — dotted border, supplier badge) so site managers see actual headcount on the ground, not paper headcount. Reuses the <code>WorkAssignment</code> sync; the only new work is the visual treatment on the Dayforce side.</p>
+              <p>Needs: Dayforce-side org-chart render tweak; supplier-attribution lookup via <code>ContingentEngagement.supplierId</code>.</p>
+            </div>
+          </article>
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">07</div>
+            <div>
+              <h4>Dayforce Wallet for contingent on-demand pay.</h4>
+              <p>Dayforce Wallet's on-demand-pay product is a category-leading retention tool for badged. Extend it to contingent workers via the supplier (supplier loads earned wages; worker draws via Wallet). Net new revenue for Dayforce, new retention tool for suppliers, real differentiation for the buyer's frontline workforce. <b>This is the kind of moment no standalone VMS can match.</b></p>
+              <p>Needs: a Wallet-side contingent contract; Flex Work pushes earned-but-unbilled hours into the Wallet ledger.</p>
+            </div>
+          </article>
+
+          <article class="sr-moment">
+            <div class="sr-moment-num">08</div>
+            <div>
+              <h4>Dayforce Copilot answers Flex Work questions.</h4>
+              <p>The product already ships <code>ai-chat.jsx</code>. Expose its data brief (workforce / suppliers / invoices / requisitions / timesheets) to Dayforce Copilot via a structured tool call. A Dayforce user asks "Which suppliers are off-rate for Plant #02 this quarter?" and Copilot answers — without switching apps. Distinguishes Dayforce Copilot from every HR-only AI assistant on the market.</p>
+              <p>Needs: a tool-calling contract between Copilot and Flex Work's data brief; reuse the <code>aiChat</code> assistant's read paths.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- The deeper recs -->
+      <div>
+        <h3 class="sr-h3" style="margin-bottom:14px;">Structural integrations beyond the demoable moments</h3>
+        <div class="sr-recs">
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 17</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Mandatory training round-trip with Dayforce LMS.</h4>
+            <p class="sr-rec-body">Site-required training (forklift cert, blood-borne pathogens, OSHA refresh) should resolve from Dayforce LMS, not a parallel Flex Work credentialing screen. Compliance status on the worker row stays derived from credential expiry rollups — extend it to consume LMS completions.</p>
+            <div class="sr-rec-foot"><span data-tag="df">Dayforce-leveraged</span><span>Credentialing</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 18</span>
+              <span class="sr-rec-pri" data-p="P1">P1 · next quarter</span>
+            </div>
+            <h4 class="sr-rec-h">Time-off-coordinated contingent backfill.</h4>
+            <p class="sr-rec-body">When a badged employee's PTO is approved in Dayforce, fire an event into Flex Work that pre-drafts a backfill requisition for the manager (role, dates, site auto-filled). The manager either publishes or dismisses. Closes a 2-week gap every site manager loses to manual coordination.</p>
+            <div class="sr-rec-foot"><span data-tag="df">Dayforce-leveraged</span><span>Requisitions</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 19</span>
+              <span class="sr-rec-pri" data-p="P2">P2 · later this year</span>
+            </div>
+            <h4 class="sr-rec-h">Cross-worker-type shift swap console.</h4>
+            <p class="sr-rec-body">A badged worker drops a shift; the swap pool eligibility extends to qualified contingent workers in the talent pool, not just other badged workers. One console. One eligibility model derived from <code>JobAssignment.Qualifications</code> regardless of <code>workerType</code>.</p>
+            <div class="sr-rec-foot"><span data-tag="df">Dayforce-leveraged</span><span>Schedule</span></div>
+          </article>
+
+          <article class="sr-rec">
+            <div class="sr-rec-head">
+              <span class="sr-rec-num">REC 20</span>
+              <span class="sr-rec-pri" data-p="P2">P2 · later this year</span>
+            </div>
+            <h4 class="sr-rec-h">Compensation alignment alerts.</h4>
+            <p class="sr-rec-body">Dayforce Compensation Management owns badged pay bands. Surface "contingent bill rate exceeds badged P75 by &gt;20%" alerts on supplier contract review and on the new rate-benchmark surface (REC 12). The most defensible rate-arbitrage story in the market.</p>
+            <div class="sr-rec-foot"><span data-tag="df">Dayforce-leveraged</span><span>Supplier contract</span></div>
+          </article>
+
+        </div>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">The Dayforce-native closing argument</div>
+        <p>Customers don't buy data-model adoption — they buy <em>moments</em>. The architecture is paid for. The wire is paid for. <b>What we owe the customer next is eight screens</b> they can't get anywhere else: the WFM-to-requisition handoff, the unified inbox, the 30-second temp-to-perm panel, the total-workforce headcount tile, the cross-product Copilot, contingent on the org chart, Wallet for contingent, and skills round-trip with Talent.</p>
+        <p>Each of those is a Q's worth of work for a small joint team. Ship four of the eight and the Dayforce-native pitch is undeniable — and uncloneable.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 05 · SEQUENCING                                                -->
+    <!-- ============================================================== -->
+    <section id="sequencing" class="sr-section">
+      <div>
+        <span class="sr-h2-num">05 · Sequencing &amp; bets</span>
+        <h2 class="sr-h2">Now → Next → Horizon — what gets shipped in what order.</h2>
+      </div>
+      <p class="sr-lead">The three rungs are not parallel. Frontline funds the references that buy us the right to be in Vndly evaluations; Helios depth makes Dayforce-native a complete pitch instead of an HCM-only one. <b>The order matters more than the totals.</b></p>
+
+      <div class="sr-seq">
+
+        <div class="sr-seq-card" data-when="now">
+          <div class="sr-seq-when">Now · this quarter (P0)</div>
+          <h3 class="sr-seq-name">The frontline parity sprint.</h3>
+          <p class="sr-seq-body">Three P0 frontline ships plus three P0 overall-VMS ships. Every one of them is product work on an architecture we already shipped. No new tables.</p>
+          <ul class="sr-seq-list">
+            <li>SMS broadcast loop (REC 01)</li>
+            <li>Geofenced clock (REC 02)</li>
+            <li>Worker reliability score (REC 03)</li>
+            <li>SOW lifecycle (REC 09)</li>
+            <li>IC classification (REC 10)</li>
+            <li>Tenure tracking (REC 11)</li>
+          </ul>
+        </div>
+
+        <div class="sr-seq-card" data-when="next">
+          <div class="sr-seq-when">Next · 2 quarters out (P1)</div>
+          <h3 class="sr-seq-name">The Vndly-fight quarter.</h3>
+          <p class="sr-seq-body">Frontline marketplace + cascade re-order; the depth layer on Helios; the first three Dayforce-native moments customers actually see in the product, not the architecture doc.</p>
+          <ul class="sr-seq-list">
+            <li>Direct-source cascade (REC 04)</li>
+            <li>Worker self-scheduling (REC 05)</li>
+            <li>Pattern bulk requisitions (REC 06)</li>
+            <li>Rate benchmark (REC 12)</li>
+            <li>AI candidate ranking (REC 13)</li>
+            <li>Conditional approvals (REC 14)</li>
+            <li>Temp-to-perm panel (Moment 04)</li>
+            <li>Unified inbox (Moment 03)</li>
+            <li>LMS round-trip (REC 17)</li>
+          </ul>
+        </div>
+
+        <div class="sr-seq-card" data-when="horizon">
+          <div class="sr-seq-when">Horizon · 12 months out (P2)</div>
+          <h3 class="sr-seq-name">The defensibility layer.</h3>
+          <p class="sr-seq-body">In-shift ops + surge pricing on the frontline side; multi-currency + forecasting on the VMS side; the demoable cross-product moments that turn Dayforce-native from a contract into a movement.</p>
+          <ul class="sr-seq-list">
+            <li>In-shift live board (REC 07)</li>
+            <li>Surge pricing (REC 08)</li>
+            <li>Multi-currency + VAT (REC 15)</li>
+            <li>Resource forecasting (REC 16)</li>
+            <li>WFM → contingent forecast (Moment 01)</li>
+            <li>Total-workforce headcount (Moment 02)</li>
+            <li>Org chart + Wallet + Copilot (Moments 06–08)</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">One closing observation</div>
+        <p>Read the three sections back to back and a single thread emerges: <b>the platform is more ready than the product</b>. Every gap in this document — every single one — sits on top of primitives we already model. The unglamorous work of the last 18 months (type-blind data, Dayforce-adopted models, feature-flagged migration, sibling objects, the iframe embed contract) <em>is the moat</em>. What it earns us now is the right to ship product surfaces at speed without re-platforming.</p>
+        <p>The next 12 months are not "build a better VMS." They are "<b>compose the VMS we already have into the moments customers will pay for</b>" — and trust that the architecture is going to hold while we do it.</p>
+      </div>
+
+    </section>
+
+    <div class="sr-foot">
+      <div>
+        Flex Work VMS — Strategy Review · v1.0 · May 22, 2026 ·
+        Companion to <a href="../Flex Work 2.0 Architecture v1.4.html">Architecture v1.4</a>
+      </div>
+      <div>Internal · for review</div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

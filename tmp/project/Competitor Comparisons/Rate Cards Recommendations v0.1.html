@@ -1,0 +1,1461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rate cards · Improvement recommendations · v0.1</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <!--
+    ─────────────────────────────────────────────────────────────────────
+    Flex Work v2 · Rate cards — improvement recommendations
+    ─────────────────────────────────────────────────────────────────────
+    Companion to "Rate Cards Parity v0.1.html" (v0.3, all parity tasks
+    shipped). Where that doc tracked feature parity against Fieldglass
+    and Vendly, this one names the structural improvements still worth
+    doing now that parity is in. Twenty-three recommendations grouped
+    by the four roles that touch a rate card.
+
+    Architecture rule (same as parity): every recommendation lands in
+    one of the existing rate-card surfaces. Zero new top-level files.
+
+    Each task carries:
+      · priority   P0 / P1 / P2
+      · effort     S (≤3 days)  M (1 sprint)  L (>1 sprint)
+      · title      verb-led, sentence case
+      · detail     what's wrong today + the recommendation
+      · area       where the work lands
+      · file       the host page + component
+      · ref        FG / VNDLY anchor where applicable
+    ─────────────────────────────────────────────────────────────────────
+  -->
+  <style>
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--evr-surface-root-primary);
+      color: var(--evr-content-primary-default);
+      font-family: var(--evr-font-text);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ===== Shell ==================================================== */
+    .rr-page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 56px 40px 96px;
+    }
+
+    /* ===== Header =================================================== */
+    .rr-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 48px;
+      align-items: end;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+      margin-bottom: 36px;
+    }
+    .rr-mark {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 12px;
+    }
+    .rr-title {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 14px;
+      text-wrap: pretty;
+    }
+    .rr-sub {
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--evr-content-primary-default);
+      margin: 0;
+      text-wrap: pretty;
+      max-width: 62ch;
+    }
+    .rr-meta {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .rr-meta b {
+      color: var(--evr-content-primary-default);
+      font-weight: 600;
+    }
+    .rr-meta code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-decorative-default-blue);
+      color: var(--evr-interactive-primary-default);
+      padding: 1px 6px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ===== Lede + legend ============================================ */
+    .rr-lede {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+    .rr-lede-prose p {
+      margin: 0 0 12px;
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--evr-content-primary-default);
+      text-wrap: pretty;
+    }
+    .rr-lede-prose p b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+    .rr-lede-prose p:last-child { margin-bottom: 0; }
+    .rr-lede-prose code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 1px 5px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 13.5px;
+    }
+
+    .rr-legend {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-sm);
+      background: var(--evr-surface-primary-default);
+      padding: 18px 20px;
+    }
+    .rr-legend h4 {
+      margin: 0 0 12px;
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .rr-legend ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .rr-legend li {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 12px;
+      align-items: baseline;
+      font-size: 13px;
+      color: var(--evr-content-primary-default);
+    }
+    .rr-legend-sep {
+      height: 1px;
+      background: var(--evr-border-decorative-lowemp);
+      margin: 10px 0;
+    }
+
+    /* ===== Pills (Priority + Effort) ================================ */
+    .rr-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .rr-pill[data-p="P0"] {
+      background: var(--evr-surface-decorative-low-red);
+      color: var(--evr-red-500);
+    }
+    .rr-pill[data-p="P0"]::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .rr-pill[data-p="P1"] {
+      background: var(--evr-surface-decorative-low-yellow);
+      color: var(--evr-yellow-700, var(--evr-yellow-600));
+    }
+    .rr-pill[data-p="P1"]::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .rr-pill[data-p="P2"] {
+      background: var(--evr-surface-decorative-low-blue);
+      color: var(--evr-interactive-primary-default);
+    }
+    .rr-pill[data-p="P2"]::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .rr-pill[data-e] {
+      background: var(--evr-surface-secondary-default);
+      color: var(--evr-content-primary-default);
+      border: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    /* v0.80 — "Shipped" pill. Per the doc's update protocol, every
+       recommendation flips its priority pill to this green pill in place
+       when the implementation lands. The article's left-border accent
+       keeps the original priority colour so the doc still reads as a
+       priority-ordered record after shipping. */
+    .rr-pill[data-p="Shipped"] {
+      background: var(--evr-surface-decorative-low-green, var(--evr-green-100, #E5F5EC));
+      color: var(--evr-green-600, #1B7340);
+    }
+    .rr-pill[data-p="Shipped"]::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .rr-rollup-card[data-shipped] {
+      background: var(--evr-surface-decorative-low-green, #E5F5EC);
+      border-color: var(--evr-green-300, #7DD8A5);
+    }
+    .rr-rollup-card[data-shipped] .rr-rollup-h {
+      color: var(--evr-green-600, #1B7340);
+    }
+    .rr-rollup-card[data-shipped] .rr-rollup-name {
+      color: var(--evr-green-600, #1B7340);
+    }
+
+    /* ===== Architecture banner ====================================== */
+    .rr-arch {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-left: 3px solid var(--evr-interactive-primary-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      padding: 18px 22px;
+      margin-bottom: 40px;
+      display: grid;
+      gap: 8px;
+    }
+    .rr-arch-h {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-interactive-primary-default);
+    }
+    .rr-arch p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--evr-content-primary-default);
+      max-width: 90ch;
+    }
+    .rr-arch code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 0 5px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 13px;
+    }
+
+    /* ===== Calc trace (the centerpiece) ============================= */
+    .rr-trace {
+      margin: 0 0 56px;
+    }
+    .rr-trace-hd {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+    .rr-trace-num {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .rr-trace-name {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0;
+      line-height: 1.2;
+    }
+    .rr-trace-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: var(--evr-content-primary-highemp);
+      color: var(--evr-content-primary-inverse, #fff);
+    }
+    .rr-trace-tag--shipped {
+      background: var(--evr-green-600, #1B7340);
+    }
+    .rr-trace-tag--shipped::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      color: var(--evr-green-200, #B8E5C9);
+    }
+    .rr-trace-lede {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--evr-content-primary-default);
+      margin: 0 0 22px;
+      max-width: 80ch;
+      text-wrap: pretty;
+    }
+
+    .rr-trace-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+    .rr-trace-col {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-sm);
+      background: var(--evr-surface-primary-default);
+      padding: 22px 24px 24px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+    .rr-trace-col[data-kind="asis"] {
+      background: var(--evr-surface-secondary-default);
+    }
+    .rr-trace-col[data-kind="tobe"] {
+      border-left: 3px solid var(--evr-green-500);
+    }
+    .rr-trace-col-h {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .rr-trace-col-name {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.005em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0;
+    }
+    .rr-trace-col-cap {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .rr-trace-col[data-kind="asis"] .rr-trace-col-cap {
+      color: var(--evr-content-primary-lowemp);
+    }
+    .rr-trace-col[data-kind="tobe"] .rr-trace-col-cap {
+      color: var(--evr-green-600);
+    }
+    .rr-formula {
+      font-family: var(--evr-font-text);
+      font-size: 13.5px;
+      line-height: 1.6;
+      background: var(--evr-content-primary-highemp);
+      color: var(--evr-content-primary-inverse, #fff);
+      padding: 14px 16px;
+      border-radius: var(--evr-radius-2xs);
+      font-feature-settings: "tnum";
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .rr-trace-col[data-kind="asis"] .rr-formula {
+      background: var(--evr-neutral-30, #4a4a55);
+    }
+    .rr-formula em {
+      color: var(--evr-yellow-300, #ffd866);
+      font-style: normal;
+      font-weight: 600;
+    }
+    .rr-formula b {
+      color: var(--evr-green-300, #7dd8a5);
+      font-weight: 600;
+    }
+    .rr-stages {
+      display: grid;
+      gap: 6px;
+    }
+    .rr-stage {
+      display: grid;
+      grid-template-columns: 22px 110px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: baseline;
+      padding: 8px 0;
+      font-size: 13px;
+      color: var(--evr-content-primary-default);
+      border-top: 1px dashed var(--evr-border-decorative-lowemp);
+    }
+    .rr-stage:first-of-type {
+      border-top: none;
+      padding-top: 4px;
+    }
+    .rr-stage-n {
+      font-feature-settings: "tnum";
+      font-size: 11px;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+      padding-top: 1px;
+    }
+    .rr-stage-name {
+      font-weight: 600;
+      color: var(--evr-content-primary-highemp);
+      font-size: 13px;
+    }
+    .rr-stage-detail {
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--evr-content-primary-default);
+    }
+    .rr-stage-detail code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 11.5px;
+    }
+    .rr-trace-col[data-kind="asis"] .rr-stage-detail code {
+      background: var(--evr-surface-primary-default);
+    }
+    .rr-stage-src {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+      padding-top: 1px;
+      white-space: nowrap;
+    }
+    .rr-stage[data-kind="text"] .rr-stage-name {
+      color: var(--evr-yellow-700, var(--evr-yellow-600));
+    }
+    .rr-stage[data-kind="text"] .rr-stage-src {
+      color: var(--evr-yellow-700, var(--evr-yellow-600));
+    }
+    .rr-stage[data-kind="typed"] .rr-stage-name {
+      color: var(--evr-green-600);
+    }
+    .rr-stage[data-kind="typed"] .rr-stage-src {
+      color: var(--evr-green-600);
+    }
+    .rr-stage[data-kind="hard"] .rr-stage-src {
+      color: var(--evr-red-500);
+    }
+    .rr-trace-note {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--evr-content-primary-lowemp);
+      margin: 0;
+      padding-top: 6px;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+    }
+    .rr-trace-note b {
+      color: var(--evr-content-primary-default);
+      font-weight: 600;
+    }
+
+    /* ===== Roll-up counts ========================================== */
+    .rr-rollup {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 56px;
+    }
+    .rr-rollup-card {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      padding: 16px 18px;
+      display: grid;
+      gap: 8px;
+    }
+    .rr-rollup-card[data-tone="header"] {
+      background: var(--evr-content-primary-highemp);
+      color: var(--evr-content-primary-inverse, #fff);
+      border-color: transparent;
+    }
+    .rr-rollup-h {
+      font-size: 11.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+    }
+    .rr-rollup-card[data-tone="header"] .rr-rollup-h {
+      color: rgba(255,255,255,0.7);
+    }
+    .rr-rollup-name {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--evr-content-primary-highemp);
+      line-height: 1.15;
+    }
+    .rr-rollup-card[data-tone="header"] .rr-rollup-name {
+      color: #fff;
+    }
+    .rr-rollup-stats {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      font-feature-settings: "tnum";
+      font-size: 12px;
+      color: var(--evr-content-primary-default);
+    }
+    .rr-rollup-card[data-tone="header"] .rr-rollup-stats {
+      color: rgba(255,255,255,0.85);
+    }
+    .rr-rollup-stats b {
+      font-weight: 600;
+      color: var(--evr-content-primary-highemp);
+    }
+    .rr-rollup-card[data-tone="header"] .rr-rollup-stats b {
+      color: #fff;
+    }
+
+    /* ===== Section ================================================== */
+    .rr-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 24px;
+    }
+    .rr-section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: baseline;
+      margin-bottom: 6px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--evr-border-decorative-default);
+    }
+    .rr-section-num {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .rr-section-name {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0;
+      line-height: 1.2;
+    }
+    .rr-section-counts {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rr-section-lede {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--evr-content-primary-default);
+      margin: 14px 0 22px;
+      max-width: 80ch;
+      text-wrap: pretty;
+    }
+
+    /* ===== Task row ================================================= */
+    .rr-tasks {
+      display: grid;
+      gap: 8px;
+    }
+    .rr-task {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr) 248px;
+      gap: 18px;
+      padding: 16px 20px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      align-items: start;
+    }
+    .rr-task[data-p="P0"] {
+      border-left: 3px solid var(--evr-red-400);
+    }
+    .rr-task[data-p="P1"] {
+      border-left: 3px solid var(--evr-yellow-500, var(--evr-yellow-600));
+    }
+    .rr-task[data-p="P2"] {
+      border-left: 3px solid var(--evr-interactive-primary-default);
+    }
+
+    .rr-task-status {
+      display: grid;
+      gap: 6px;
+      padding-top: 1px;
+    }
+    .rr-task-id {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--evr-content-primary-lowemp);
+      padding-bottom: 2px;
+    }
+    .rr-task-body h4 {
+      margin: 0 0 4px;
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1.35;
+      color: var(--evr-content-primary-highemp);
+      text-wrap: pretty;
+    }
+    .rr-task-body p {
+      margin: 0 0 6px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--evr-content-primary-default);
+      text-wrap: pretty;
+    }
+    .rr-task-body p:last-child { margin-bottom: 0; }
+    .rr-task-body p code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 12.5px;
+    }
+    .rr-task-body p b {
+      color: var(--evr-content-primary-highemp);
+      font-weight: 600;
+    }
+
+    .rr-task-meta {
+      display: grid;
+      gap: 4px;
+      font-size: 12.5px;
+      color: var(--evr-content-primary-lowemp);
+      line-height: 1.45;
+    }
+    .rr-task-meta-row {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 6px;
+    }
+    .rr-task-meta-k {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+      padding-top: 1px;
+    }
+    .rr-task-meta-v {
+      color: var(--evr-content-primary-default);
+    }
+    .rr-task-meta-v code {
+      font-family: var(--evr-font-text);
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 11.5px;
+    }
+
+    /* ===== Footer note ============================================== */
+    .rr-foot {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+      font-size: 12.5px;
+      color: var(--evr-content-primary-lowemp);
+      display: grid;
+      gap: 6px;
+    }
+    .rr-foot a {
+      color: var(--evr-interactive-primary-default);
+      text-decoration: none;
+    }
+    .rr-foot a:hover { text-decoration: underline; }
+
+    @media (max-width: 960px) {
+      .rr-head { grid-template-columns: 1fr; }
+      .rr-lede { grid-template-columns: 1fr; }
+      .rr-rollup { grid-template-columns: repeat(2, 1fr); }
+      .rr-trace-grid { grid-template-columns: 1fr; }
+      .rr-task { grid-template-columns: 1fr; gap: 10px; }
+      .rr-stage {
+        grid-template-columns: 22px 1fr;
+        grid-template-rows: auto auto;
+      }
+      .rr-stage-detail { grid-column: 2; }
+      .rr-stage-src { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+  <main class="rr-page">
+
+    <!-- ============================================================== -->
+    <!-- HEADER                                                         -->
+    <!-- ============================================================== -->
+    <header class="rr-head">
+      <div>
+        <div class="rr-mark">Roadmap · Rate cards · shipped v0.2</div>
+        <h1 class="rr-title">Where rate cards went next, after parity.</h1>
+        <p class="rr-sub">Twenty-three structural recommendations that lifted Pricing Configurations and the supplier-contract rate card from feature-parity with Fieldglass / Vendly to something measurably better &mdash; all twenty-three shipped in a single build pass, every one landing in a file that already existed.</p>
+      </div>
+      <div class="rr-meta">
+        <div><b>Doc</b> &middot; Rate cards &middot; recommendations</div>
+        <div><b>Version</b> &middot; <code>v0.2</code> &middot; 23 recommendations &middot; <b style="color:var(--evr-green-600)">23 shipped</b></div>
+        <div><b>Last updated</b> &middot; <time datetime="2026-05-28">May 28, 2026</time></div>
+        <div><b>Author</b> &middot; Dominic Esposito</div>
+        <div><b>Companion</b> &middot; <a style="color:inherit;text-decoration:underline" href="Rate%20Cards%20Parity%20v0.1.html">Rate Cards Parity v0.3</a></div>
+        <div><b>Benchmarks</b> &middot; SAP Fieldglass Rates 2.0 &middot; Workday Vendly Rate Catalog</div>
+      </div>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- LEDE + LEGEND                                                  -->
+    <!-- ============================================================== -->
+    <section class="rr-lede">
+      <div class="rr-lede-prose">
+        <p><b>What we found.</b> We ship Pricing Configurations as eight named groups &mdash; regular pay, pay premiums, holiday pay, employer contributions, tenure deduction, markup, skill premiums, taxes &mdash; each authored in <code>pages/pricing-config.jsx</code> with a free-text "Calculation" field ("13.8% &middot; gross pay above &pound;9,100/yr"). The supplier-contract rate card in <code>pages/supplier-contract-sections.jsx</code> computes <code>billRate</code> with the formula <code>pay &times; (1 + (burden + skill) / 100) &times; (1 + markup / 100)</code>, where <i>burden</i> reads a hard-coded value off the <code>CLASSIFICATIONS</code> array (W-2 22%, 1099 3%, C2C 10%) and <i>markup</i> reads a position-or-district number off the contract.</p>
+        <p>Those two surfaces are <b>not connected</b>. A customer can author a pricing config that says "Employer NI 13.8%" and "Pension 3%", bind it to a supplier contract, and the engine will still compute burden as a single 22% number from a hard-coded array. The holiday-pay group, the night/weekend pay premiums, the tenure deduction, and the VAT group are documentary &mdash; they read well in the editor and they are invisible to the calc.</p>
+        <p><b>What this list proposes.</b> Wire the calc engine through the pricing-config authoring surface so what an admin writes is what the engine runs, then build the visibility, comparison, and approval surfaces around that single source of truth. Twenty-three recommendations, grouped by role: <b>Foundations</b> (the calc itself), <b>Admin</b> (Pricing Configurations), <b>Manager</b> (Suppliers + Inbox), <b>Agency</b> (supplier-side rate card). Every recommendation lands in a file that already exists.</p>
+      </div>
+      <aside class="rr-legend" aria-label="Status legend">
+        <h4>Priority &middot; effort</h4>
+        <ul>
+          <li><span class="rr-pill" data-p="P0">P0</span><span>Calc correctness or audit gap. Do first.</span></li>
+          <li><span class="rr-pill" data-p="P1">P1</span><span>Daily workflow friction. Schedule next.</span></li>
+          <li><span class="rr-pill" data-p="P2">P2</span><span>Quality-of-life polish. When room appears.</span></li>
+        </ul>
+        <div class="rr-legend-sep"></div>
+        <ul>
+          <li><span class="rr-pill" data-e="S">S</span><span>&le; 3 engineer-days.</span></li>
+          <li><span class="rr-pill" data-e="M">M</span><span>One sprint, single owner.</span></li>
+          <li><span class="rr-pill" data-e="L">L</span><span>Multi-sprint, foundations change.</span></li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- ARCHITECTURE BANNER                                            -->
+    <!-- ============================================================== -->
+    <aside class="rr-arch" aria-label="Architecture rule">
+      <div class="rr-arch-h">Architecture &middot; embed, don't add</div>
+      <p>Every recommendation lands in one of seven existing files: <code>pages/pricing-config.jsx</code> (named pricing groups), <code>pages/supplier-contract.jsx</code> (wizard + <code>rowAdditiveLoadPct</code>), <code>pages/supplier-contract-sections.jsx</code> (<code>RateCardsCard</code> + <code>ScRateCardEditorPanel</code> + <code>billRate</code> calc), <code>pages/suppliers.jsx</code> (Compare rates panel), <code>pages/inbox.jsx</code> (<code>rate_change</code> approvals), <code>pages/assign-worker-panel.jsx</code> (above-band exception), <code>pages/worker-tenure.jsx</code> (rate progression). <b>Zero new top-level files</b>.</p>
+    </aside>
+
+    <!-- ============================================================== -->
+    <!-- THE CALC TRACE (CENTERPIECE)                                   -->
+    <!-- ============================================================== -->
+    <section class="rr-trace" aria-label="Calc trace">
+      <header class="rr-trace-hd">
+        <div>
+          <span class="rr-trace-num">The finding</span>
+          <h2 class="rr-trace-name">Pricing config and the bill-rate engine are not the same code path.</h2>
+        </div>
+        <div><span class="rr-trace-tag rr-trace-tag--shipped">Shipped v0.79</span></div>
+      </header>
+      <p class="rr-trace-lede">The pricing-config editor authors eight named groups; the bill-rate engine reads two hard-coded constants. Closing this gap is the lever for almost every other recommendation in the doc &mdash; once each group becomes a typed primitive the engine stacks in stage order, holiday pay, shift premiums, tenure deduction, and locale-specific taxes all become first-class outputs of the rate card instead of footnotes in the editor.</p>
+
+      <div class="rr-trace-grid">
+        <!-- AS-IS column -->
+        <article class="rr-trace-col" data-kind="asis">
+          <div class="rr-trace-col-h">
+            <h3 class="rr-trace-col-name">As-is &middot; today</h3>
+            <span class="rr-trace-col-cap">2 stages, 2 hard-coded inputs</span>
+          </div>
+
+          <pre class="rr-formula">billRate(p) =
+  base &times; (1 + <em>(burdenPct + skillPct)</em>/100)
+       &times; (1 + <em>markupPct</em>/100)
+
+  base       = p.payRatePref || p.payRate
+  burdenPct  = CLASSIFICATIONS[p.classification]
+  skillPct   = &Sigma; SKILL_PREMIUMS[p.skillIds]
+  markupPct  = p.positionMarkup
+            ?? district.markupPct
+            ?? avg(operatingDistricts)</pre>
+
+          <div class="rr-stages">
+            <div class="rr-stage" data-kind="hard">
+              <span class="rr-stage-n">1</span>
+              <span class="rr-stage-name">Loaded base</span>
+              <span class="rr-stage-detail">Single multiplier mashes burden + skills into one <code>rowAdditiveLoadPct</code> number.</span>
+              <span class="rr-stage-src">Hard-coded</span>
+            </div>
+            <div class="rr-stage" data-kind="hard">
+              <span class="rr-stage-n">2</span>
+              <span class="rr-stage-name">Markup</span>
+              <span class="rr-stage-detail">Position override <code>&rsaquo;</code> district <code>&rsaquo;</code> operating average.</span>
+              <span class="rr-stage-src">Contract</span>
+            </div>
+            <div class="rr-stage" data-kind="text">
+              <span class="rr-stage-n">&mdash;</span>
+              <span class="rr-stage-name">Holiday pay</span>
+              <span class="rr-stage-detail">"1.5x base rate &middot; public holidays" &mdash; <b>display text only</b>, not in the calc.</span>
+              <span class="rr-stage-src">Text</span>
+            </div>
+            <div class="rr-stage" data-kind="text">
+              <span class="rr-stage-n">&mdash;</span>
+              <span class="rr-stage-name">Pay premiums</span>
+              <span class="rr-stage-detail">"+15% &middot; hours 22:00&ndash;06:00" &mdash; <b>display text only</b>, no per-shift bill rate.</span>
+              <span class="rr-stage-src">Text</span>
+            </div>
+            <div class="rr-stage" data-kind="text">
+              <span class="rr-stage-n">&mdash;</span>
+              <span class="rr-stage-name">Employer contributions</span>
+              <span class="rr-stage-detail">"13.8% NI / 3% pension" &mdash; <b>not read</b>; engine still uses W-2 22% from the array.</span>
+              <span class="rr-stage-src">Text</span>
+            </div>
+            <div class="rr-stage" data-kind="text">
+              <span class="rr-stage-n">&mdash;</span>
+              <span class="rr-stage-name">Tenure deduction</span>
+              <span class="rr-stage-detail">"&minus;5% &middot; workers &lt;90 days" &mdash; surfaces only on the worker-tenure timeline.</span>
+              <span class="rr-stage-src">Text</span>
+            </div>
+            <div class="rr-stage" data-kind="text">
+              <span class="rr-stage-n">&mdash;</span>
+              <span class="rr-stage-name">Taxes</span>
+              <span class="rr-stage-detail">"20% VAT on final bill rate" &mdash; tax engine runs at invoice time, not at quote.</span>
+              <span class="rr-stage-src">Text</span>
+            </div>
+          </div>
+
+          <p class="rr-trace-note"><b>Effect.</b> Two customers in the UK and US authoring different pricing configs see the same number from the engine. The breakdown popover shows accurate <i>shape</i> (pay &middot; burden &middot; skill &middot; markup) but the <i>burden</i> is always one of three hard-coded values regardless of the eight groups the admin painstakingly configured.</p>
+        </article>
+
+        <!-- TO-BE column -->
+        <article class="rr-trace-col" data-kind="tobe">
+          <div class="rr-trace-col-h">
+            <h3 class="rr-trace-col-name">To-be &middot; staged components</h3>
+            <span class="rr-trace-col-cap">6 stages, 1 typed source</span>
+          </div>
+
+          <pre class="rr-formula">billRate(p, ctx) =
+  reduce(stages, base, (acc, stage) =&gt;
+    stage.apply(acc, <b>pricingConfig.rules</b>, ctx))
+
+  ctx     = { date, shift, country,
+              workerTenureDays, currency }
+  stages  = [base, premiums, contributions,
+             skills, tenure, markup, taxes]
+
+  // each rule is { kind, value, scope,
+  //                effectiveFrom, effectiveTo }</pre>
+
+          <div class="rr-stages">
+            <div class="rr-stage" data-kind="typed">
+              <span class="rr-stage-n">1</span>
+              <span class="rr-stage-name">Base pay</span>
+              <span class="rr-stage-detail">Resolved from <code>payRatePref</code> / band &middot; shift variant chosen by <code>ctx.shift</code>.</span>
+              <span class="rr-stage-src">Row + ctx</span>
+            </div>
+            <div class="rr-stage" data-kind="typed">
+              <span class="rr-stage-n">2</span>
+              <span class="rr-stage-name">Pay premiums</span>
+              <span class="rr-stage-detail">Night / weekend / holiday rules from group <code>g2 + g3</code> &middot; multiplicative on base.</span>
+              <span class="rr-stage-src">Pricing config</span>
+            </div>
+            <div class="rr-stage" data-kind="typed">
+              <span class="rr-stage-n">3</span>
+              <span class="rr-stage-name">Employer contributions</span>
+              <span class="rr-stage-detail">NI / pension / workers' comp from group <code>g4</code> &middot; supersedes the burdenPct constant.</span>
+              <span class="rr-stage-src">Pricing config</span>
+            </div>
+            <div class="rr-stage" data-kind="typed">
+              <span class="rr-stage-n">4</span>
+              <span class="rr-stage-name">Skill premiums</span>
+              <span class="rr-stage-detail">Per-cert uplift from group <code>g6b</code> &middot; filtered by row's <code>skillIds[]</code>.</span>
+              <span class="rr-stage-src">Pricing config</span>
+            </div>
+            <div class="rr-stage" data-kind="typed">
+              <span class="rr-stage-n">5</span>
+              <span class="rr-stage-name">Tenure deduction</span>
+              <span class="rr-stage-detail">Band rule from group <code>g5</code> &middot; resolves against <code>ctx.workerTenureDays</code>.</span>
+              <span class="rr-stage-src">Pricing config</span>
+            </div>
+            <div class="rr-stage" data-kind="typed">
+              <span class="rr-stage-n">6</span>
+              <span class="rr-stage-name">Markup</span>
+              <span class="rr-stage-detail">Existing position / district / default chain &mdash; unchanged.</span>
+              <span class="rr-stage-src">Contract</span>
+            </div>
+            <div class="rr-stage" data-kind="typed">
+              <span class="rr-stage-n">7</span>
+              <span class="rr-stage-name">Taxes</span>
+              <span class="rr-stage-detail">VAT / GST / state tax from group <code>g7</code> &middot; final stage &middot; respects reverse-charge.</span>
+              <span class="rr-stage-src">Pricing config</span>
+            </div>
+          </div>
+
+          <p class="rr-trace-note"><b>Effect.</b> The eight-group editor and the engine become the same code path. The breakdown popover now shows every layer the admin authored. UK customers get an FG-style transparency build-up; US customers stack burden, skill, markup, state tax. <code>CLASSIFICATIONS</code> becomes the <i>default template</i> for new pricing configs rather than a parallel source of truth.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- ROLL-UP                                                        -->
+    <!-- ============================================================== -->
+    <section class="rr-rollup" aria-label="Counts by section">
+      <div class="rr-rollup-card" data-tone="header">
+        <div class="rr-rollup-h">Recommendations &middot; v0.2</div>
+        <div class="rr-rollup-name">23 shipped</div>
+        <div class="rr-rollup-stats">Was: 9 P0 &middot; 10 P1 &middot; 4 P2</div>
+      </div>
+      <div class="rr-rollup-card" data-shipped>
+        <div class="rr-rollup-h">00 &middot; Foundations</div>
+        <div class="rr-rollup-name">6 shipped</div>
+        <div class="rr-rollup-stats">F1 · F2 · F3 · F4 · F5 · F6</div>
+      </div>
+      <div class="rr-rollup-card" data-shipped>
+        <div class="rr-rollup-h">01 &middot; Admin</div>
+        <div class="rr-rollup-name">6 shipped</div>
+        <div class="rr-rollup-stats">A1 · A2 · A3 · A4 · A5 · A6</div>
+      </div>
+      <div class="rr-rollup-card" data-shipped>
+        <div class="rr-rollup-h">02 &middot; Manager</div>
+        <div class="rr-rollup-name">6 shipped</div>
+        <div class="rr-rollup-stats">M1 · M2 · M3 · M4 · M5 · M6</div>
+      </div>
+      <div class="rr-rollup-card" data-shipped>
+        <div class="rr-rollup-h">03 &middot; Agency</div>
+        <div class="rr-rollup-name">5 shipped</div>
+        <div class="rr-rollup-stats">G1 · G2 · G3 · G4 · G5</div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 00 · FOUNDATIONS                                               -->
+    <!-- ============================================================== -->
+    <section id="foundations" class="rr-section">
+      <header class="rr-section-head">
+        <div>
+          <span class="rr-section-num">Section 00</span>
+          <h2 class="rr-section-name">Foundations &middot; wire the engine to the editor</h2>
+        </div>
+        <div class="rr-section-counts">
+          <span class="rr-pill" data-p="Shipped">6 shipped</span>
+        </div>
+      </header>
+      <p class="rr-section-lede">The structural work that turns Pricing Configurations from a documentary surface into the engine's input shape. Every other section in this doc rests on Foundations 1 &amp; 2 landing first.</p>
+
+      <div class="rr-tasks">
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">F1</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="L">L</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Promote each pricing-config rule to a typed primitive</h4>
+            <p>Today every rule in <code>PCFG_DEFAULT_STRUCTURE</code> carries free-text fields &mdash; <code>{ label: "Calculation", value: "13.8% &middot; gross pay above &pound;9,100/yr" }</code>. Add a structured payload alongside the existing display text: <code>{ kind: "percentage" | "amount" | "multiplier" | "band", value, threshold?, scope }</code>. Keep the display text for editor legibility; emit the typed payload for the engine. Backward-compatible: rules without a typed payload behave exactly as today.</p>
+            <p><b>Why.</b> Without typed rules the engine cannot consume what the editor produces. This is the gate task &mdash; F2 through F6 all read the new shape.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/pricing-config.jsx</code> &middot; <code>PCFG_DEFAULT_STRUCTURE</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Component</i> &middot; VNDLY: <i>Rate formula component</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">F2</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="L">L</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Rewrite <code>billRate</code> as an ordered stage reducer</h4>
+            <p>Today <code>billRate(p)</code> in <code>pages/supplier-contract-sections.jsx</code> is a two-line expression: <code>base &times; (1 + load) &times; (1 + markup)</code>. Replace with <code>reduce(stages, base, (acc, stage) =&gt; stage.apply(acc, pricingConfig.rules, ctx))</code> where <i>stages</i> is the ordered list <code>[base, premiums, contributions, skills, tenure, markup, taxes]</code> and each stage filters <code>pricingConfig.rules</code> for its <code>kind</code>. Falls back to the legacy <code>burdenPct + skillPct</code> path when no pricing config is bound to the contract.</p>
+            <p><b>Why.</b> Matches Fieldglass Rates&nbsp;2.0's Rate Component Group stacking model. Gives Vendly-style "every component visible" build-up without changing the row shape.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> &middot; <code>billRate()</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Component Group stacking</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">F3</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Add shift &amp; holiday variants to every rate row</h4>
+            <p>Today one row = one bill rate. A "Production Associate" on a Sunday night actually invoices at base + 15% night + 10% weekend, but the rate card cell shows the regular number with no surface telling the manager what Sunday night costs. Extend the row to carry <code>payVariants: [{ kind: "regular" | "night" | "weekend" | "holiday", payRate, billRate }]</code> derived from the pricing config's premium rules at edit time. The cell still shows the regular rate; the popover from M1 expands to the four-row variant table.</p>
+            <p><b>Why.</b> Manager intake quotes are currently low by the premium spread on any non-9-to-5 role. Closing this also lets timesheets resolve the right bill rate per line without re-running the engine at invoice time.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v">extend <code>positions[].payVariants</code> in <code>pages/supplier-contract.jsx</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Schedule shifts</i> &middot; VNDLY: <i>Premium pay variants</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">F4</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Effective-date each pricing-config rule</h4>
+            <p>Rate-card rows carry <code>effectiveFrom</code> / <code>effectiveTo</code>; pricing-config rules do not. A statutory NI bump on April&nbsp;6 should change every bound contract on its own &mdash; today the only way is editing the rule in place, with no audit of the value it held before. Add the same date-pair to each rule and pass <code>ctx.date</code> through the stage reducer so the engine resolves the rule active on the work date, not the rule active on the read date.</p>
+            <p><b>Why.</b> The CSV-import / Master-data flow on the rate-card side already round-trips effective dates. Pricing config is the only layer missing the primitive.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v">extend rule shape in <code>pages/pricing-config.jsx</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Effective-dated rate components</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">F5</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Tag every rule with <code>currency</code> + <code>country</code></h4>
+            <p>A UK NI rule on a pricing config bound to a US-only contract should no-op. Today every rule applies regardless of contract locale; the same config bound to two countries quietly miscomputes. Add <code>scope: { countries: [], currencies: [] }</code> to the rule shape; the engine skips rules whose scope excludes the row's contract.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v">extend rule shape in <code>pages/pricing-config.jsx</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Country-specific calculations</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">F6</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Tenure-band rule resolves at calc time, not at intake</h4>
+            <p>The "First 90 days &minus;5%" tenure deduction in group <code>g5</code> is visible only on the worker-tenure timeline today &mdash; not in the rate-card row. Once F1&ndash;F2 ship, the rule becomes a band primitive <code>[{ lt: 90, value: -5 }, { lt: 180, value: 0 }, ...]</code> and the engine resolves it against <code>ctx.workerTenureDays</code> at the time the bill-rate is computed. A worker crossing the 90-day mark mid-engagement sees the rate move &mdash; with the same snapshot guarantees that protect the engagement.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> + <code>pages/worker-tenure.jsx</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Tenure schedule</i> &middot; FG: <i>Tenure-banded rate</i></span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 01 · ADMIN                                                     -->
+    <!-- ============================================================== -->
+    <section id="admin" class="rr-section">
+      <header class="rr-section-head">
+        <div>
+          <span class="rr-section-num">Section 01</span>
+          <h2 class="rr-section-name">Admin &middot; Pricing Configurations</h2>
+        </div>
+        <div class="rr-section-counts">
+          <span class="rr-pill" data-p="Shipped">6 shipped</span>
+        </div>
+      </header>
+      <p class="rr-section-lede">The program owner's surface. Once rules are typed and effective-dated (Foundations), the authoring surface needs the safety rails that any FG / VNDLY admin would expect: impact preview before save, history per rule, industry-templated configs, and a path to migrate contracts between configs without one-at-a-time clicks.</p>
+
+      <div class="rr-tasks">
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">A1</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Impact preview on every rule save</h4>
+            <p>Editing a rule today is a blind action &mdash; the admin doesn't see how many supplier contracts, positions, or in-flight assignments are about to move. Before save, run a dry pass: "Changing Employer NI 13.8% &rarr; 14.2% affects 12 contracts &middot; 168 positions &middot; 41 active assignments &middot; average bill rate +&pound;0.27/hr". Block the save behind an acknowledgment when the affected-assignment count crosses a threshold the admin sets.</p>
+            <p><b>Why.</b> Pricing changes are the highest-stakes config edit in the product. FG's Rates&nbsp;2.0 ships a similar "Mass Update Preview"; Vendly ships it under "Apply changes".</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/pricing-config.jsx</code> &middot; rule editor side panel</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Mass Update Preview</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">A2</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Per-rule audit ledger</h4>
+            <p>The supplier-contract Rate cards card carries a history drawer per row; the pricing-config rule that drives a third of that bill rate has no such record. Add the same audit primitive (timestamp, actor, before / after, reason) to every rule, surfaced as a History drawer at the bottom of each group. Reason is required on save when the rule is bound to one or more active contracts.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/pricing-config.jsx</code> &middot; reuse rate-card history primitive</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Component Revision History</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">A3</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Pricing-config versions with stage-and-promote</h4>
+            <p>Today edits to a pricing config are in-place. Introduce a "Save as new version" toggle &mdash; v1.2 of the Manufacturing config sits alongside v1.1 in draft state, can be diffed cell-by-cell, and is promoted with a single Activate action that flips bindings atomically. Same primitive used on the supplier-contract amendments flow.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/pricing-config.jsx</code> &middot; version sidebar</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Rate template versioning</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">A4</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Industry templates seed new configurations</h4>
+            <p>Every new pricing config today seeds from the same eight-group default. Add a "Start from" picker on create: <i>Light industrial</i> (W-2 dominant, night/weekend premiums, FLSA OT), <i>Healthcare</i> (RN burden &asymp; 32%, ICU/ER skill premiums, holiday pay 1.5x), <i>Professional services</i> (1099 dominant, no burden, skill premiums), <i>Hospitality</i> (tipped wage minima, sub-minimum where statutory). Each template is just a different seed array; the runtime stays identical.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/pricing-config.jsx</code> &middot; new-config modal</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Industry rate templates</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">A5</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Bulk migrate N supplier contracts onto a new config</h4>
+            <p>Moving suppliers between pricing configs is one-at-a-time today &mdash; open contract, edit, save, repeat. Add a multi-select on the "Agencies" tab of the pricing-config detail with a "Move to&hellip;" action that re-uses A1's impact preview to show the bill-rate delta per contract before commit. Single audit entry batched on the source and destination configs.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/pricing-config.jsx</code> &middot; Agencies tab</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Schedule reassignment</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P2">
+          <div class="rr-task-status">
+            <span class="rr-task-id">A6</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Drift report &mdash; same role, different configs</h4>
+            <p>A panel running three pricing configs across twelve suppliers drifts over time &mdash; "Production Associate" ends up at $19.50/hr loaded in Manufacturing-Pilot but $21.10/hr in Warehouse-Standard, with no obvious why. Add a report under the pricing-config index that buckets the same canonical position across every active config and flags drift &gt; 8%. The admin reads it on a quarterly cadence; nothing time-critical, but the conversation it surfaces is.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Settings &middot; Pricing</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/pricing-config.jsx</code> &middot; new "Drift" tab</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Rate parity report</i></span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · MANAGER                                                   -->
+    <!-- ============================================================== -->
+    <section id="manager" class="rr-section">
+      <header class="rr-section-head">
+        <div>
+          <span class="rr-section-num">Section 02</span>
+          <h2 class="rr-section-name">Manager &middot; Suppliers + Inbox</h2>
+        </div>
+        <div class="rr-section-counts">
+          <span class="rr-pill" data-p="Shipped">6 shipped</span>
+        </div>
+      </header>
+      <p class="rr-section-lede">The buyer's surface. Most days a manager reads a rate card to size an intake; sometimes they approve a change; rarely they push a counter back to the agency. The cards below tighten read, approve, and counter without adding any new surfaces.</p>
+
+      <div class="rr-tasks">
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">M1</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Breakdown popover surfaces every staged layer</h4>
+            <p>The bill-rate cell popover in <code>RateCardsCard</code> shows pay &rarr; burden &rarr; skill &rarr; markup today. Once F2 lands, expand it to the full stage list: regular &rarr; premiums &rarr; contributions &rarr; skill &rarr; tenure &rarr; markup &rarr; tax, each line carrying its numeric contribution and a chevron to the rule in <code>pages/pricing-config.jsx</code>. Mirrors Vendly's "Rate Build-Up" panel and FG's Rate Component breakdown.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> &middot; <code>.sc-bill-pop</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Rate build-up</i> &middot; FG: <i>Bill Rate Composition</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">M2</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>SLA + auto-escalation on <code>rate_change</code> approvals</h4>
+            <p>The polymorphic <code>/me/approvals</code> queue carries rate-change kinds alongside timesheets and requisitions; nothing today says how fast a manager has to respond. Add a per-org SLA (default 72h) and an auto-route-to-next-approver behavior past expiry. Surfaces a yellow countdown chip on the inbox row at T&minus;24h and a red one at expiry &mdash; the same primitive timesheet approvals already use.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Inbox</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/inbox.jsx</code> + <code>pages/settings-policies.jsx</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Change SLA</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">M3</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Row-diff view on the history drawer</h4>
+            <p>The Rate cards card's history drawer renders a flat newest-first list of changes today. For any single row, switch the view to a side-by-side diff &mdash; previous value vs current value, per-field, with the changed cells highlighted. Same primitive the inbox uses to render <code>rate_change</code> approvals; lift it into the drawer header.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> &middot; history drawer</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Schedule diff view</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">M4</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Stacked-bar visualization in the Compare Rates panel</h4>
+            <p>The Compare Rates panel today highlights the lowest rate in each row across the top three suppliers, but doesn't tell the panel manager <i>why</i> a supplier is cheaper. Add a stacked-bar rendering of the staged components (pay + premium + contribution + skill + markup + tax) per supplier per role, with hover for exact values. Lets a procurement lead see at a glance whether the cheaper supplier is undercutting on markup or on burden &mdash; very different conversations.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; list</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/suppliers.jsx</code> &middot; Compare Rates panel</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Supplier rate decomposition</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">M5</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Above-band exception shows the resulting loaded bill rate</h4>
+            <p>The assign-worker exception banner today says "Proposed $32/hr is $4 above max ($28)." It does <b>not</b> say what the loaded bill rate the manager is approving actually is. Append "&rarr; bill rate $48.20/hr (vs $42.10 at band max)" to the banner and roll the same delta into the engagement's snapshot at intake. Removes the most common rate-exception support-ticket category in the FG and Vendly worlds.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Requisitions &middot; assignment</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/assign-worker-panel.jsx</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Rate Exception with loaded bill</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P2">
+          <div class="rr-task-status">
+            <span class="rr-task-id">M6</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Solve-for-pay mode in the editor</h4>
+            <p>FG and Vendly both ship a "given a target bill rate and a markup, solve for pay" mode in their rate editors. <code>ScRateCardEditorPanel</code> already has a live preview running the forward calc; flip it bi-directional with a tiny mode toggle. Most useful during negotiation: a manager knows the program target is "$48/hr fully loaded" and wants the supplier to back into a pay rate.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> &middot; <code>ScRateCardEditorPanel</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">FG: <i>Bill Rate Based</i> rate type</span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · AGENCY                                                    -->
+    <!-- ============================================================== -->
+    <section id="agency" class="rr-section">
+      <header class="rr-section-head">
+        <div>
+          <span class="rr-section-num">Section 03</span>
+          <h2 class="rr-section-name">Agency &middot; supplier-side rate card</h2>
+        </div>
+        <div class="rr-section-counts">
+          <span class="rr-pill" data-p="Shipped">5 shipped</span>
+        </div>
+      </header>
+      <p class="rr-section-lede">The supplier's surface. Parity shipped the agency read, counter-rate composer, and tenure-progression preview. These five tighten the agency's day-to-day &mdash; clearer masked views, statutory-floor watchdogs, prefilled market data on counters, and an explicit margin line where policy permits.</p>
+
+      <div class="rr-tasks">
+
+        <article class="rr-task" data-p="P0">
+          <div class="rr-task-status">
+            <span class="rr-task-id">G1</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Statutory-floor watchdog on every row</h4>
+            <p>A pay rate authored at the contract's currency / country can silently drop below local minimum wage after a statutory update (federal, state, or city). Read the country's minimum-wage table from <code>pages/locales.jsx</code> and flag any <code>payRateMin</code> within 5% of the floor with a yellow chip; block save when below. Surfaces on both the buyer and agency views.</p>
+            <p><b>Why.</b> Wage-and-hour exposure is the single largest legal-risk vector in temporary labor. The data is already on the locale; no surface today reads it.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Suppliers &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> + <code>pages/locales.jsx</code></span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Pay parity / minimum-wage check</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">G2</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>"Why is this masked?" explainer on the agency rate card</h4>
+            <p>Rate-visibility policy hides pay-rate cells as <code>&bull;&bull;&bull;</code> when an org has the supplier in band-only or masked mode. Most support tickets are agency users not knowing why. Add a small info button next to every masked cell that opens a tooltip: "Your buyer has set rate visibility to band-only. Contracted bill rate is &pound;48/hr. Margin lines appear on each invoice." Reads <code>contract.payRateVisibility</code> + the policy rationale field that already exists.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Agency &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> &middot; <code>RateCardsCard</code> agency branch</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Visibility rationale</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P1">
+          <div class="rr-task-status">
+            <span class="rr-task-id">G3</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="M">M</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Counter-rate composer prefills with market data</h4>
+            <p>The counter-rate panel from parity v0.3 ships with blank fields. Prefill: program panel average for the same role + location (already aggregated for <code>su-ratecard</code> in analytics), and a placeholder for an external BLS-style market median. The agency can submit the prefilled value with one click or override; either way the routing into the inbox is unchanged.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Agency &middot; contract onboarding</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract.jsx</code> &middot; agency invite branch</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Market median anchor</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P2">
+          <div class="rr-task-status">
+            <span class="rr-task-id">G4</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Explicit margin column when policy permits</h4>
+            <p>When <code>payRateVisibility === "visible"</code>, agencies today still mentally compute their margin from the pay-rate cell. Add a "Margin/hr" column that renders the loaded bill rate minus the supplier's portion of the burden. Hidden in masked mode. Reduces ambiguity on multi-layer stacks &mdash; agencies routinely under-estimate their take-home on configs with night premiums or skill uplifts.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Agency &middot; contract</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/supplier-contract-sections.jsx</code> &middot; agency branch</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Supplier margin column</i></span></div>
+          </div>
+        </article>
+
+        <article class="rr-task" data-p="P2">
+          <div class="rr-task-status">
+            <span class="rr-task-id">G5</span>
+            <span class="rr-pill" data-p="Shipped">Shipped</span>
+            <span class="rr-pill" data-e="S">S</span>
+          </div>
+          <div class="rr-task-body">
+            <h4>Roll the rate-progression timeline up onto the bench view</h4>
+            <p>The four-stop pay/bill timeline lives on the agency worker-profile today, one worker at a time. Aggregate it: a "Rate bumps coming in 30 / 60 / 90 days" card on the agency's bench view summarizes every worker whose tenure-band crossing is imminent, with the projected bill-rate uplift per worker and the program total. Read-only; no new write paths.</p>
+          </div>
+          <div class="rr-task-meta">
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Area</span><span class="rr-task-meta-v">Agency &middot; workforce</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">File</span><span class="rr-task-meta-v"><code>pages/worker-tenure.jsx</code> &middot; bench summary card</span></div>
+            <div class="rr-task-meta-row"><span class="rr-task-meta-k">Ref</span><span class="rr-task-meta-v">VNDLY: <i>Tenure schedule roll-up</i></span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- FOOTER                                                         -->
+    <!-- ============================================================== -->
+    <footer class="rr-foot">
+      <p>v0.2 &middot; 23 recommendations &middot; <b style="color:var(--evr-green-600)">23 shipped</b>. Pair with <a href="Rate%20Cards%20Parity%20v0.1.html">Rate Cards Parity v0.3</a> for the feature-by-feature ledger against Fieldglass / Vendly. Update protocol: when a recommendation ships, flip its priority pill to a green "Shipped" pill in place (do not delete) and add a matching entry to <code>Flex Work v2 Changelog.html</code> the same turn.</p>
+      <p>Foundations (F1, F2) were the gate &mdash; the typed-rule + stage-reducer shape now backs every Manager / Agency card downstream. Engine code path lives in <code>runRateStages()</code> in <code>pages/supplier-contract.jsx</code>; typed primitives + effective-date + scope live on every rule in <code>PCFG_DEFAULT_STRUCTURE</code> in <code>pages/pricing-config.jsx</code>.</p>
+    </footer>
+
+  </main>
+</body>
+</html>

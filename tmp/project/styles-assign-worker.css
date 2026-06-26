@@ -1,0 +1,764 @@
+/* =====================================================================
+   Flex Work — Assign worker side panel
+   Styled to sit alongside the existing aw-* picker (req-distribution),
+   but as a true workers table with rating + past-shifts columns.
+   All values come from Everest semantic tokens.
+   ===================================================================== */
+
+.side-panel.awp-panel { width: min(820px, 96vw); }
+
+/* Ensure the panel body actually scrolls when the workers list is
+   long. `.sp-body` already declares `flex: 1; overflow-y: auto`, but
+   in a flex column the default `min-height: auto` lets content push
+   past the viewport before overflow kicks in; this clamps it so the
+   table area scrolls cleanly. `overscroll-behavior: contain` keeps
+   the wheel/touch scroll from leaking through to the page underneath
+   once the panel hits top/bottom. */
+.side-panel.awp-panel .sp-body {
+  min-height: 0;
+  overscroll-behavior: contain;
+}
+
+.awp-head-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-status-informative-default);
+  flex-shrink: 0;
+}
+
+/* --- Context strip --------------------------------------------------- */
+.awp-context {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+}
+.awp-context-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 16px;
+  min-width: 0;
+}
+.awp-context-block:first-child { padding-left: 0; }
+.awp-context-block:last-child { padding-right: 0; }
+.awp-context-divider {
+  width: 1px;
+  background: var(--evr-border-decorative-lowemp);
+  flex-shrink: 0;
+}
+.awp-context-label {
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-lowemp);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.awp-context-value {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.awp-context-agency {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Workers table --------------------------------------------------- */
+.awp-table {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 132px 88px 116px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+  overflow: hidden;
+}
+/* Supplier-only view drops the Agency column. */
+.awp-table.awp-table--agency {
+  grid-template-columns: minmax(0, 1.6fr) 152px 116px 132px;
+}
+.awp-row { display: contents; }
+.awp-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  font-family: var(--evr-font-text);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  min-width: 0;
+}
+.awp-row:last-child .awp-cell { border-bottom: 0; }
+.awp-row--head .awp-cell {
+  background: var(--evr-surface-primary-default);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  padding: 14px 14px;
+  white-space: nowrap;
+}
+
+/* Cell variants */
+.awp-cell--worker { gap: 12px; }
+.awp-worker-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.awp-worker-name {
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.awp-worker-sub {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.awp-worker-match {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-content-status-success-default);
+}
+.awp-worker-match svg { color: var(--evr-content-status-success-default); }
+
+.awp-cell--agency { min-width: 0; }
+.awp-agency-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.awp-agency-name--internal {
+  color: var(--evr-content-primary-lowemp);
+  font-style: italic;
+}
+
+.awp-cell--rating { gap: 6px; }
+.awp-rating-val {
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+
+.awp-cell--shifts {
+  justify-content: flex-start;
+  color: var(--evr-content-primary-highemp);
+  font-weight: var(--evr-fw-demibold);
+}
+.awp-row--head .awp-cell--shifts {
+  justify-content: flex-start;
+  font-weight: var(--evr-fw-demibold);
+}
+
+.awp-cell--action { justify-content: flex-end; padding-right: 14px; }
+.awp-pick-btn {
+  white-space: nowrap;
+}
+
+/* Row hover (data rows only — head row stays static) */
+.awp-row:not(.awp-row--head):hover .awp-cell {
+  background: var(--evr-surface-primary-hover);
+}
+
+/* Empty state — spans the full grid */
+.awp-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px 16px;
+  color: var(--evr-content-primary-lowemp);
+}
+.awp-empty p { margin: 0; }
+
+/* --- Footer ---------------------------------------------------------- */
+.awp-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.awp-foot-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+.awp-foot-hint svg { color: var(--evr-content-status-informative-default); }
+
+
+/* ===================================================================
+   Rate-exception banner (FG: Rate Exception)
+   =================================================================== */
+.awp-rate-band {
+  margin: 12px 0 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-left: 3px solid var(--evr-interactive-primary-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-secondary-default);
+  font-size: 13px;
+}
+.awp-rate-band--over {
+  border-left-color: var(--evr-content-status-warning-default);
+  background: var(--evr-surface-status-warning-lowemp);
+}
+.awp-rate-band-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--evr-content-primary-default);
+  margin-bottom: 8px;
+}
+.awp-rate-band-h b { color: var(--evr-content-primary-highemp); font-weight: 600; }
+.awp-rate-band-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 12px;
+  align-items: end;
+}
+@media (max-width: 480px) {
+  .awp-rate-band-row { grid-template-columns: 1fr; }
+}
+.awp-rate-label {
+  display: grid;
+  gap: 4px;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  font-weight: 600;
+}
+.awp-rate-input,
+.awp-rate-select {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-default);
+  font: var(--evr-body2);
+  font-feature-settings: "tnum";
+  text-transform: none;
+  letter-spacing: 0;
+}
+.awp-rate-warn {
+  margin: 8px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--evr-content-status-warning-default);
+}
+
+/* ===================================================================
+   Type-aware spine — mode strip, checks column, pipeline, bulk, tabs
+   =================================================================== */
+
+.awp-head-role { color: var(--evr-content-primary-lowemp); font-weight: var(--evr-fw-regular); }
+
+/* --- Engagement-type mode strip ------------------------------------- */
+.awp-mode {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-default);
+}
+.awp-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-bold);
+  white-space: nowrap;
+}
+.awp-mode-pill--allocate { background: var(--evr-surface-decorative-low-blue);   color: var(--evr-content-status-informative-default); }
+.awp-mode-pill--submit   { background: var(--evr-surface-decorative-low-green);  color: var(--evr-content-status-success-default); }
+.awp-mode-pill--propose  { background: var(--evr-surface-decorative-low-purple, var(--evr-surface-decorative-low-blue)); color: var(--evr-content-status-informative-default); }
+.awp-mode-text { color: var(--evr-content-primary-lowemp); }
+.awp-mode-bulk {
+  margin-left: auto;
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-status-informative-default);
+  white-space: nowrap;
+}
+
+/* --- Compliance / availability chips -------------------------------- */
+.awp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  white-space: nowrap;
+}
+.awp-chip + .awp-chip { margin-left: 2px; }
+.awp-chip svg { flex-shrink: 0; }
+.awp-chip--ok   { background: var(--evr-surface-decorative-low-green);  color: var(--evr-content-status-success-default); }
+.awp-chip--warn { background: var(--evr-surface-status-warning-lowemp, var(--evr-surface-decorative-low-yellow)); color: var(--evr-content-status-warning-default); }
+.awp-chip--fail { background: var(--evr-surface-decorative-low-red);    color: var(--evr-content-status-error-default); }
+
+.awp-cell--checks { gap: 4px; flex-wrap: wrap; }
+.awp-worker-incompat { color: var(--evr-content-status-warning-default); font-style: italic; }
+.awp-check { width: 16px; height: 16px; accent-color: var(--evr-interactive-primary-default); flex-shrink: 0; cursor: pointer; }
+.awp-row--blocked .awp-cell { opacity: 0.62; }
+.awp-row--blocked .awp-cell--checks { opacity: 1; }
+
+/* --- Regridded table (adds the checks column, drops shifts) ---------- */
+/* Non-agency, non-bulk: worker | supplier | checks | rating | action   */
+.awp-table.awp-table--checks {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1.15fr) 116px 112px;
+}
+/* Agency, non-bulk: worker | checks | rating | action                  */
+.awp-table.awp-table--checks.awp-table--agency {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.25fr) 116px 112px;
+}
+/* Non-agency, bulk: worker | supplier | checks | rating                */
+.awp-table.awp-table--checks.awp-table--bulk {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1.15fr) 116px;
+}
+/* Agency, bulk: worker | checks | rating                               */
+.awp-table.awp-table--checks.awp-table--agency.awp-table--bulk {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.25fr) 116px;
+}
+
+/* --- Controls (compat toggle, recurring) ---------------------------- */
+.awp-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+.awp-compat-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+}
+.awp-compat-toggle input { width: 16px; height: 16px; accent-color: var(--evr-interactive-primary-default); }
+
+/* --- Submit-mode tabs ----------------------------------------------- */
+.awp-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  margin-bottom: 14px;
+  background: var(--evr-surface-secondary-default);
+  border-radius: var(--evr-radius-2xs);
+}
+.awp-tab {
+  height: 30px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--evr-radius-3xs);
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-lowemp);
+  cursor: pointer;
+}
+.awp-tab--on {
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-highemp);
+  box-shadow: var(--evr-depth-02);
+}
+
+/* --- New-candidate form --------------------------------------------- */
+.awp-newcand {
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+  padding: 16px;
+}
+.awp-newcand-hint { margin: 0 0 14px; font: var(--evr-body2); color: var(--evr-content-primary-lowemp); }
+.awp-newcand-grid {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+@media (max-width: 520px) { .awp-newcand-grid { grid-template-columns: 1fr; } }
+.awp-newcand-btn { width: 100%; justify-content: center; }
+
+/* --- Pipeline (work order + onboarding lifecycle) ------------------- */
+.awp-pipeline {
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-secondary-default);
+  padding: 14px;
+  margin-bottom: 16px;
+}
+.awp-pipeline-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.awp-pipeline-h svg { color: var(--evr-content-status-informative-default); }
+
+.awp-pl-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  padding: 12px 14px;
+}
+.awp-pl-card + .awp-pl-card { margin-top: 8px; }
+.awp-pl-card--active { border-left: 3px solid var(--evr-content-status-success-default); }
+.awp-pl-card--rejected { opacity: 0.7; }
+.awp-pl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.awp-pl-who { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.awp-pl-name { font: var(--evr-body2-bold); color: var(--evr-content-primary-highemp); }
+.awp-pl-meta { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+.awp-pl-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.awp-pl-wait { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); font-style: italic; }
+.awp-pl-active { display: inline-flex; align-items: center; gap: 5px; font: var(--evr-caption); font-weight: var(--evr-fw-bold); color: var(--evr-content-status-success-default); }
+.awp-pl-rejected { display: inline-flex; align-items: center; gap: 5px; font: var(--evr-caption); font-weight: var(--evr-fw-demibold); color: var(--evr-content-status-error-default); }
+.awp-pl-reject { color: var(--evr-content-status-error-default); }
+
+/* Stepper */
+.awp-steps {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+.awp-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  position: relative;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  text-align: center;
+}
+.awp-step::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--evr-border-decorative-default);
+  z-index: 0;
+}
+.awp-step:first-child::before { display: none; }
+.awp-step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--evr-surface-primary-default);
+  border: 2px solid var(--evr-border-decorative-default);
+  z-index: 1;
+}
+.awp-step--done .awp-step-dot { background: var(--evr-content-status-success-default); border-color: var(--evr-content-status-success-default); }
+.awp-step--done::before { background: var(--evr-content-status-success-default); }
+.awp-step--cur .awp-step-dot { box-shadow: 0 0 0 3px var(--evr-surface-decorative-low-green); }
+.awp-step--cur .awp-step-label { color: var(--evr-content-primary-highemp); font-weight: var(--evr-fw-demibold); }
+.awp-step-label { line-height: 1.2; }
+.awp-steps--rejected .awp-step-dot { background: var(--evr-surface-primary-default); border-color: var(--evr-border-decorative-default); }
+
+/* Onboarding checklist */
+.awp-pl-ob {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+}
+.awp-pl-ob-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--evr-content-primary-lowemp);
+  margin-bottom: 8px;
+}
+.awp-pl-ob-count { color: var(--evr-content-status-informative-default); }
+.awp-pl-ob-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.awp-pl-ob-list label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+}
+.awp-pl-ob-list input { width: 15px; height: 15px; accent-color: var(--evr-content-status-success-default); }
+.awp-pl-req {
+  margin-left: auto;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ===================================================================
+   Worker performance + past-history detail (review-to-select)
+   Disclosure lives in the worker cell; the detail panel spans the
+   full grid row beneath the worker.
+   =================================================================== */
+.awp-disclosure {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: 999px;
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-default);
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.awp-disclosure:hover {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-border-decorative-default);
+}
+.awp-disclosure svg:first-child { color: var(--evr-content-status-informative-default); }
+.awp-disclosure svg:last-child {
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.awp-disclosure--open {
+  background: var(--evr-surface-decorative-low-blue);
+  border-color: var(--evr-interactive-primary-default);
+  color: var(--evr-content-status-informative-default);
+}
+.awp-disclosure--open svg:last-child { transform: rotate(180deg); }
+.awp-row--expanded .awp-cell { background: var(--evr-surface-primary-hover); }
+
+/* Full-width detail cell — escapes the grid columns like .awp-empty. */
+.awp-detail-cell {
+  grid-column: 1 / -1;
+  padding: 0 14px 16px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-primary-hover);
+}
+.awp-row:last-child .awp-detail-cell { border-bottom: 0; }
+
+.awp-perf {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  background: var(--evr-surface-primary-default);
+}
+
+/* --- Top: rating + headline chips --- */
+.awp-perf-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.awp-perf-rating {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-right: 20px;
+  border-right: 1px solid var(--evr-border-decorative-lowemp);
+}
+.awp-perf-rating-num {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.awp-perf-rating-num > span:first-child {
+  font-family: var(--evr-font-display);
+  font-size: 26px;
+  font-weight: var(--evr-fw-demibold);
+  line-height: 1;
+  color: var(--evr-content-primary-highemp);
+}
+.awp-perf-rating-denom { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+.awp-perf-rating-sub { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); }
+
+.awp-perf-heads {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  flex: 1;
+  min-width: 280px;
+}
+.awp-perf-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.awp-perf-head svg { flex-shrink: 0; }
+.awp-perf-head--ok svg   { color: var(--evr-content-status-success-default); }
+.awp-perf-head--warn svg { color: var(--evr-content-status-warning-default); }
+.awp-perf-head--fail svg { color: var(--evr-content-status-error-default); }
+.awp-perf-head-text { display: flex; flex-direction: column; min-width: 0; }
+.awp-perf-head-val {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+}
+.awp-perf-head-k {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Middle: KPI grid + trend --- */
+.awp-perf-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+}
+@media (max-width: 620px) { .awp-perf-cols { grid-template-columns: 1fr; } }
+
+.awp-perf-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--evr-border-decorative-lowemp);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-2xs);
+  overflow: hidden;
+}
+.awp-perf-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  background: var(--evr-surface-primary-default);
+}
+.awp-perf-kpi-val {
+  font: var(--evr-body1-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.awp-perf-kpi-k {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+.awp-perf-kpi--warn .awp-perf-kpi-val { color: var(--evr-content-status-warning-default); }
+.awp-perf-kpi--fail .awp-perf-kpi-val { color: var(--evr-content-status-error-default); }
+
+.awp-perf-sub-h {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--evr-content-primary-lowemp);
+  margin-bottom: 8px;
+}
+.awp-perf-sub-h svg { color: var(--evr-content-primary-lowemp); }
+
+.awp-perf-trend { display: flex; flex-direction: column; }
+.awp-perf-bars {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  align-items: end;
+  height: 86px;
+  flex: 1;
+}
+.awp-perf-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  height: 100%;
+  justify-content: flex-end;
+}
+.awp-perf-bar-stack {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+  max-width: 26px;
+  flex: 1;
+}
+.awp-perf-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 2px; }
+.awp-perf-bar--worked { background: var(--evr-interactive-primary-default); }
+.awp-perf-bar--cancelled { background: var(--evr-content-status-warning-default); border-radius: 0; }
+.awp-perf-bar-mo {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* --- Bottom: past-history sites --- */
+.awp-perf-sites { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.awp-perf-site {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: var(--evr-radius-3xs);
+  background: var(--evr-surface-secondary-default);
+}
+.awp-perf-site-name {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.awp-perf-site-shifts { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); white-space: nowrap; }
+.awp-perf-site-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}

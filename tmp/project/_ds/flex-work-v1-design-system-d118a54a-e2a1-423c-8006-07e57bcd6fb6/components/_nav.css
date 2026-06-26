@@ -1,0 +1,200 @@
+/* Flex Work — Navigation components (Topbar, Sidebar, Footer).
+   Reconstructed 1:1 from the "Flex Work Web Library" Figma (Navigation page).
+   Icons: FontAwesome Free 7.2.0 — link assets/fontawesome/css/all.min.css from
+   the HTML page (kept OUT of the token closure so its utility classes/@font-face
+   don't pollute the design system). Tokens: ../colors_and_type.css. */
+
+@import url('../colors_and_type.css');
+
+/* Render FA glyphs via explicit literal content. FA7's default
+   `content: var(--fa)/""` doesn't rasterize in html-to-image captures and some
+   engines; literal content is bulletproof. Codepoints from FA Free 7.2.0. */
+.fa-chart-column::before { content: "\e0e3"; }
+.fa-address-card::before { content: "\f2bb"; }
+.fa-briefcase::before { content: "\f0b1"; }
+.fa-users::before { content: "\f0c0"; }
+.fa-clipboard::before { content: "\f328"; }
+.fa-street-view::before { content: "\f21d"; }
+.fa-calendar-check::before { content: "\f274"; }
+.fa-gear::before { content: "\f013"; }
+.fa-angles-left::before { content: "\f100"; }
+.fa-person-running::before { content: "\f70c"; }
+.fa-list-check::before { content: "\f0ae"; }
+.fa-user-tie::before { content: "\f508"; }
+.fa-certificate::before { content: "\f0a3"; }
+.fa-credit-card::before { content: "\f09d"; }
+.fa-comment::before { content: "\f075"; }
+.fa-bullhorn::before { content: "\f0a1"; }
+.fa-circle-question::before { content: "\f059"; }
+.fa-gauge-high::before { content: "\f625"; }
+.fa-file-invoice-dollar::before { content: "\f571"; }
+.fa-magnifying-glass::before { content: "\f002"; }
+.fa-bell::before { content: "\f0f3"; }
+.fa-chevron-down::before { content: "\f078"; }
+.fa-chevron-left::before { content: "\f053"; }
+.fa-chevron-right::before { content: "\f054"; }
+.fa-sort::before { content: "\f0dc"; }
+.fa-ellipsis::before { content: "\f141"; }
+.fa-table-list::before { content: "\f00b"; }
+.fa-circle-check::before { content: "\f058"; }
+.fa-user::before { content: "\f007"; }
+.fa-check::before { content: "\f00c"; }
+
+* { box-sizing: border-box; }
+.nav-demo { margin: 0; background: #fff; -webkit-font-smoothing: antialiased; padding: 20px; }
+
+/* Figma colors used here:
+   border  rgb(238,238,238) #eeeeee
+   text    rgb(34,31,32)    #221f20
+   muted   rgb(144,143,143) #908f8f
+   icon    rgb(112,112,112) #707070
+   active  rgb(48,103,219)  #3067db (Dayforce Blue)
+   activeBg rgb(235,248,255) #ebf8ff
+   searchBg rgb(249,249,249) #f9f9f9
+   link    rgb(16,174,186)  #10aeba (teal) */
+
+/* ============================ SIDEBAR ================================= */
+.nav-sidebar {
+  width: 240px;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: var(--font-body);
+}
+.nav-sidebar__top { display: flex; flex-direction: column; gap: 5px; }
+.nav-sidebar__bottom { display: flex; flex-direction: column; gap: 5px; padding: 8px 0; }
+
+/* search wrapper padding for Admin variant */
+.nav-sidebar__search-wrap { padding: 12px 6px; }
+
+/* tab item — State=Default. A transparent 4px left border is reserved on every
+   tab so the active indicator (border color) never shifts content. */
+.nav-tab {
+  position: relative;
+  width: 240px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color .12s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 48px;
+}
+.nav-tab__icon {
+  position: absolute;
+  left: 16px; top: 12px;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  color: #707070;
+}
+.nav-tab__label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.24px;
+  color: #221f20;
+}
+.nav-tab__chevron {
+  position: absolute;
+  left: 208px; top: 11px;
+  width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  color: #707070;
+}
+/* Hover — subtle light-gray fill + 4px grey left indicator (not on the active item or the collapse button) */
+.nav-tab:hover:not(.active):not(.nav-tab--muted) {
+  background: linear-gradient(90deg, #bcbbbc 0, #bcbbbc 4px, #f9f9f9 4px, #f9f9f9 100%);
+}
+
+/* State=Active — 4px left indicator painted into the background (renders everywhere) */
+.nav-tab.active {
+  background: linear-gradient(90deg, #3067db 0, #3067db 4px, #ebf8ff 4px, #ebf8ff 100%);
+}
+.nav-tab.active .nav-tab__icon,
+.nav-tab.active .nav-tab__label,
+.nav-tab.active .nav-tab__chevron { color: #3067db; }
+
+/* muted bottom item (Collapse sidebar) */
+.nav-tab--muted .nav-tab__label { color: #707070; }
+
+/* section header — Sidebar - Section */
+.nav-section {
+  width: 240px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 4px 16px;
+}
+.nav-section__label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 100%;
+  color: #908f8f;
+}
+
+/* search — Sidebar - Search */
+.nav-search {
+  width: 226px;
+  height: 36px;
+  border-radius: 6px;
+  background: #f9f9f9;
+  border: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 10px;
+}
+.nav-search__icon { font-size: 16px; color: #908f8f; }
+.nav-search__label { font-family: var(--font-body); font-size: 14px; line-height: 1.5; letter-spacing: 0.24px; color: #221f20; flex: 1; }
+.nav-search__keys { display: flex; gap: 3px; }
+.nav-search__key {
+  width: 16px; height: 16px;
+  border-radius: 3px;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #908f8f;
+  font-family: var(--font-body);
+}
+
+/* ============================ TOPBAR ================================== */
+.nav-topbar {
+  width: 1440px;
+  height: 40px;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-body);
+}
+.nav-topbar__logo { padding: 2px 16px; display: flex; align-items: center; }
+.nav-topbar__logo img { width: 163px; height: 20px; display: block; }
+.nav-topbar__right { display: flex; align-items: center; gap: 10px; padding: 2px 16px; }
+.nav-topbar__flag { width: 22px; height: 16px; border-radius: 1px; background-size: cover; background-position: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06); }
+.nav-topbar__bell { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #707070; }
+.nav-topbar__user { display: flex; align-items: center; gap: 8px; padding: 5px; }
+.nav-topbar__username { font-family: var(--font-body); font-weight: 700; font-size: 13px; line-height: 1.5; letter-spacing: 0.24px; color: #221f20; }
+.nav-topbar__user-chevron { font-size: 13px; color: #908f8f; }
+
+/* ============================ FOOTER ================================= */
+.nav-footer {
+  width: 1200px;
+  height: 50px;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-body);
+}
+.nav-footer__links { display: flex; align-items: center; gap: 24px; padding: 10px 16px; }
+.nav-footer__link { font-family: var(--font-body); font-size: 14px; line-height: 1.5; letter-spacing: 0.24px; color: #10aeba; text-decoration: none; }
+.nav-footer__link:hover { text-decoration: underline; }
+.nav-footer__powered { padding: 10px 16px; display: flex; align-items: center; justify-content: flex-end; gap: 7px; }
+.nav-footer__powered-by { font-family: var(--font-body); font-size: 13px; line-height: 1.5; letter-spacing: 0.24px; color: #908f8f; }
+.nav-footer__powered img { height: 16px; width: auto; display: block; }

@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cost of delay · Contingent labor ROI · Dayforce Flex Work</title>
+  <!-- Sales track asset. Everest referenced read-only, two levels up. -->
+  <link rel="stylesheet" href="../../tokens.css" />
+  <link rel="stylesheet" href="../../fonts/fonts.css" />
+  <link rel="stylesheet" href="styles-roi.css" />
+</head>
+<body>
+  <div class="roi">
+
+    <!-- ===================================================== NAV -->
+    <nav class="roi-nav">
+      <div class="roi-nav-brand">
+        <img src="../../assets/dayforce-flexwork-logo.svg" alt="Dayforce Flex Work" />
+        <span class="roi-nav-divider" aria-hidden="true"></span>
+        <span class="roi-nav-ae">
+          <span class="roi-nav-ae-avatar">MT</span>
+          <span class="roi-nav-ae-text"><b>Mark Todd</b><small>Account Executive</small></span>
+        </span>
+      </div>
+      <button class="roi-nav-ticker" id="navTicker" type="button" hidden title="Cost of delay so far — open full screen">
+        <span class="roi-live-dot"></span>
+        <span class="roi-nav-ticker-label">Delay has cost</span>
+        <span class="roi-nav-ticker-val" id="navTickerVal">$0.00</span>
+      </button>
+      <div class="roi-nav-actions">
+        <a class="roi-nav-link" href="ROI Calculator Changelog.html">Changelog</a>
+        <button class="roi-btn roi-btn--ghost roi-btn--sm" id="copyLinkBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M10 14a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>
+          Copy link
+        </button>
+        <button class="roi-btn roi-btn--primary roi-btn--sm" id="summaryBtn" type="button">View client summary</button>
+      </div>
+    </nav>
+
+    <!-- ============================================= CONTEXT BAR -->
+    <div class="roi-context">
+      <div class="roi-context-inner">
+        <div class="roi-context-lead">
+          <span class="roi-context-eyebrow">Configure this estimate</span>
+          <p class="roi-context-note" id="contextNote"></p>
+        </div>
+        <div class="roi-context-fields">
+          <label class="roi-context-field">
+            <span>Country</span>
+            <select class="roi-select" id="ctxCountry" aria-label="Client country (sets currency)"></select>
+          </label>
+          <label class="roi-context-field">
+            <span>Industry</span>
+            <select class="roi-select" id="ctxIndustry" aria-label="Client industry"></select>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================== HERO · COST OF DELAY -->
+    <header class="roi-hero roi-clockhero" id="clockHero">
+      <div class="roi-clockhero-inner">
+        <div class="roi-clockhero-head">
+          <p class="roi-clock-eyebrow"><span class="roi-live-dot"></span> <span id="clockEyebrow">Cost of delay · live</span></p>
+          <h1 id="clockHeadline">Every second you wait, the meter keeps running</h1>
+        </div>
+
+        <div class="roi-clockhero-meterwrap">
+          <button class="roi-clock-meter" id="clockMeter" type="button" title="Open full screen" aria-label="Cost of delay so far — open full screen">
+            <span class="roi-clock-cur" id="clockCur">$</span><span class="roi-clock-int" id="clockInt">0</span><span class="roi-clock-dec" id="clockDec">.00</span>
+          </button>
+          <p class="roi-clock-status" id="clockStatus"></p>
+        </div>
+
+        <div class="roi-clock-rates" id="clockRates"></div>
+
+        <div class="roi-clock-foot">
+          <div class="roi-clock-controls">
+            <!-- before the clock is started -->
+            <div class="roi-clock-start" id="clockStart">
+              <label class="roi-clock-date">
+                <span>The conversation started internally on</span>
+                <input type="date" id="delayDate" class="roi-clock-dateinput" aria-label="Date the client began deliberating" />
+              </label>
+              <button class="roi-btn roi-btn--clockcta" id="startClockBtn" type="button">Start the delay clock</button>
+            </div>
+            <!-- once the clock is running -->
+            <div class="roi-clock-running" id="clockRunning" hidden>
+              <button class="roi-btn roi-btn--clockcta" id="clockFull" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+                Show full screen
+              </button>
+              <button class="roi-btn roi-btn--ondark" id="clockCopyLink" type="button">Copy the live link</button>
+              <button class="roi-btn roi-btn--linkondark" id="clockReset" type="button">Reset clock</button>
+            </div>
+          </div>
+          <div class="roi-clock-side">
+            <div class="roi-clock-side-stat">
+              <span class="l">Net annual ROI on the table</span>
+              <span class="v" id="heroNet">$0</span>
+              <span class="s" id="heroSpendNote">Based on $0 in annual contingent labor spend</span>
+            </div>
+            <div class="roi-clock-side-pair">
+              <div><span class="v" id="heroMultiple">0×</span><span class="l">Return on platform cost</span></div>
+              <div><span class="v" id="heroPct">0%</span><span class="l">Saved on contingent spend</span></div>
+            </div>
+            <a class="roi-clock-buildlink" href="#build">Build &amp; tune the model below
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================ STEP 1 · SPEND -->
+    <section class="roi-section" id="build">
+      <div class="roi-section-inner">
+        <p class="roi-step-eyebrow">Step 1 · Your spend</p>
+        <h2>It starts with one number</h2>
+        <p class="roi-section-lead">
+          Every saving below is measured against your annual contingent labor
+          spend. Know it? Enter it. If not, estimate it from headcount and
+          industry, then refine it together later.
+        </p>
+        <div class="roi-card">
+          <div class="roi-tabs" role="tablist">
+            <button class="roi-tab is-active" data-spend-tab="known" type="button">I know my spend</button>
+            <button class="roi-tab" data-spend-tab="estimate" type="button">Estimate it</button>
+          </div>
+
+          <div class="roi-tabpanel is-active" id="panelKnown">
+            <label class="roi-field-label" for="spendKnownInput">Annual contingent labor spend</label>
+            <div class="roi-money">
+              <span class="roi-money-sym">$</span>
+              <input id="spendKnownInput" inputmode="numeric" autocomplete="off" aria-label="Annual contingent labor spend" />
+            </div>
+            <p class="roi-field-hint">Total annual amount billed by staffing agencies and contractors.</p>
+          </div>
+
+          <div class="roi-tabpanel" id="panelEstimate">
+            <div class="roi-grid-2">
+              <div>
+                <label class="roi-field-label" for="estHeadcount">Total employee headcount</label>
+                <input class="roi-input" id="estHeadcount" inputmode="numeric" autocomplete="off" />
+                <p class="roi-field-hint">Across every location funded by this program.</p>
+              </div>
+              <div>
+                <span class="roi-field-label">Industry</span>
+                <div class="roi-est-industry-chip" id="estIndustryChip">—</div>
+                <p class="roi-field-hint">Set in the configuration bar at the top. Drives the typical contingent share applied here.</p>
+              </div>
+            </div>
+            <div class="roi-estimate-out">
+              <span id="estMath"></span>
+              <div class="roi-estimate-result" id="estResult"></div>
+            </div>
+            <div class="roi-estimate-actions">
+              <button class="roi-btn roi-btn--primary roi-btn--sm" id="applyEstimate" type="button">Use this estimate</button>
+              <span class="roi-field-hint">Contingent-share benchmarks from <a class="roi-source roi-source--inline" href="source-notes.html#sia-share" target="_blank" rel="noopener">Staffing Industry Analysts</a> and SIA <a class="roi-source roi-source--inline" href="http://cwstrategies.staffingindustry.com/benchmarks-workforce-mix-by-industry/" target="_blank" rel="noopener">workforce-mix-by-industry</a> data — illustrative planning values, replace with client actuals when known.</span>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--evr-border-decorative-lowemp)">
+            <span class="roi-field-hint" style="text-transform:uppercase;letter-spacing:0.06em">Modeling against</span>
+            <div class="roi-spend-readout"><span class="v" id="spendDisplay">$0</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================== STEP 2 · HARD COSTS -->
+    <section class="roi-section roi-section--tint">
+      <div class="roi-section-inner">
+        <p class="roi-step-eyebrow">Step 2 · Hard-dollar savings</p>
+        <div class="roi-section-head">
+          <div>
+            <h2>Savings straight off the invoice</h2>
+            <p class="roi-section-lead">
+              Direct savings on what agencies bill you. Switch off anything that
+              doesn't apply, and tune each rate to your reality. The defaults are
+              deliberately conservative, and every one is sourced.
+            </p>
+          </div>
+          <div class="roi-total-pill">
+            <span class="roi-total-pill-l">Hard savings / year</span>
+            <span class="roi-total-pill-v" id="hardTotal">$0</span>
+          </div>
+        </div>
+        <div class="roi-drivers" id="hardList"></div>
+      </div>
+    </section>
+
+    <!-- ====================================== STEP 3 · SOFT COSTS -->
+    <section class="roi-section">
+      <div class="roi-section-inner roi-soft">
+        <p class="roi-step-eyebrow">Step 3 · Soft-dollar savings</p>
+        <div class="roi-section-head">
+          <div>
+            <h2>Time your team gets back</h2>
+            <p class="roi-section-lead">
+              The hours your team loses every week to sourcing agencies, chasing
+              timesheets and reconciling invoices, won back through automation. Set
+              a blended loaded hourly cost and how many people do this work today.
+            </p>
+          </div>
+          <div class="roi-total-pill">
+            <span class="roi-total-pill-l">Soft savings / year</span>
+            <span class="roi-total-pill-v" id="softTotal">$0</span>
+          </div>
+        </div>
+
+        <div class="roi-blended">
+          <label for="blendedRate">Blended loaded cost</label>
+          <div class="roi-money">
+            <span class="roi-money-sym">$</span>
+            <input id="blendedRate" inputmode="numeric" autocomplete="off" aria-label="Blended loaded hourly cost" />
+          </div>
+          <span class="hint">Per hour, fully loaded, for the program / ops staff who manage contingent labor today.</span>
+        </div>
+
+        <div class="roi-people">
+          <div class="roi-people-main">
+            <span class="roi-people-label">People doing this work</span>
+            <div class="roi-people-count"><span class="n" id="peopleCount">0</span><span class="u">people</span></div>
+            <p class="roi-people-math" id="peopleMath"></p>
+          </div>
+          <div class="roi-people-basis">
+            <div class="roi-tabs roi-tabs--sm" role="tablist" aria-label="How to size the team">
+              <button class="roi-tab is-active" data-people-mode="spend" type="button">From spend</button>
+              <button class="roi-tab" data-people-mode="footprint" type="button">From footprint</button>
+            </div>
+            <div class="roi-people-footprint" id="peopleFootprint" hidden>
+              <span class="fp"><input class="roi-input roi-input--sm" id="locCount" inputmode="numeric" autocomplete="off" aria-label="Number of locations" /> locations</span>
+              <span class="times">×</span>
+              <span class="fp"><input class="roi-input roi-input--sm" id="peoplePerLoc" inputmode="numeric" autocomplete="off" aria-label="People per location" /> people each</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roi-soft-col-head">
+          <span></span><span>Task</span><span>Hrs/wk per person</span><span>Recovered</span><span class="r">Per year</span>
+        </div>
+        <div class="roi-drivers" id="softList"></div>
+        <p class="roi-field-hint" style="margin-top:14px">
+          Soft-savings basis: Staffing Industry Analysts reports a VMS/MSP recovers admin time through
+          automation and consolidated invoicing — one program refocused two billing specialists after
+          moving to a single invoice. <a class="roi-source roi-source--inline" href="https://www.staffingindustry.com/editorial/cws-30-contingent-workforce-strategies/creative-cost-savings-without-relying-on-your-suppliers-" target="_blank" rel="noopener"><b>SIA · Creative cost savings</b></a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================================== STEP 4 · PLATFORM COST -->
+    <section class="roi-section roi-section--tint">
+      <div class="roi-section-inner">
+        <p class="roi-step-eyebrow">Step 4 · Platform investment</p>
+        <h2>Now, what it costs</h2>
+        <p class="roi-section-lead">
+          Dayforce Flex Work is priced at a flat 1.5% of contingent labor spend.
+          Choose who funds it — you, your suppliers or a subsidy — and the return
+          below reflects only what you pay.
+        </p>
+        <div class="roi-card roi-platform-card">
+          <div class="meta">
+            <p class="roi-driver-title" style="font-size:18px">Dayforce Flex Work platform fee</p>
+            <p class="roi-driver-desc" style="margin-bottom:0">A flat 1.5% of annual contingent labor spend covers the unified VMS — sourcing, time, invoicing, compliance and analytics in one place.</p>
+            <a class="roi-source roi-source--inline" href="https://www.staffingindustry.com/editorial/cws-30-contingent-workforce-strategies/how-evolve-your-vms-strategy" target="_blank" rel="noopener" style="margin-top:10px">Fee as a percentage of spend is the dominant VMS pricing model — <b>SIA</b></a>
+
+            <div class="roi-funding">
+              <span class="roi-funding-label">Who funds the fee</span>
+              <div class="roi-tabs roi-tabs--sm" role="tablist" aria-label="Funding model">
+                <button class="roi-tab is-active" data-funding="buyer" type="button">Buyer-funded</button>
+                <button class="roi-tab" data-funding="mixed" type="button">Subsidized</button>
+                <button class="roi-tab" data-funding="supplier" type="button">Supplier-funded</button>
+              </div>
+              <p class="roi-funding-desc" id="fundingDesc"></p>
+              <div class="roi-funding-mix" id="fundingMix" hidden>
+                <label for="supplierShare">Suppliers fund</label>
+                <input type="range" class="roi-range" id="supplierShare" min="0" max="100" step="5" value="50" aria-label="Share of the platform fee funded by suppliers" />
+                <span class="roi-range-val" id="supplierShareVal">50%</span>
+                <span class="roi-funding-mix-note">of the fee · you fund the rest</span>
+              </div>
+            </div>
+          </div>
+          <div class="roi-platform-amt">
+            <div class="v" id="platformAmt">$0</div>
+            <div class="l" id="platformAmtLabel">your platform cost · per year</div>
+            <div class="roi-funding-stats" id="fundingStats"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================= STEP 5 · RESULTS -->
+    <section class="roi-section">
+      <div class="roi-section-inner">
+        <p class="roi-step-eyebrow">The result</p>
+        <h2>The bottom line</h2>
+        <p class="roi-section-lead">
+          The savings a unified VMS unlocks, net of what the platform costs to run.
+        </p>
+
+        <div class="roi-results-grid">
+          <div class="roi-result roi-result--net">
+            <div class="l">Net annual ROI</div>
+            <div class="v" id="resNet">$0</div>
+            <div class="s" id="resNetSub">after the 1.5% platform fee</div>
+          </div>
+          <div class="roi-result">
+            <div class="l">Gross savings</div>
+            <div class="v" id="resGross">$0</div>
+            <div class="s" id="resGrossSub">0% of spend</div>
+          </div>
+          <div class="roi-result">
+            <div class="l">Platform cost</div>
+            <div class="v" id="resPlatform">$0</div>
+            <div class="s" id="resPlatformSub">1.5% of spend</div>
+          </div>
+          <div class="roi-result">
+            <div class="l">Return multiple</div>
+            <div class="v" id="resMultiple">0×</div>
+            <div class="s">gross savings ÷ cost</div>
+          </div>
+          <div class="roi-result">
+            <div class="l">Payback</div>
+            <div class="v" id="resPayback">0 mo</div>
+            <div class="s">to cover platform cost</div>
+          </div>
+        </div>
+
+        <div class="roi-breakdown">
+          <div class="roi-bar">
+            <span class="roi-seg-hard" id="barHard">Hard</span>
+            <span class="roi-seg-soft" id="barSoft">Soft</span>
+            <span class="roi-seg-platform" id="barPlatform">Platform</span>
+          </div>
+          <div class="roi-bar-legend">
+            <span><span class="roi-dot" style="background:var(--evr-blue-400)"></span>Hard savings · <strong id="legHard">$0</strong></span>
+            <span><span class="roi-dot" style="background:var(--evr-teal-400)"></span>Soft savings · <strong id="legSoft">$0</strong></span>
+            <span><span class="roi-dot" style="background:var(--evr-neutral-50)"></span>Platform cost · <strong id="legPlatform">$0</strong></span>
+          </div>
+        </div>
+
+        <div class="roi-stake">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <p>At this net return, <b id="stakeNet">$0</b> a year is on the table — about <b id="stakeDaily">$0</b> for every day nothing changes.</p>
+        </div>
+
+        <div class="roi-how">
+          <p class="roi-how-title">How the savings add up</p>
+          <ul class="roi-how-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.4l2.4 2.4 4.8-5.3"/></svg><span>Consolidate suppliers and route demand to the best-priced, best-performing agencies.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.4l2.4 2.4 4.8-5.3"/></svg><span>Hold every requisition to negotiated contract rates and stop off-contract pay.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.4l2.4 2.4 4.8-5.3"/></svg><span>Verify worker identity and approve time, so you pay only for hours actually worked.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.4l2.4 2.4 4.8-5.3"/></svg><span>Auto-match approved time to invoices and recover billing errors before they are paid.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.4l2.4 2.4 4.8-5.3"/></svg><span>Automate sourcing, timesheets, reconciliation and reporting to win back admin hours.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== STEP 6 · SHARE -->
+    <section class="roi-section roi-section--tint">
+      <div class="roi-section-inner">
+        <p class="roi-step-eyebrow">Step 6 · Save & send</p>
+        <h2>Save it. Send it.</h2>
+        <p class="roi-section-lead">
+          Name the scenario and save it. You'll get a shareable link and a dated record — so you can
+          both watch the cost of waiting climb from here, or hand over a clean one-page summary.
+        </p>
+        <div class="roi-share-grid" id="shareGrid">
+          <div class="roi-card" id="sendCard">
+            <div class="roi-share-fields">
+              <div>
+                <label class="roi-field-label" for="clientName">Client / company name</label>
+                <input class="roi-input" id="clientName" autocomplete="off" placeholder="e.g. Northwind Retail Group" />
+              </div>
+              <div>
+                <label class="roi-field-label" for="preparedBy">Prepared by</label>
+                <input class="roi-input" id="preparedBy" autocomplete="off" placeholder="Your name" />
+              </div>
+            </div>
+            <div class="roi-share-actions">
+              <button class="roi-btn roi-btn--primary" id="sendBtn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M4 12l16-8-6 16-3-6-7-2z"/></svg>
+                Save & send
+              </button>
+              <button class="roi-btn roi-btn--ghost" id="summaryBtn2" type="button" onclick="document.getElementById('summaryBtn').click()">View summary</button>
+              <button class="roi-btn roi-btn--ghost" id="printBtn" type="button">Print one-pager</button>
+            </div>
+          </div>
+
+          <div class="roi-sent" id="sentBox" hidden>
+            <p class="roi-sent-l">Saved · ready to send</p>
+            <p class="roi-sent-line" id="sentLine"></p>
+            <div class="roi-sent-link" id="sentLinkRow">
+              <input id="sentLinkInput" class="roi-input" readonly aria-label="Shareable link" />
+              <button class="roi-btn roi-btn--ghost roi-btn--sm" id="copySentLink" type="button">Copy link</button>
+            </div>
+            <div class="roi-accrued" id="accruedVal">$0</div>
+            <div class="roi-accrued-sub" id="accruedSub"></div>
+            <div class="roi-sent-actions">
+              <button class="roi-btn roi-btn--primary roi-btn--sm" id="sentViewSummary" type="button">View summary</button>
+              <button class="roi-btn roi-btn--ghost roi-btn--sm" id="sentPrint" type="button">Print one-pager</button>
+              <button class="roi-btn roi-btn--ghost roi-btn--sm" id="resetSent" type="button">Edit &amp; resend</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================= SOURCES -->
+    <section class="roi-section" id="sources">
+      <div class="roi-section-inner">
+        <p class="roi-step-eyebrow">Methodology</p>
+        <h2>Every assumption, sourced</h2>
+        <p class="roi-section-lead">
+          The default percentages draw on published industry research. Tune them to
+          the client's own data — these are starting points, not promises.
+        </p>
+        <ul class="roi-sources-list" id="sourcesList"></ul>
+        <p class="roi-disclaimer">
+          This calculator produces directional estimates for discussion, not a
+          guarantee of results or a contractual commitment. Hard-dollar drivers are
+          modeled as a percentage of contingent labor spend; soft-dollar drivers as
+          recovered administrative hours valued at the blended loaded rate you set.
+          Industry estimates for unknown spend use illustrative contingent-share and
+          rate benchmarks and should be replaced with client actuals. The 1.5%
+          platform rate is a standard planning figure. Figures display in the
+          selected country's currency; cross-currency benchmark conversions use
+          illustrative exchange rates for planning only.
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================= FOOTER -->
+    <footer class="roi-footer">
+      <div class="roi-footer-inner">
+        <img src="../../assets/dayforce-flexwork-logo.svg" alt="Dayforce Flex Work" />
+        <div class="roi-footer-links">
+          <a href="ROI Calculator Changelog.html">Changelog</a>
+          <a href="https://www.dayforce.com/how-we-help/dayforce/flex-work" target="_blank" rel="noopener">About Flex Work</a>
+        </div>
+        <small>Sales asset · directional estimates for discussion</small>
+      </div>
+    </footer>
+
+    <!-- ========================================= PROOF OVERLAY -->
+    <div class="roi-proof" id="proofOverlay" role="dialog" aria-modal="true" aria-label="How Flex Work delivers this saving" hidden>
+      <div class="roi-proof-backdrop" data-proof-close></div>
+      <div class="roi-proof-sheet" role="document">
+        <button class="roi-proof-close" data-proof-close type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div class="roi-proof-head">
+          <p class="roi-proof-kicker">In Dayforce Flex Work</p>
+          <h3 id="proofTitle">How this saving is earned</h3>
+          <p class="roi-proof-desc" id="proofDesc"></p>
+        </div>
+        <figure class="roi-proof-figure">
+          <div class="roi-proof-frame">
+            <div class="roi-proof-bar"><span></span><span></span><span></span></div>
+            <img id="proofImg" alt="" />
+          </div>
+          <figcaption id="proofCap"></figcaption>
+        </figure>
+        <a class="roi-proof-source" id="proofSource" target="_blank" rel="noopener" hidden></a>
+      </div>
+    </div>
+
+    <!-- ========================================= SUMMARY OVERLAY -->
+    <div class="roi-summary" id="summaryOverlay" role="dialog" aria-modal="true" aria-label="Client summary">
+      <button class="roi-summary-close" id="summaryClose" type="button" aria-label="Close summary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="roi-summary-sheet">
+        <div class="roi-summary-head">
+          <p class="roi-eyebrow">Dayforce Flex Work · contingent labor ROI</p>
+          <h2 id="sumClient">Prospective client</h2>
+          <div class="meta" id="sumMeta"></div>
+        </div>
+        <div class="roi-summary-body">
+          <p style="font:var(--evr-utility2);text-transform:uppercase;letter-spacing:0.06em;color:var(--evr-content-primary-lowemp);margin:0 0 6px">Estimated net annual ROI</p>
+          <div class="roi-summary-hero-net" id="sumNet">$0</div>
+          <div style="font:var(--evr-body2);color:var(--evr-content-primary-lowemp);margin-top:6px"><span id="sumMultiple">0×</span> · <span id="sumPct">0%</span></div>
+
+          <h3 class="roi-summary-sub">Hard-dollar savings</h3>
+          <div id="sumHardLines"></div>
+          <div class="roi-summary-row" style="border-top-color:var(--evr-border-decorative-default)"><span class="k">Hard total</span><span class="val" id="sumHard">$0</span></div>
+
+          <h3 class="roi-summary-sub">Soft-dollar savings</h3>
+          <div id="sumSoftLines"></div>
+          <div class="roi-summary-row" style="border-top-color:var(--evr-border-decorative-default)"><span class="k">Soft total</span><span class="val" id="sumSoft">$0</span></div>
+
+          <h3 class="roi-summary-sub">The math</h3>
+          <div class="roi-summary-row"><span class="k">Contingent labor spend</span><span class="val" id="sumSpend">$0</span></div>
+          <div class="roi-summary-row"><span class="k">Gross annual savings</span><span class="val" id="sumGross">$0</span></div>
+          <div class="roi-summary-row roi-summary-row--cost"><span class="k" id="sumPlatformLabel">Platform investment (1.5%)</span><span class="val" id="sumPlatform">$0</span></div>
+          <div class="roi-summary-row roi-summary-row--total"><span class="k">Net annual ROI</span><span class="val" id="sumNetRow">$0</span></div>
+
+          <div class="roi-summary-stake" id="sumStake"></div>
+        </div>
+        <div class="roi-summary-toolbar">
+          <button class="roi-btn roi-btn--primary" id="sumPrint" type="button">Print / save as PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================ FULL-SCREEN CASH CLOCK -->
+    <div class="roi-cashclock" id="cashClock" role="dialog" aria-modal="true" aria-label="Cost of delay, full screen" hidden>
+      <button class="roi-cashclock-close" id="cashClockClose" type="button" aria-label="Exit full screen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="roi-cashclock-inner">
+        <p class="roi-cashclock-eyebrow"><span class="roi-live-dot"></span> The cost of waiting · live &amp; counting</p>
+        <p class="roi-cashclock-for" id="ccFor"></p>
+        <div class="roi-cashclock-meter">
+          <span class="cur" id="ccCur">$</span><span class="int" id="ccInt">0</span><span class="dec" id="ccDec">.00</span>
+        </div>
+        <p class="roi-cashclock-status" id="ccStatus"></p>
+        <div class="roi-cashclock-rates" id="ccRates"></div>
+        <p class="roi-cashclock-tag">Dayforce Flex Work · every second of indecision has a price</p>
+      </div>
+    </div>
+
+    <div class="roi-toast" id="roiToast" role="status"></div>
+
+  </div>
+  <script src="roi-calc.js"></script>
+</body>
+</html>

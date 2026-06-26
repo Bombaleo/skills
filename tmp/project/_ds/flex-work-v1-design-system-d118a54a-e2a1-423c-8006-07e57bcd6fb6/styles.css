@@ -1,0 +1,14 @@
+/* ============================================================================
+   Flex Work V1 — Design System entrypoint
+   Single stylesheet consumers can link to get everything: design tokens,
+   the Gilroy webfont, and the component styles (nav, table, section).
+
+   FontAwesome is a VENDORED third-party icon dependency and is intentionally
+   NOT imported here — link `assets/fontawesome/css/all.min.css` separately on
+   any page that renders icons. Keeping it out of this closure stops its ~2000
+   utility classes and shim @font-face from being treated as design tokens.
+   ============================================================================ */
+
+@import url('colors_and_type.css');   /* color + type tokens, radii, shadows, spacing, Gilroy @font-face */
+@import url('components/_nav.css');    /* topbar, sidebar, footer */
+@import url('components/_table.css');  /* table + section (also pulls _nav.css) */

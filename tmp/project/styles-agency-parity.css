@@ -1,0 +1,229 @@
+/* =====================================================================
+   Agency Portal — Universal Parity recommendations · companion styles
+   Loaded after styles-strategy.css (sr-* shell) and styles-sow-parity.css
+   (tl-* task-list primitives). Everything here is .ap-* plus two extra
+   parity-pill variants (ju · all) that extend the tl-par set. No
+   collisions with the strategy / SOW / MSP stylesheets.
+   ===================================================================== */
+
+:root {
+  --ap-ju:     #8A4B12;   /* JoinedUp — frontline / shift  */
+  --ap-ju-bg:  #FBEADB;
+  --ap-all:    #235C4E;   /* Universal — sets the bar everywhere */
+  --ap-all-bg: #DCEFE8;
+}
+
+/* ---- extend the SOW parity pill set with JU + All ------------------- */
+.tl-par[data-pp="ju"]  { color: var(--ap-ju);  background: var(--ap-ju-bg); }
+.tl-par[data-pp="all"] { color: var(--ap-all); background: var(--ap-all-bg); }
+
+/* =====================================================================
+   Today → Target compare band (used in "Where we stand")
+   ===================================================================== */
+.ap-compare {
+  display: grid;
+  grid-template-columns: 1fr 44px 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-top: 8px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  overflow: hidden;
+  background: var(--evr-surface-primary-default);
+}
+.ap-compare-col {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ap-compare-col[data-side="today"]  { background: var(--evr-surface-secondary-default); }
+.ap-compare-col[data-side="target"] { background: color-mix(in srgb, var(--ap-all) 5%, var(--evr-surface-primary-default)); }
+.ap-compare-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--evr-surface-primary-default);
+  border-left: 1px solid var(--evr-border-decorative-lowemp);
+  border-right: 1px solid var(--evr-border-decorative-lowemp);
+  color: var(--evr-content-primary-lowemp);
+}
+.ap-compare-arrow svg { width: 20px; height: 20px; }
+.ap-compare-h {
+  font-family: var(--evr-font-text);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+}
+.ap-compare-col[data-side="target"] .ap-compare-h { color: var(--ap-all); }
+.ap-compare ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ap-compare li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--evr-content-primary-default);
+}
+.ap-compare li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--evr-content-primary-lowemp);
+}
+.ap-compare-col[data-side="target"] li::before { background: var(--ap-all); border-radius: 50%; }
+.ap-compare li b { color: var(--evr-content-primary-highemp); font-weight: 600; }
+@media (max-width: 760px) {
+  .ap-compare { grid-template-columns: 1fr; }
+  .ap-compare-arrow { transform: rotate(90deg); height: 40px; border: none; }
+}
+
+/* =====================================================================
+   Universal model diagram — receive → respond → measured → paid
+   ===================================================================== */
+.ap-loop {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 8px;
+}
+@media (max-width: 900px) { .ap-loop { grid-template-columns: repeat(2, 1fr); } }
+.ap-loop-step {
+  position: relative;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-sm);
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 4px solid var(--ap-all);
+}
+.ap-loop-num {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ap-all);
+  font-feature-settings: "tnum";
+}
+.ap-loop-step h4 {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+  color: var(--evr-content-primary-highemp);
+}
+.ap-loop-step p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--evr-content-primary-default);
+}
+.ap-loop-flex {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.ap-loop-flex span {
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--evr-content-primary-lowemp);
+  padding-left: 16px;
+  position: relative;
+}
+.ap-loop-flex span::before {
+  content: attr(data-k);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+}
+.ap-loop-flex span[data-k="S"]::before { content: "S"; color: var(--ap-ju); }
+.ap-loop-flex span[data-k="P"]::before { content: "P"; color: var(--tl-vn); }
+.ap-loop-flex span[data-k="J"]::before { content: "J"; color: var(--tl-both); }
+
+/* legend chips for the S/P/J engagement keys */
+.ap-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--evr-content-primary-default);
+}
+.ap-key span { display: inline-flex; align-items: center; gap: 6px; }
+.ap-key b {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #fff;
+}
+.ap-key b[data-k="S"] { background: var(--ap-ju); }
+.ap-key b[data-k="P"] { background: var(--tl-vn); }
+.ap-key b[data-k="J"] { background: var(--tl-both); }
+
+/* =====================================================================
+   Surface inventory grid (current agency views)
+   ===================================================================== */
+.ap-surfaces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+@media (max-width: 900px) { .ap-surfaces { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .ap-surfaces { grid-template-columns: 1fr; } }
+.ap-surface {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ap-surface-name {
+  font-family: var(--evr-font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--evr-content-primary-highemp);
+}
+.ap-surface-state {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--evr-content-primary-default);
+}
+.ap-surface-tag {
+  margin-top: 4px;
+  align-self: flex-start;
+  font-family: var(--evr-font-text);
+  font-weight: 700;
+  font-size: 9.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.ap-surface-tag[data-depth="thin"]   { color: var(--evr-content-status-error-default); background: var(--evr-surface-decorative-low-red); }
+.ap-surface-tag[data-depth="partial"]{ color: var(--ap-ju); background: var(--ap-ju-bg); }
+.ap-surface-tag[data-depth="built"]  { color: var(--ap-all); background: var(--ap-all-bg); }

@@ -1,0 +1,384 @@
+/* =====================================================================
+   Settings → Jobs page (pages/jobs-settings.jsx)
+   ---------------------------------------------------------------------
+   Two surfaces live in this file:
+     · The page itself (.jobs-header / .jobs-tabs / .jobs-tab-count) —
+       header strip with sync chip + Frontline / Professional tabs.
+     · The active-category pane (.jobs-pane → stats, toolbar, add row,
+       table). Pane renders for the active tab when both categories
+       are on, or flat when only one is.
+   The look stays inside Everest tokens — no decorative gradients.
+   ===================================================================== */
+
+/* ---- Header strip --------------------------------------------------- */
+.jobs-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+.jobs-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.jobs-header-sync {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-decorative-low-green);
+  color: var(--evr-green-700);
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.jobs-header-sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--evr-green-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--evr-green-500) 22%, transparent);
+  animation: jobsPulse 2s ease-in-out infinite;
+}
+@keyframes jobsPulse {
+  0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--evr-green-500) 22%, transparent); }
+  50%      { box-shadow: 0 0 0 5px color-mix(in srgb, var(--evr-green-500) 10%, transparent); }
+}
+.jobs-header-sync-sep {
+  color: var(--evr-content-primary-lowemp);
+  opacity: 0.6;
+}
+.jobs-header-sync-time {
+  font-weight: var(--evr-fw-regular);
+  color: var(--evr-content-primary-default);
+}
+
+/* ---- Tabs (Frontline / Professional) -------------------------------- */
+.jobs-tabs {
+  align-self: flex-start;
+}
+.jobs-tab-count {
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--evr-surface-secondary-selected);
+  color: var(--evr-content-primary-default);
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  font-variant-numeric: tabular-nums;
+}
+.fw-tab[aria-pressed="true"] .jobs-tab-count {
+  background: var(--evr-interactive-primary-decorative);
+  color: var(--evr-interactive-primary-default);
+}
+
+/* ---- Pane (one per category) --------------------------------------- */
+.jobs-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+/* ---- Stats strip --------------------------------------------------- */
+.jobs-stats {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  align-self: flex-start;
+}
+.jobs-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.jobs-stat-value {
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--evr-content-primary-highemp);
+}
+.jobs-stat-label {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+}
+.jobs-stat-sep {
+  color: var(--evr-content-primary-lowemp);
+  opacity: 0.5;
+}
+
+/* ---- Toolbar ------------------------------------------------------- */
+.jobs-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.jobs-search {
+  position: relative;
+  min-width: 320px;
+  flex: 0 1 360px;
+}
+.jobs-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--evr-content-primary-lowemp);
+  pointer-events: none;
+  display: inline-flex;
+}
+.jobs-search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 36px 0 38px;
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: 10px;
+  background: var(--evr-surface-primary-default);
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-highemp);
+}
+.jobs-search-input:focus {
+  outline: none;
+  border-color: var(--evr-interactive-primary-default);
+  box-shadow: 0 0 0 2px var(--evr-interactive-primary-decorative);
+}
+.jobs-search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--evr-content-primary-lowemp);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.jobs-search-clear:hover { background: var(--evr-surface-secondary-hover); }
+.jobs-count {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Add-row ------------------------------------------------------- */
+.jobs-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 14px;
+  border: 1px dashed var(--evr-border-decorative-default);
+  border-radius: 12px;
+  background: var(--evr-surface-secondary-default);
+}
+.jobs-add-icon {
+  color: var(--evr-content-primary-lowemp);
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+.jobs-add-input {
+  flex: 1 1 auto;
+  height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-highemp);
+  min-width: 0;
+}
+.jobs-add-input:focus {
+  outline: none;
+  background: var(--evr-surface-primary-default);
+  box-shadow: 0 0 0 2px var(--evr-interactive-primary-decorative);
+}
+.jobs-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--evr-interactive-primary-default);
+  color: var(--evr-content-primary-inverse);
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-demibold);
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.jobs-add-btn:hover  { background: var(--evr-interactive-primary-hover); }
+.jobs-add-btn:disabled {
+  background: var(--evr-inactive-surface);
+  color: var(--evr-inactive-content);
+  cursor: not-allowed;
+}
+
+/* ---- Table card ---------------------------------------------------- */
+.jobs-card {
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.jobs-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.jobs-table thead th {
+  text-align: left;
+  font: var(--evr-utility2);
+  font-weight: var(--evr-fw-demibold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-lowemp);
+  white-space: nowrap;
+}
+.jobs-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  vertical-align: middle;
+}
+.jobs-table tbody tr:last-child td { border-bottom: 0; }
+.jobs-table tbody tr:hover { background: var(--evr-surface-secondary-hover); }
+
+.jobs-row-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.jobs-row-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+.jobs-row-dot--fl  { background: var(--evr-blue-400); }
+.jobs-row-dot--pro { background: var(--evr-purple-400); }
+.jobs-row-title {
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+
+.jobs-source-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  white-space: nowrap;
+}
+.jobs-source-pill--core {
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-blue-700);
+}
+.jobs-source-pill--custom {
+  background: var(--evr-surface-secondary-selected);
+  color: var(--evr-content-primary-default);
+}
+
+.jobs-row-usage {
+  font-variant-numeric: tabular-nums;
+  color: var(--evr-content-primary-default);
+  white-space: nowrap;
+}
+.jobs-row-usage-zero {
+  color: var(--evr-content-primary-lowemp);
+  font-style: italic;
+}
+
+.jobs-row-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+.jobs-row-remove {
+  border: 0;
+  background: transparent;
+  color: var(--evr-content-primary-lowemp);
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.jobs-row-remove:hover {
+  background: var(--evr-surface-decorative-low-red);
+  color: var(--evr-red-500);
+}
+
+/* ---- Empty state --------------------------------------------------- */
+.jobs-empty {
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+.jobs-empty-title {
+  margin: 0;
+  font: var(--evr-body1);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.jobs-empty-body {
+  margin: 0;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  max-width: 460px;
+}
+
+/* ---- Configuration card row count chip ----------------------------- */
+/* Used by JobsCategoryCard in settings-config.jsx alongside the
+   existing .cfg-engtypes-list row markup. The count chip echoes how
+   many jobs are currently in the catalog so the user sees what's
+   about to light up across the product when they flip a switch. */
+.cfg-jobs-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--evr-surface-secondary-selected);
+  color: var(--evr-content-primary-default);
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-demibold);
+  font-variant-numeric: tabular-nums;
+}
+.cfg-engtype-row--on .cfg-jobs-count {
+  background: var(--evr-interactive-primary-decorative);
+  color: var(--evr-interactive-primary-default);
+}

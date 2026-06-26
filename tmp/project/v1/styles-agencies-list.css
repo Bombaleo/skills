@@ -1,0 +1,111 @@
+/* =====================================================================
+   Flex Work V1 — Agencies → Active ("Active Agencies List")
+   Rebuilt on the V1 design system: the list card uses the V1 Section +
+   Table vocabulary (white card, Gilroy section title, Helvetica data
+   rows, #908f8f headers, #f9f9f9 zebra, #eeeeee hairlines, teal/blue
+   pills). Scoped under .proto-app.
+   ===================================================================== */
+
+/* ---------- List card (V1 Section) ------------------------------------ */
+.agl-card {
+  background: #fff;
+  border: 1px solid #eeeeee;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  margin-top: var(--space-3);
+  overflow: hidden;
+}
+
+/* header (icon + title) — V1 section header, 60px */
+.agl-head {
+  display: flex; align-items: center; gap: 16px;
+  min-height: 60px;
+  padding: 14px 24px;
+  border-bottom: 1px solid #eeeeee;
+}
+.agl-head-ico { width: 24px; height: 24px; flex: 0 0 auto; }
+.agl-head-ico .proto-fa { font-size: 22px; color: #221f20; }
+.agl-title {
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 20px; line-height: 26px;
+  letter-spacing: -0.1px; color: #1f1f23; margin: 0;
+}
+
+/* ---------- Filter / sort pills --------------------------------------- */
+.agl-filters {
+  display: flex; gap: 10px;
+  padding: 20px 24px 4px;
+}
+.agl-pill {
+  border: 1px solid #eeeeee; cursor: pointer;
+  background: #f9f9f9; color: var(--text-1);
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 13px; line-height: 1;
+  padding: 10px 10px; border-radius: var(--radius-input);
+  transition: background-color 150ms, color 150ms, border-color 150ms;
+}
+.agl-pill:hover { background: #eef1f4; }
+.agl-pill.is-on {
+  background: var(--primary-1);
+  border-color: var(--primary-1);
+  color: var(--primary-0);
+}
+
+/* ---------- Table (V1 fw-table) --------------------------------------- */
+.agl-table-wrap { padding: 12px 0 4px; overflow-x: auto; }
+.agl-table { width: 100%; border-collapse: collapse; }
+
+.agl-table thead th {
+  text-align: left;
+  font-family: var(--font-body); font-weight: 700; font-size: 14px; letter-spacing: 0.24px;
+  color: #908f8f;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eeeeee;
+  white-space: nowrap;
+}
+.agl-table thead th.agl-c-priority { padding-left: 24px; }
+.agl-table thead th.agl-c-act { padding-right: 24px; }
+
+.agl-table tbody td {
+  font-family: var(--font-body); font-size: 14px; line-height: 1.5; letter-spacing: 0.24px;
+  color: #1f1f23;
+  padding: 15px 16px;
+  border-bottom: 1px solid #eeeeee;
+  vertical-align: middle;
+}
+.agl-table tbody tr:last-child td { border-bottom: 0; }
+.agl-table tbody tr.agl-row { cursor: pointer; transition: background-color 120ms; }
+.agl-table tbody tr.agl-row:nth-child(even) td { background: #f9f9f9; }
+.agl-table tbody tr.agl-row:hover td { background: #ebf8ff; }
+
+/* priority cell: drag handle + value */
+.agl-c-priority { padding-left: 24px !important; white-space: nowrap; }
+.agl-handle { display: inline-flex; width: 16px; height: 16px; margin-right: 12px; vertical-align: middle; cursor: grab; }
+.agl-handle .proto-fa { font-size: 15px; color: #bcbbbc; }
+.agl-priority { color: #1f1f23; }
+
+.agl-c-act { padding-right: 24px !important; white-space: nowrap; }
+.agl-c-act.is-na { color: #a5a4a5; }
+.agl-c-sent { white-space: nowrap; }
+
+/* contact cell: single line, ellipsis on overflow */
+.agl-c-contact {
+  max-width: 160px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* email cell: text + copy button */
+.agl-c-email { white-space: nowrap; }
+.agl-email { color: #1f1f23; }
+.agl-copy {
+  border: 0; background: transparent; cursor: pointer;
+  color: var(--primary-0);
+  padding: 3px; margin-left: 8px; vertical-align: middle;
+  display: inline-flex; border-radius: 4px;
+}
+.agl-copy:hover { background: var(--primary-1); }
+.agl-copy .proto-fa { font-size: 14px; }
+
+@media (max-width: 768px) {
+  .agl-head, .agl-filters { padding-left: 16px; padding-right: 16px; }
+  .agl-table thead th.agl-c-priority, .agl-c-priority { padding-left: 16px !important; }
+  .agl-table thead th.agl-c-act, .agl-c-act { padding-right: 16px !important; }
+}

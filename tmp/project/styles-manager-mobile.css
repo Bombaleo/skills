@@ -1,0 +1,439 @@
+/* =====================================================================
+   Manager mobile app — layered on top of styles-worker.css
+   The shell (.wm-stage / .wm-dock-* / .wm-app / .wm-card / .wm-tabbar /
+   .wm-subtabs / .wm-header) is shared with the worker app; only the
+   manager-specific bits (stats, post card, today card, approval card,
+   fill bar, audit list, profile, location rows) live here.
+   ===================================================================== */
+
+/* Stage tint — subtle blue shift so the manager preview reads as a
+   distinct (but related) surface to the worker preview. */
+.mm-stage {
+  background:
+    radial-gradient(420px 280px at 60% -10%, #1d2c4e 0%, transparent 70%),
+    radial-gradient(360px 240px at 100% 110%, #0c1d3a 0%, transparent 70%),
+    #08111f;
+}
+
+/* Header subtitle next to the page title */
+.mm-header-sub {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 2px;
+}
+
+/* Header avatar pill */
+.mm-avatar-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font: var(--evr-utility2);
+  font-weight: var(--evr-fw-bold);
+  font-family: var(--evr-font-text);
+  font-size: 13px;
+}
+
+/* Inline action used in header right slot (e.g. "Approve all") */
+.mm-text-action {
+  background: none; border: none; padding: 8px 10px;
+  font: var(--evr-utility2);
+  font-weight: var(--evr-fw-bold);
+  color: var(--evr-interactive-primary-default);
+  cursor: pointer;
+  border-radius: 8px;
+}
+.mm-text-action:hover { background: var(--evr-surface-secondary-default); }
+
+/* Section title with a "View all" link on the right */
+.mm-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+/* Greeting at the top of Home */
+.mm-greet {
+  padding: 8px 20px 4px;
+}
+.mm-greet-headline {
+  font: var(--evr-h3);
+  font-family: var(--evr-font-display);
+  color: var(--evr-content-primary-highemp);
+  font-weight: var(--evr-fw-demibold);
+  letter-spacing: -0.01em;
+}
+.mm-greet-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 2px;
+}
+
+/* ----- Metric tiles (At risk / Approvals / Open) ----- */
+.mm-stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 16px 20px 8px;
+}
+.mm-stat {
+  position: relative;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-primary-default);
+  border-radius: 14px;
+  padding: 14px 12px 12px;
+  text-align: left;
+  cursor: pointer;
+  display: flex; flex-direction: column; gap: 2px;
+  transition: background 150ms, border-color 150ms;
+}
+.mm-stat:hover {
+  background: var(--evr-surface-secondary-default);
+}
+.mm-stat-value {
+  font: var(--evr-h2);
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  letter-spacing: -0.01em;
+  color: var(--evr-content-primary-highemp);
+  line-height: 1.1;
+}
+.mm-stat-label {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-default);
+  font-weight: var(--evr-fw-medium);
+}
+.mm-stat-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: var(--evr-content-primary-lowemp);
+}
+.mm-stat--risk .mm-stat-value { color: #B42323; }
+.mm-stat--risk .mm-stat-icon  { color: #B42323; }
+.mm-stat--risk {
+  background: #FDEDED;
+  border-color: #F4C7C7;
+}
+.mm-stat--risk:hover { background: #FBE0E0; }
+
+/* ----- Post-a-shift card ----- */
+.mm-post-card {
+  margin: 4px 20px 12px;
+  display: flex; align-items: center; gap: 12px;
+  background: var(--evr-blue-50, #EBF1FC);
+  border: 1px solid var(--evr-blue-100, #C5D4F1);
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  width: calc(100% - 40px);
+  text-align: left;
+  transition: background 150ms;
+}
+.mm-post-card:hover { background: var(--evr-blue-100, #C5D4F1); }
+.mm-post-card-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--evr-interactive-primary-default);
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.mm-post-card-body { flex: 1; }
+.mm-post-card-title {
+  font: var(--evr-body1-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.mm-post-card-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  margin-top: 2px;
+}
+
+/* ----- Card additions (rows, names, amounts) ----- */
+.mm-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.mm-card-name {
+  font: var(--evr-body1-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.mm-card-amount {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+  font-variant-numeric: tabular-nums;
+}
+.mm-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 6px;
+}
+
+/* Today / clock-in card */
+.mm-clock-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+}
+.mm-clock-block {
+  display: flex; flex-direction: column;
+}
+.mm-clock-block small {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mm-clock-block strong {
+  font: var(--evr-body1-bold);
+  color: var(--evr-content-primary-highemp);
+  font-variant-numeric: tabular-nums;
+}
+.mm-clock-divider {
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* Pills (status indicators inside cards) */
+.mm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font: var(--evr-caption);
+  font-weight: var(--evr-fw-bold);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.mm-pill--inline {
+  margin-left: auto;
+  font-size: 11px;
+}
+.mm-pill--ok      { background: #DFF1E5; color: #1B6A3A; }
+.mm-pill--warn    { background: #FFF1D2; color: #7A4B00; }
+.mm-pill--crit    { background: #FDE2E2; color: #A22020; }
+.mm-pill--neutral { background: var(--evr-surface-secondary-default); color: var(--evr-content-primary-default); }
+
+/* Open requisition card — fill progress */
+.mm-fill-row {
+  margin-top: 10px;
+}
+.mm-fill-text {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-default);
+  margin-bottom: 6px;
+}
+.mm-fill-text strong { color: var(--evr-content-primary-highemp); font-weight: var(--evr-fw-bold); }
+.mm-fill-bar {
+  height: 6px;
+  background: var(--evr-surface-secondary-default);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.mm-fill-progress {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 200ms;
+}
+.mm-fill--ok   { background: #2E8C4B; }
+.mm-fill--warn { background: #C58A14; }
+.mm-fill--crit { background: #B42323; }
+
+/* Approval card */
+.mm-card-approval {
+  display: block;
+}
+.mm-card-approval--compact .wm-card-org { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ----- Approvals summary header ----- */
+.mm-approvals-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  padding: 16px 20px 8px;
+}
+.mm-approvals-summary-block {
+  position: relative;
+  text-align: left;
+}
+.mm-approvals-summary-block + .mm-approvals-summary-block {
+  padding-left: 14px;
+  border-left: 1px solid var(--evr-border-decorative-lowemp);
+  margin-left: 14px;
+}
+.mm-approvals-summary-value {
+  font: var(--evr-h4);
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  font-variant-numeric: tabular-nums;
+}
+.mm-approvals-summary-label {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 2px;
+}
+
+/* Audit trail (approval detail) */
+.mm-audit {
+  padding: 0 20px 16px;
+  position: relative;
+}
+.mm-audit::before {
+  content: "";
+  position: absolute;
+  left: 28px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--evr-border-decorative-lowemp);
+}
+.mm-audit-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  position: relative;
+}
+.mm-audit-dot {
+  width: 12px; height: 12px;
+  border-radius: 999px;
+  background: var(--evr-surface-secondary-default);
+  border: 2px solid var(--evr-border-decorative-lowemp);
+  margin-top: 4px;
+  z-index: 1;
+  flex-shrink: 0;
+  margin-left: 3px;
+}
+.mm-audit-dot--current {
+  background: var(--evr-interactive-primary-default);
+  border-color: var(--evr-interactive-primary-default);
+  box-shadow: 0 0 0 4px var(--evr-blue-50, #EBF1FC);
+}
+.mm-audit-title {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.mm-audit-sub {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 2px;
+}
+
+/* Approval detail — variance badge */
+.mm-variance {
+  font: var(--evr-caption);
+  color: #7A4B00;
+  margin-top: 4px;
+  font-weight: var(--evr-fw-medium);
+}
+.mm-banner--alert {
+  background: #FDEDED;
+  border-color: #F4C7C7;
+  color: #5A1010;
+}
+
+/* ----- More screen ----- */
+.mm-profile-card {
+  margin: 0 20px 16px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; align-items: center; gap: 14px;
+}
+.mm-profile-avatar {
+  width: 56px; height: 56px;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font: var(--evr-h4);
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-bold);
+}
+.mm-profile-name {
+  font: var(--evr-h4);
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.mm-profile-title {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 2px;
+}
+.mm-sites {
+  padding: 0 20px 8px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.mm-site-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  border-radius: 8px;
+}
+.mm-site-row:hover {
+  background: var(--evr-surface-secondary-default);
+}
+.mm-site-icon {
+  color: var(--evr-content-primary-lowemp);
+  display: inline-flex;
+}
+.mm-rows {
+  padding: 0 20px;
+}
+.mm-row {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  padding: 14px 4px;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+.mm-row:hover {
+  background: var(--evr-surface-secondary-default);
+}
+.mm-row-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--evr-surface-secondary-default);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--evr-content-primary-highemp);
+}
+.mm-row-body {
+  flex: 1;
+  display: flex; flex-direction: column;
+}
+.mm-row-label {
+  font: var(--evr-body1-bold);
+  color: var(--evr-content-primary-highemp);
+}
+.mm-row-sub {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  margin-top: 1px;
+}
+.mm-signout {
+  width: 100%;
+  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The wm-subtabs has 4 evenly-spaced items in worker app (Invites /
+   Upcoming / Active / Past); manager has 4 too (Today / Upcoming /
+   Open / Past) so they fit cleanly. No override needed except to
+   reduce gap on narrow phones. */
+.mm-subtabs { gap: 26px; }

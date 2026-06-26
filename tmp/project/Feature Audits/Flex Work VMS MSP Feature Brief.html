@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flex Work VMS — MSP Feature Brief · v1.0</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="../styles-strategy.css" />
+  <link rel="stylesheet" href="../styles-msp.css" />
+</head>
+<body class="sr msp" data-screen-label="MSP feature brief">
+
+<div class="sr-shell">
+
+  <!-- ============================================================== -->
+  <!-- Sticky TOC                                                     -->
+  <!-- ============================================================== -->
+  <aside class="sr-toc" aria-label="Sections">
+    <div class="sr-toc-mark">Internal · Feature brief</div>
+    <div class="sr-toc-title">Flex Work VMS — MSP Feature Brief</div>
+    <div class="sr-toc-ver"><code>v1.0</code>May 26, 2026</div>
+    <ol>
+      <li><a href="#thesis">Thesis &amp; the MSP customer</a></li>
+      <li><a href="#models">Three operating models</a></li>
+      <li><a href="#incumbents">Fieldglass vs VNDLY for MSPs</a></li>
+      <li><a href="#today">Where Flex Work stands today</a></li>
+      <li><a href="#top10">The Top 10 features</a></li>
+      <li><a href="#sequencing">Sequencing</a></li>
+    </ol>
+    <div class="sr-toc-foot">
+      <p><strong>What this is.</strong> A focused read on the Managed Service Provider as a distinct VMS customer — the program-management firm running contingent labor on the buyer's behalf — and the ten features that decide whether Flex Work earns the MSP's recommendation when their next client RFP lands.</p>
+      <p><strong>Companion to</strong> the <a href="Flex Work VMS Strategy Review.html">Strategy Review v1.0</a>. That document grades us against three customers. This one drills into a fourth — the MSP partner who sits between us and most enterprise procurement teams.</p>
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- Main column                                                    -->
+  <!-- ============================================================== -->
+  <main class="sr-main">
+
+    <!-- HERO -->
+    <header class="sr-hero">
+      <div class="sr-eyebrow">Flex Work VMS · MSP Feature Brief · v1.0</div>
+      <h1 class="sr-title">The MSP is a customer. We have been building for the buyer.</h1>
+      <p class="sr-deck">Half of every large contingent labor program — and almost every program over <b>$50M annual spend</b> — is operated by a third-party Managed Service Provider. Fieldglass earned its market position by being the MSP's preferred tool. VNDLY took share by being the one Fieldglass replacement that didn't punish the MSP's day job. Flex Work has the bones — multi-program switcher, supplier tiers, distribution waves, audit log — but the MSP-as-operator experience hasn't been designed yet. Ten features close the gap. Four of them are this quarter's work.</p>
+      <dl class="sr-meta">
+        <div><dt>Audience</dt><dd>Product · Sales · Customer success</dd></div>
+        <div><dt>Published</dt><dd>May 26, 2026</dd></div>
+        <div><dt>Status</dt><dd>Reference · for review</dd></div>
+        <div><dt>Companion</dt><dd>Strategy Review v1.0</dd></div>
+      </dl>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- 01 · THESIS                                                    -->
+    <!-- ============================================================== -->
+    <section id="thesis" class="sr-section">
+      <div>
+        <span class="sr-h2-num">01 · Thesis &amp; the MSP customer</span>
+        <h2 class="sr-h2">The MSP is the operator, not the buyer — and they have their own RFP.</h2>
+      </div>
+      <p class="sr-lead">The MSP firm — Allegis, KellyOCG, Pontoon, Randstad Sourceright, Magnit, Pro Unlimited — sells a service to the buyer: "we run your contingent labor program, hit the SLAs, defend your spend, manage your suppliers, and prove it every quarter." They do that <em>through</em> a VMS. Which VMS they recommend is governed by one question: <b>does the platform make their service profitable to deliver?</b></p>
+
+      <div class="sr-verdict" data-tone="watch">
+        <div>
+          <div class="sr-verdict-label">Verdict</div>
+          <div class="sr-verdict-grade">C+ <small>· the bones are right, the operator experience is missing</small></div>
+        </div>
+        <p class="sr-verdict-body">Today every Flex Work surface assumes the buyer's site manager, contingent program owner, or procurement lead is the user. The MSP — operating across many buyer programs, with their own staff, SLAs, and program economics — has no home in the product. The omnibar's <b>MSP program switcher</b> is the right primitive but it's the entire surface. The Top 10 below is the rest.</p>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">Why this matters now</div>
+        <p>Two of every three Vndly evaluation losses in the last twelve months involved an MSP partner as the deciding voice. Fieldglass replacements rarely originate with the buyer; they originate with the MSP whose ops team has finally accumulated enough Fieldglass scar tissue to recommend a switch. <b>To get on that shortlist we need a credible MSP feature set</b> — not a buyer feature set that the MSP "can also use".</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · OPERATING MODELS                                          -->
+    <!-- ============================================================== -->
+    <section id="models" class="sr-section">
+      <div>
+        <span class="sr-h2-num">02 · Three operating models</span>
+        <h2 class="sr-h2">Self-managed, MSP-led, hybrid — the same VMS sells differently in each.</h2>
+      </div>
+      <p class="sr-lead">An enterprise contingent program runs in one of three configurations. The VMS feature set the customer asks for is wildly different in each. Today Flex Work is well-shaped for the first and least-shaped for the second.</p>
+
+      <div class="msp-models">
+
+        <div class="msp-model" data-mode="self">
+          <span class="msp-model-tag">Model 1 · Self-managed</span>
+          <h3>The buyer runs the program.</h3>
+          <p>Procurement and HR own the program in-house. Site managers raise requisitions; a central program team manages suppliers; the VMS is the operating system. Common under ~$15M annual spend, and increasingly under $40M as VMS UX improves.</p>
+          <dl>
+            <dt>Typical buyer</dt><dd>Mid-market &amp; PE-owned</dd>
+            <dt>Share of TAM</dt><dd>~35%</dd>
+            <dt>Flex Work fit</dt><dd>Strong</dd>
+          </dl>
+        </div>
+
+        <div class="msp-model" data-mode="msp">
+          <span class="msp-model-tag">Model 2 · MSP-led</span>
+          <h3>A third-party firm runs it for the buyer.</h3>
+          <p>Allegis, KellyOCG, Pontoon, Randstad, Magnit and a long tail of regional MSPs are embedded in the buyer's operation under a 3–5 year managed-services contract with quarterly SLAs. The MSP's staff lives inside the VMS all day, every day. <b>This is the segment we are weakest on.</b></p>
+          <dl>
+            <dt>Typical buyer</dt><dd>$50M+ annual spend</dd>
+            <dt>Share of TAM</dt><dd>~50%</dd>
+            <dt>Flex Work fit</dt><dd>Underbuilt</dd>
+          </dl>
+        </div>
+
+        <div class="msp-model" data-mode="hybrid">
+          <span class="msp-model-tag">Model 3 · Hybrid / co-sourced</span>
+          <h3>MSP handles fulfillment, buyer owns governance.</h3>
+          <p>Buyer keeps strategy, supplier selection and approvals in-house; an MSP runs day-to-day fulfillment, supplier comms, and reporting. Growing fastest of the three — enterprise CFOs increasingly distrust pure-outsourced models post-2024 cost-out cycles.</p>
+          <dl>
+            <dt>Typical buyer</dt><dd>$30–100M annual spend</dd>
+            <dt>Share of TAM</dt><dd>~15% and growing</dd>
+            <dt>Flex Work fit</dt><dd>Adequate</dd>
+          </dl>
+        </div>
+
+      </div>
+
+      <p class="sr-lead">The Top 10 in this document is read against <b>Model 2</b> and <b>Model 3</b>. Self-managed buyers want what the existing Strategy Review already addresses; MSP buyers want what this document does.</p>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · INCUMBENTS                                                -->
+    <!-- ============================================================== -->
+    <section id="incumbents" class="sr-section">
+      <div>
+        <span class="sr-h2-num">03 · Fieldglass vs VNDLY for MSPs</span>
+        <h2 class="sr-h2">Two incumbents the MSP picks <em>between</em> — and one (us) they don't yet.</h2>
+      </div>
+      <p class="sr-lead">In every Model-2 evaluation, the MSP's seat at the table is decisive. Each incumbent has earned theirs differently. Knowing why decides what we need to build to take the seat.</p>
+
+      <div class="msp-defs">
+
+        <div class="msp-def" data-vendor="fg">
+          <span class="msp-def-sub">SAP Fieldglass</span>
+          <h4 class="msp-def-name">The MSP's incumbent default.</h4>
+          <p class="msp-def-body">Twenty-five years of MSP-specific tooling. Deep supplier hierarchy, mature program scorecards, granular permission model that spans buyers, multi-currency depth, audit trails for SOX / GDPR / IR35. Sales motion goes <em>through</em> MSP partners — Allegis and KellyOCG are channel partners as much as customers.</p>
+          <div class="msp-def-foot">
+            <span data-mark="plus">Mature MSP roles</span>
+            <span data-mark="plus">Multi-currency + VAT</span>
+            <span data-mark="plus">Supplier scorecards</span>
+            <span data-mark="minus">Dated ops UX</span>
+            <span data-mark="minus">No native AI</span>
+            <span data-mark="minus">12+ mo implementations</span>
+          </div>
+        </div>
+
+        <div class="msp-def" data-vendor="vndly">
+          <span class="msp-def-sub">VNDLY (Workday)</span>
+          <h4 class="msp-def-name">The Fieldglass replacement the MSP doesn't hate.</h4>
+          <p class="msp-def-body">Modern UX, fast time-to-stand-up, clean APIs, the Workday parentage opens doors. MSP feature set caught up enough by 2024 that Pontoon and Magnit started recommending it in net-new RFPs. Conditional-approval graphs and supplier scorecards are real; the multi-program / multi-client story is the youngest part.</p>
+          <div class="msp-def-foot">
+            <span data-mark="plus">Modern ops UX</span>
+            <span data-mark="plus">Fast onboarding</span>
+            <span data-mark="plus">Workday data fabric</span>
+            <span data-mark="minus">Thin multi-program</span>
+            <span data-mark="minus">Weak mass comms</span>
+            <span data-mark="minus">No QBR automation</span>
+          </div>
+        </div>
+
+        <div class="msp-def" data-vendor="fw">
+          <span class="msp-def-sub">Flex Work</span>
+          <h4 class="msp-def-name">A buyer-shaped VMS the MSP can <em>use</em>.</h4>
+          <p class="msp-def-body">Multi-program switcher, supplier tiers, cascading distribution waves, audit log, AI assistant scoped to live data, and the Dayforce-native integration story. The platform we have is what an MSP would have built — except the MSP themselves were never the imagined user of a single one of the surfaces.</p>
+          <div class="msp-def-foot">
+            <span data-mark="plus">Multi-program primitive</span>
+            <span data-mark="plus">Distribution + tier engine</span>
+            <span data-mark="plus">Live-data AI assistant</span>
+            <span data-mark="minus">No program SLA layer</span>
+            <span data-mark="minus">No program-fee billing</span>
+            <span data-mark="minus">No fulfillment desk</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 04 · WHERE WE STAND                                            -->
+    <!-- ============================================================== -->
+    <section id="today" class="sr-section">
+      <div>
+        <span class="sr-h2-num">04 · Where Flex Work stands today</span>
+        <h2 class="sr-h2">A side-by-side read on the ten capabilities the MSP buyer evaluates.</h2>
+      </div>
+      <p class="sr-lead">The ten capabilities below are not a feature wish-list — they are the ten line items that appear in every MSP-led VMS RFP we have seen since 2024. None of them is exotic. All of them are table stakes by the time the evaluation reaches the finalist round.</p>
+
+      <div class="sr-cols">
+        <div class="sr-col" data-tone="strong">
+          <div class="sr-col-h">
+            <h4>MSP capabilities we already have</h4>
+            <span class="sr-col-count">6 strengths</span>
+          </div>
+          <ul>
+            <li><b>MSP program switcher in the omnibar.</b> Multi-program is a first-class primitive, not a tenant fork. The right shape — needs an actual workspace behind it.</li>
+            <li><b>Supplier tiers + cascading distribution waves.</b> <code>SupplierTier</code> + <code>DistributionRule</code> compose into rounds of supplier outreach with manual override — tighter than Fieldglass.</li>
+            <li><b>Universal audit log.</b> <code>req-audit.jsx</code> covers every state change with actor + diff + reason; the defensibility layer MSPs need for client reviews.</li>
+            <li><b>Bulk actions everywhere.</b> <code>bulk-actions.jsx</code> + <code>view-customizer.jsx</code> make the dense-list work an MSP does all day fast — Fieldglass loses this comparison.</li>
+            <li><b>Live-data AI assistant.</b> <code>ai-chat.jsx</code> reads workforce / invoices / suppliers / timesheets — an MSP analyst can answer client questions without leaving the product.</li>
+            <li><b>Site-manager unified time approval.</b> One queue across contingent and badged through Dayforce Pay Approval Structure — VNDLY and Beeline can't claim this.</li>
+          </ul>
+        </div>
+
+        <div class="sr-col" data-tone="gap">
+          <div class="sr-col-h">
+            <h4>MSP capabilities still missing</h4>
+            <span class="sr-col-count">10 gaps</span>
+          </div>
+          <ul>
+            <li><b>No MSP workspace.</b> The program switcher exists; the home it switches into doesn't. No cross-program search, no my-day, no work-queue heatmap.</li>
+            <li><b>No fulfillment desk.</b> MSP recruiters work requisitions <em>across</em> clients; today fulfillment lives inside each tenant's req list with no cross-tenant queue or ownership routing.</li>
+            <li><b>No program SLA scorecard.</b> Time-to-submit, fill rate, time-to-fill, time-to-clear, conversion rate, time-to-pay — not tracked as program KPIs with targets.</li>
+            <li><b>Static supplier tiers.</b> Tiers are configured, not earned. No performance score driving auto-promotion or auto-demotion.</li>
+            <li><b>No metered program-fee billing.</b> Supplier-funded is a flag, not a billing primitive. MSP percent-of-spend or per-req fees can't be metered, invoiced, and audited natively.</li>
+            <li><b>No vendor-neutral submission mode.</b> Supplier identity is always visible on candidate proposals — required RFP item for MSPs defending neutrality to their client.</li>
+            <li><b>No QBR automation.</b> MSPs lose ~40 staff-hours per program per quarter building QBR decks by hand from CSV exports.</li>
+            <li><b>No mass supplier comms.</b> Rate-card updates and holiday schedules go out by email outside the system; the system has no record of who got what when.</li>
+            <li><b>No savings ledger.</b> Rate negotiations, tenure saves, leakage captures — the MSP's value-narrative artifact — has no place to live in Flex Work.</li>
+            <li><b>Single-tenant user model.</b> User roles are per-tenant; MSP staff working across five client programs need cross-program identities with scoped permissions.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KPI strip preview -->
+      <h3 class="sr-h3" style="margin-top:8px;">What the program scorecard should look like</h3>
+      <div class="msp-kpis" aria-label="MSP program KPI strip (illustrative)">
+        <div class="msp-kpi">
+          <div class="msp-kpi-label">Time to submit</div>
+          <div class="msp-kpi-val">3.4 d</div>
+          <div class="msp-kpi-sub" data-tone="up">Target 4.0 d</div>
+        </div>
+        <div class="msp-kpi">
+          <div class="msp-kpi-label">Fill rate</div>
+          <div class="msp-kpi-val">94%</div>
+          <div class="msp-kpi-sub" data-tone="up">Target 90%</div>
+        </div>
+        <div class="msp-kpi">
+          <div class="msp-kpi-label">Time to fill</div>
+          <div class="msp-kpi-val">11.2 d</div>
+          <div class="msp-kpi-sub" data-tone="down">Target 10.0 d</div>
+        </div>
+        <div class="msp-kpi">
+          <div class="msp-kpi-label">Time to clear</div>
+          <div class="msp-kpi-val">1.8 d</div>
+          <div class="msp-kpi-sub" data-tone="up">Target 2.0 d</div>
+        </div>
+        <div class="msp-kpi">
+          <div class="msp-kpi-label">Conversion</div>
+          <div class="msp-kpi-val">22%</div>
+          <div class="msp-kpi-sub">Last 90 days</div>
+        </div>
+        <div class="msp-kpi">
+          <div class="msp-kpi-label">Time to pay</div>
+          <div class="msp-kpi-val">28 d</div>
+          <div class="msp-kpi-sub" data-tone="up">Target 30 d</div>
+        </div>
+      </div>
+
+      <!-- Supplier-funded fee flow -->
+      <h3 class="sr-h3" style="margin-top:8px;">How a supplier-funded program fee should compose</h3>
+      <div class="msp-fee-flow" aria-label="Supplier-funded MSP fee flow (illustrative)">
+        <div class="msp-fee-step">
+          <div class="msp-fee-step-label">Worker pay rate</div>
+          <div class="msp-fee-step-val">$42.00</div>
+          <div class="msp-fee-step-sub">per hour</div>
+        </div>
+        <div class="msp-fee-step">
+          <div class="msp-fee-step-label">+ Supplier markup</div>
+          <div class="msp-fee-step-val">$16.80</div>
+          <div class="msp-fee-step-sub">40% markup</div>
+        </div>
+        <div class="msp-fee-step" data-tone="fee">
+          <div class="msp-fee-step-label">+ MSP program fee</div>
+          <div class="msp-fee-step-val">$1.76</div>
+          <div class="msp-fee-step-sub">3% of bill rate · supplier-funded</div>
+        </div>
+        <div class="msp-fee-step">
+          <div class="msp-fee-step-label">= Buyer bill rate</div>
+          <div class="msp-fee-step-val">$58.80</div>
+          <div class="msp-fee-step-sub">to client invoice</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 05 · TOP 10                                                    -->
+    <!-- ============================================================== -->
+    <section id="top10" class="sr-section">
+      <div>
+        <span class="sr-h2-num">05 · The Top 10 features</span>
+        <h2 class="sr-h2">Ten features. Four for this quarter. Nothing exotic.</h2>
+      </div>
+      <p class="sr-lead">Read in priority order. Each card carries the feature, the rationale, the data-model touch (none of them require new top-level tables), and a one-line comparison to Fieldglass and VNDLY. The colored rail on the left mirrors priority: red is P0, orange is P1, blue is P2.</p>
+
+      <div class="msp-top10">
+
+        <!-- =========== 01 =========== -->
+        <article class="msp-feat" data-pri="P0">
+          <div class="msp-feat-num">01</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">MSP program workspace.</h3>
+            <p class="msp-feat-prose">A home behind the omnibar program switcher. Three regions on one page: <b>cross-program search</b> (one box, finds a worker / req / invoice across every client the MSP runs), <b>work queue heatmap</b> (open reqs by client × age × SLA risk), and <b>my-day</b> (what's mine, what's overdue, what's escalated). The single screen the MSP ops lead opens at 7am — and the surface every MSP pilot starts on.</p>
+            <p class="msp-feat-prose">Composes existing primitives: <code>req-audit</code> for activity, <code>workflows</code> for escalations, the existing list infrastructure for cross-program reads. No new tables — a new top-level route and a small <code>MSPProgram</code> scope on existing queries.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="new">New surface</span>
+              <span>Omnibar</span>
+              <span>Workforce</span>
+              <span>Requisitions</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P0">P0 · this quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="par">Par</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="behind">Behind</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 02 =========== -->
+        <article class="msp-feat" data-pri="P0">
+          <div class="msp-feat-num">02</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">Centralized fulfillment desk.</h3>
+            <p class="msp-feat-prose">A cross-program work queue for the MSP's fulfillment team. Recruiters take ownership of open requisitions (round-robin, skill-routed, or manual claim), see their SLA clock, and work the entire pipeline — distribute, screen, submit, schedule — from one inbox. The single biggest day-job complaint Fieldglass MSPs raise: <em>"I have nine tabs open before I've started."</em></p>
+            <p class="msp-feat-prose">Extends <code>requisitions.jsx</code> with an MSP-owner field on <code>JobRequisition</code> and a fulfillment-team view that reads across tenant scope. Builds on the same axis-scope-bar machinery that filters Workforce.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="new">New surface</span>
+              <span>Requisitions</span>
+              <span>Workflows</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P0">P0 · this quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="behind">Behind</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="par">Par</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 03 =========== -->
+        <article class="msp-feat" data-pri="P0">
+          <div class="msp-feat-num">03</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">Program SLA scorecard.</h3>
+            <p class="msp-feat-prose">A native KPI engine with the six metrics every MSP contract codifies — <b>time-to-submit, fill rate, time-to-fill, time-to-clear, conversion rate, time-to-pay</b> — plus per-program targets, trend lines, and breach alerts. Today these numbers are reconstructed by analysts from CSV exports. <b>This single screen wins or loses the QBR.</b></p>
+            <p class="msp-feat-prose">Derivable from existing data: timestamps on <code>JobRequisition</code> state transitions, <code>WorkAssignment</code> start dates, <code>ContingentEngagement.endedAt</code>, <code>Invoice.paidAt</code>. New: a <code>ProgramSLAPolicy</code> record per <code>MSPProgram</code> that holds targets and breach thresholds.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="model">New derivation</span>
+              <span>Analytics</span>
+              <span>Settings policies</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P0">P0 · this quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="lead">Lead</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="par">Par</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 04 =========== -->
+        <article class="msp-feat" data-pri="P0">
+          <div class="msp-feat-num">04</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">MSP program fee as a native billing primitive.</h3>
+            <p class="msp-feat-prose">Today supplier-funded is a boolean flag. It should be a <em>metered fee</em>: percent-of-spend or per-req, supplier-absorbed or buyer-line-itemed, with an audit trail every MSP needs to defend their take to the client CFO. Pricing engine writes the fee onto the engagement; invoicing surfaces it (or hides it, when supplier-funded) on every invoice run.</p>
+            <p class="msp-feat-prose">Extends <code>PricingRule</code> with a new rule type <code>MSPProgramFeeRule</code>; extends <code>Invoice</code> with a fee-line composition; existing <code>supplier-funding.jsx</code> moves from boolean to metered configuration.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="extend">Extend pricing</span>
+              <span>Invoices</span>
+              <span>Supplier contract</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P0">P0 · this quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="lead">Lead</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="par">Par</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="behind">Behind</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 05 =========== -->
+        <article class="msp-feat" data-pri="P1">
+          <div class="msp-feat-num">05</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">Performance-driven supplier scorecard with auto-tiering.</h3>
+            <p class="msp-feat-prose">Submit-to-shortlist rate, fill quality, on-time delivery, response time, dropout rate, candidate tenure on assignment — composed into a 0–100 supplier score per program. Tier promotion / demotion runs nightly against thresholds the MSP sets. Distribution waves consume the live score, not a manually-edited tier list. <b>The single feature that makes "supplier rationalization" a one-screen operation instead of a 90-day project.</b></p>
+            <p class="msp-feat-prose">Derivable from existing data: every signal lives on <code>WorkAssignment</code>, <code>ContingentEngagement</code>, or <code>SupplierContract</code> already. New: <code>SupplierScoreSnapshot</code> for trend history; a <code>TierThreshold</code> on <code>SupplierTier</code>.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="model">New derivation</span>
+              <span>Suppliers</span>
+              <span>Distribution</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P1">P1 · next quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="lead">Lead</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="par">Par</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="behind">Behind</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 06 =========== -->
+        <article class="msp-feat" data-pri="P1">
+          <div class="msp-feat-num">06</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">Vendor-neutral submission mode.</h3>
+            <p class="msp-feat-prose">Per-program toggle that strips supplier identity from candidate proposals at the screening stage — name, rate, and credentials visible to the hiring manager; supplier name visible only after the shortlist is locked. The defensibility artifact every MSP needs when a client's procurement asks <em>"how do we know you're not favoring AllegisGroup over Insight Global?"</em></p>
+            <p class="msp-feat-prose">Display-time treatment on <code>req-distribution-panels.jsx</code> and the proposal list views; a <code>BlindMode</code> flag on <code>DistributionRule</code>. No data-model work — it's a render gate plus an audit-log marker on unmask events.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="extend">Extend distribution</span>
+              <span>Requisitions</span>
+              <span>Compliance</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P1">P1 · next quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="lead">Lead</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="behind">Behind</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 07 =========== -->
+        <article class="msp-feat" data-pri="P1">
+          <div class="msp-feat-num">07</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">QBR pack generator.</h3>
+            <p class="msp-feat-prose">One button on the program workspace. Output: a templated PDF or Google Slides deck — program KPIs vs SLA targets, supplier scorecard summary, spend trends and savings narrative, top issues with audit-log evidence, the next quarter's commit. MSPs spend 30–40 staff-hours per program per quarter on this today. <b>The most-loved feature on every Fieldglass MSP wishlist that Fieldglass has never shipped.</b></p>
+            <p class="msp-feat-prose">Composes existing data: KPI engine (Feature 03), supplier scorecards (Feature 05), spend ledger (Feature 09), audit log. Template lives in the program's policy; brand variables (logo, accent color) per MSP.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="new">New surface</span>
+              <span>Analytics</span>
+              <span>Templates</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P1">P1 · next quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="off">Missing</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="off">Missing</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 08 =========== -->
+        <article class="msp-feat" data-pri="P1">
+          <div class="msp-feat-num">08</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">Mass supplier communications.</h3>
+            <p class="msp-feat-prose">Send a broadcast to the entire supplier panel — rate-card change, holiday schedule, new compliance attestation, RFP invite — with delivery tracking, read receipts, and a required-acknowledgement option that blocks distribution to unacknowledged suppliers until they accept. Today this happens in Outlook with no system memory; the audit defense is a forwarded email.</p>
+            <p class="msp-feat-prose">New: <code>SupplierBroadcast</code> records with <code>BroadcastDelivery</code> per supplier. Reuses the existing notification rail and supplier contact roster.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="new">New surface</span>
+              <span>Suppliers</span>
+              <span>Notifications</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P1">P1 · next quarter</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="behind">Behind</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="off">Missing</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 09 =========== -->
+        <article class="msp-feat" data-pri="P2">
+          <div class="msp-feat-num">09</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">Spend-under-management &amp; savings ledger.</h3>
+            <p class="msp-feat-prose">Every rate negotiation, every tenure save, every leakage capture, every benchmark-driven re-card recorded as a ledger entry tied to a savings type and a verifiable basis (the old rate, the new rate, the worker, the date, the actor). The MSP's value-narrative artifact — and the QBR's most-cited slide.</p>
+            <p class="msp-feat-prose">New: <code>SavingsLedgerEntry</code> records linked to <code>SupplierContract</code>, <code>ContingentEngagement</code>, or <code>PricingRule</code>. Adjacent to but distinct from <code>BurnLedgerEntry</code> — different question, same shape.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="new">New table</span>
+              <span>Financials</span>
+              <span>Analytics</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P2">P2 · later this year</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="par">Par</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="behind">Behind</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+        <!-- =========== 10 =========== -->
+        <article class="msp-feat" data-pri="P2">
+          <div class="msp-feat-num">10</div>
+          <div class="msp-feat-body">
+            <h3 class="msp-feat-h">Cross-program MSP user model.</h3>
+            <p class="msp-feat-prose">An MSP recruiter assigned to five client programs should sign in once, see all five, and have role-scoped permissions per program ("Fulfillment" on Helios, "Read-only analyst" on Quanta, "Program Manager" on Acme). Today user roles are per-tenant; MSP staff get five logins and five inboxes. <b>The day-one user-experience floor for any MSP rollout above ~20 recruiters.</b></p>
+            <p class="msp-feat-prose">Extends <code>UserRole</code> and <code>users-admin.jsx</code> with an <code>MSPIdentity</code> that holds the cross-program assignments; SSO contract gains an MSP claim. Touches the omnibar (already does multi-program) and every list view's scope-bar.</p>
+            <div class="msp-feat-meta">
+              <span data-tag="extend">Extend identity</span>
+              <span>Users admin</span>
+              <span>Roles</span>
+            </div>
+          </div>
+          <div class="msp-feat-side">
+            <span class="msp-feat-pri" data-p="P2">P2 · later this year</span>
+            <dl class="msp-feat-comp">
+              <dt>Today</dt>
+              <dd><b>Fieldglass</b><span class="g" data-g="lead">Lead</span></dd>
+              <dd><b>VNDLY</b><span class="g" data-g="behind">Behind</span></dd>
+              <dd><b>Flex Work</b><span class="g" data-g="off">Missing</span></dd>
+            </dl>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">What the Top 10 share</div>
+        <p>Read the cards in sequence and one pattern shows up: <b>nine of the ten compose primitives we already model.</b> A program workspace is a new route over existing scopes. The SLA scorecard is timestamps already on the row. Supplier scoring is six fields already captured per assignment. The MSP fee is one new <code>PricingRule</code> variant. Vendor-neutral is a render gate plus a log marker. The QBR generator reads the four features above it. Only the savings ledger introduces a new table — and it is the same shape as the burn ledger.</p>
+        <p>This document does not propose new architecture. It proposes ten product surfaces on the architecture we have.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 06 · SEQUENCING                                                -->
+    <!-- ============================================================== -->
+    <section id="sequencing" class="sr-section">
+      <div>
+        <span class="sr-h2-num">06 · Sequencing</span>
+        <h2 class="sr-h2">Now → Next → Horizon — read against the Strategy Review's quarter.</h2>
+      </div>
+      <p class="sr-lead">The MSP investments interleave with the Strategy Review's frontline and overall-VMS sprints, not compete with them. None of the ten cards above duplicates a Strategy Review recommendation — the two documents are additive.</p>
+
+      <div class="sr-seq">
+
+        <div class="sr-seq-card" data-when="now">
+          <div class="sr-seq-when">Now · this quarter (P0)</div>
+          <h3 class="sr-seq-name">Earn the MSP shortlist seat.</h3>
+          <p class="sr-seq-body">Four features. None require new architecture. Together they convert "Flex Work can be used by an MSP" into "Flex Work was built with the MSP in mind" — the only positioning that survives a Fieldglass replacement RFP.</p>
+          <ul class="sr-seq-list">
+            <li>Feature 01 · MSP program workspace</li>
+            <li>Feature 02 · Centralized fulfillment desk</li>
+            <li>Feature 03 · Program SLA scorecard</li>
+            <li>Feature 04 · MSP program fee billing</li>
+          </ul>
+        </div>
+
+        <div class="sr-seq-card" data-when="next">
+          <div class="sr-seq-when">Next · 2 quarters out (P1)</div>
+          <h3 class="sr-seq-name">Close the operator-experience gap.</h3>
+          <p class="sr-seq-body">The features that turn the MSP staff's day from "I get my work done in spite of the tool" to "the tool gets me ninety minutes back every day." This is the quarter that wins us references.</p>
+          <ul class="sr-seq-list">
+            <li>Feature 05 · Auto-tiering supplier scorecard</li>
+            <li>Feature 06 · Vendor-neutral submission</li>
+            <li>Feature 07 · QBR pack generator</li>
+            <li>Feature 08 · Mass supplier communications</li>
+          </ul>
+        </div>
+
+        <div class="sr-seq-card" data-when="horizon">
+          <div class="sr-seq-when">Horizon · 12 months out (P2)</div>
+          <h3 class="sr-seq-name">Defensibility &amp; depth.</h3>
+          <p class="sr-seq-body">The savings ledger is the artifact that makes Flex Work the MSP's preferred QBR weapon; the cross-program user model is the floor every MSP enterprise rollout above twenty seats requires.</p>
+          <ul class="sr-seq-list">
+            <li>Feature 09 · Spend-under-management &amp; savings ledger</li>
+            <li>Feature 10 · Cross-program MSP user model</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">Closing argument</div>
+        <p>Fieldglass earned the MSP market by being there first. VNDLY took share by being the one replacement an MSP could live with. <b>The Dayforce wedge is different.</b> An MSP recommending Flex Work to a Dayforce HCM customer is recommending a labor strategy, not a tool — total-workforce headcount, unified manager inbox, WFM-driven contingent backfill, Wallet for contingent. None of those exist at Fieldglass or VNDLY.</p>
+        <p>What this brief proposes is the floor the MSP needs to recommend the platform in the first place. Once we're recommended, the Dayforce-native story (covered in the Strategy Review) closes the deal. <b>Build the floor, ship the moments, win the segment.</b></p>
+      </div>
+    </section>
+
+    <div class="sr-foot">
+      <div>
+        Flex Work VMS — MSP Feature Brief · v1.0 · May 26, 2026 ·
+        Companion to <a href="Flex Work VMS Strategy Review.html">Strategy Review v1.0</a>
+      </div>
+      <div>Internal · for review</div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

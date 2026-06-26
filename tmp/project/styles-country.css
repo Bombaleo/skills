@@ -1,0 +1,236 @@
+/* =====================================================================
+   Country picker — org-card flag chip + anchored dropdown popover.
+   ===================================================================== */
+
+/* --- Org-card country chip --------------------------------------------- */
+.gn-org-country {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px 8px 8px;
+  border-radius: var(--evr-radius-2xs);
+  border: 1px solid var(--evr-border-decorative-default);
+  background: var(--evr-surface-primary-default);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--evr-font-text);
+  color: var(--evr-content-primary-highemp);
+  transition: background 120ms cubic-bezier(0.4,0,0.2,1), border-color 120ms;
+}
+.gn-org-country:hover {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-border-decorative-highemp);
+}
+.gn-org-country[aria-expanded="true"] {
+  border-color: var(--evr-interactive-primary-default);
+  background: var(--evr-interactive-primary-decorative);
+}
+.gn-org-country:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+/* Flag — provided by flag-icons CDN. Library handles bg-image/size. */
+.gn-org-flag {
+  flex-shrink: 0;
+  width: 28px;
+  height: 21px;
+  border-radius: var(--evr-radius-4xs);
+  box-shadow: 0 0 0 1px var(--evr-border-decorative-lowemp);
+}
+
+.gn-org-country-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.gn-org-country-name {
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--evr-content-primary-highemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gn-org-country-sub {
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--evr-content-primary-lowemp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gn-org-country-edit {
+  flex-shrink: 0;
+  color: var(--evr-content-primary-lowemp);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.gn-org-country[aria-expanded="true"] .gn-org-country-edit {
+  transform: rotate(180deg);
+  color: var(--evr-interactive-primary-default);
+}
+
+/* --- Dropdown popover -------------------------------------------------- */
+.cp-pop {
+  z-index: 9400;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  box-shadow: var(--evr-depth-06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Height is set inline by CountryPicker — JS clamps it to the available
+     viewport space above/below the anchor. Don't override here. */
+  animation: cp-pop-in 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes cp-pop-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cp-pop-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 6px 8px 12px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  flex-shrink: 0;
+}
+.cp-pop-title {
+  font-family: var(--evr-font-text);
+  font-weight: var(--evr-fw-demibold);
+  font-size: 13px;
+  color: var(--evr-content-primary-highemp);
+  letter-spacing: 0.2px;
+}
+.cp-pop-close {
+  width: 28px;
+  height: 28px;
+}
+
+.cp-pop-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 8px 10px;
+  height: 32px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  border-radius: var(--evr-radius-2xs);
+  padding: 0 10px 0 34px;
+  transition: border-color 120ms, background 120ms;
+}
+.cp-pop-search:focus-within {
+  border-color: var(--evr-interactive-primary-default);
+  background: var(--evr-surface-primary-default);
+}
+.cp-pop-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--evr-content-primary-lowemp);
+  display: inline-flex;
+}
+.cp-pop-search-input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-highemp);
+  min-width: 0;
+}
+.cp-pop-search-input::placeholder {
+  color: var(--evr-content-primary-lowemp);
+}
+
+.cp-pop-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 6px 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.cp-pop-row {
+  display: grid;
+  grid-template-columns: 24px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px;
+  border-radius: var(--evr-radius-3xs);
+  cursor: pointer;
+  user-select: none;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-highemp);
+}
+.cp-pop-row:hover { background: var(--evr-surface-primary-hover); }
+.cp-pop-row--current { background: var(--evr-interactive-primary-decorative); }
+.cp-pop-row--current:hover { background: var(--evr-interactive-primary-decorative); }
+
+.cp-pop-flag {
+  width: 20px;
+  height: 15px;
+  border-radius: var(--evr-radius-4xs);
+  box-shadow: 0 0 0 1px var(--evr-border-decorative-lowemp);
+}
+.cp-pop-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: var(--evr-fw-medium);
+}
+.cp-pop-curr {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: var(--evr-fw-bold);
+  letter-spacing: 0.3px;
+  color: var(--evr-content-primary-lowemp);
+  padding: 2px 6px;
+  background: var(--evr-surface-secondary-default);
+  border-radius: var(--evr-radius-circle);
+}
+.cp-pop-row--current .cp-pop-curr {
+  background: var(--evr-surface-primary-default);
+}
+.cp-pop-check {
+  color: var(--evr-interactive-primary-default);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cp-pop-empty {
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--evr-content-primary-lowemp);
+  font: var(--evr-body2);
+}
+
+.cp-pop-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-secondary-default);
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+  flex-shrink: 0;
+}
+.cp-pop-foot > :first-child {
+  color: var(--evr-content-status-informative-default);
+  flex-shrink: 0;
+}

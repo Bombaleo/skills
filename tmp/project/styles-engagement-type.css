@@ -1,0 +1,329 @@
+/* =====================================================================
+   Engagement Type — picker card, table column, filter chip.
+
+   Activation is driven by `body.engtype-cols-on` — toggled by
+   EngagementType.useBodyClass() in the list-page files. Without that
+   class, the column cells are display:none so the table renders
+   byte-identical to the all-flags-off ship.
+   ===================================================================== */
+
+/* ---------- Picker card (New Requisition) -------------------------- */
+.et-card {
+  background: var(--evr-surface-primary-default, #FFFFFF);
+  border: 1px solid var(--evr-border-decorative-lowemp, #E0E2E8);
+  border-radius: var(--evr-radius-sm, 16px);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.et-card-head {
+  margin-bottom: 16px;
+}
+.et-card-title {
+  font: var(--evr-h4);
+  color: var(--evr-content-primary-highemp);
+  margin: 0 0 var(--evr-spacing-3xs) 0;
+}
+.et-card-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  margin: 0;
+  max-width: 720px;
+}
+
+/* ---------- Tile row ---------------------------------------------- */
+.et-tile-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.et-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: var(--evr-surface-primary-default, #FFFFFF);
+  border: 1px solid var(--evr-border-decorative-lowemp, #E0E2E8);
+  border-radius: var(--evr-radius-2xs, 8px);
+  text-align: left;
+  cursor: pointer;
+  transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--evr-font-body, "Clarika Grotesque"), sans-serif;
+}
+.et-tile:hover {
+  background: var(--evr-surface-primary-hover, #F4F4F6);
+  border-color: var(--evr-border-decorative-default, #C5C6D0);
+}
+.et-tile--on {
+  border-color: var(--evr-interactive-primary-default, #3067DB);
+  background: var(--evr-surface-decorative-default-blue, #ECF1FE);
+  box-shadow: inset 0 0 0 1px var(--evr-interactive-primary-default, #3067DB);
+}
+.et-tile--on:hover {
+  background: var(--evr-surface-decorative-default-blue, #ECF1FE);
+}
+
+.et-tile-icon {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--evr-surface-secondary-default, #F8F6F6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--evr-content-primary-default, #43454E);
+  margin-top: 1px;
+}
+.et-tile--on .et-tile-icon {
+  background: var(--evr-interactive-primary-decorative, #DCE6FA);
+  color: var(--evr-interactive-primary-default, #3067DB);
+}
+
+.et-tile-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-right: 22px; /* room for the check icon when selected */
+}
+.et-tile-title {
+  font: var(--evr-body2-bold);
+  color: var(--evr-content-primary-highemp);
+  margin-bottom: var(--evr-spacing-3xs);
+}
+.et-tile-desc {
+  font: var(--evr-caption);
+  color: var(--evr-content-primary-lowemp);
+}
+
+.et-tile-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--evr-interactive-primary-default, #3067DB);
+}
+
+/* ---------- Per-row chip (table cell) ------------------------------ */
+.et-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-demibold);
+  line-height: 1.4;
+  white-space: nowrap;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  background: var(--evr-surface-decorative-default-neutral, #F0F0F2);
+  color: var(--evr-content-primary-default, #43454E);
+}
+.et-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.7;
+}
+.et-chip--shift {
+  background: var(--evr-surface-decorative-default-blue, #ECF1FE);
+  color: var(--evr-content-decorative-blue, #0C3A8B);
+}
+.et-chip--assignment {
+  background: var(--evr-surface-decorative-default-purple, #ECE3FB);
+  color: var(--evr-content-decorative-purple, #3E1985);
+}
+.et-chip--project {
+  background: var(--evr-surface-decorative-default-yellow, #FFF2CC);
+  color: var(--evr-content-decorative-yellow, #5C3E00);
+}
+.et-chip--statement-of-work {
+  background: var(--evr-surface-decorative-default-teal, #DCF7F1);
+  color: var(--evr-content-decorative-teal, #07312B);
+}
+
+/* ---------- Column cell shared --------------------------------------- */
+.req-cell--engtype {
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+}
+
+/* ---------- v0.78 axis column headers (Engagement type · Billing
+   basis · Time capture · Supplier types) — Everest utility eyebrow
+   treatment. The four axis classifiers read as field labels above
+   their colored chip values, not as primary data headers. Uses the
+   `--evr-utility2` token (Clarika Geometric Medium 14px) with
+   tracking + lowEmp color so the chips do the visual heavy lifting. */
+.req-row--header .req-cell--engtype,
+.req-row--header .req-cell--v77em,
+.req-row--header .req-cell--v77tc,
+.req-row--header .req-cell--v77st {
+  font: var(--evr-utility2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+}
+
+/* Hide entirely when the body flag is off so the grid track is gone. */
+body:not(.engtype-cols-on) .req-cell--engtype {
+  display: none !important;
+}
+
+/* =====================================================================
+   Grid-template insertions per table — copied from the v77 pattern.
+   Each table inserts a single track right BEFORE the right-edge actions.
+   Activated only by body.engtype-cols-on; off → no track allocated.
+
+   Engagement type is inserted right before "Engagement model" (the
+   v0.77 column slot) when both are on, so the column reading goes:
+     [data]  →  Engagement type  →  Engagement model  →  Supplier types
+                ↑ the explicit picker ↑ the v0.77 axis  ↑ the v0.77 axis
+
+   When v77 cols are off, engagement type slots in at the equivalent
+   right-edge slot (before the right-aligned numeric / status column).
+   ===================================================================== */
+
+/* ---------- Requisitions table ------------------------------------- */
+/* Base track list (styles.css):
+   44 · 140 · 116 · 1.4fr · 1.2fr · 1fr · 160 · 100 · 52 */
+body.engtype-cols-on .req-table-card .req-row {
+  grid-template-columns:
+    44px                          /* check */
+    140px                         /* id */
+    116px                         /* status */
+    minmax(220px, 1.4fr)          /* dates */
+    minmax(200px, 1.2fr)          /* jobs */
+    minmax(180px, 1fr)            /* location */
+    160px                         /* suppliers */
+    150px                         /* engagement type */
+    100px                         /* est. bill */
+    52px;                         /* kebab */
+}
+body.engtype-cols-on .req-scroll .req-table-card .req-row { min-width: 1380px; }
+
+body.engtype-cols-on.v77-cols-on .req-table-card .req-row {
+  grid-template-columns:
+    44px                          /* check */
+    140px                         /* id */
+    116px                         /* status */
+    minmax(220px, 1.4fr)          /* dates */
+    minmax(200px, 1.2fr)          /* jobs */
+    minmax(180px, 1fr)            /* location */
+    160px                         /* suppliers */
+    150px                         /* engagement type */
+    140px                         /* billing basis */
+    140px                         /* time capture */
+    180px                         /* supplier types */
+    100px                         /* est. bill */
+    52px;                         /* kebab */
+}
+body.engtype-cols-on.v77-cols-on .req-scroll .req-table-card .req-row { min-width: 1820px; }
+
+/* ---------- Workforce table ---------------------------------------- */
+body.engtype-cols-on .req-row.wf-row {
+  grid-template-columns:
+    44px                          /* checkbox */
+    minmax(220px, 1.4fr)          /* worker */
+    minmax(160px, 1fr)            /* supplier */
+    minmax(220px, 1.4fr)          /* jobs */
+    150px                         /* engagement type */
+    minmax(80px, 100px)           /* shifts */
+    52px;                         /* kebab */
+}
+body.engtype-cols-on .req-scroll .req-row.wf-row { min-width: 1100px; }
+
+body.engtype-cols-on.v77-cols-on .req-row.wf-row {
+  grid-template-columns:
+    44px                          /* checkbox */
+    minmax(220px, 1.4fr)          /* worker */
+    minmax(160px, 1fr)            /* supplier */
+    minmax(220px, 1.4fr)          /* jobs */
+    150px                         /* engagement type */
+    140px                         /* billing basis */
+    140px                         /* time capture */
+    180px                         /* supplier types */
+    minmax(80px, 100px)           /* shifts */
+    52px;                         /* kebab */
+}
+body.engtype-cols-on.v77-cols-on .req-scroll .req-row.wf-row { min-width: 1540px; }
+
+/* ---------- Timesheets table ---------------------------------------
+   The JSX always renders the Period + Engagement (engagement-name)
+   cells between Date and Start; these rules MUST include matching
+   tracks or the trailing cells (notably Supplier types) overflow into
+   an auto-row and the chip renders below the timesheet ID. */
+body.engtype-cols-on .req-row.ts-row {
+  grid-template-columns:
+    44px                          /* check */
+    minmax(140px, 1fr)            /* timesheet id */
+    140px                         /* status */
+    minmax(180px, 1.4fr)          /* worker */
+    minmax(160px, 1.2fr)          /* supplier */
+    120px                         /* date */
+    150px                         /* period */
+    minmax(160px, 1.2fr)          /* engagement name */
+    140px                         /* start */
+    140px                         /* end */
+    80px                          /* duration */
+    150px                         /* engagement type */
+    44px;                         /* kebab */
+}
+body.engtype-cols-on .req-scroll .req-row.ts-row { min-width: 1790px; }
+
+body.engtype-cols-on.v77-cols-on .req-row.ts-row {
+  grid-template-columns:
+    44px                          /* check */
+    minmax(140px, 1fr)            /* timesheet id */
+    140px                         /* status */
+    minmax(180px, 1.4fr)          /* worker */
+    minmax(160px, 1.2fr)          /* supplier */
+    120px                         /* date */
+    150px                         /* period */
+    minmax(160px, 1.2fr)          /* engagement name */
+    140px                         /* start */
+    140px                         /* end */
+    80px                          /* duration */
+    150px                         /* engagement type */
+    140px                         /* billing basis */
+    140px                         /* time capture */
+    180px                         /* supplier types */
+    44px;                         /* kebab */
+}
+body.engtype-cols-on.v77-cols-on .req-scroll .req-row.ts-row { min-width: 2230px; }
+
+/* ---------- Invoices table ----------------------------------------- */
+body.engtype-cols-on .req-row.inv-row {
+  grid-template-columns:
+    44px                          /* check */
+    minmax(180px, 1fr)            /* invoice */
+    minmax(180px, 1.1fr)          /* supplier */
+    140px                         /* status */
+    minmax(220px, 1.4fr)          /* locations */
+    140px                         /* amount */
+    150px                         /* engagement type */
+    32px;                         /* chevron */
+}
+body.engtype-cols-on .req-scroll .req-row.inv-row { min-width: 1260px; }
+
+body.engtype-cols-on.v77-cols-on .req-row.inv-row {
+  grid-template-columns:
+    44px                          /* check */
+    minmax(180px, 1fr)            /* invoice */
+    minmax(180px, 1.1fr)          /* supplier */
+    140px                         /* status */
+    minmax(220px, 1.4fr)          /* locations */
+    140px                         /* amount */
+    150px                         /* engagement type */
+    140px                         /* billing basis */
+    140px                         /* time capture */
+    180px                         /* supplier types */
+    32px;                         /* chevron */
+}
+body.engtype-cols-on.v77-cols-on .req-scroll .req-row.inv-row { min-width: 1740px; }

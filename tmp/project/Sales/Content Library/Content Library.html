@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sales content library · Dayforce Flex Work</title>
+  <!-- Sales track asset. Everest referenced read-only, two levels up. -->
+  <link rel="stylesheet" href="../../tokens.css" />
+  <link rel="stylesheet" href="../../fonts/fonts.css" />
+  <link rel="stylesheet" href="styles-content-library.css" />
+</head>
+<body>
+  <div class="lib">
+
+    <!-- ===================================================== NAV -->
+    <nav class="lib-nav">
+      <div class="lib-nav-brand">
+        <img src="../../assets/dayforce-flexwork-logo.svg" alt="Dayforce Flex Work" />
+        <span class="lib-nav-sep"></span>
+        <span class="lib-nav-kicker">Sales content library</span>
+      </div>
+      <div class="lib-nav-actions">
+        <a class="lib-nav-link" href="Content Library Live.html">Live library</a>
+        <a class="lib-nav-link" href="Content Library Changelog.html">Changelog</a>
+        <a class="lib-nav-link" href="../ROI Calculator/ROI Calculator.html">ROI calculator</a>
+      </div>
+    </nav>
+
+    <!-- ==================================================== HERO -->
+    <header class="lib-hero">
+      <div class="lib-hero-inner">
+        <p class="lib-eyebrow">Sales enablement · Content hub</p>
+        <h1>Every asset you need to move a Flex Work deal forward</h1>
+        <p class="lib-hero-sub">
+          The right thing to send, mapped to the moment your buyer is in. Browse by stage,
+          search by name, and open any asset to use with a client. The ROI calculator is ready
+          now; the rest are landing here as they ship.
+        </p>
+        <div class="lib-hero-stats">
+          <div class="lib-hero-stat">
+            <div class="lib-hero-stat-v" data-num id="statTotal">0</div>
+            <div class="lib-hero-stat-l">Assets in the library</div>
+          </div>
+          <div class="lib-hero-stat">
+            <div class="lib-hero-stat-v" data-status="live" data-num id="statReady">0</div>
+            <div class="lib-hero-stat-l">Ready to send</div>
+          </div>
+          <div class="lib-hero-stat">
+            <div class="lib-hero-stat-v" data-num id="statSoon">0</div>
+            <div class="lib-hero-stat-l">Coming soon</div>
+          </div>
+          <div class="lib-hero-stat">
+            <div class="lib-hero-stat-v" data-num id="statStages">0</div>
+            <div class="lib-hero-stat-l">Buyer-journey stages</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================================================= TOOLBAR -->
+    <div class="lib-toolbar">
+      <div class="lib-toolbar-inner">
+        <div class="lib-search">
+          <svg class="lib-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+          <input id="searchInput" type="search" placeholder="Search assets by name, format or use" autocomplete="off" aria-label="Search content" />
+          <button id="searchClear" class="lib-search-clear" type="button" aria-label="Clear search" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+        <div class="lib-filters" id="filters">
+          <button class="lib-chip is-active" data-filter="all" type="button">All</button>
+          <button class="lib-chip" data-filter="ready" data-status="ready" type="button"><span class="lib-chip-dot"></span>Ready to send</button>
+          <button class="lib-chip" data-filter="soon" data-status="soon" type="button"><span class="lib-chip-dot"></span>Coming soon</button>
+        </div>
+        <div class="lib-toolbar-hint"><b id="visibleCount">0</b> shown</div>
+      </div>
+    </div>
+
+    <!-- ================================================== STAGES -->
+    <main class="lib-stages">
+      <div class="lib-intro">
+        <h2>Find the right asset for the moment you are in</h2>
+        <p>
+          A Flex Work buyer moves through five jobs-to-be-done: realising contingent labor is a
+          mess worth fixing, learning what a VMS does, judging whether ours fits their world,
+          getting the spend approved, then succeeding and expanding. Each stage below holds the
+          assets that do the heavy lifting there — with the format, whether it is ready to send,
+          and a one-line note on when to reach for it.
+        </p>
+      </div>
+      <div id="stages"></div>
+      <p class="lib-noresults" id="noResults" hidden>No assets match your search. Clear it to see the full library.</p>
+    </main>
+
+    <!-- ================================================== FOOTER -->
+    <footer class="lib-footer">
+      <div class="lib-footer-inner">
+        <div>
+          <h4>About this library</h4>
+          <p>
+            One asset per job, mapped to the buyer journey. Every asset reuses Everest tokens and
+            cites real sources for any figures, matching the ROI calculator pattern. Need something
+            that is not here yet? Add it to the roadmap and it will appear once it ships.
+          </p>
+        </div>
+        <div class="lib-footer-legend">
+          <div class="lib-legend-row"><span class="lib-legend-sw" style="background:var(--evr-content-decorative-blue)"></span>Interactive — calculators, tours, configurators</div>
+          <div class="lib-legend-row"><span class="lib-legend-sw" style="background:var(--evr-content-decorative-purple)"></span>Deck — pitch and presentation decks</div>
+          <div class="lib-legend-row"><span class="lib-legend-sw" style="background:var(--evr-content-decorative-teal)"></span>Document — one-pagers, guides, templates</div>
+          <div class="lib-legend-row"><span class="lib-legend-sw" style="background:var(--evr-content-decorative-orange)"></span>Video — explainers and walkthroughs</div>
+          <div class="lib-legend-row"><span class="lib-legend-sw" style="background:var(--evr-content-decorative-green)"></span>Proof — case studies, references, benchmarks</div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="library-data.js"></script>
+  <script src="content-library.js"></script>
+</body>
+</html>

@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project parity · architecture map · v0.1</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <!--
+    ─────────────────────────────────────────────────────────────────────
+    Project Engagement Type · Architecture Map
+    ─────────────────────────────────────────────────────────────────────
+    Companion to "Project Engagement Type Parity v0.1.html". For every
+    one of the 53 parity tasks, names the architectural home — the
+    canonical file/component the work lives in — and a one-line
+    rationale for why that home scales.
+
+    Maintenance contract:
+      · When a parity task ships, update its row here to reference the
+        actual landed file/component (cross-check with the parity doc's
+        status pill).
+      · When adding a new task to the parity doc, add a sibling row
+        here in the same section + same order.
+      · When the underlying architecture shifts (e.g. project-engagement
+        -views.jsx splits into role-specific files), update the column
+        names ONCE at the top of the doc and find/replace down.
+    ─────────────────────────────────────────────────────────────────────
+  -->
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--evr-surface-root-primary);
+      color: var(--evr-content-primary-default);
+      font-family: var(--evr-font-text);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ===== Shell ================================================== */
+    .am-page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 56px 40px 96px;
+    }
+
+    /* ===== Header ================================================ */
+    .am-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 48px;
+      align-items: end;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+      margin-bottom: 36px;
+    }
+    .am-mark {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 12px;
+    }
+    .am-title {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 14px;
+      text-wrap: pretty;
+    }
+    .am-sub {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--evr-content-primary-default);
+      margin: 0;
+      text-wrap: pretty;
+      max-width: 60ch;
+    }
+    .am-meta {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .am-meta b { color: var(--evr-content-primary-default); font-weight: 600; }
+    .am-meta code {
+      background: var(--evr-surface-decorative-default-blue);
+      color: var(--evr-interactive-primary-default);
+      padding: 1px 6px;
+      border-radius: var(--evr-radius-4xs);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ===== Status pills ========================================== */
+    .am-st {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .am-st::before {
+      content: "";
+      width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor;
+    }
+    .am-st[data-s="shipped"] { background: var(--evr-surface-decorative-low-green);  color: var(--evr-green-600); }
+    .am-st[data-s="partial"] { background: var(--evr-surface-decorative-low-yellow); color: var(--evr-yellow-700, var(--evr-yellow-600)); }
+    .am-st[data-s="gap"]     { background: var(--evr-surface-decorative-low-red);    color: var(--evr-red-500); }
+    .am-st[data-s="oos"]     { background: var(--evr-surface-secondary-default);     color: var(--evr-content-primary-lowemp); }
+
+    /* ===== Principles ============================================ */
+    .am-principles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 28px 0 56px;
+    }
+    .am-principle {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-left: 3px solid var(--evr-interactive-primary-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      padding: 16px 20px;
+    }
+    .am-principle-num {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 4px;
+    }
+    .am-principle h4 {
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 6px;
+      line-height: 1.3;
+    }
+    .am-principle p {
+      font-size: 13px;
+      color: var(--evr-content-primary-default);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .am-principle code {
+      font-size: 12px;
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+    }
+
+    /* ===== Module map ============================================ */
+    .am-modulemap {
+      border: 1px solid var(--evr-border-decorative-default);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      padding: 22px 24px;
+      margin-bottom: 56px;
+    }
+    .am-modulemap h3 {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 17px;
+      margin: 0 0 12px;
+      color: var(--evr-content-primary-highemp);
+    }
+    .am-modulemap-grid {
+      display: grid;
+      gap: 14px;
+    }
+    .am-mod {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: var(--evr-radius-4xs);
+      background: var(--evr-surface-primary-default);
+    }
+    .am-mod--core { border-left: 3px solid var(--evr-blue-400); }
+    .am-mod--host { border-left: 3px solid var(--evr-teal-500); }
+    .am-mod--external { border-left: 3px solid var(--evr-orange-500); }
+    .am-mod-name {
+      font-weight: 600;
+      color: var(--evr-content-primary-highemp);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .am-mod-name code {
+      font-family: var(--evr-font-text);
+      font-size: 13px;
+      background: var(--evr-surface-secondary-default);
+      padding: 1px 6px;
+      border-radius: var(--evr-radius-4xs);
+      font-weight: 600;
+    }
+    .am-mod-role {
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+    }
+    .am-mod-desc {
+      font-size: 13px;
+      color: var(--evr-content-primary-default);
+      line-height: 1.45;
+    }
+    .am-mod-desc code {
+      font-size: 12px;
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+    }
+
+    /* ===== Section + task rows =================================== */
+    .am-section {
+      margin-bottom: 48px;
+    }
+    .am-section-h {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: baseline;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--evr-border-decorative-default);
+      margin-bottom: 18px;
+    }
+    .am-section-num {
+      font-family: var(--evr-font-display);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      margin-bottom: 6px;
+    }
+    .am-section-name {
+      font-family: var(--evr-font-display);
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: -0.005em;
+      color: var(--evr-content-primary-highemp);
+      margin: 0;
+      line-height: 1.2;
+    }
+    .am-section-summary {
+      font-size: 13px;
+      color: var(--evr-content-primary-lowemp);
+      font-feature-settings: "tnum";
+    }
+
+    /* Task row: status · title+rationale · home */
+    .am-row {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1.5fr) minmax(0, 1.2fr);
+      gap: 20px;
+      padding: 14px 18px;
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      margin-bottom: 8px;
+      align-items: start;
+    }
+    .am-row[data-s="shipped"] { border-left: 3px solid var(--evr-green-500); }
+    .am-row[data-s="partial"] { border-left: 3px solid var(--evr-yellow-600); }
+    .am-row[data-s="gap"]     { border-left: 3px solid var(--evr-red-400); }
+    .am-row[data-s="oos"]     { border-left: 3px solid var(--evr-border-decorative-default); background: var(--evr-surface-secondary-default); }
+
+    .am-row-status { padding-top: 2px; }
+    .am-row-title {
+      font-family: var(--evr-font-text);
+      font-weight: 600;
+      font-size: 14.5px;
+      color: var(--evr-content-primary-highemp);
+      margin: 0 0 4px;
+      line-height: 1.3;
+    }
+    .am-row-rationale {
+      font-size: 13px;
+      color: var(--evr-content-primary-default);
+      line-height: 1.5;
+      margin: 0;
+      text-wrap: pretty;
+    }
+    .am-row-rationale code {
+      font-size: 12px;
+      background: var(--evr-surface-secondary-default);
+      padding: 0 4px;
+      border-radius: var(--evr-radius-4xs);
+    }
+    .am-row-home {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--evr-content-primary-default);
+    }
+    .am-row-home-l {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--evr-content-primary-lowemp);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .am-row-home code {
+      font-family: var(--evr-font-text);
+      font-size: 12px;
+      background: var(--evr-surface-secondary-default);
+      padding: 1px 5px;
+      border-radius: var(--evr-radius-4xs);
+      font-weight: 600;
+    }
+    .am-row-home-component {
+      display: inline-block;
+      background: var(--evr-surface-decorative-low-blue);
+      color: var(--evr-interactive-primary-default);
+      padding: 1px 7px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-top: 4px;
+      margin-right: 4px;
+    }
+    .am-row-home-new {
+      background: var(--evr-surface-decorative-low-yellow);
+      color: var(--evr-yellow-700, var(--evr-yellow-600));
+    }
+
+    .am-foot {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid var(--evr-border-decorative-lowemp);
+      font-size: 12.5px;
+      color: var(--evr-content-primary-lowemp);
+    }
+    .am-foot a {
+      color: var(--evr-interactive-primary-default);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    @media (max-width: 920px) {
+      .am-head { grid-template-columns: 1fr; }
+      .am-principles { grid-template-columns: 1fr; }
+      .am-mod { grid-template-columns: 1fr; }
+      .am-row { grid-template-columns: 1fr; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="am-page">
+
+    <!-- ============================================================== -->
+    <!-- HEADER                                                         -->
+    <!-- ============================================================== -->
+    <header class="am-head">
+      <div>
+        <div class="am-mark">Architecture map · Project engagement type</div>
+        <h1 class="am-title">Where every parity task lives in the codebase.</h1>
+        <p class="am-sub">Companion to the parity task list. For every one of the 53 tasks &mdash; shipped or open &mdash; this doc names the canonical file and component the work lives in, plus a one-line rationale for why that home scales. Built so the next teammate knows where to extend without inventing new modules.</p>
+      </div>
+      <div class="am-meta">
+        <div><b>Doc</b> &middot; Project parity &middot; architecture</div>
+        <div><b>Version</b> &middot; <code>v0.1</code></div>
+        <div><b>Last updated</b> &middot; <time datetime="2026-05-27">27 May 2026</time></div>
+        <div><b>Owner</b> &middot; Dominic Esposito</div>
+        <div><b>See also</b> &middot; <a href="Project Engagement Type Parity v0.1.html">Parity task list v0.1</a></div>
+      </div>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- 01 · PRINCIPLES                                                -->
+    <!-- ============================================================== -->
+    <section>
+      <h2 class="am-section-name" style="margin-bottom: 8px;">Architectural principles</h2>
+      <p style="color: var(--evr-content-primary-default); margin: 0 0 4px; max-width: 72ch;">
+        Eight rules every Project-parity decision below honours. Break one and the system stops scaling cleanly.
+      </p>
+
+      <div class="am-principles">
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 01</div>
+          <h4>Single domain module owns the data</h4>
+          <p>Lifecycle states, transitions, NTE helpers, phase/task hierarchy, amendment shape, audit-entry shape, document shape, storage I/O &mdash; every primitive lives in <code>pages/project-engagement.jsx</code>. Adding a field is a one-file edit.</p>
+        </article>
+
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 02</div>
+          <h4>Views split by role, then by tab</h4>
+          <p>Today <code>pages/project-engagement-views.jsx</code> holds every component. As surface grows past ~1500 lines, split per role: <code>-admin.jsx</code>, <code>-manager.jsx</code>, <code>-agency.jsx</code>, <code>-worker.jsx</code>. Detail tabs (Burn, Roster, Amendments&hellip;) stay as siblings inside <code>-manager.jsx</code>.</p>
+        </article>
+
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 03</div>
+          <h4>Host pages stay thin</h4>
+          <p>Settings, new-requisition, requisitions, worker-mobile know nothing about Project except how to mount the component (<code>window.ProjectAdminPanel</code>, <code>window.ProjectIntakeFields</code>, &hellip;) behind the <code>engProject</code> flag. Project logic never bleeds into host files.</p>
+        </article>
+
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 04</div>
+          <h4>Variant registry routes detail pages</h4>
+          <p>Project registers with <code>window.VariantRegistry</code> against channel <code>"Project"</code> + id prefix <code>"PRJ-"</code>. The unified detail router does the rest. Adding a sub-type (e.g. capex-funded Project) is a new manifest, not a new route.</p>
+        </article>
+
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 05</div>
+          <h4>Per-org storage namespace</h4>
+          <p>Everything keyed on <code>flexwork.projects.{orgId}</code> and <code>flexwork.projectConfig.{orgId}</code>. Org switches re-read; never re-fetch globally. New shapes (status reports, compliance acks) extend in-place or sit beside under the same prefix.</p>
+        </article>
+
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 06</div>
+          <h4>Events for cross-module sync</h4>
+          <p><code>projects:change</code> + <code>projectconfig:change</code> + <code>featureflags:change</code> + <code>industry:change</code>. Anything that wants to react to Project state subscribes &mdash; never reaches across module boundaries directly.</p>
+        </article>
+
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 07</div>
+          <h4>Cross-cutting features extend existing modules</h4>
+          <p>Compliance scoped to a project lives in <code>pages/compliance.jsx</code>; resource forecasting lives in <code>pages/analytics.jsx</code>; FX-as-of-date lives in a financial-foundation module. Project module references those, never re-implements.</p>
+        </article>
+
+        <article class="am-principle">
+          <div class="am-principle-num">Principle 08</div>
+          <h4>Two-party flows share components</h4>
+          <p>Where manager + supplier touch the same object (closeout, amendments, roster, resource swap), one component takes a <code>tenantRole</code> prop and inverts. No duplicated Manager and Agency forks of the same modal.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · MODULE MAP                                                -->
+    <!-- ============================================================== -->
+    <section class="am-modulemap">
+      <h3>The Project surface in the codebase today</h3>
+      <p style="font-size: 13px; color: var(--evr-content-primary-default); margin: 0 0 16px; max-width: 72ch;">
+        Two new modules plus a thin layer of mount points across existing host pages. Everything below is gated by the <code style="background: var(--evr-surface-secondary-default); padding: 0 5px; border-radius: 3px;">engProject</code> feature flag &mdash; off and the entire surface disappears.
+      </p>
+
+      <div class="am-modulemap-grid">
+        <article class="am-mod am-mod--core">
+          <div>
+            <div class="am-mod-name"><code>pages/project-engagement.jsx</code></div>
+            <div class="am-mod-role">Core · domain + storage</div>
+          </div>
+          <div class="am-mod-desc">
+            States, transitions, helpers, per-org storage, seed data, variant registration, REQUISITIONS injection. <i>Every</i> Project data shape originates here. Exports primitives on <code>window.PSProjects</code>.
+          </div>
+        </article>
+
+        <article class="am-mod am-mod--core">
+          <div>
+            <div class="am-mod-name"><code>pages/project-engagement-views.jsx</code></div>
+            <div class="am-mod-role">Core · React components</div>
+          </div>
+          <div class="am-mod-desc">
+            <code>ProjectAdminPanel</code>, <code>ProjectIntakeFields</code>, <code>ProjectVariantBody</code> (with eight tab components), <code>AgencyProjectsTab</code>, <code>WorkerProjectScreen</code>, plus the burn chart, progress, pill, modal, field-grid primitives. Exports on <code>window.*</code>.
+          </div>
+        </article>
+
+        <article class="am-mod am-mod--external">
+          <div>
+            <div class="am-mod-name"><code>styles-project-engagement.css</code></div>
+            <div class="am-mod-role">Core · styling</div>
+          </div>
+          <div class="am-mod-desc">
+            Every <code>.prj-*</code> and <code>.wm-project-*</code> class. Layered on top of <code>tokens.css</code> &mdash; uses Everest tokens for colour, type, spacing. Standalone so it can be loaded once at <code>index.html</code> top.
+          </div>
+        </article>
+
+        <article class="am-mod am-mod--host">
+          <div>
+            <div class="am-mod-name"><code>pages/settings-config.jsx</code></div>
+            <div class="am-mod-role">Host · admin mount point</div>
+          </div>
+          <div class="am-mod-desc">
+            Renders <code>&lt;window.ProjectAdminPanel /&gt;</code> when <code>engProject</code> is on, behind a "Project settings" rail item. Otherwise null.
+          </div>
+        </article>
+
+        <article class="am-mod am-mod--host">
+          <div>
+            <div class="am-mod-name"><code>pages/new-requisition.jsx</code></div>
+            <div class="am-mod-role">Host · intake mount point</div>
+          </div>
+          <div class="am-mod-desc">
+            Renders <code>&lt;window.ProjectIntakeFields /&gt;</code> after the engagement-type picker when <code>engType === "Project"</code>. Captures budget / NTE / currency / external ID into local state, committed to a Project record on Review.
+          </div>
+        </article>
+
+        <article class="am-mod am-mod--host">
+          <div>
+            <div class="am-mod-name"><code>pages/requisitions.jsx</code></div>
+            <div class="am-mod-role">Host · list mount point</div>
+          </div>
+          <div class="am-mod-desc">
+            Reads <code>window.REQUISITIONS</code> &mdash; which the core module post-load injects Project rows into. Also renders <code>&lt;window.AgencyProjectsTab /&gt;</code> above the list on agency tenants.
+          </div>
+        </article>
+
+        <article class="am-mod am-mod--host">
+          <div>
+            <div class="am-mod-name"><code>pages/requisition-engagement-detail.jsx</code></div>
+            <div class="am-mod-role">Host · variant router</div>
+          </div>
+          <div class="am-mod-desc">
+            Dispatches PRJ-* ids to <code>ProjectVariantBody</code> via the registry. No Project-specific code &mdash; the manifest carries everything.
+          </div>
+        </article>
+
+        <article class="am-mod am-mod--host">
+          <div>
+            <div class="am-mod-name"><code>pages/worker-mobile.jsx</code></div>
+            <div class="am-mod-role">Host · worker mount point</div>
+          </div>
+          <div class="am-mod-desc">
+            Adds a "Projects" tile to the More screen when <code>engProject</code> is on; opens <code>&lt;window.WorkerProjectScreen /&gt;</code> in a panel.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · TASK → HOME MAP                                           -->
+    <!-- ============================================================== -->
+
+    <!-- ====================== 00 · FOUNDATIONS ====================== -->
+    <section class="am-section">
+      <header class="am-section-h">
+        <div>
+          <div class="am-section-num">Section 00</div>
+          <h3 class="am-section-name">Foundations &middot; data model + lifecycle</h3>
+        </div>
+        <div class="am-section-summary">11 tasks &middot; all shipped</div>
+      </header>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Engagement-type axis with Project as a first-class value</h4>
+          <p class="am-row-rationale">The Project value sits on the engagement-type axis next to Shift / Assignment / Statement of Work. Cross-tenant primitive — every list reads from it.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/engagement-type.jsx</code>
+          <div><span class="am-row-home-component">ENG_TYPES + ENG_TYPE_OPTIONS</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Per-org Project enablement at Settings → Configuration</h4>
+          <p class="am-row-rationale">Already a per-org engagement-type config; Project is one of the three flippable rows. Storage shared with Assignment + SOW so org switches are atomic.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/engagement-types-config.jsx</code>
+          <div><span class="am-row-home-component">flexwork.engagementTypes.{orgId}</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project budget &amp; burn-ledger primitives</h4>
+          <p class="am-row-rationale">Per Principle 01 — every shape originates in the domain module. Burn ledger is a flat array on the project for now; promotes to its own table if multi-source ingestion arrives.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">HELIOS_SEED · _burn() · projectActualSpend()</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project lifecycle state machine</h4>
+          <p class="am-row-rationale">States + allowed-transitions as plain arrays. State drives every other surface (header action menu, closeout precondition, list filter). Centralised so a new state is a one-line addition.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">STATES · TRANSITIONS · stateMeta()</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project hierarchy &mdash; Project → Phase → Task</h4>
+          <p class="am-row-rationale">Phases on the project; task catalog org-wide in config. Task code on each roster line. This shape mirrors Fieldglass / VNDLY almost exactly so future imports are cheap.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">project.phases · config.taskCatalog · roster.taskId</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project number &amp; external ERP code</h4>
+          <p class="am-row-rationale">Number-sequence config in admin; external ID + optional validator on the project. Treasury CIP-YYYY-### is the named validator today; new validators register as enum values.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">DEFAULT_CONFIG.numberFormat · createProject()</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Not-to-exceed cap as a first-class field</h4>
+          <p class="am-row-rationale">A field on the project, not a tag. Helpers compute % vs NTE; progress bars carry an NTE marker. Future: an NTE-violation queue on the dashboard subscribes to <code>projects:change</code>.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">project.nte · projectNtePct() · nteCushionPct()</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project change-order / amendment object</h4>
+          <p class="am-row-rationale">Amendments live as a child array on the project, not a separate table. Easier to render history; reads stay one record. Promotes if cross-project amendment search becomes a need.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">project.amendments[] (AMD-NNN)</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Multi-currency budget + FX-as-of date</h4>
+          <p class="am-row-rationale">Currency is a project field; format helpers symbol-switch by code. FX-as-of-date for cross-currency invoices is a follow-up — that part of the work routes through a future <code>pages/financials-fx.jsx</code> per Principle 07.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">project.currency · CCY_SYM · fmtMoney()</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project audit log surface</h4>
+          <p class="am-row-rationale">Append-only array on the project. Cheap to read for the AuditTab; easy to filter for cross-project audit search later. Every action that mutates the project writes a row.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">project.audit[]</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project documents attachment surface</h4>
+          <p class="am-row-rationale">Documents list on the project. Stub uploader today; future binds to the org-wide DMS via a thin adapter rather than re-implementing storage.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement.jsx</code>
+          <div><span class="am-row-home-component">project.documents[]</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== 01 · ADMIN ====================== -->
+    <section class="am-section">
+      <header class="am-section-h">
+        <div>
+          <div class="am-section-num">Section 01</div>
+          <h3 class="am-section-name">Admin &middot; per-tenant configuration</h3>
+        </div>
+        <div class="am-section-summary">10 tasks &middot; all shipped</div>
+      </header>
+
+      <p style="font-size: 13.5px; color: var(--evr-content-primary-default); margin: 0 0 14px; max-width: 76ch;">
+        Every admin control sits as a sub-card inside <code style="background: var(--evr-surface-secondary-default); padding: 0 5px; border-radius: 3px;">ProjectAdminPanel</code> in views.jsx, edits feed back to <code style="background: var(--evr-surface-secondary-default); padding: 0 5px; border-radius: 3px;">PSProjects.saveConfig()</code>. The host page mount point is one line in <code style="background: var(--evr-surface-secondary-default); padding: 0 5px; border-radius: 3px;">settings-config.jsx</code>. Adding a tenth sub-section = add a function + render in the panel.
+      </p>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Toggle Project on / off per org</h4>
+          <p class="am-row-rationale">The host card already exists in Settings → Configuration. Project is a sibling row to Assignment + SOW. No Project-specific wiring needed.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/engagement-types-config.jsx</code> · <code>settings-config.jsx</code>
+          <div><span class="am-row-home-component">EngagementTypesCard</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project-conditional custom fields</h4>
+          <p class="am-row-rationale">Already supports <code>engagementType in [Project]</code> as a conditional. No Project-specific code; conditions stay in the custom-field shape.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/custom-fields-config.jsx</code>
+          <div><span class="am-row-home-component">conditional: { field: "engagementType" }</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project number / ID sequence config</h4>
+          <p class="am-row-rationale">Project-specific so it sits inside ProjectAdminPanel. The same control would be parallelled for SOW / Assignment if those gain their own sequence — but lifted out to a shared "ID sequences" page only if &gt; 3 number formats coexist.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → NumberSequenceCard</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Budget approval threshold matrix</h4>
+          <p class="am-row-rationale">Today an array of tiers inside <code>projectConfig</code>. Long-term: when Workflows ships its drag-drop graph editor for general approval routing, this tier-array becomes the seed data for a Project-flavoured workflow.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → BudgetApprovalCard</span></div>
+          <div style="margin-top: 6px;"><span class="am-row-home-component am-row-home-new">future · workflows.jsx</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Change-order approval policy</h4>
+          <p class="am-row-rationale">Three thresholds (auto / manager / full re-approval) + reason-code list. AmendmentsTab reads the policy live and renders the routing chip. Same migration path as the budget matrix when workflows.jsx absorbs approvals.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → ChangeOrderCard</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Burn-alert thresholds</h4>
+          <p class="am-row-rationale">Three-level threshold table tied to the project's burn ledger. Notification dispatch is stubbed today; production wires through the existing inbox + notifications via <code>projects:change</code>.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → BurnAlertCard</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project task catalog (per org)</h4>
+          <p class="am-row-rationale">Closed list shown to workers at time entry. If org-by-org task lists grow beyond ~25, split this into its own settings page parallel to Jobs.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → TaskCatalogCard</span></div>
+          <div style="margin-top: 6px;"><span class="am-row-home-component am-row-home-new">future · pages/project-tasks-settings.jsx</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project closeout policy</h4>
+          <p class="am-row-rationale">Toggles drive the precondition checklist on CloseoutTab. Per-org so different programs (capex-heavy vs. opex-heavy) can demand different signal-completeness.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → ClosesoutCard</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Supplier burn visibility policy</h4>
+          <p class="am-row-rationale">Three-value enum (hidden / summary / full). The Agency component reads it live and conditionally renders. Same pattern reusable for any supplier-facing visibility decision the program needs.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → SupplierVisibilityCard</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project role permissions matrix</h4>
+          <p class="am-row-rationale">Six-column matrix of capabilities per role. Long-term this fuses into the global Settings → Roles surface as a Project sub-section; for now lives inside ProjectAdminPanel so it ships in lockstep with the rest of Project config.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectAdminPanel → RolePermsCard</span></div>
+          <div style="margin-top: 6px;"><span class="am-row-home-component am-row-home-new">future · pages/roles.jsx</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== 02 · MANAGER ====================== -->
+    <section class="am-section">
+      <header class="am-section-h">
+        <div>
+          <div class="am-section-num">Section 02</div>
+          <h3 class="am-section-name">Manager &middot; create, staff, run, close</h3>
+        </div>
+        <div class="am-section-summary">14 tasks · 12 shipped · 1 partial · 1 not chasing</div>
+      </header>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Create Project requisition with budget on intake</h4>
+          <p class="am-row-rationale">Host page mounts the intake fields; the underlying record is created by the core module on Review commit. Adds budget / NTE / currency / external ID to the requisition without bloating new-requisition.jsx.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectIntakeFields</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Mounted by · <code style="font-size: 11px;">new-requisition.jsx</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="partial">
+        <div class="am-row-status"><span class="am-st" data-s="partial">Partial</span></div>
+        <div>
+          <h4 class="am-row-title">Distribute Project to one or many suppliers</h4>
+          <p class="am-row-rationale">Existing distribution rules + tiers cover the simple case. The team-fill mode (request N roles × M plannedHours from each supplier) is the missing piece &mdash; build as a sub-component inside the existing distribution panel, gated on engagementType === "Project".</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/req-distribution-panels.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ TeamFillMode (new sub-component)</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Reads team shape from · <code style="font-size: 11px;">project.teamProposal.teamShape</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Approve weekly burn / timesheets on a Project</h4>
+          <p class="am-row-rationale">TimesheetsTab on the project detail body shows the rolled-up weekly view. The existing timesheets.jsx list page recognises Project rows but the consolidated weekly approval lives on the project &mdash; not in the list &mdash; because the rollup is project-scoped.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectVariantBody → TimesheetsTab</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project detail page — burn dashboard</h4>
+          <p class="am-row-rationale">Tab on the variant body. Stats + chart + phase strip. Adding a new chart type = a new sibling component inside BurnDashboardTab — chart shell is small and re-usable.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectVariantBody → BurnDashboardTab</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Review &amp; accept supplier team proposal</h4>
+          <p class="am-row-rationale">The supplier-side proposal modal exists (AgencyProjectsTab → PendingProposalCard). The manager-side review is the inverse — show all submitted candidates side-by-side, accept all/some/reject with reason. Builds as a shared component with a <code>tenantRole</code> prop per Principle 08.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ TeamProposalReviewModal (new, shared)</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Mounted by · ProjectVariantBody → RosterTab + AgencyProjectsTab</div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project roster — named workers on the engagement</h4>
+          <p class="am-row-rationale">RosterTab. Reads <code>project.roster[]</code>; renders the row + actions inline. Swap, end-date, task re-assign are local actions; assign-worker uses the existing modal via prop hand-off.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectVariantBody → RosterTab</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Submit a change-order request</h4>
+          <p class="am-row-rationale">AmendmentsTab. Reads the change-order policy live to route + render the routing chip. The same component services supplier-initiated amendments by inverting via <code>tenantRole</code> (per Principle 08).</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectVariantBody → AmendmentsTab</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Add / remove / swap workers mid-project</h4>
+          <p class="am-row-rationale">Roster actions ride on the existing assign / remove panels (delegated). Each action writes an audit entry through the same path so the trail stays single-source.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">RosterTab</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Delegates to · <code style="font-size: 11px;">assign-worker-panel.jsx</code> · <code style="font-size: 11px;">remove-worker-panel.jsx</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Re-assign worker between tasks / phases</h4>
+          <p class="am-row-rationale">Inline task selector on each roster row reads from <code>config.taskCatalog</code>. Writes the change to <code>project.audit[]</code> in the same transaction.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">RosterTab → task select</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Re-distribute under-spent budget</h4>
+          <p class="am-row-rationale">A specialised amendment shape (Phase A → Phase B reallocation), not a brand-new flow. Builds as an alternative submission mode inside the existing AmendmentsTab modal — pick "Reallocate phase budget" instead of "Budget delta".</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ BudgetReallocationMode (sub-form of AmendmentsTab)</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project status report — weekly cadence</h4>
+          <p class="am-row-rationale">Auto-drafted from project state + comments + recent burn. New tab on the variant body; storage on <code>project.statusReports[]</code>. Future export hook into Insights / Dashboard via <code>projects:change</code> event.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ StatusReportTab (new tab on ProjectVariantBody)</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Data on · <code style="font-size: 11px;">project.statusReports[]</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project closeout sign-off</h4>
+          <p class="am-row-rationale">CloseoutTab reads the closeout policy live and renders the precondition checklist. The "Sign off &amp; close" button flips the state via the same path as manual transitions in the header.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectVariantBody → CloseoutTab</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project commentary thread</h4>
+          <p class="am-row-rationale">CommentsTab reads <code>project.comments[]</code>. One thread per project &mdash; the simplest shape that survives most use cases. Mentions + reactions are deferred until a real user asks for them.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ProjectVariantBody → CommentsTab</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="oos">
+        <div class="am-row-status"><span class="am-st" data-s="oos">Not chasing</span></div>
+        <div>
+          <h4 class="am-row-title">Per-project supplier scorecard</h4>
+          <p class="am-row-rationale">If we change our mind, this lives on Suppliers (cross-project view of scorecard rows) — not on Project. Per-project scorecards bloat the project detail without much signal at typical program sizes.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/suppliers.jsx</code> <i>(deferred)</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== 03 · AGENCY ====================== -->
+    <section class="am-section">
+      <header class="am-section-h">
+        <div>
+          <div class="am-section-num">Section 03</div>
+          <h3 class="am-section-name">Agency &middot; propose, manage, bill</h3>
+        </div>
+        <div class="am-section-summary">10 tasks &middot; 8 shipped &middot; 1 partial &middot; 1 gap</div>
+      </header>
+
+      <p style="font-size: 13.5px; color: var(--evr-content-primary-default); margin: 0 0 14px; max-width: 76ch;">
+        Agency surface mounts above the requisitions list when the tenant is an agency org. The core component is <code style="background: var(--evr-surface-secondary-default); padding: 0 5px; border-radius: 3px;">AgencyProjectsTab</code> in views.jsx. As surface grows, the right move is a sibling file <code style="background: var(--evr-surface-secondary-default); padding: 0 5px; border-radius: 3px;">pages/project-engagement-agency.jsx</code> so the manager + agency code can evolve independently.
+      </p>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Receive Project distribution as the supplier</h4>
+          <p class="am-row-rationale">AgencyProjectsTab Inbox section. Pulls open team-proposal requests off <code>project.teamProposal</code> and ranks by due date. Mounted on the existing Requisitions hub for agency tenants.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">AgencyProjectsTab → pending list</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Mounted by · <code style="font-size: 11px;">requisitions.jsx</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="partial">
+        <div class="am-row-status"><span class="am-st" data-s="partial">Partial</span></div>
+        <div>
+          <h4 class="am-row-title">Expense submission against a project</h4>
+          <p class="am-row-rationale">Existing Professional Expenses surface accepts T&amp;E lines. The missing piece — tagging an expense to a project's <code>phase + task</code> code — is one new column on the expense entry + a small validator helper in the core module.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/professional-expenses.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ projectId / taskId columns</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Validator from · <code style="font-size: 11px;">PSProjects.getProject() + taskCatalog</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Propose a team of N candidates in one submission</h4>
+          <p class="am-row-rationale">Modal opened from the Pending card. Renders one row per (role × count) in the team-shape, captures candidate / rate / start. Writes back to <code>project.teamProposal.submitted</code>.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">PendingProposalCard → propose modal</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Manage project roster — supplier view</h4>
+          <p class="am-row-rationale">ActiveAgencyProjectCard surfaces the roster + state. Burn visibility honours the per-org policy. Detailed roster actions (swap, replace) ride the shared ResourceSwapModal once that lands.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">AgencyProjectsTab → ActiveAgencyProjectCard</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Submit consolidated weekly time on the team's behalf</h4>
+          <p class="am-row-rationale">A weekly grid (workers × days × task codes) that fans into per-worker timesheets on submit. Distinct enough from the per-worker shift timesheet to warrant its own component. Lands in views.jsx so it shares chart/state primitives.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ AgencyConsolidatedTimesheet (new)</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Mounted by · ActiveAgencyProjectCard footer</div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Burn visibility from the supplier side</h4>
+          <p class="am-row-rationale">ActiveAgencyProjectCard reads <code>config.supplierBurnVisibility</code> live; renders summary / full / nothing accordingly. One line of conditional render &mdash; the policy carries the decision.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">ActiveAgencyProjectCard → burn block</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Initiate change-order from the supplier</h4>
+          <p class="am-row-rationale">Re-use the existing AmendmentsTab modal with <code>tenantRole === "supplier"</code> (per Principle 08). Same form, supplier-flavoured copy, routes through the same policy. Mounted from ActiveAgencyProjectCard footer.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">AmendmentsTab (shared, +tenantRole prop)</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Resource swap with reason code</h4>
+          <p class="am-row-rationale">Shared modal usable from both Manager RosterTab and Agency ActiveAgencyProjectCard. Reads the org's reason-code list (a new <code>config.resourceSwap.reasonCodes</code> string array). Writes a roster-change audit entry.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ ResourceSwapModal (new, shared)</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Policy from · <code style="font-size: 11px;">DEFAULT_CONFIG.resourceSwap</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="gap">
+        <div class="am-row-status"><span class="am-st" data-s="gap">Gap</span></div>
+        <div>
+          <h4 class="am-row-title">Compliance docs scoped to a project</h4>
+          <p class="am-row-rationale">Per Principle 07 — cross-cutting features extend existing modules. NDAs / site-induction / IP-assignment per project are project-tagged compliance docs; lives in <code>pages/compliance.jsx</code> with a new <code>scope === "project"</code> branch, surfaced inside the Project DocumentsTab via a thin filter.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/compliance.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ project scope branch</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Surfaced in · ProjectVariantBody → DocumentsTab</div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Closeout acceptance from the supplier</h4>
+          <p class="am-row-rationale">CloseoutTab gains a second sign-off action behind <code>tenantRole === "supplier"</code>. Both manager and supplier ack required before the lifecycle flips to <i>Closed</i>. One component, two signatures.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">CloseoutTab (shared, +tenantRole)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== 04 · WORKER ====================== -->
+    <section class="am-section">
+      <header class="am-section-h">
+        <div>
+          <div class="am-section-num">Section 04</div>
+          <h3 class="am-section-name">Worker &middot; accept, log time, close</h3>
+        </div>
+        <div class="am-section-summary">8 tasks &middot; 7 shipped &middot; 1 not chasing</div>
+      </header>
+
+      <p style="font-size: 13.5px; color: var(--evr-content-primary-default); margin: 0 0 14px; max-width: 76ch;">
+        Worker surface mounts inside <code style="background: var(--evr-surface-secondary-default); padding: 0 5px; border-radius: 3px;">worker-mobile.jsx</code> as a panel opened from a "Projects" tile in the More screen. Component lives in views.jsx so it shares chart + state primitives with the Manager body.
+      </p>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Receive project assignment from the agency</h4>
+          <p class="am-row-rationale">The worker mobile More tile + Projects screen exist. The missing bit — surfacing a new Project assignment alongside Shift invites on the Home / Invites tab — is a new card type in worker-mobile.jsx that reads from the same Project store.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/worker-mobile.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ WmProjectInviteCard (new card type)</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Project landing on worker mobile</h4>
+          <p class="am-row-rationale">WorkerProjectScreen lists worker-assigned projects + opens a project-detail view with Log time / Scope / Info tabs. Same shape on phone-width as on tablet so the iOS frame doesn't fork.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">WorkerProjectScreen</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Mounted by · worker-mobile.jsx (More → Projects)</div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Time entry per phase / task code</h4>
+          <p class="am-row-rationale">WorkerTimeEntry — weekly grid, task codes from <code>config.taskCatalog</code>, hours-remaining banner. Submits feed into <code>project.burnLedger</code> via the same write path as the consolidated supplier timesheet.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">WorkerProjectScreen → WorkerTimeEntry</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Expense entry against project (worker side)</h4>
+          <p class="am-row-rationale">Mobile-first expense form with phase + task tagging. Builds inside WorkerProjectScreen as a new "Expense" tab. Receipt photo capture rides the existing iOS-frame camera helper; storage as <code>project.expenses[]</code> for simplicity (promote later if cross-project expense search is needed).</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ WorkerExpenseEntry (new tab)</span></div>
+          <div style="margin-top: 6px; font-size: 11.5px; color: var(--evr-content-primary-lowemp);">Data on · <code style="font-size: 11px;">project.expenses[]</code></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Acknowledge project scope &amp; compliance docs</h4>
+          <p class="am-row-rationale">WorkerScopeAck. Renders summary + phases + a single ack checkbox. Compliance docs surface inside the same tab once the cross-cutting compliance work in Agency Section 03 lands.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">WorkerProjectScreen → WorkerScopeAck</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">View own contribution &amp; remaining hours</h4>
+          <p class="am-row-rationale">Header on WorkerTimeEntry shows <code>plannedHours - hoursToDate</code>. No budget dollars exposed to the worker — that's the supplier-visibility policy's call, not the worker's.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component">WorkerTimeEntry header</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="shipped">
+        <div class="am-row-status"><span class="am-st" data-s="shipped">Shipped</span></div>
+        <div>
+          <h4 class="am-row-title">Change-order acknowledgement</h4>
+          <p class="am-row-rationale">When a manager-approved amendment changes the worker's planned hours or end-date, push an inbox item + render in WorkerProjectScreen as a new "Updates" tab. Reads from <code>project.amendments[]</code>, filtered to those touching this worker.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/project-engagement-views.jsx</code>
+          <div><span class="am-row-home-component am-row-home-new">+ WorkerUpdatesTab (new)</span></div>
+        </div>
+      </div>
+
+      <div class="am-row" data-s="oos">
+        <div class="am-row-status"><span class="am-st" data-s="oos">Not chasing</span></div>
+        <div>
+          <h4 class="am-row-title">Peer rating between project workers</h4>
+          <p class="am-row-rationale">Decision: stay out. Signal-to-noise is too low at typical team sizes; optics around contingent peer review are bad. If revisited, lives as a worker-mobile feature (not Project module) to share the rating UI.</p>
+        </div>
+        <div class="am-row-home">
+          <div class="am-row-home-l">Lives at</div>
+          <code>pages/worker-mobile.jsx</code> <i>(deferred)</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- FOOTER                                                         -->
+    <!-- ============================================================== -->
+    <footer class="am-foot">
+      <p>Companion docs &middot; <a href="Project Engagement Type Parity v0.1.html">Parity task list v0.1</a> &middot; <a href="../Flex Work 2.0 Architecture v1.6.html">Architecture v1.6</a> &middot; <a href="../Feature Audits/Flex Work VMS Strategy Review.html">Strategy Review</a> &middot; <a href="../Flex Work v2 Changelog.html">Changelog</a></p>
+      <p>Update rule &middot; when a task ships, sync its row here with the actual landed file/component. Add new rows in the same section + order as the parity doc.</p>
+    </footer>
+
+  </main>
+</body>
+</html>

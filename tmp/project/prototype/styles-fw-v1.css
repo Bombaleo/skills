@@ -1,0 +1,189 @@
+/* =====================================================================
+   Flex Work V1 surface skin                 ·  IA version: V1
+   ---------------------------------------------------------------------
+   A reskin layer that dresses Everest-token settings surfaces — the Rate
+   Cards flow (landing, §8.1 rate cards, §8.2 simulator, version detail,
+   upload wizard) and Settings → Positions — in the
+   Flex Work V1 design system — the JJJ-origin library acquired by
+   Dayforce: Gilroy display type, Dayforce Blue, teal accent, pill
+   buttons, 24px rounded cards with the signature soft double drop-shadow.
+
+   How it works (no structural / token-name churn):
+     The rate surfaces are all authored against semantic Everest tokens
+     (`--evr-*`). This file simply REDEFINES those tokens to V1 values on
+     the `.fw-v1` wrapper that pricingView() / positionsView() now emit — custom properties
+     cascade, so every descendant inherits the V1 palette + type without
+     touching a single component rule. A short tail then overrides the
+     handful of V1-specific *shapes* tokens can't express (pill radius,
+     24px cards, soft shadow, retinted tier chips).
+
+   Scope is the `.fw-v1` wrapper only — the V1 IA chrome (top bar, side
+   nav) stays on Everest, exactly as the prototype ships it.
+   Loaded LAST in the head, after every other stylesheet.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1 · TOKEN REMAP — Everest semantic tokens → Flex Work V1 values.
+   These inherit to all descendants of .fw-v1.
+   --------------------------------------------------------------------- */
+.fw-v1 {
+  /* Type — Gilroy for display/headings/buttons, Helvetica for body/data */
+  --evr-font-display: 'Gilroy', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --evr-font-text:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* The composite `font:` shorthand tokens (--evr-h2, --evr-body1, …) embed
+     var(--evr-font-display) resolved at :root, so overriding the family
+     tokens alone leaves them on Clarika. Re-declare each shorthand here with
+     the Gilroy / Helvetica stack inlined literally (weight + size + line
+     preserved) so every heading/body/button on the surface uses V1 type. */
+  --evr-display1:   var(--evr-fw-bold)     var(--evr-display1-size)/1.067 'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-display2:   var(--evr-fw-bold)     var(--evr-display2-size)/1.067 'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-h1:         var(--evr-fw-bold)     var(--evr-h1-size)/1.2   'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-h2:         var(--evr-fw-bold)     var(--evr-h2-size)/1.27  'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-h3:         var(--evr-fw-demibold) var(--evr-h3-size)/1.27  'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-h4:         var(--evr-fw-demibold) var(--evr-h4-size)/1.27  'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-body1:      var(--evr-fw-regular)  var(--evr-body1-size)/1.5  'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-body1-bold: var(--evr-fw-bold)     var(--evr-body1-size)/1.5  'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-body2:      var(--evr-fw-regular)  var(--evr-body2-size)/1.43 'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-body2-bold: var(--evr-fw-bold)     var(--evr-body2-size)/1.43 'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-caption:    var(--evr-fw-regular)  var(--evr-caption-size)/1.54 'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-tabular:    var(--evr-fw-regular)  var(--evr-body2-size)/1.43 'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-button-lg:  var(--evr-fw-bold)     var(--evr-button-lg-size)/1.25 'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-button-sm:  var(--evr-fw-bold)     var(--evr-button-sm-size)/1.29 'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-utility1:   var(--evr-fw-medium)   var(--evr-utility1-size)/1.25 'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --evr-utility2:   var(--evr-fw-medium)   var(--evr-utility2-size)/1.29 'Gilroy','Helvetica Neue',Helvetica,Arial,sans-serif;
+
+  /* Interactive — Dayforce Blue brand */
+  --evr-interactive-primary-default:    #3067db;
+  --evr-interactive-primary-hover:      #2553b8;
+  --evr-interactive-primary-pressed:    #1c3e8c;
+  --evr-interactive-primary-decorative: #eaf1fd;
+  --evr-interactive-primary-focus:      #3067db;
+  --evr-interactive-error-default:      #e13336;
+  --evr-interactive-error-hover:        #c52b2e;
+  --evr-interactive-error-decorative:   #fdecec;
+  --evr-interactive-success-default:    #0ed780;   /* dots / switches — bright V1 green */
+  --evr-interactive-success-hover:      #0bb56e;
+  --evr-interactive-warning-default:    #f6c651;
+  --evr-interactive-warning-hover:      #e0ad2e;
+
+  /* Content — cool, slightly-blue V1 grays */
+  --evr-content-primary-default:  #5d6b76;   /* body / secondary text */
+  --evr-content-primary-highemp:  #2b3641;   /* headings / primary text */
+  --evr-content-primary-lowemp:   #8392a0;   /* muted / meta */
+  --evr-content-primary-inverse:  #ffffff;
+  --evr-content-status-error-default:        #d92b2e;
+  --evr-content-status-error-lowemp:         #8f1f21;
+  --evr-content-status-success-default:      #0a9d5e;   /* legible green for text */
+  --evr-content-status-success-lowemp:       #07683e;
+  --evr-content-status-warning-default:      #a9790f;
+  --evr-content-status-warning-highemp:      #2b3641;
+  --evr-content-status-informative-default:  #3067db;
+  --evr-content-decorative-teal:   #0e7e88;
+  --evr-content-decorative-blue:   #2553b8;
+  --evr-content-decorative-purple: #c2531f;   /* off-brand purple → V1 coral secondary */
+  --evr-content-vivid-purple:      #c2531f;
+  --evr-content-decorative-orange: #c2531f;
+
+  /* Borders — V1 hairlines */
+  --evr-border-decorative-lowemp:  #e8edf1;
+  --evr-border-decorative-default: #d9dde2;
+  --evr-border-decorative-highemp: #c2c8d0;
+  --evr-border-primary-default:    #a5a4a5;
+  --evr-border-status-error:   #e13336;
+  --evr-border-status-success: #0ed780;
+  --evr-border-status-warning: #f6c651;
+
+  /* Surfaces — clean white + very light cool-gray */
+  --evr-surface-root-primary:      #f4f6f8;
+  --evr-surface-root-secondary:    #ffffff;
+  --evr-surface-primary-default:   #ffffff;
+  --evr-surface-primary-hover:     #f7f9fb;
+  --evr-surface-primary-selected:  #eef1f4;
+  --evr-surface-secondary-default: #f4f6f8;
+  --evr-surface-secondary-hover:   #eef1f4;
+  --evr-surface-secondary-selected:#e8edf1;
+  --evr-surface-tertiary-default:  #e8edf1;
+  --evr-surface-tertiary-hover:    #dfe4ea;
+  --evr-surface-inverse-primary:   #2b3641;   /* dark slate active chip */
+  --evr-surface-inverse-secondary: #3a4753;
+  --evr-surface-decorative-low-blue:   #eaf1fd;
+  --evr-surface-decorative-low-teal:   #e6f7f8;
+  --evr-surface-decorative-low-purple: #fdeee7;
+  --evr-surface-decorative-low-orange: #fdeee7;
+  --evr-surface-status-error-lowemp:       #fdecec;
+  --evr-surface-status-success-lowemp:     #e7faf1;
+  --evr-surface-status-warning-lowemp:     #fef8eb;
+  --evr-surface-status-informative-lowemp: #eaf1fd;
+
+  /* Soft V1 double drop-shadow, reused below */
+  --v1-shadow-card: 0 2px 4px 0 rgba(0,0,0,0.06), 0 1px 2px 0 rgba(0,0,0,0.04);
+  --v1-radius-card: 24px;
+  --v1-radius-pill: 999px;
+
+  /* Helvetica body text for the surface */
+  font-family: var(--evr-font-text);
+}
+
+/* ---------------------------------------------------------------------
+   2 · V1-SPECIFIC SHAPES — what token-remapping alone can't express.
+   --------------------------------------------------------------------- */
+
+/* Display type — Gilroy with V1's tight tracking on big headings */
+.fw-v1 .proto-page-head h1,
+.fw-v1 .proto-acc-title,
+.fw-v1 .ag-list-head h2,
+.fw-v1 .ra-card-title { letter-spacing: -0.4px; }
+.fw-v1 .proto-page-head h1 { font-weight: var(--evr-fw-demibold); }
+
+/* Cards — 24px radius, V1 border, signature soft double shadow */
+.fw-v1 .proto-card,
+.fw-v1 .proto-acc-item {
+  border-radius: var(--v1-radius-card);
+  border-color: #e4e9ee;
+  box-shadow: var(--v1-shadow-card);
+}
+
+/* Buttons — pill shaped, Gilroy bold */
+.fw-v1 .proto-btn {
+  border-radius: var(--v1-radius-pill);
+  font-family: var(--evr-font-display);
+  font-weight: var(--evr-fw-bold);
+}
+/* V1 secondary = light-blue fill, blue text (the signature secondary) */
+.fw-v1 .proto-btn--secondary {
+  background: #eaf1fd;
+  color: #3067db;
+  border-color: transparent;
+}
+.fw-v1 .proto-btn--secondary:hover { background: #d9e6fb; }
+.fw-v1 .proto-linkbtn { font-family: var(--evr-font-display); font-weight: var(--evr-fw-bold); }
+
+/* Segmented control + legacy subtabs — pill capsule */
+.fw-v1 .rm-seg,
+.fw-v1 .rm-subtabs { border-radius: var(--v1-radius-pill); }
+.fw-v1 .rm-seg-btn,
+.fw-v1 .rm-subtab { border-radius: var(--v1-radius-pill); font-family: var(--evr-font-text); }
+
+/* Filter chips / presets — already pill; make active state Gilroy-tight */
+.fw-v1 .ra-chip,
+.fw-v1 .ra-preset { font-family: var(--evr-font-text); }
+
+/* Inputs — V1's crisp 4px radius (vs Everest 8px) */
+.fw-v1 .ra-in,
+.fw-v1 input[type="number"],
+.fw-v1 input[type="text"],
+.fw-v1 select { border-radius: var(--evr-radius-3xs); }
+
+/* Tier chips — retinted to the V1 palette:
+   Pay = teal accent · Engine cost = slate · Markup/Bill = Dayforce blue */
+.fw-v1 .rp-tchip--ref { background: #e6f7f8; color: #0e7e88; }
+.fw-v1 .rp-tchip--eng { background: #eef1f4; color: #5d6b76; }
+.fw-v1 .rp-tchip--agy { background: #eaf1fd; color: #2553b8; }
+
+/* Fieldset section-header icons alternate blue/teal for V1 accent rhythm */
+.fw-v1 .ra-fieldset:nth-child(2) .ra-fieldset-h .proto-ico { color: #10aeba; }
+
+/* Bill rate hero numbers — keep Gilroy weight, V1 green already via token */
+.fw-v1 .ra-wf-bill,
+.fw-v1 .ra-sim-bill-v { font-family: var(--evr-font-display); }

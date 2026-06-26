@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<!--
+  ─────────────────────────────────────────────────────────────────────
+  FLEX WORK V1 · app shell  (IA version: V1)
+  ─────────────────────────────────────────────────────────────────────
+  The single-page entry point for the Flex Work V1 track. Every state,
+  page and role runs from this one file — the same single-page behaviour
+  as the V2 app at the project root (index.html + app.jsx + pages/*),
+  but in vanilla JS (no React, no Babel), the V1 convention.
+
+  Architecture (load order matters, mirrors v2):
+    1. core.js            — window.V1 namespace: helpers, nav models,
+                            roles, the page registry.
+    2. chrome.js          — the V1 shell: top bar + account/role menu,
+                            search pill, primary + Settings sidebars.
+    3. pages/rate-engine.js — shared data + math layer (loads before its
+                            consumers, like v2's data modules).
+    4. pages/*.js         — page modules that register on V1.pages.
+    5. app.js             — the root: state, router, wiring; boots last.
+
+  ISOLATED from the project-root V2 app. Reuses Everest tokens/icons/
+  logo by RELATIVE, read-only reference (../). Changes here are logged
+  in v1/Flex Work V1 Changelog.html (the V1 track changelog).
+
+  Clickable surfaces (everything else is inert chrome):
+    · Agencies            → WorkWhile agency detail (accordion cards)
+    · Settings            → settings sub-nav (Policies / Configuration / …)
+    · Settings → Pricing  → rate-card automation (template + real upload)
+  ─────────────────────────────────────────────────────────────────────
+-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dayforce Flex Work · V1</title>
+  <!-- Flex Work V1 design system — tokens (Gilroy + Helvetica, Dayforce
+       Blue palette) and FontAwesome 7 Solid (the V1 product icon set). -->
+  <link rel="stylesheet" href="vendor/v1-tokens.css" />
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="styles-prototype.css" />
+  <link rel="stylesheet" href="styles-agencies.css" />
+  <link rel="stylesheet" href="styles-agencies-list.css" />
+  <link rel="stylesheet" href="styles-pricing.css" />
+  <link rel="stylesheet" href="styles-rate-engine.css" />
+</head>
+<body>
+  <div id="app" class="proto-app"></div>
+  <div class="proto-toast-wrap" id="toasts" aria-live="polite"></div>
+
+  <!-- V1 core — shared namespace, helpers, nav models, page registry. -->
+  <script src="core.js"></script>
+  <!-- V1 chrome — top bar, sidebars, search. -->
+  <script src="chrome.js"></script>
+  <!-- Shared data + math layer (loads before its consumers). -->
+  <script src="pages/rate-engine.js"></script>
+  <!-- Page modules — register on window.V1.pages. -->
+  <script src="pages/agencies-list.js"></script>
+  <script src="pages/agencies.js"></script>
+  <script src="pages/pricing.js"></script>
+  <script src="pages/settings.js"></script>
+  <script src="pages/rate-engine-lookup.js"></script>
+  <!-- Root — owns state, routes, wires, boots. Loaded LAST. -->
+  <script src="app.js"></script>
+</body>
+</html>

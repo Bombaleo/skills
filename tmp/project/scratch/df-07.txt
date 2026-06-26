@@ -1,0 +1,1724 @@
+ournal
+Number
+The number of the credit account, used for taxes withheld from an
+employee (for example, employment insurance tax), and for taxes paid
+by an employer (for example, Social Security tax).
+Credit Journal
+Number
+The number of the debit account used for taxable benefits, and memo
+calc earnings, regular earnings, and reimbursements.
+Manually Added
+Tax
+Checkbox that, when selected, indicates that the tax is a manually added
+tax. Available to US legal entities only.
+Columns in the Canadian Tax Authorities list
+Column 	Description
+Tax Authority 	The numeric designation in Dayforce for the tax authority.
+DTS Tax ID 	Dayforce Tax Service Tax ID for the tax authority.
+Tax Type 	Jurisdictional type of the tax authority, Federal or Province.
+Tax Name 	Name given to the tax to appear in earning statements.
+Description 	Description of the tax authority.
+Employee Tax Checkbox that marks the tax as an employee tax when
+selected.
+Employer Tax Checkbox that marks the tax as an employer tax when
+selected.
+Client Responsible Tax
+Checkbox that marks the tax as one not supported or filed by
+DTS when selected. Client responsible taxes must be filed by
+the employer.
+
+-- 342 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 343 of 0
+Company Tax
+ID Number
+Unique account number usually issued by the tax authority that is specific to
+your company. For example, an employer health tax account number. Also
+referred to as a Business Identification Number, or BIN for Canadian legal
+entities.
+Debit Journal
+Number
+The number of the credit account, used for taxes withheld from an employee
+(for example, employment insurance tax), and for taxes paid by an employer
+(for example, Social Security tax).
+Credit Journal
+Number
+The number of the debit account, used for taxable benefits and memo calc
+earnings, and regular earnings and reimbursements.
+Columns in the UK Tax Authorities list
+Column 	Description
+Tax Authority Required. The numeric designation in Dayforce for the tax
+authority. Auto populates, so no action required on user's part.
+DTS Tax ID 	Not required for the UK.
+Tax Type
+Required. Jurisdictional type of the tax authority. Federal only. In
+a UK legal entity tax authority, Federal indicates central
+government.
+Tax Name Required. Name given to the tax to appear in earning
+statements.
+Description 	Required. Description of the tax authority.
+Employee Tax Required. Checkbox that, when selected, marks the tax as an
+employee tax.
+Employer Tax Required. Checkbox that, when selected, marks the tax as an
+employer tax.
+Client Responsible Tax
+Required. Checkbox that, when selected, marks the tax as one
+not supported or filed by DTS. Client responsible taxes must be
+filed by the employer.
+Company Tax ID Number Not required for the UK.
+Applied For 	Not required for the UK.
+Date Applied 	Not required for the UK.
+Debit Journal Number 	Not required for the UK.
+Credit Journal Number 	Not required for the UK.
+Manually Added Tax 	Not required for the UK.
+Manually Add Taxes
+Before You Begin: Manually adding taxes is only available for US employees and legal entities.
+
+-- 343 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 344 of 0
+Important: If you’re an Implementation Consultant planning on making manual changes to either
+state or federal tax rates or to state insurance rates—outside of the regular quarterly update done
+by DTS—you must make sure of two things:
+Ensure that you receive appropriate management approval for the change.
+Ensure that the effective date of any change is set to the first of the quarter.
+You can manually add taxes at the legal entity level for all or a filtered list of the entity’s
+employees, or you can add taxes to individual employees. This allows you to correct omissions of
+the application’s tax locator functionality.
+For example, if Dayforce doesn’t fully recognize an address and can’t locate the appropriate local
+or county taxes, you can manually add the appropriate tax.
+Add New Taxes to Employees
+Important: Manually added taxes must be tied to an address so that Dayforce knows if the tax still
+applies. If the employee’s address changes, or the end date for a selected address has passed,
+Dayforce automatically stops applying the tax to the employee’s pay.
+To manually add a new tax to a US employee:
+1. Go to People, open the employee profile, and click Payroll > Tax Definitions.
+2. In the Employee Payroll Tax section, click Add New Taxes.
+3. The application shows the Add New Taxes dialog box.
+3. In the Tax Type drop-down list, select the type of tax you want to add.
+4. Enter values in the other filter fields. You can filter by the tax authority's title, or filter by the
+tax's description.
+5. Click Apply Filter.
+6. Dayforce shows a list of taxes that match your search terms.
+6. Select the appropriate tax.
+7. Select the employee's applicable from the Employee Address field.
+8. Click Add Selected Tax.
+9. The application adds the tax to the list shown in the Employee Payroll Tax section with the
+Manually Added Tax checkbox selected.
+Add New Taxes at the Legal Entity Level
+You can manually add new taxes to a legal entity so that it applies to some or all of the legal
+entity's employees.
+To manually add new taxes at the legal entity level:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select the US legal entity.
+2. Select the Tax Authorities tab.
+
+-- 344 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 345 of 0
+3. Click Add New Taxes.
+4. Select the type of the tax that you want to add in the Tax Type drop-down list.
+5. Search for the tax you want to add by providing values in the other filter options; you can
+filter by the tax authority's title, or filter by the tax's description.
+6. Click Apply Filter.
+7. Select the appropriate tax.
+8. Click Add Selected Tax to add the tax to the legal entity. Next, you need to define which
+employees in the legal entity are taxed for the manually added tax.
+9. Select the manually added tax.
+10. In the Tax Qualifier section, click Add.
+11. Specify an effective start of the new tax in the Effective Start field.
+12. Do the following to specify which employees in the legal entity are taxed:
+Leave the Locations field and the Work Location Overrides field blank and the tax is
+applied to all of the legal entity's employees.
+Specify values in the Locations field and the Work Location Overrides field to filter the
+list of employees the tax is applied to.
+13. For example, to configure Dayforce to apply only the new manually added tax to employees
+working at three of the five locations in the legal entity, select those three locations in the
+Locations field.
+13. Click Save.
+Configure Tax Exempt Status for US Legal Entities
+Important: If you configure a legal entity as exempt from either the Federal Social Security or
+Medicare Tax, you must mark the legal entity as tax exempt for both the employee and
+corresponding employer tax. The application displays an error message if just one in the pair of
+employee and employer tax for either the Federal Social Security or Medicare Tax is marked as
+exempt.
+To configure tax exempt status for a US legal entity:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Tax Authorities tab and select the tax authority in the list.
+3. Click Add in the Tax Setting section, to the right of the list of tax authorities.
+4. Enter a date in the Effective Start field to indicate when the legal entity and its employees'
+tax exempt status begins.
+5. (Optional) Enter a date in the Effective End field to indicate when the tax exempt status
+expires.
+6. Select the Exempt Tax Only, Update Wages checkbox to exempt the tax, but calculate
+taxable wages. For some taxes, you can select the Exempt Tax And Taxable Wages
+checkbox to apply the exemption and disregard the taxable wages.
+7. Note: You can select either the Exempt Tax Only, Update Wages checkbox, or the Exempt
+Tax and Taxable Wages checkbox, but not both.
+
+-- 345 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 346 of 0
+7. Click Save.
+Tax Settings and Tax Qualifiers for Tax Authorities
+Some employer and employee taxes have additional settings that can (or must) be configured so
+that the taxes are calculated correctly. These settings are configured in the Tax Setting section for
+a selected tax in the Tax Authorities tab in Org Setup > Org Payroll Setup > Legal Entity.
+In addition to the Tax Setting section, some tax authorities also have a Tax Qualifier section.
+Tax authority settings are available for taxes in Canada, the United Kingdom, and the United
+States. However, not all tax authorities have tax settings or tax qualifiers available. These sections
+are available for those taxes where the federal, state, provincial, territorial, county, local, or other
+tax authorities have legislated additional tax settings or configurations for the calculation or
+collection of taxes.
+Tax Setting Columns
+Tax Setting columns
+Column 	Description
+Start Date 	Start date for the tax setting. Required.
+End Date 	End date for the tax setting. Optional.
+Exempt Tax Only, Update
+Wages
+Checkbox that you can select to apply an exemption to a tax
+but track the taxable wages for information purposes. You
+must select this checkbox for both FICA EE and FICA ER tax
+types when you’re setting up tax authorities for a Medicare-
+only legal entity. More information is available in Medicare-
+Only Legal Entities and Filers.
+Exempt Tax and Taxable
+Wages
+Select Yes to apply a tax exemption for legal entities exempt
+from both Federal Medicare and Social Security Taxes. You
+must select this checkbox for the following four tax types: Fed
+MWT EE, Fed MWT ER, FICA EE, and FICA ER. More
+information is available in Medicare-Only Legal Entities and
+Filers.
+The options or parameters that Dayforce shows in the Tax Setting section depend on which tax
+authority you select in the Tax Authorities list.
+Tax Setting Options
+Not all tax authority types have configurable tax settings or the same tax setting options. The
+following table lists some of the options and parameters that Dayforce shows for a tax authority
+when you select it:
+
+-- 346 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 347 of 0
+Tax Setting options
+Option 	Description
+Alternate Calculation Code
+Drop-down list for selecting an alternate calculation method
+for:
+State withholding tax for California:
+01 - EXACT CALCULATION METHOD-CA
+02 - BONUSES AND/OR STOCK OPTIONS
+METHOD-CA
+New York County (NY - Payroll Expense Tax
+1 - Over $437,500
+2 - Over $375,000 but not over $437,500
+3 - Over $312,500 but not over $375,000
+4 - Less than or equal to $312,500
+Seattle City (King Country) - Payroll Expense Tax
+1 - 7,000,000.00 up to $99,999,999.99
+2 - 10,000,000.00 up to $999,999,999.99
+3 - 1,000,000,000.00 or greater
+Alternate Higher Wages
+Indicates Dayforce uses alternate higher wages for state
+unemployment tax for the following US states:
+Nebraska: Employers in UI Tax Category 20 are subject
+to the higher wage base.
+Michigan: Delinquent employers might be subject to
+the higher wage base.
+Rhode Island: Employers with the highest experience
+rate are subject to the higher wage base.
+
+-- 347 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 348 of 0
+Block ER
+Wage
+Reporting
+This option overrides employer wage reporting for Illinois and Pennsylvania, if
+you have employees in Illinois or Pennsylvania who work in another state and
+your organization doesn’t have physical work locations in Illinois or
+Pennsylvania. This option ensures that wages that the employee earns outside
+of their state of residence are reported for the employee's state of residence
+on their Form W-2, per the specific state rules.
+This option is available only for the Illinois State Withholding tax and the
+Pennsylvania State Withholding tax and only when there is no Company Tax ID
+Number entry for the specific tax. By default, this checkbox is cleared.
+Enable Tax
+Payment
+Deferral
+Indicates the tax payment due on the Canadian provincial tax is deferred.
+Generally, payment deferrals are part of a provincial tax deferral program.
+Exemption
+Allocation
+Specifies if the Canadian employer qualifies for a tax exemption or not. The
+exemption applies only to the Newfoundland & Labrador Health and Post
+Secondary Education Tax (HAPSET) and Ontario Employer Health Tax (EHT).
+You can select from the following exemption types:
+Full Exemption. The employer claims the full exemption or threshold
+amount.
+No Exemption. The employer isn’t claiming an exemption.
+Partial Exemption. The employer is claiming a part of the full exemption
+or threshold amount. You can enter the exemption amount claimed in
+Exemption Amount.
+Exemption
+Amount
+The employer's exemption amount claimed when you select the partial tax
+exemption option in Exemption Allocation. The exemption amount applies only
+to the following Canadian taxes:
+Newfoundland & Labrador Health and Post Secondary Education Tax
+(HAPSET)
+Ontario Employer Health Tax (EHT)
+When the field is left blank, no exemption amount is applied and taxes are
+calculated using the latest payroll tax rates.
+Experience
+Rate
+Field where you can enter the unemployment tax contribution rate in a decimal
+format to override the default system rate in Dayforce. For example, enter
+3.5% as 0.035.
+This option is available with regular and voluntary employer/employee plans
+where the rate is different from the standard state rate assigned by the
+
+-- 348 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 349 of 0
+agency. Normally, the state agency assigns an experience rate if you have a
+different rate from the standard rate.
+Gross Annual
+Payroll
+Field to enter the amount of payroll that the organization pays all of its
+employees (before taxes) from January 1 to December 31.
+Quarterly
+Formula
+Indicates that you want to use the formula for paying taxes quarterly over
+the year. Applies to US State Employer Unemployment Tax only. Often, this
+checkbox is selected by default and can’t be cleared.
+Reciprocity
+Indicates that the state in which the employee resides has a reciprocal tax
+agreement with the state in which the employee works. Often, this checkbox
+is selected by default and can’t be cleared.
+Rpt Full Subject
+Wages
+When selected, indicates the tax wage and the full subject wage amounts
+are reported as the same in the Dayforce Tax Service (DTS) file even though
+the wage limit has been exceeded. Used by reimbursable employers in all
+US states, except North Dakota, Oklahoma, and Wyoming.
+Self Adjust
+Code
+Checkbox that, when selected, instructs Dayforce to attempt to make up
+any shortfalls if too little tax is withheld for the current pay period. Often, this
+checkbox is selected by default and can’t be cleared.
+Self Insured
+Flag
+Indicates that the organization is self-insured and acts as its own issuer to
+pay for worker's compensation claims directly out of the organization's own
+pocket, instead of paying a traditional third-party insurer. Applies to US
+State Employer Unemployment Tax.
+Supplemental
+Tax Method
+Drop-down list with several options to set the supplemental tax method to
+be applied to the tax type:
+PR Christmas Bonus
+Regular Without Exemptions
+Supplemental Cumulative Method
+Supplemental Flat Rate
+Supplemental Rate Table
+Supplemental System Selected
+Supplemental With Separate Aggregation
+Use Zero Rate Checkbox that you can select to override the default rate of certain taxes
+and instead use a rate of zero in the tax calculations.
+The jurisdiction for which the tax was legislated determines the specific settings or qualifiers for
+tax authorities. Some examples that are documented here are:
+BC Employer Health Tax (BC EHT)
+Employment Allowance and SER for Legal Entities
+Specify Employee Tax Percentage for Washington Paid Family Leave
+
+-- 349 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 350 of 0
+Tax Qualifiers
+Similar to how some tax authorities have tax settings, some tax settings have associated tax
+qualifiers. Tax qualifiers are used in relation to tax settings to configure qualifiers for the tax setting
+for a given tax authority. They’re often associated with manually added municipal, local, or other
+taxes, for example, Joint Economic Development Districts, or JEDDs. The qualifiers section
+generally contains the following:
+Effective Start and Effective End dates:
+Locations: Locations specific to the legal entity associated with the tax authority.
+Work Location Overrides: Overrides to the location setting with which you can specify the
+physical location where the employee works, ensuring that the employee’s taxes are
+properly calculated based on that physical location.
+Projects: Projects specific to the legal entity associated with the tax authority.
+The Dayforce Tax Service engine automatically locates tax authorities based on published
+regulatory records of physical geographic boundaries. Where a tax authority does NOT have a
+physical boundary that can be located, you can use the Tax Qualifiers section as an override to
+specify a work location that should locate this tax on an employee assigned to that location.
+Tax Rates
+Similar to how some tax authorities have tax settings, some, but not all, tax settings have
+associated tax rates. Tax rates are used for some tax authorities like Workers’ Compensation to
+configure specific tax rates for those tax withholdings. For example, for some workers’
+compensation withholdings have different rates for both employer and employee.
+The following two tables contain details about the workers’ compensation tax authorities for
+employer and employee for specific states that must be specially configured:
+US Employer Tax Authorities for Workers’ Compensation
+Tax Authority 	Tax Name
+USA-00350000-030 	New Mexico State - Employer Worker Compensation Tax
+USA-00380000-030 	North Dakota State - Employer Worker Compensation Tax
+USA-00390000-030 	Ohio State - Employer Worker Compensation Tax
+USA-00410000-030 	Oregon State - Employer Worker Compensation Tax
+USA-00530000-030 	Washington State - Employer Worker Compensation Tax
+USA-00560000-030 	Wyoming State - Employer Worker Compensation Tax
+US Employee Tax Authorities for Workers’ Compensation
+Tax Authority 	Tax Name
+USA-00350000-040 	New Mexico State - Employee Worker Compensation Tax
+USA-00410000-040 	Oregon State - Employee Worker Compensation Tax
+
+-- 350 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 351 of 0
+USA-00530000-040 	Washington State - Employee Worker Compensation Tax
+Important: Dayforce Tax Service calculates, remits, and files your Workers Compensation Taxes in
+New Mexico, Oregon, and Wyoming. Additional information may be required for the calculation for
+the tax authorities above. The Workers Compensation Report will not provide complete information
+needed for accurate calculations for the states listed above.
+You must enter the Employee Class Code, an effective start date, and the experience rate. Note
+that only one employee class code can be default for the specific workers compensation taxation
+your legal entity should be withholding. Information about the rate you should be using each year
+is provided to you by the state or by your private plan provider.
+Employee class codes entered in the Rates section panel must then be linked to each employee
+record in that jurisdiction in the People feature, in the Payroll > Tax Definitions screen.
+See Configure Workers' Comp Legal Entity Policies and Rates.
+Apply Supplemental Tax Method (US Only)
+You can assign supplemental tax calculations for state withholding taxes at the legal-entity level,
+which applies the calculation method to all employees in the legal entity.
+Important: After you configure the supplemental tax method at the legal entity level, the
+application overrides any other tax method configurations at the check template or earning level.
+This information in this topic is divided into the following tasks and concepts:
+Configure Supplemental Tax Methods
+Configure Zero Rate Tax Calculation
+PSD Codes for Pennsylvania
+Configure Supplemental Tax Methods
+To configure supplemental tax methods at the legal entity level:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Tax Authorities tab and select the tax authority.
+3. Click Add in the Tax Setting section, to the right of the list of tax authorities.
+4. Enter a date in the Effective Start field to indicate when the tax starts using the supplemental
+tax method.
+5. (Optional) Enter a date in the Effective End field to indicate when the supplemental tax
+method expires.
+6. Select an option in the Supplemental Tax Method drop-down list, if applicable. For the
+Supplemental Flat Rate tax method, select an option in the Supplemental Alternate
+Calculation Method drop-down list.
+7. Click Save.
+
+-- 351 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 352 of 0
+Configure Zero Rate Tax Calculation
+If necessary, you can override the default rate of certain taxes and instead use a rate of zero in the
+tax calculations. The Use Zero Rate checkbox is available for the following:
+At the legal entity level:
+Federal Social Security Tax
+Federal Medicare Tax
+Federal Unemployment Tax
+Colorado Unemployment Tax
+Aurora City Occupation Tax
+At the employee level:
+Federal Social Security Tax
+Federal Medicare Tax
+Federal Unemployment Tax
+VA DRT
+VA SUI
+To configure a zero rate tax calculation:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Tax Authorities tab and select the tax authority.
+3. Click Add in the Tax Setting section, to the right of the list of tax authorities.
+4. The application displays several additional fields.
+4. Enter a date in the Effective Start field to indicate when the tax starts following reciprocity
+rules.
+5. (Optional) Enter a date in the Effective End field to indicate when the reciprocity rules expire.
+6. Select the Use Zero Rate checkbox and click Save.
+PSD Codes for Pennsylvania
+Dayforce automatically determines the correct Political Subdivision Code (PSD) for both work
+location addresses and employee primary residential addresses. PSD codes are six -digit
+numbers that designate each of the 69 tax collection districts in the state of Pennsylvania, which
+are used to ensure that taxes are remitted to the proper taxing authority.
+The application displays the read-only PSD Code field in the Personal > Contact Information
+screen of People for employees whose primary residence address is in Pennsylvania. It
+automatically updates the code if the primary residence changes to an address in a different tax
+collection district.
+PSD Codes are also displayed in the Address tab of Org Setup > Organization for physical
+locations defined in Org Setup once an employee has been assigned to work at the physical
+
+-- 352 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 353 of 0
+location.
+This information is provided to Dayforce Tax Service to help ensure that taxes are remitted to the
+appropriate taxing authority.
+BC Employer Health Tax (BC EHT)
+The British Columbia Employer Health Tax (BC EHT) is payable by employers on the earnings of
+their BC employees when total BC employee earnings exceed the yearly exemption limit.
+The remittance requirements for BC EHT specify that employers must pay this tax in equal
+quarterly installments that are based on an estimate of the total earnings for BC employees for the
+year. If the amount of tax paid based on the estimate is lower than the actual amount owing, the
+outstanding amount is subject to interest.
+These remittance requirements are different from those of other Canadian provincial health taxes
+for which installment amounts vary and are based on the actual tax calculated during the
+installment.
+Important: Because the installments of BC EHT are based on estimated earnings and require
+equal installments, Dayforce does not support the calculation or remittance of this tax and only
+supports the tracking of taxable wages. This means that you need to calculate and remit this tax
+to the BC government outside of Dayforce.
+While the application does not calculate or remit this tax, you still need to update the tax details in
+Dayforce to track taxable wages. Dayforce provides the tax value BC EHT in the Tax Authorities
+tab for Canadian legal entities in Org Setup > Org Payroll Setup > Legal Entity. The tax authority
+number for BC EHT is 1011000020.
+In the Company Tax ID Number column for this tax, you need to record the BC tax account
+number for the legal entity. If the legal entity doesn't have a BC tax account number, you can enter
+EHT-9999-9999 as a placeholder.
+In the Tax Setting section for this tax, you need to create a record with effective start and end
+dates covering the year. As is the case with other health taxes, you need to create a tax setting
+record each year.
+If you select the Exempt Tax and Taxable Wages checkbox in the record, the application does not
+track taxable wages. It is a best practice to leave this checkbox cleared so that you can monitor
+whether the legal entity is nearing or over the exemption limit for the tax, and to ensure the
+estimated installment amounts do not fall below the actual tax owing.
+Because the application does not calculate this tax, the Exemption Allocation, Exemption Amount
+and Gross Annual Payroll parameters of the record are non-editable.
+Information about Calculating Tax Installments
+
+-- 353 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 354 of 0
+You can calculate the tax installments using the health tax calculator on the BC government
+website: https://forms.gov.bc.ca/taxes/employer-health-tax-calculator/.
+In this calculator, you need to enter an estimate of total BC earnings based on the lesser of
+the following:
+the previous year's tax
+estimated tax for the current year
+You can obtain the BC earnings recorded in Dayforce for the previous year by running the
+Payroll Summary Report. Group the report by work province and run it for the relevant legal
+entities. In the report, the Gross to Net section for BC displays the total earnings.
+You need to monitor the taxable wages of the BC EHT tax in Dayforce for the current year to
+ensure that the estimated earnings that are used to calculate the installment do not fall
+below the actual earnings. This will allow you to avoid interest fees for extra amounts owing.
+You can monitor this by running the Payroll Summary Report. Group the report by work
+province and run it for the relevant legal entities. In the report, the Tax Expense Summary
+section for BC displays the limited taxable wages for BC EHT.
+More information about BC EHT is located on the BC government
+website: https://www2.gov.bc.ca/gov/content/taxes/employer-health-tax.
+Configure Reduced Quebec Health Services Fund (HSF) Rates
+Client administrators can configure a reduced Quebec Health Services Fund (HSF) rate. The
+reduced rate applies to qualified Quebec legal entities identified as small or mid-sized businesses
+(SMBs) in the primary and manufacturing sectors with less than $5 million in annual payroll.
+To configure reduced Quebec HSF rates:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Tax Authorities tab and select the Quebec Health Services Fund.
+3. In the Tax Setting section to the right, click Add.
+4. In the Effective Start field, enter the date that the reduced rate takes effect.
+5. (Optional) In the Effective End field, enter the date that the rate expires.
+6. Select the Exempt Tax And Taxable Wages checkbox, if necessary.
+7. In the Gross Annual Payroll field, enter the amount for the setting.
+8. In the Reduction of the HSF Contribution Rate drop-down list, select SMB in the Primary or
+Manufacturing Sector.
+9. Click Save.
+When configured, Dayforce applies a reduced HSF rate based on the legal entity's gross annual
+payroll total.
+Part XIII Tax
+
+-- 354 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 355 of 0
+Part XIII tax is a federal withholding tax on specific types of income paid out to employees who
+are non-residents of Canada. As a Canadian employer, you must withhold this tax and remit them
+to the Canadian Revenue Agency (CRA) as well as fill out a NR4 slip for every non-resident whose
+income was deducted.
+Dayforce calculates the Part XIII tax on earnings that are configured to report the tax, and on
+employees set up as non-residents in their employee record in People. See Earnings Subject to
+Part XIII Tax.
+In Org Setup > Org Payroll Setup > Legal Entity, the Part XIII tax authority is shown in the Tax
+Authorities tab for Canadian legal entities.
+In the Company Tax ID Number column for this tax, you need to record your organization's non-
+resident account number. You must include the letters NRF at the beginning of the account
+number. This account number is used on the NR4 slips.
+In the Tax Setting section for this tax, you can override the default tax rate by entering a value
+between 0 and 25%. Any other value will be ignored and the default rate is applied instead.
+More information about Part XIII tax is available on the Canadian government
+website: https://www.canada.ca/en/revenue-agency/services/tax/international-non-
+residents/payments-non-residents/nr4-part-xiii-tax/part-xiii-withholding-tax.html.
+Employment Allowance and SER for Legal Entities
+Eligible employers can configure UK legal entities in Dayforce to claim an Employment Allowance
+or Small Employers' Relief (SER).
+The Employment Allowance can qualify the legal entity for a reduction in its National Insurance bill.
+For details about Employment Allowance and employer eligibility requirements, see the site
+https://www.gov.uk/claim-employment-allowance.
+Important: As of 6 April 2020, there is no longer a flat-rate amount for the Employment Allowance.
+Employers must apply to be awarded an Employment Allowance, and the amount can be different
+for each employer. The amount is also cleared at the start of every fiscal year and must therefore
+be entered manually each year.
+The SER can qualify a legal entity to reclaim certain amounts for statutory pay, (for example,
+Statutory Maternity Pay, Paternity, Adoption and Shared Parental Pay). Detailed information about
+partial and full recovery of SER, as well as the rules governing the effective start date and the
+calculation of SER, can be found at https://www.gov.uk/recover-statutory-payments.
+Employment Allowance details and Small Employers' Relief are included in the EPS file
+transmitted to HMRC, which you can verify in the Tax Month Management sub-tab in Payroll
+> Post Commit Management, in the Tax Month Preview slide-out panel, in the EPS Summary tab.
+
+-- 355 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 356 of 0
+Employment Allowance and Small Employers' Relief are both configured in Org Setup > Org
+Payroll Setup > Organization for a selected legal entity, in the Tax Setting section of the Tax
+Authorities tab for the National Insurance ER (employer) entry. These tax settings are start-date
+effective, because requirements can change at the start of the tax year. To allow for mid-year
+implementation, enter the start date that the parameters go into effect to ensure that the correct
+processing period is used for calculation.
+The Tax Setting section for National Insurance ER (employer) contains the following options:
+Agriculture Sector: Select this checkbox to indicate that the tax setting is for the agriculture
+sector. This is included in the EPS file.
+Annual Apprenticeship Levy Allowance: If applicable, enter the annual apprenticeship
+allowance.
+Eligibility for Employment Allowance: Select this checkbox to indicate that the employment
+allowance must be calculated.
+Employment Allowance: Enter the annual employment allowance amount. As of 6 April
+2020, the employment allowance amount must be entered manually every year.
+Expected annual payroll exceeds Apprenticeship Levy Threshold: Select this checkbox to
+indicate that the annual payment exceeds the apprenticeship levy threshold and that the
+annual apprenticeship levy must be calculated.
+Important: If you select this checkbox, you must also select one of the sector checkboxes or
+the State Aid Rules Do Not Apply checkbox, otherwise you will not be able to save this
+record.
+Fisheries and Aquaculture Sector: Select this checkbox to indicate that the tax setting is for
+the fisheries and aquaculture sector. This is included in the EPS file.
+Industrial Sector: Select this checkbox to indicate that the tax setting is for the industrial
+sector. This is included in the EPS file.
+Road Transport Sector: Select this checkbox to indicate that the tax setting is for the road
+transport sector. Included in the EPS file.
+State Aid Rules Do Not Apply: Select this checkbox to indicate that the tax setting is exempt
+from state aid rules.
+Statutory Payment Recovery Type: Select one of the following options: None, Partial, or Full.
+None: The statutory recovery compensation isn’t applicable. This is also the option if
+the field is left blank.
+Partial: Recovery = Amount*92% and NIC Compensation = 0.
+Full: Recovery = Amount and NIC Compensation = Amount*3%.
+The NIC Compensation values are calculated and displayed at the employee level for general
+ledger purposes in the same way as the recovery values. The values are also displayed in the Tax
+Month Management sub-tab for EPS and reported as RTI data items in the EPS file as follows:
+97 - Value of NIC compensation on SMP year to date
+98 - Value of NIC compensation on SPP year to date
+
+-- 356 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 357 of 0
+99 - Value of NIC compensation on SAP year to date
+100 - Value of NIC compensation on ShPP year to date
+Specify Employee Tax Percentage for Washington Paid Family Leave
+The Washington state paid family leave program provides up to 12 weeks of protected leave in a
+12-month period for eligible employees. By default, the employee pays up to 63% of the premium
+cost (EPFL & EMLI combined) and the employer pays the remaining 37% (MLIR).
+You have the option to specify the percentage rate responsible by employees and employers for
+Washington Paid Family Leave employee taxes and medical premiums in Dayforce for medical
+leave and paid family leave (regular and voluntary) tax authorities. For example, you can pay more
+than the 37%, such as a 50/50 amount, to override the contribution amount by the employee or
+employer that doesn’t allow selecting an option below 37%.
+You can specify the unemployment insurance tax rate based on the employer's experience rating
+that was assigned by the state agency (that is, other than the standard rate) in the Experience
+Rate field in the Tax Setting section. By doing so, you override the default contribution rate that is
+used in the system and apply the specified rate to all employees for its tax authority. When
+specifying the unemployment tax rate in the Experience Rate field, enter the percentage rate in a
+decimal format. For example, if the tax unemployment rate is 3.25%, enter 0.0325. See Tax
+Settings and Tax Qualifiers for Tax Authorities.
+To specify percentage rate for Washington paid family leave employee taxes:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a US legal entity.
+2. Click the Tax Authorities tab and select the Washington tax authority from the list displayed.
+For example, Washington - Paid Family Leave Voluntary - Employer.
+3. Click New in the Tax Setting section, to the right of the list of tax authorities.
+4. Enter the date that the unemployment insurance leave starts in the Effective Start field.
+5. (Optional) Enter the date that the unemployment insurance leave expires in the Effective
+End field.
+6. Enter the unemployment insurance tax rate that was assigned to you by the state agency in
+the Experience Rate field in a decimal format.
+7. Click Save.
+The Customer Funding Identifiers Tab
+This topic describes the Customer Funding Identifiers tab in Org Setup > Org Payroll Setup
+> Legal Entity, which is described in detail in Org Payroll Setup > Legal Entity. Customer funding
+identifiers are used to identify bank account information for a legal entity.
+Note: If you logged in with the English (United Kingdom) culture setting, the Legal Entity tab is
+called Organisation.
+
+-- 357 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 358 of 0
+The Customer Funding Identifiers tab in Org Setup > Org Payroll Setup > Legal Entity has a list of
+any tax authorities configured for the legal entity. The toolstrip in the Customer Funding Identifiers
+tab contains the following buttons:
+Add: Adds a customer funding identifier.
+Copy: Copies an existing customer funding identifier.
+Delete: Deletes an existing customer funding identifier.
+Localize: Opens the Localize dialog box to localize the customer funding identifier.
+Dayforce shows the following columns, depending on country:
+Is Default
+Name
+Description
+Reference Code
+Funding Identifier (Canada)
+Tax Service ID (US)
+Service User Number (UK)
+Technical ID (Nuapay) (UK)
+Effective Start
+Effective End
+Note: Each US legal entity must have a default funding identifier configured for each effective
+period.
+When you select an existing customer funding identifier, the Bank Account Setting section is
+shown. The section has a toolstrip with Add, Delete, Approve Online Check Verification Document,
+and Localize buttons.
+To learn more about the Approve Online Check Verification Document button, see Print and
+Approve the Check Verification Document.
+Dayforce shows the following columns in the Bank Account Setting section:
+Approved
+Name
+Description
+Effective Start
+Effective End
+Online CVD Approved (US)
+Online CVD Approved On (US)
+Printed CVD Approval Site (US)
+Printed CVD Approval File Sent On (US)
+Printed CVD Approved On (US)
+
+-- 358 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 359 of 0
+Approved On (US)
+When you add a bank account in the Bank Account Setting section, Dayforce shows the tabs
+Payroll Check and Direct Deposit, Third Party Payee and Bank Transfer.
+Some of the buttons, columns, and tabs described for the Bank Account Setting section are
+available only for specific operating countries of legal entities. For more details about how to
+configure the customer funding identifier for your legal entity's operating country, see one of the
+following topics.
+Configure Customer Funding Identifiers for Mauritius Legal Entities
+Enter Customer Funding Identifiers for Irish Legal Entities
+Enter Customer Funding Identifiers for UK Legal Entities
+Enter Customer Funding Identifiers for Australian Legal Entities
+Customer Funding Identifiers for Canadian Legal Entities
+Configure the Funding Bank Account for Singapore Payroll
+Suppress or Override “Payroll Check” in Non-ODC Printed Checks
+You can override the default message in non-Official Dayforce Checks (ODC) payroll checks that
+are printed. Instead of the default message “Payroll Check”, the text is replaced by the alternate
+message that you’ve configured in Payroll Setup > Bank Accounts for that bank account.
+Before You Begin: This topic describes the Check Details section in the Bank Accounts tab in
+Payroll Setup > Bank Accounts, described in the topic The Check Details Section in the Bank
+Accounts Tab. It also describes the Customer Funding Identifiers tab in Org Setup > Org Payroll
+Setup > Legal Entity, which is described in detail in the topic Org Payroll Setup > Legal Entity
+Configure the Replacement Message
+1. Go to Payroll Setup > Bank Accounts and select the bank account to edit.
+2. In the Check Details section, select the checkbox next to the option Use for Non-Dayforce
+Checks.
+3. In the Authorizing Messages 2 field, enter the alternate message to display on non-Dayforce
+checks.
+4. Click Save.
+Configure the Customer Funding Identifier Information
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select the Legal Entity to edit.
+2. Click the Customer Funding Identifier tab.
+3. In the Bank Account Setting, add a new (or select an existing) entry to configure for non-
+Dayforce checks.
+4. Click the Payroll Check and Direct Deposit sub-tab or the Customer Funding Identifier sub-
+tab.
+
+-- 359 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 360 of 0
+5. Click Approve Online Verification Document, click Approve, then click Save.
+6. Click Generate Printed CVD for Client Approval, enter the delivery information, then click
+OK.
+Related information is available in Print and Approve the Check Verification Document.
+The Employment Insurance Tab
+The Employment Insurance tab in Org Setup > Org Payroll Setup > Legal Entity has a list of any
+employment insurance entries for the legal entity. The toolstrip in the Employment Insurance tab
+contains the following controls:
+Add: Button to add an employment insurance entry.
+Copy: Button to copy an existing employment insurance entry.
+Delete: Button to delete an existing employment insurance entry.
+If you select an existing entry, or if you add one, Dayforce shows the following columns:
+Rate Group: Required name for the rate group
+Reference Code: Required reference (XRef) code
+For Canadian legal entities, enter the four-digit reference number for RP (payroll
+deductions).
+Is Default: Checkbox to indicate the default rate when more than one exists
+When you select one of the employment insurance entries, Dayforce shows a Rates section that
+has the following columns:
+Rate: Required field for the employment insurance rate
+Start Date: Required field for the start date
+End Date: Optional field for the end date
+The Workers Comp Tab
+The Workers Comp tab in Org Setup > Org Payroll Setup > Legal Entity has a list of any tax
+authorities configured for the legal entity.
+For Canada legal entities, you must configure WCB rates for all provinces in which your legal
+entity has employees.
+For US legal entities, the Workers Comp tab is used to add information about the organization and
+its legal entities to the Workers Compensation Report. The report allows a client to collect data and
+complete state-required filing returns or to provide the required information to third-party providers
+who assist with these filings.
+In this tab, it is recommended that US legal entities do not configure the workers compensation
+states and rates that are being calculated in the Tax Authorities tab (NM, ND, OH, OR, WA, WY).
+
+-- 360 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 361 of 0
+See Tax Settings and Tax Qualifiers for Tax Authorities. Information for these states should be
+obtained from existing tax reports available in Dayforce and used to complete each state’s filing
+returns or to provide to third-party providers who assist with these filings. Note that Dayforce Tax
+Service will file NM, OR, and WY Workers Compensation for the client when you’ve configured all
+the information in the Tax Authorities tab and/or at the employee level.
+The toolstrip in the Workers Comp tab contains the following controls:
+Add: Button to add a workers comp entry.
+Copy: Button to copy an existing workers comp entry.
+Delete: Button to delete an existing workers comp entry.
+Localize: Button to localize the workers comp entry.
+The columns that the application displays in the list depends on the operating country as selected
+in the Address tab. The columns for
+State / Province:
+Account / Policy Number:
+Name:
+Description:
+Start Date:
+End Date:
+Earning Groupings:
+Is Default:
+When you have created a new workers comp entry, or selected an existing one, the Rates section
+is displayed containing a toolstrip with Add, Copy, and Delete buttons, and a list for rates
+containing the following columns:
+Workers Comp Class Code: Drop-down list with workers comp class codes that you have
+configured in Org Setup > Jobs and Job Assignments. The Workers Compensation Report
+shows the employee wages for the class codes configured here. There is also a report
+setting that allows you to report on jobs without a class code configured.
+Start Date:
+End Date:
+Employer Rate:
+Employee Rate:
+Is Default:
+The Tax Remittance Tab
+The Tax Remittance tab in Org Setup > Org Payroll Setup > Legal Entity has a list of any tax
+remittance entries for the legal entity.
+
+-- 361 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 362 of 0
+For legal entities in Canada, you must configure the application to remit taxes through the
+Government Remittance System (GRS) in the Dayforce Back Office system. You must also specify
+the frequency at which those taxes will be remitted. This is to ensure that tax remittances are
+made correctly and on time.
+The toolstrip in the Tax Remittance tab contains the following controls:
+Add: Button to add a tax remittance entry.
+Copy: Button to copy an existing tax remittance entry.
+Delete: Button to delete an existing tax remittance entry.
+If you select an existing entry, or if you add one, the columns that the application displays in the
+list are:
+Authority: Required drop-down list with available tax remittance authorities:
+Canada Federal
+Manitoba
+Newfoundland/Labrador
+Northwest Territories
+Nova Scotia
+Nunavut
+Ontario
+Quebec
+Remittance Frequency: Required drop-down list with available remittance frequency types:
+Quarterly
+Regular (Monthly)
+Threshold 1 (Semi-Monthly)
+Threshold 2 (Weekly)
+Is Remitted: Checkbox to ensure that the tax is remitted
+Start Date
+End Date
+When you select one of the employment insurance entries, the application displays a Rates
+section that displays the following columns:
+Rate: Required field for the employment insurance rate
+Start Date: Required field for the start date
+End Date: Optional field for the end date
+Instructions for this task are available in Configure GRS Tax Remittance (Canada only).
+The YTD Amount Tab
+
+-- 362 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 363 of 0
+The YTD Amount tab in Org Setup > Org Payroll Setup > Legal Entity has a list of any year-to-
+date entries for the legal entity. The toolstrip in the YTD Amount tab contains the following controls:
+Add: Button to add a pay group and funding identifier set to in the YTD Amount tab.
+Delete: Button to delete an existing pay group and funding identifier set.
+If you select an existing entry, or if you add one, the columns that the application displays in the
+list are:
+Pay Group: Required drop-down list with the pay groups set up in Pay Setup > Pay Group.
+Used to determine year-to-date amounts.
+Funding Identifier: Drop-down list with the funding identifiers set up in the Customer Funding
+Identifiers tab of Org Setup > Org Payroll Setup > Legal Entity for the legal entity.
+When you select one of the pay group entries, the application displays a corresponding section to
+the right containing the following sections and options:
+Migration Year: Drop-down list with available years.
+Employer Employment Insurance (EI): A section with Add and Delete buttons. If you add a
+new entry or select an existing one, a list in the section displays the following fields:
+EI Rate Group
+Tot Taxable Wage
+LTD Taxable Wage
+Taxes
+Employer Canada Pension Plan (CPP): A section with Add and Delete buttons. If you add a
+new entry or select an existing one, a list in the section displays the following fields:
+EI Rate Group
+Tot Taxable Wage
+LTD Taxable Wage
+Taxes
+Health Taxes:
+British Columbia EHT:
+Tot Taxable Wage
+Ltd Taxable Wage
+Newfoundland HAPSET:
+Tot Taxable Wage
+Ltd Taxable Wage
+Taxes
+Quebec HSF:
+Tot Taxable Wage
+Taxes
+Employer Quebec Pension Plan (QPP):
+Tot Taxable Wage
+
+-- 363 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 364 of 0
+Ltd Taxable Wage
+Taxes
+Manitoba HET:
+Tot Taxable Wage
+Ltd Taxable Wage
+Taxes
+Ontario EHT:
+Tot Taxable Wage
+Ltd Taxable Wage
+Taxes
+Quebec Parental Insurance Plan (QPIP):
+Tot Taxable Wage
+Ltd Taxable Wage
+Taxes
+Additional Information
+You should only use the YTD Amount tab if you can’t include one or more employer taxes in the
+Pay Run History Import as part of the implementation process. For details about that import,
+download the Dayforce Interface Specifications ZIP file and see the Dayforce Pay Run History
+Import Specification document.
+When a Canadian legal entity migrates to using the Payroll feature, or if you are implementing a
+Canadian customer with mid-year go-live date, use of the YTD Amount tab in Org Setup > Org
+Payroll Setup > Legal Entity is required for Canadian legal entities that have made payments for
+ON EHT, QC HSF, NL HAPSET, or MB HE Levy.
+Multiple Worksite Reporting
+Multiple Worksite Reporting helps in the collection of statistical reporting data for employers who
+have more than one physical worksite in a state; that is, a primary worksite and at least one
+secondary worksite.
+Before You Begin: This topic applies to US legal entities only.
+Generally, the Multiple Worksite Report (or MWR) is required for employers who have a total of 10
+or more employees in a state with both primary and secondary worksite locations that are covered
+under a single State Unemployment Insurance (or SUI) account. This means that if your
+organization has multiple worksites in a state, and the total number of employees working in all
+locations in the state is 10 or more, you are probably required to file the Multiple Worksite Report.
+For information about Multiple Worksite Reporting, including requirements, see the U.S. Bureau of
+Labor Statistics site, https://www.bls.gov/respondents/mwr/home.htm.
+Configuring Multiple Worksite Reporting involves the following:
+
+-- 364 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 365 of 0
+Adding unique worksite numbers to each worksite location for a legal entity (in Org Setup
+> Org Payroll Setup > Multiple Worksite Reporting).
+If you're already familiar with the concepts covered in this topic, you can go to Configure Multiple
+Worksite Reporting.
+To configure Multiple Worksite Reporting in Dayforce, you must assign unique worksite numbers to
+each location that is covered under a single SUI account. Assigning each worksite location a
+unique identification number allows you to report all locations covered under that SUI.
+You can add as many worksites as necessary. After you have configured your worksites, you must
+assign the worksite numbers to the appropriate site locations in the organizational hierarchy under
+Organization > Legal Entity, in the slide-out panel for the site, in the Legal Entity tab, in the
+Worksite [State-Number] drop-down list.
+Multiple Worksite Reporting for Legal Entities
+A list of multiple worksite reporting locations for US legal entities is shown in Org Setup > Org
+Payroll Setup > Multiple Working Reporting if you have added any worksites.
+You can configure multiple worksite location entries to produce the Multiple Worksite Report. Enter
+the name and contact details of the person responsible for multiple worksite reporting for the legal
+entity.
+Multiple Worksite Reporting options
+Option 	Description
+Multiple Worksite Reporting
+Select the checkbox to configure the legal entity to use
+multiple worksite reporting.
+Important: If you select the Multiple Worksite Reporting
+checkbox, you must also enter contact details in the
+provided fields.
+Multiple Worksite Contact Name Name of the contact for multiple worksite reporting.
+Mandatory.
+Title 	Title of the multiple worksite contact. Mandatory.
+Phone Number Phone number of the multiple worksite contact.
+Mandatory.
+Configure Multiple Worksite Reporting
+Some states require legal entities to define and assign worksite numbers to all their locations when
+those legal entities have multiple locations that are covered under a single Unemployment
+
+-- 365 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 366 of 0
+Insurance (UI) account. Those states then require those legal entities to report on those locations.
+The following states are required to file Multiple Worksite Reports: Alabama, California, Colorado,
+Florida, Georgia, Iowa, Kansas, Louisiana, Maine, Maryland, Minnesota, Montana, Nebraska,
+Nevada, New Hampshire, New Jersey, New York, North Carolina, North Dakota, Ohio, Oklahoma,
+Oregon, South Carolina, Vermont, Virginia, West Virginia, Puerto Rico and the Virgin Islands.
+Multiple worksite reporting can only be configured on legal entities with locations in the United
+States.
+To configure multiple worksite reporting:
+1. Go to Org Setup > Org Payroll Setup > Multiple Worksite Reporting and select a legal entity.
+2. Select the Multiple Worksite Reporting checkbox.
+3. Provide a multiple worksite contact name, title, and phone number in the available fields.
+4. Click Add.
+5. Select the state in the Worksite State drop-down list.
+6. Enter the five-digit, numeric Worksite Number assigned for the worksite. This number is
+provided by the state.
+7. Enter a name and description of the worksite in the available fields.
+8. Enter the reference code.
+9. Enter effective dates for the worksite.
+10. Enter the worksite's address in the available fields.
+11. Select a comment code in the Comments drop-down list. These are provided by the US
+Department of Labor's Bureau of Labor Statistics.
+12. Click Save.
+You can configure as many worksites as necessary. After you configure worksites, you need to
+assign the worksite numbers to the appropriate locations in the organizational hierarchy.
+Assigning Worksite Numbers
+To assign worksite numbers to the physical location or site it represents in the organizational
+hierarchy:
+1. Go to Org Setup > Organization and click the Organization tab.
+2. Browse the hierarchy, clicking the arrow button to expand levels, until you find the location
+or site that you want assigned a worksite number.
+3. Select the location and then click the Legal Entity tab.
+4. Select the worksite number in the Worksite Name [State-Number] drop-down list.
+5. Click Save.
+The Quarterly/Annual Reporting Parameters Tab
+
+-- 366 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 367 of 0
+The Quarterly/Annual Reporting Parameters tab in Org Setup > Org Payroll Setup > Legal Entity
+has a list of any tax authorities configured for the legal entity. The toolstrip in the Quarterly/Annual
+Reporting Parameters tab contains the following controls:
+Add: Button to add a multiple worksite reporting entry.
+Copy: Button to copy an existing multiple worksite reporting entry.
+Delete: Button to delete an existing multiple worksite reporting entry.
+When you have created a new quarterly/annual reporting parameters entry, or you have selected
+an existing one, a list is displayed containing the following columns:
+Jurisdiction: Depending on which option you select, a section is displayed to the right that
+contains additional settings.
+Start Date
+End Date
+See US Legal Entity Specific Tax Reporting Parameters.
+Federal and State options
+Jurisdiction drop-down
+selection Fields displayed to the right
+USA Federal
+Kind of Employer: Drop-down list with the following
+options:
+Federal Government
+None Apply
+State and Local Governmental Employer
+Tax Exempt Employer
+State and Local Tax Exempt Employer
+Employment Code: Drop-down list with the following
+options:
+Agriculture - Form 943
+Regular - Form 944
+Household - Schedule H
+Military - Form 941
+Medicare Qualified Government Employment -
+Form 941
+Regular - Form 941
+Regular - Form 945
+Railroad - CT-1
+Terminated Business: Checkbox
+Retirement Plan Eligible: Drop-down list with options
+[None], No, and Yes
+
+-- 367 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 368 of 0
+Annual Tax Filing Other EIN: Field for the former FEIN of a legal entity if
+the legal entity reorganizes mid-year and uses a new FEIN number. This
+field populates the otherEIN field in the XML file.
+Account Number on 1099R: Drop-down list with the options:
+None
+1099R Form Id
+Contractor Tax Form Type: This drop-down list is empty by default. If no
+selection is made, the form 1099-NEC is used by default. The drop-down
+contains the following options:
+1099-M
+1099-NEC
+1099 Payer Phone Number: The payer's telephone number you want to
+include in the 1099-M, 1099-NEC, and 1099-R forms.
+Canada
+Federal
+Dental Plan Available: Indicates the code used to complete Box 45 in T4 slips
+and Box 15 in the T4A slips to comply with the Dental Care Measures Act.
+Alaska 	Alaska Geo Area Code
+Maine Seasonal Period Start
+Seasonal Period End
+Montana
+Reimbursable ER: If you are a Montana SUI reimbursable employer, when this
+option is selected, the Subject Wages to the Limit is replaced by Full Subject
+Wages in the quarterly filing.
+This feature has been replaced by the Rpt Full Subject Wages tax setting in
+Org Setup > Org Payroll Setup > Legal Entities in the Tax Authorities tab, and
+should no longer be used.
+New York Dependent Medical Insurance
+Northern
+Mariana
+Islands
+Box D - CNMI NAICS Employee class code: Used for the six-digit industry
+code of your business. For more information about the North American Industry
+Classification System (NAICS), go to https://www.census.gov/naics/.
+Puerto Rico Cease of Operation (Closing) Date
+Employer Phone Number for Puerto Rico
+Vermont 	Healthcare Coverage
+The Fiscal Calendar Tab
+The Fiscal Calendar tab in Org Setup > Org Payroll Setup > Legal Entity has a list of any fiscal
+calendars configured for the legal entity. The toolstrip in the Fiscal Calendar tab contains the
+
+-- 368 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 369 of 0
+following controls:
+Add: Button to create a fiscal calendar.
+Copy: Button to copy an existing fiscal calendar.
+Delete: Button to delete an existing fiscal calendar.
+The following columns are displayed for entries in the Fiscal Calendar tab:
+Start Date: Start date of the fiscal calendar year. Required.
+End Date: End date of the fiscal calendar year. Optional.
+Fiscal Calendar: Name of the fiscal calendar. Required.
+This tab is displayed as the Financial Calendar tab when you are logged in with English (UK) or
+English (Ireland) culture setting.
+The Revenue Parameters Tab
+The Revenue parameters tab in Org Setup > Org Payroll Setup > Legal Entity displays if you have
+selected an Irish legal entity. This tab contains settings required for the transmission of
+ROS certificates to the Office of the Revenue Commissioners configured for the legal entity.
+The following options are available in the Revenue parameters tab:
+At the top of the tab, the following fields are displayed:
+Employer's PAYE Registration Number: Number provided by Revenue to your
+organisation.
+Tax Advisor Identification Number: Field available to enter the TAIN reference if
+Dayforce, Inc. is acting as your organisation's tax adviser
+PRSI Class: Field for the employer PRSI class.
+Arrestment Admin Fee: Field for an administrative fee for attachment of earnings
+orders, if applicable.
+Registered for EWSS: (Ireland Only) Checkbox to indicate whether the legal entity can
+claim the Employee Wage Subsidy Scheme (EWSS).
+ROS Certificate: Section containing the following fields:
+Current certificate: Displays the current ROS digital certificate.
+Remove: Button to remove the contents of the Current certificate field.
+Expiry Date: Field for the expiry date of the current certificate.
+Certificate: Field that works in conjunction with the Select File button to select a
+ROS digital certificate.
+Select File: Button that opens a File Upload dialog box in which you can locate and
+select your ROS digital certificate if entering it for the first time or are changing digital
+certificates.
+Password: Password that corresponds with your ROS digital certificate.
+Save Certificate: Button to save the newly added certificate.
+
+-- 369 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 370 of 0
+The Taxation Parameters Tab
+For legal entities in Australia, Canada, Mauritius, the United Kingdom, and the United States, the
+Taxation Parameters tab in Org Setup > Org Payroll Setup > Legal Entity has country-specific
+taxation parameters that you can configure for the legal entity.
+For legal entities in the Republic of Ireland, the Revenue Parameters tab is shown instead of the
+Taxation Parameters tab. See The Revenue Parameters Tab.
+By selecting a country in the Country Code drop-down list of the Address tab, the country code
+determines the options that are available in the Taxation Parameters tab. The following table
+describes the settings for each country.
+Taxation Parameters tab options by country
+Country Code 	Fields shown in the Taxation Parameters tab
+Australia
+PAYG Employer Reference Number: The legal entity's
+PAYG withholding tax reference number. When set up, it’s
+used for third-party payment to payees in Australia with
+the category of Australian Taxation Office.
+Nominated Default Superannuation Scheme: This field
+only shows for Australian third-party payees with the
+"Default superannuation scheme" payee category. The
+drop-down list shows the name in the following format:
+{USI} - Name of super fund.
+Note: You can refer to the employee's profile in the Payroll
+> Superannuation screen in People, in the Fund Name
+field for the naming format.
+You can search by USI or the fund name.
+Canada Apply Status Indian Calculations to Legal Entity's Employees
+checkbox. See Taxation Parameters for Canada.
+Mauritius
+Tax Calculation Parameters
+Category of Employer
+NPF Tax Authority
+SME Category
+PRGF Effective Start Date
+General
+Employer Registration Number
+
+-- 370 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 371 of 0
+Employer Business Registration Number
+Employer Name
+Telephone Number
+Mobile Number
+Name of Declarant
+Email Address
+SOE
+SOE Name of Declarant
+Capacity in which acting
+Additional information about these fields is available in Mauritius Legal Entity
+Taxation Parameters Settings.
+United
+Kingdom
+HMRC Office Number
+PAYE Employer Reference Number
+Employer Reference Number (ERN)
+Employer Account Office
+Corporation Tax Reference
+In the BACS export file, Dayforce uses four extra characters after the 13-
+character Account Office reference to show the year and the month or quarter
+your HMRC payment is for. This 17-character Account Office reference is
+included automatically, and ensures that payments are correctly allocated when
+you make early or late payments outside of the current period.
+United
+States of
+America
+Territorial Filer: Indicates that a US legal entity is incorporated in the
+specified territory and isn’t required to file the standard federal Form 941 to
+the Internal Revenue Service (IRS) for this federal employment identification
+number (FEIN). Rather, a federal territorial Form 941-PR (Puerto Rico) or
+Form 941-SS (American Samoa, Guam, Commonwealth of the Northern
+Mariana Islands, and the Virgin Islands) should be filed for this FEIN. You
+can select from the following options: American Samoa, Guam, Northern
+Mariana Islands, Puerto Rico, and the Virgin Islands.
+This drop-down list is only available for a new legal entity, and after the
+legal entity commits a payroll in Dayforce, you can't change your selection
+in this drop-down list.
+Note: Dayforce assigns territory-specific Dayforce Tax Service (DTS) codes
+for Medicare and Social Security taxes and prompts DTS to file the correct
+Form 941 with the appropriate tax authorities. During payroll commit,
+
+-- 371 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 372 of 0
+Dayforce validates that all employee work and residential addresses that are
+associated with the legal entity match the selected territory.
+Pennsylvania Employers Only: Allow PA Local Resident Withholding for Employees
+Working Outside of PA: Withholds Local Withholding amounts, based on employee's
+resident location, for PA Residents (outside of Philadelphia).
+Pennsylvania Local Services Tax: Withhold on Primary Work Assignment Only:
+Withholds PA Local Services Tax (LST) only on primary work assignments with PA LST
+wages. By default, this checkbox isn’t selected.
+When the checkbox isn’t selected, the PA LST on secondary work assignments or
+projects, and the primary work assignments that are subject to PA LST, are withheld.
+Employees can submit an exemption request to their employer to exclude a specific
+PA LST. The exemption request applies only for jurisdictions that show in the
+employee’s HR record in People, in the Payroll > Tax Definitions screen in the
+Employee Payroll Tax section.
+Puerto Rico Tax Form Confirmation Numbers: Section with Add, Copy, and Delete
+buttons. If any entries exist, the following columns are shown:
+Year
+Confirmation Number
+Taxation Parameters for Canada
+This section describes how to configure taxation parameters for legal entities in the Taxation
+Parameters tab of Org Setup > Org Payroll Setup > Legal Entity.
+Configure Canadian Status Indian Taxation
+If the legal entity employs Status Indian employees that work in a location that meets the
+government definition of a reserve, you can configure how the application applies Status Indian
+exemptions.
+Note: If a payroll administrator records tax amounts for a Status Indian employee in the
+Adjustments, Checks, or Quick Entry tabs, the application applies the tax amount regardless of
+the configuration.
+To configure Status Indian taxation parameters:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity and select a legal entity.
+2. Click the Taxation Parameters tab.
+3. Select the Apply Status Indian Calculations to Legal Entity’s Employees checkbox.
+4. In the Calculate CPP For Status Indians drop-down list, select one of the following options:
+Calculate CPP to include CPP/QPP totals in the employee’s tax calculations.
+No CPP to exclude CPP/QPP totals in the employee's tax calculations.
+5. Click Save.
+
+-- 372 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 373 of 0
+You must also add the Status Indian exemption to the applicable employee records in People.
+See Configure Canadian Status Indian Exemptions.
+The STP Parameters Tab
+Important: The Australian Taxation Office (ATO) requires that if a legal entity is considered as a
+related entity to other entities with different Australian Business Numbers (ABNs), and the legal
+entity needs to submit Single Touch Payroll (STP) data for other entities in the group, the related
+entity must get a business authority to lodge STP on their behalf.
+This authorisation is needed before the initial STP submission. For detailed instructions or more
+information, contact the ATO or visit their website at: https://www.ato.gov.au/Business/Single-
+Touch-Payroll/Start-reporting/STP-checklists/.
+Australian payroll processing works with STP to simplify business payroll reporting obligations to
+the ATO. General information about STP is available in Overview of Australian Payroll.
+STP parameters are configured for legal entities in Org Setup > Org Payroll Setup > Legal Entity,
+in the STP Parameters tab. The following table contains information about each of these options to
+set up the reporting of payroll activity to the Australian Tax Office (ATO).
+STP Parameters tab options
+Field 	Description
+Software Subscription ID
+A unique ID provided by Dayforce to the customer. This
+number is used as part of the authentication process for
+the submitted payroll file. All child legal entities with a
+parent uses the Software Subscription ID (SSID) of the
+parent. SSID is important to perform authentication
+linking between entities’ ABN with the right SSID. The
+linking can be done through the business’ Access
+Manager according to ATO’s STP checklist. Required
+field.
+Previous BMS Identifier
+A unique number to identify your employees’ previous
+Payroll ID in an update event for the reporting of payroll
+information to the ATO using STP.
+Note: This update event functionality isn’t developed yet
+and will be available in a future release. Currently, it’s
+just a static field.
+Branch ID
+A unique 3-digit branch ID to identify the legal entity for
+the STP parameter. Defaults to 1 if no branch ID is
+entered. Required field.
+
+-- 373 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 374 of 0
+Note: (Australia only) Organizations in Australia can decide in to create a new
+Australian legal entity with the same ABN number but with a different branch
+number in Org Set-up > Org Payroll Set-up > Legal Entity in the
+Federal/Business ID number field, and in this Branch ID field, respectively.
+To opt in to create an Australian legal entity with a duplicate ABN but with a
+different branch number, the Allow duplicate ABN (Australia only – restricted)
+client property in System Admin > Client Properties must be selected. You
+must understand ATO’s STP reporting requirements with the same ABN but
+different branch numbers before enabling this option. Also, when you create a
+new legal entity with the same Federal/Business ID number but a different
+Branch ID with an existing one, a unique Name is required. Otherwise, if the
+legal entity name already exists, an error is shown.
+Payer Reporting Information
+Payer
+Contact
+Name
+Name of the person who is used as a contact for your organisation. Required
+field.
+Payer Email
+Address
+Email address for the contact person. This email acknowledges receipt of the
+payroll file, certain processing equities, and general correspondence. Required
+field.
+Payer
+Business
+Telephone
+Number
+Telephone number for the contact person. Required field.
+Payroll Is Run By
+Use Default
+Parent Legal
+Entity
+Select this option to assign the entity to an existing default parent legal entity.
+When an organization has multiple legal entities, this setting allows this legal
+entity to be at the top of the hierarchy in the STP file to allow for proper
+reporting.
+Use Another
+Parent Legal
+Entity
+Use this option when there’s a business requirement to have multiple parent
+entities in the same environment. Assign the entity to a nondefault parent entity
+in the Select an option drop-down list.
+Use Information Provided
+
+-- 374 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 375 of 0
+Important: If the current entity is a parent/business intermediary
+for other legal entities, don’t select this option. Instead, select the
+Business Intermediary / Registered Agent option and provide
+relevant information.
+Business Intermediary /
+Registered Agent
+Sets up a legal entity whose payroll is run by an authorised
+business intermediary or being a parent/business intermediary
+for other legal entities. If selected, provide applicable details in
+the Intermediary / Registered Agent ABN, Intermediary /
+Registered Agent Contact Name, Intermediary / Registered
+Agent Contact Email Address and Intermediary / Registered
+Agent Business Telephone Number fields.
+Use this as Default Parent
+Legal Information.
+Select this checkbox to indicate that the current legal entity is
+used as a default parent for all related child legal entities, which
+have selected the Use Default Parent Legal Entity option. This
+means all information provided under the Business Intermediary /
+Registered Agent related fields of the current entity are used to
+lodge STP submissions on behalf of associated child entities.
+Intermediary / Registered
+Agent ABN
+(Applicable for both managed payroll and SaaS customers)
+Australian Business Number (ABN) for an entity that is authorized
+to make statements on behalf of another entity.
+Registered Agent Number
+(Applicable for both managed payroll and SaaS customers)
+Registered Agent Number that is issued by the Tax Practitioners
+Board (TPB) and is associated with the Intermediary ABN.
+Enter information in this field when the payroll event data is
+supplied by a registered agent. Valid characters are 0–9. The
+maximum length is 8 characters.
+Intermediary/Registered
+Agent Contact Name
+(Applicable for both managed payroll and SaaS customers)
+Name of the authorized contact person for the Business
+Intermediary or the Registered agent.
+Intermediary /Registered
+Email Address
+(Applicable for both managed payroll and SaaS customers) Email
+address of the authorised contact person for the Business
+Intermediary or the registered agent. This email is used to
+acknowledge receipt of the payroll file, certain processing
+inquiries, and general correspondence. Enter information in this
+field when the payroll event data is supplied by a registered
+agent.
+
+-- 375 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 376 of 0
+Intermediary/Registered Agent
+Business Telephone Number
+(Applicable for both managed payroll and SaaS
+customers) Telephone number for the contact person for
+the business intermediary or the registered agent. This
+field is required when the payroll event data is supplied by
+a registered agent.
+Additional settings
+Use alternative
+intermediary/registered agent
+contact info
+This checkbox is selected by default to set up STP
+reporting of a child’s legal entity information with alternative
+contact information.
+Alternative
+intermediary/registered agent
+contact name
+The name of the alternative authorized contact person for
+the business intermediary or the registered agent.
+Alternative
+intermediary/registered agent
+email address
+The email address of the alternative authorised contact
+person for the business intermediary or the registered
+agent.
+Alternative
+intermediary/registered agent
+business telephone number
+The telephone number of the alternative authorised
+contact person for the business intermediary or the
+registered agent.
+The New Hire Reporting Tab
+This topic describes the options in the New Hire Reporting tab in Org Setup > Org Payroll Setup
+for US legal entities. General information about new hire reporting is available in Overview of New
+Hire Reporting.
+Before You Begin: This topic applies to US legal entities only.
+In Org Setup > Org Payroll Setup > Legal Entity, you can select a US legal entity and then set
+overrides for new hire reporting for that legal entity in the New Hire Reporting tab.
+New Hire Reporting tab options
+Option 	Description
+Registered with HHS as a Multistate
+Employer
+Flags the legal entity as registered with HHS as a multi-
+state employer and activates the Designated State for
+Reporting drop-down list.
+Designated State for Reporting
+Sets which state, from those in which the legal entity
+has employees, will be used as the state for reporting
+all employees. Active only if the Registered with HHS
+as a Multistate Employer checkbox is selected.
+Suppress New Hire Reporting Excludes all employees and future new hires of the
+legal entity from the new hire export file.
+
+-- 376 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 377 of 0
+Override
+Employer
+Address
+Sets the override address for the employer to use when reporting new hires
+in the report for the legal entity. The options available are those you set up in
+System Admin > Client Properties, in the Addresses tab. Activates the option
+to set the address type for the employer override.
+Override
+Employer
+Address Type
+Sets the address type for the override you selected. Options are H -
+Headquarters Address or P - Payroll Address. Activates the option to set the
+contact for the employer override.
+Override
+Employer
+Contact
+Sets the contact name for the override you selected. The options available
+are those you set up in System Admin > Client Properties in the Contacts tab.
+Overview of New Hire Reporting
+New Hire Reporting is configured in Org Setup > Org Payroll Setup > Legal Entity in the New Hire
+Reporting tab.
+Before You Begin: This topic applies to US legal entities only.
+Role feature access: Org Setup > Org Setup > Org Payroll Setup > Legal Entity > New Hire
+Reporting
+When US employers hire new employees, or rehire previous employees, federal law requires the
+employers to report basic information on the new or rehired employees to the state in which the
+employees work within 20 days of their hire or rehire date. Some states require employers to report
+new hire and rehire information sooner.
+After new hire reporting information is sent to states, the states forward the information to the
+National Directory of New Hires, which child support agencies use to locate parents who owe
+child support and issue income withholding orders. The National Directory of New Hires is
+maintained by the Office of the Administration for Children and Families, which is part of the US
+Department of Health and Human Services (HHS).
+General Process for New Hire Reporting
+Dayforce supports the reporting of new hires with the Department of Health and Human Services
+(HHS). The following is a summary of this process in Dayforce:
+When you commit a pay run, Dayforce automatically runs the Payroll New Hire Export
+background job to generate a file based on specifications configured by the Dayforce back
+office.
+After the file is generated, Dayforce Back Office transmits it to the various state agencies, or
+to the single designated state if you are registered as a multistate employer.
+
+-- 377 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 378 of 0
+This process of generating the report is automatic and doesn't require user action. However, you
+can override certain details about the file for specific legal entities. To override the file, you can
+configure the following settings in the New Hire Reporting tab under Org Setup > Org Payroll
+Setup > Legal Entity:
+Override Employer Address
+Override Employer Address Type
+Override Employer Contact
+Suppress New Hire Reporting
+Multistate Employer Reporting
+By default, new hire reports are sent to each state in which your newly hired or rehired employees
+work. You can, however, configure your instance of Dayforce for multistate reporting, which
+requires you to register with HHS as a multistate employer. For general information and details
+about requirements for registering as a multistate employer, see the site
+https://www.acf.hhs.gov/css/employers/employer-responsibilities/new-hire-reporting.
+Registering as a multistate employer and configuring Dayforce so you can report new hires as a
+multistate employer minimizes the number of times employees must be reported as new hires,
+which is helpful in cases where they are later hired, or rehired in a different state by the same legal
+entity.
+When you configure Dayforce for multistate employer new hire reporting, you must add an
+employer contact, or the report fails. the name of an employer contact, as well as a single
+employer address and address type for the contact. This establishes a single contact for new hire
+reporting, as well as a central location where any garnishment paperwork can be sent, instead of
+each different state location where employees are hired. Instructions for configuring a legal entity
+as a multistate employer are available in Configure New Hire Reporting for a Multistate Employer.
+Configure New Hire Reporting for a Multistate Employer
+When you configure Dayforce for multistate employer new hire reporting, you must add an
+employer contact, or the report fails. the name of an employer contact, as well as a single
+employer address and address type for the contact.
+Important: This topic applies to US legal entities only.
+Before You Begin: Make sure you are familiar with the general concepts and requirements for new
+hire reporting in Overview of New Hire Reporting and The New Hire Reporting Tab.
+To configure a US legal entity as a multistate employer for new hire reporting:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity.
+
+-- 378 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 379 of 0
+2. Select the US legal entity that you want to update and click the New Hire Reporting tab.
+3. Select the Registered with HHS as a Multistate Employer checkbox.
+4. Set the following options:
+a. Select a state in the Designated State for Reporting drop-down list.
+b. Select an address in the Override Employer Address drop-down list.
+c. Select the address type in the Override Employer Address Type drop-down list.
+d. Select a contact name in the Override Employer Contact drop-down list.
+5. Click Save.
+The Payroll Parameters Tab
+The Payroll Parameters tab is shown only for Singapore organizations in Org Setup > Org Payroll
+Setup > Legal Entity. Use this tab to enter the organization's tax information and provide accurate
+payroll reporting to the Singapore tax authorities and other government agencies.
+Note: If you logged in with the English (United Kingdom) culture setting, the Legal Entity tab is
+called Organisation.
+Dayforce determines where an organization is legally based by the country selected in the
+Operating Country drop-down list.
+Payroll Parameters tab fields
+Label 	Description
+Authorized Signatory
+Name
+The name of the authorized payroll signatory in the organization. This
+name appears in the reports.
+Authorized Signatory
+Designation
+The position in the organization held by the authorized payroll
+signatory. This name appears in the reports.
+ID Number of
+Authorized Signatory
+The National Registration Identity Card (NRIC) number of the
+authorized payroll signatory.
+Business Phone 	The business phone number of the authorized payroll signatory.
+Mobile 	The mobile phone number of the authorized payroll signatory.
+Email Address 	The email address of the authorized payroll signatory.
+Organizational ID Type
+The tax identification type that your organization uses. This type
+needs to match the ID number entered in Federal/Business ID
+Number in Org Setup > Org Payroll Setup > Legal Entity.
+ASGD Number The tax reference number assigned by the Inland Revenue Authority
+of Singapore.
+CSN (CPF Submission
+Number)
+The CPF submission number used to make employee CPF payments
+or other related requests. See CPF Submission Number.
+VCSN (Voluntary CPF
+Submission Number) The voluntary CPF submission number.
+
+-- 379 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 380 of 0
+CPF Sector 	The company sector under which your organization operates.
+AW Projection 	This function isn’t supported.
+CPF File Format 	This function isn’t supported.
+YE CPF File Submission 	This function is not supported.
+CPF Line Contribution
+Amount Limit Per File
+The maximum number of lines supported in each CPF
+submission file. This function isn’t supported.
+Legal Entity Start Date The date of incorporation used for Equity Remuneration
+Incentive Scheme (ERIS) start-ups in the Appendix 8B form.
+Configure Basic Legal Entity Entries
+Before You Begin: Ensure that you are familiar with the general concepts about legal entities, as
+well as the contents and controls in the user interface. See Org Payroll Setup > Legal Entity.
+To configure a legal entity entry:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity.
+If you logged in with the English (United Kingdom) culture setting, the Legal Entity tab is
+called Organisation.
+2. Click Add.
+3. In the Name field, enter the legal entity's name.
+4. (Optional) In the Description field, enter a description of the legal entity.
+5. In the Operating Country drop-down list, select the country of the legal entity.
+6. In the Federal/Business Id Number field, enter the FEIN for a US legal entity, or the BN for a
+Canadian legal entities. The field is required for legal entities in US, Canada, UK, Ireland,
+Mauritius, Australia, New Zealand, and Singapore.
+7. Ensure the Active checkbox is selected.
+8. In the Effective Start field, enter or select the effective start date of the legal entity.
+9. (Optional) In the Effective End field, enter or select the end date of the legal entity.
+10. In the Reference Code field, enter an XREF code for the legal entity.
+11. (Optional) Select the No Back Office checkbox to prevent Dayforce from filing with Dayforce
+Back Office for this legal entity.
+12. (Optional) In the Legal Entity Status drop-down list, select an option to include or exclude
+the legal entity from annual and quarterly reporting.
+13. In the Process for Employment drop-down list, select a payroll type (regular, contractor, or
+pensioner).
+14. (Optional) In the Earning Statement Logo drop-down list, select a company logo to appear
+on an earning statement or payslip for a legal entity level. For the legal entity logo to appear,
+
+-- 380 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 381 of 0
+the logo must already be added in the Images tab in Site Setup > Client, as an ESS Earning
+Statement Legal Entity option in the Image Type drop-down list.
+15. Click Save to save the entry.
+16. Click Refresh to reload the list if the entry does not appear in it.
+After you have saved the legal entity entry, you can configure its particulars.
+Configure Legal Entities
+Before You Begin: Ensure that you have completed the steps in Configure Basic Legal Entity
+Entries. You can also consult Org Payroll Setup > Legal Entity.
+To configure a legal entity after you created it:
+1. Go to Org Setup > Org Payroll Setup > Legal Entity.
+If you logged in with the English (United Kingdom) culture setting, the Legal Entity tab is
+called Organisation.
+2. Select the legal entity that you want to configure.
+3. Click Add.
+4. Enter a name and description of the legal entity.
+5. In the Operating Country drop-down list, select the legal entity's country.
+6. In the Federal/Business Id Number field, enter the FEIN for a US legal entity, or the BN for a
+Canadian legal entities; the field is optional for UK legal entities.
+7. Ensure the Active checkbox is selected.
+8. Click the calendar icon next to Effective Start and select the effective start date of the legal
+entity from the calendar. The legal entity can only be used in Dayforce during its effective
+date range, as defined with the Effective Start and Effective End fields.
+9. (Optional) Select an effective end date for the legal entity in the Effective End field.
+10. (Optional) Enter a cross-reference code for the legal entity in the Reference Code field.
+Cross-reference codes are used to export data from Dayforce to other applications.
+11. (Optional) Select the No Back Office checkbox to prevent Dayforce from filing with
+Dayforce's back office for this legal entity.
+12. If necessary, define that the legal entity should be excluded from annual and quarterly
+reporting by selecting Implementation or Lost no Tax Forms or Filing Required options in the
+Legal Entity Status drop-down list.
+13. If the legal entity is going to be used to pay contractors or pensioners, select an option in
+the Process for Employment drop-down list. Dayforce populates the drop-down list with no
+selection for preexisting legal entities, and treats a blank selection as regular payroll.
+14. Click Save.
+15. Next, you need to define the entity's address:
+15. Click the Address tab.
+16. A legal entity's address is kept in Dayforce for informational purposes; this information is the
+employer's legal address, typically used on tax forms, but it does not influence what taxes
+
+-- 381 of 472 --
+
+Dayforce Implementation Guide
+Copyright © 2026 Dayforce, Inc. All Rights Reserved 	Page 382 of 0
+are applied to employees. For that determination, Dayforce uses the addresses of the sites
+employees work at, specified in Org Setup, as well as US employees' addresses specified
+on their employee records in People.
+19. Because a single legal entity might operate in multiple states or provinces, and as a result
+need to subtract different taxes for employees working in each, the taxes that employees
+pay aren’t based on the legal entity's address.
+16. Enter the address of the legal entity and zip or postal code.
+17. Select the country of the legal entity's address in the Country Code drop-down list.
+18. Note: You can define an address that is outside of a legal entity's operating country,
+meaning an American legal entity can have an address in Canada, and a Canadian legal
+entity can have an address in the United States.
+18. Select the state or province of the legal address in the State/Province drop-down list.
+19. Click and select the city.
+20. Dayforce displays cities in the Select City drop-down list that have already been configured
+in System Admin > Geo Locations. You can also create new cities by selecting the Create
+new city option. Enter the name of the city in the Create New City field and then click OK.
+20. If necessary, specify the county of the entity's legal address.
+21. Click Save.
+Next, you need to define the entity's taxation parameters:
+22. Select the Taxation Parameters tab, if available.
+For Canadian legal entities, select the Apply Status Indian Calculations to Legal
+Entity's Employees to apply the correct calculations to employees identified as Status
+Indians. If selected, choose an option in the Calculate CPP For Status Indians drop-
+down list.
+For US legal entities, you can add Puerto Rico tax form confirmation numbers or
+assign territorial-filing status. If you are a Pennsylvania employer, 

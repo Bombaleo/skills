@@ -1,0 +1,101 @@
+/* =====================================================================
+   EngagementScope chip-bar — the universal type-aware filter primitive.
+   See pages/engagement-scope.jsx for the React component.
+   ===================================================================== */
+
+.es-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.es-bar-lbl {
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  margin-right: 4px;
+}
+
+/* Collapsed state — only Frontline enabled. Single neutral "All
+   engagements" pill so the surface looks byte-identical to the pre-
+   unification baseline at all-flags-off. */
+.es-bar--collapsed .es-pill--all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: var(--evr-font-text);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-lowemp);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+}
+
+/* Active chip-bar. */
+.es-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--evr-surface-primary-default);
+  color: var(--evr-content-primary-default);
+  border: 1px solid var(--evr-border-decorative-default);
+  font-family: var(--evr-font-text);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+  user-select: none;
+}
+
+.es-chip:hover {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-border-decorative-highemp);
+}
+
+.es-chip:focus-visible {
+  outline: 2px solid var(--evr-interactive-primary-focus);
+  outline-offset: 2px;
+}
+
+.es-chip-count {
+  font-feature-settings: "tnum";
+  font-size: 11px;
+  color: var(--evr-content-primary-lowemp);
+  padding: 0 4px;
+  background: var(--evr-surface-secondary-default);
+  border-radius: 99px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* On state — chip carries its variant color. */
+.es-chip--all.is-on {
+  background: var(--evr-surface-inverse-primary);
+  color: var(--evr-content-primary-inverse);
+  border-color: var(--evr-surface-inverse-primary);
+}
+.es-chip--all.is-on .es-chip-count {
+  background: var(--evr-black-a20, rgba(0,0,0,.2));
+  color: var(--evr-content-primary-inverse);
+}
+
+.es-chip.rdu-chip--frontline.is-on    { background: var(--evr-surface-decorative-default-orange); color: var(--evr-content-decorative-orange); border-color: var(--evr-content-decorative-orange); }
+.es-chip.rdu-chip--professional.is-on { background: var(--evr-surface-decorative-default-blue);   color: var(--evr-content-decorative-blue);   border-color: var(--evr-content-decorative-blue);   }
+.es-chip.rdu-chip--contractor.is-on   { background: var(--evr-surface-decorative-default-purple); color: var(--evr-content-decorative-purple); border-color: var(--evr-content-decorative-purple); }
+.es-chip.rdu-chip--sow.is-on          { background: var(--evr-surface-decorative-default-teal);   color: var(--evr-content-decorative-teal);   border-color: var(--evr-content-decorative-teal);   }
+.es-chip.rdu-chip--eor.is-on          { background: var(--evr-surface-decorative-default-yellow); color: var(--evr-content-decorative-yellow); border-color: var(--evr-content-decorative-yellow); }
+
+.es-chip.is-on .es-chip-count {
+  background: rgba(255,255,255,.55);
+  color: inherit;
+}

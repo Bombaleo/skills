@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flex Work — Onboarding &amp; Offboarding parity tasks · v0.1</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="../styles-strategy.css" />
+  <link rel="stylesheet" href="../styles-sow-parity.css" />
+  <!--
+    ─────────────────────────────────────────────────────────────────────
+    Flex Work — Onboarding & Offboarding parity tasks · v0.1
+    ─────────────────────────────────────────────────────────────────────
+    Scope: the lifecycle bookends — bringing a worker in, walking them
+    out — across the two engagement types where Flex Work has live
+    competition:
+      · Professional  → SAP Fieldglass + Workday VNDLY
+      · Frontline     → Joined Up (RTW UK frontline direct sourcing)
+
+    The Contractor (IC) lifecycle is out of scope here — it shipped
+    end-to-end on the Contractors parity scope (v2.0) and has its own
+    onboarding panel, classification gate, and convert-to-employee
+    handoff. SOW resources are also out — supplier-managed, no
+    buyer-side onboarding.
+
+    Architecture rule (unchanged): every task lands inside an existing
+    page or model. Zero new top-level files. Section 03 names the host.
+    ─────────────────────────────────────────────────────────────────────
+  -->
+</head>
+<body class="sr" data-screen-label="On-/Offboarding parity tasks">
+
+<div class="sr-shell">
+
+  <!-- ============================================================== -->
+  <!-- Sticky TOC                                                     -->
+  <!-- ============================================================== -->
+  <aside class="sr-toc" aria-label="Sections">
+    <div class="sr-toc-mark">Internal · Task list</div>
+    <div class="sr-toc-title">On-/Offboarding parity — remaining work by role</div>
+    <div class="sr-toc-ver"><code>v0.2</code>May 28, 2026</div>
+    <ol>
+      <li><a href="#scope">Scope &amp; methodology</a></li>
+      <li><a href="#summary">Where we stand</a></li>
+      <li><a href="#architecture">Architecture · embed, don't add</a></li>
+      <li><a href="#admin">Admin · configure the lifecycle</a></li>
+      <li><a href="#manager">Manager · run on-/offboarding</a></li>
+      <li><a href="#worker">Worker · self-serve</a></li>
+      <li><a href="#shared">Shared infrastructure</a></li>
+      <li><a href="#sequencing">Sequencing &amp; phased rollout</a></li>
+    </ol>
+    <div class="sr-toc-foot">
+      <p><strong>What this is.</strong> A role-by-role inventory of the work needed to bring Flex Work's worker on-/offboarding flow up to the bar set by <b>SAP Fieldglass</b> and <b>Workday VNDLY</b> for Professional engagements, and <b>Joined Up</b> for Frontline direct-sourced shift work. The Contractor (IC) lifecycle shipped on its own parity scope and is excluded.</p>
+      <p><strong>How to read it.</strong> Roles are the canonical Flex Work three for the lifecycle question — <b>Admin</b> (configures the program), <b>Manager</b> (runs it), <b>Worker</b> (self-serves). Each task names the file it lives in and flags any new architecture introduced.</p>
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- Main column                                                    -->
+  <!-- ============================================================== -->
+  <main class="sr-main">
+
+    <!-- HERO -->
+    <header class="sr-hero">
+      <div class="sr-eyebrow">Flex Work VMS · On-/Offboarding parity · v0.2 · implementation status</div>
+      <h1 class="sr-title">Bringing the worker lifecycle to Fieldglass, VNDLY, and Joined Up parity — without forking a parallel app.</h1>
+      <p class="sr-deck">Flex Work today onboards three of its four engagement types with intent: Contractors run a six-step direct wizard, Professionals run a four-step buyer-invited panel, and SOW resources arrive supplier-managed. What's missing — and what this list closes — is the <em>Frontline</em> lifecycle (Joined Up parity: direct-invite, I-9/RTW, W-4, orientation, shift-ready), the <em>Professional offboarding</em> story end-to-end (Fieldglass + VNDLY parity: end-engagement reason, asset return, access revocation, exit interview, knowledge transfer), and the shared infrastructure both engagement types lean on (worker lifecycle status, audit, webhooks, approval router). The data layer and detail surface for both engagement types are already in place inside <code>pages/workforce.jsx</code> and <code>pages/worker-mobile.jsx</code> — the work below extends them in-place rather than adding a parallel "onboarding" page or model.</p>
+      <dl class="sr-meta">
+        <div><dt>Audience</dt><dd>Product · Engineering · Design</dd></div>
+        <div><dt>Published</dt><dd>May 28, 2026</dd></div>
+        <div><dt>Status</dt><dd>Reference · for planning</dd></div>
+        <div><dt>Companion</dt><dd>Contractors parity v2.0 · Architecture v1.6</dd></div>
+      </dl>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- 01 · SCOPE & METHODOLOGY                                       -->
+    <!-- ============================================================== -->
+    <section id="scope" class="sr-section">
+      <div>
+        <span class="sr-h2-num">01 · Scope &amp; methodology</span>
+        <h2 class="sr-h2">Two engagement types, three benchmarks, one shared backbone.</h2>
+      </div>
+      <p class="sr-lead">For this list, <b>onboarding</b> is the path from <i>worker is selected</i> to <i>worker can earn</i> — every form signed, document collected, check cleared, access provisioned, orientation completed. <b>Offboarding</b> is the path from <i>engagement ends</i> (voluntary or involuntary) to <i>access revoked</i> — last shift handled, assets returned, final pay reconciled, do-not-rehire flag set when warranted. Tasks split by engagement type because the bar is set by different products: Professional onboarding maps to Fieldglass + VNDLY's invite&rarr;tax&rarr;BG&rarr;NDA&rarr;asset&rarr;orientation flow; Frontline maps to Joined Up's W&#8209;2 direct-sourcing shape — invite code, I-9/RTW + W-4, orientation video, shift-ready in days not weeks.</p>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">Out of scope</div>
+        <p><b>Contractor (IC) lifecycle</b> shipped end-to-end on Contractors parity v2.0 — classification gate, MSA + tax-form + banking onboarding, convert-to-employee handoff, year-end 1099 e-file. <b>SOW resources</b> are onboarded by the supplier under the SOW agreement; the buyer's lifecycle bookend is the SOW closeout, not a per-worker exit. <b>Agency-supplied Frontline</b> workers are onboarded by their agency — Flex Work's job there is the compliance gate (credentialing, I-9 sighted, banking on supplier side), not running the workflow.</p>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">What counts as parity</div>
+        <p>A task is parity-bound if a Fieldglass, VNDLY, or Joined Up customer can run the equivalent workflow today and we cannot. Tasks tagged <b>Beyond</b> are intentional extensions — native Dayforce HR handoff, real-time co-employment status, AIX assists on document review — that none of the three reference platforms own end-to-end. The bar is functional parity, not visual mimicry.</p>
+      </div>
+
+      <div class="sr-callout">
+        <div class="sr-callout-tag">Architectural discipline</div>
+        <p>Per Architecture Principle 01, on-/offboarding is a <em>filter</em> on every Flex Work surface, not a sibling product. Every task in this list maps to an existing page or model — section 03 names the host. The work extends <code>pages/professional-onboard.jsx</code> (already hosts <code>AddProfessionalPanel</code> + <code>RenewProfessionalPanel</code>), <code>pages/remove-worker-panel.jsx</code> (already does shift-scoped removal, scopes up to engagement / worker), <code>pages/worker-mobile.jsx</code> (gains an Onboarding tab pool-conditionally), <code>pages/workforce.jsx</code> (status enum + accordion), and <code>pages/settings-config.jsx</code> (Pro + Frontline program cards alongside the existing SOW and Contractor cards). <b>Net new top-level files: zero.</b></p>
+      </div>
+
+      <div class="tl-legend" role="note">
+        <div class="tl-legend-group">
+          <span>Priority</span>
+          <span class="tl-pri" data-p="P0">P0</span><span>parity-blocker</span>
+          <span class="tl-pri" data-p="P1">P1</span><span>parity-credible</span>
+          <span class="tl-pri" data-p="P2">P2</span><span>parity-polish</span>
+        </div>
+        <div class="tl-legend-group">
+          <span>Parity</span>
+          <span class="tl-par" data-pp="fg">FG</span><span>Fieldglass</span>
+          <span class="tl-par" data-pp="vn">VN</span><span>VNDLY</span>
+          <span class="tl-par" data-pp="both">JU</span><span>Joined Up</span>
+          <span class="tl-par" data-pp="beyond">Beyond</span><span>differentiator</span>
+        </div>
+        <div class="tl-legend-group">
+          <span>Status</span>
+          <span class="tl-stat">Not started</span>
+          <span class="tl-stat" style="background:color-mix(in srgb, var(--tl-prog) 12%, var(--evr-surface-secondary-default))">In progress</span>
+          <span class="tl-stat" style="background:color-mix(in srgb, var(--tl-done) 12%, var(--evr-surface-secondary-default))">Shipped</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 02 · WHERE WE STAND                                            -->
+    <!-- ============================================================== -->
+    <section id="summary" class="sr-section">
+      <div>
+        <span class="sr-h2-num">02 · Where we stand</span>
+        <h2 class="sr-h2">Both bookends now run end-to-end on the happy path. Polish, routers, and shared-infra events are the remaining work.</h2>
+      </div>
+      <p class="sr-lead">At the start of this scope, Professional onboarding shipped only as the front of the <code>AddProfessionalPanel</code> flow, Frontline had no buyer-initiated direct path, and offboarding didn't exist beyond shift-scoped removal. That has changed. Professional and direct-sourced Frontline now share a configurable lifecycle: the Add panel carries a Frontline variant, both engagement types read a per-role / per-country task catalog from the two program cards in Settings, the worker detail shows a live onboarding/offboarding tracker, the worker-mobile shell surfaces an On-/Off-board tab, and offboarding runs through the scoped <code>RemoveWorkerPanel</code> (now <code>shift | engagement | worker</code>) with reason, effective date, last-shift handling, asset-return, and final-pay. The worker lifecycle status enum gained <code>Offboarding</code>, <code>Inactive</code>, and <code>Terminated</code>. What's left is the polish and plumbing tier: the two approval-router presets, the schedule.jsx last-shift booking gate, the three lifecycle webhook transition events, the document library, the offer-accept auto-trigger, agency&rarr;direct conversion, and bulk offboard — none of which block the core flow.</p>
+
+      <div class="sr-verdict" data-tone="strong">
+        <div>
+          <div class="sr-verdict-label">Status</div>
+          <div class="sr-verdict-grade">Bookends largely shipped <small>· 21 of 31 live · 5 in progress · 5 queued</small></div>
+        </div>
+        <p class="sr-verdict-body">The lifecycle now runs end-to-end on the happy path. <b>Shipped:</b> the worker lifecycle status enum (<code>Offboarding</code> / <code>Inactive</code> / <code>Terminated</code> added to <code>pages/workforce.jsx</code>), both Professional and Frontline program cards with full on-/offboarding task catalogs and connectors (<code>pages/lifecycle-config.jsx</code>), the Frontline direct-invite variant on the Add panel, the onboarding tracker accordion on worker detail, the scoped end-engagement / end-assignment offboard panel (<code>pages/remove-worker-panel.jsx</code> scope lifted to <code>shift | engagement | worker</code>), the worker-mobile Onboarding/Offboarding tab, and the <code>frontlineDirect</code> feature flag. <b>In progress:</b> the onboarding approval-router preset, the schedule.jsx last-shift gate (panel UI captures the mode; the booking-gate wire-through is pending), and the three shared-infra pieces (lifecycle webhook events &mdash; <code>worker.onboarded</code> / <code>worker.offboarded</code> live, the three transition events pending; audit event-types; perms wire-through). <b>Queued:</b> the offboarding approval router, the version-controlled document library, the offer-accept auto-trigger, agency&rarr;direct conversion, and bulk offboard. Architecture held the line &mdash; <b>one new file</b> (<code>pages/lifecycle-config.jsx</code>, a data + config module, not a page) plus extensions to five existing surfaces. Zero new top-level routes.</p>
+      </div>
+
+      <div class="tl-summary">
+        <div class="tl-sum-card" data-tone="admin">
+          <span class="tl-sum-label">Admin</span>
+          <span class="tl-sum-figure">10</span>
+          <div class="tl-sum-mix" aria-label="Admin progress mix">
+            <span class="tl-mix-done" style="flex:7"></span>
+            <span class="tl-mix-prog" style="flex:1"></span>
+            <span class="tl-mix-todo" style="flex:2"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>7</b> done</span><span><b>1</b> in progress</span><span><b>2</b> to go</span></div>
+        </div>
+        <div class="tl-sum-card" data-tone="manager">
+          <span class="tl-sum-label">Manager</span>
+          <span class="tl-sum-figure">9</span>
+          <div class="tl-sum-mix" aria-label="Manager progress mix">
+            <span class="tl-mix-done" style="flex:5"></span>
+            <span class="tl-mix-prog" style="flex:1"></span>
+            <span class="tl-mix-todo" style="flex:3"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>5</b> done</span><span><b>1</b> in progress</span><span><b>3</b> to go</span></div>
+        </div>
+        <div class="tl-sum-card" data-tone="worker">
+          <span class="tl-sum-label">Worker</span>
+          <span class="tl-sum-figure">7</span>
+          <div class="tl-sum-mix" aria-label="Worker progress mix">
+            <span class="tl-mix-done" style="flex:7"></span>
+            <span class="tl-mix-prog" style="flex:0"></span>
+            <span class="tl-mix-todo" style="flex:0"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>7</b> done</span><span><b>0</b> in progress</span><span><b>0</b> to go</span></div>
+        </div>
+        <div class="tl-sum-card" data-tone="shared">
+          <span class="tl-sum-label">Shared</span>
+          <span class="tl-sum-figure">5</span>
+          <div class="tl-sum-mix" aria-label="Shared progress mix">
+            <span class="tl-mix-done" style="flex:2"></span>
+            <span class="tl-mix-prog" style="flex:3"></span>
+            <span class="tl-mix-todo" style="flex:0"></span>
+          </div>
+          <div class="tl-sum-foot"><span><b>2</b> done</span><span><b>3</b> in progress</span><span><b>0</b> to go</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 03 · ARCHITECTURE · embed, don't add                            -->
+    <!-- ============================================================== -->
+    <section id="architecture" class="sr-section">
+      <div>
+        <span class="sr-h2-num">03 · Architecture · embed, don't add</span>
+        <h2 class="sr-h2">Every task lives in an existing page or model. Net new top-level pages: zero — one shared config module added.</h2>
+      </div>
+      <p class="sr-lead">On-/offboarding is a <em>filter</em> on every Flex Work surface, not a sibling product. The work extends Settings, Workforce, Worker mobile, the remove-worker panel, and the professional onboarding panel — rather than fork a parallel "Lifecycle" app. The mapping below names the existing host file for every task and the existing primitives it reuses. Any task that would introduce a new top-level file is flagged so we can push back early.</p>
+
+      <div class="tl-archnote">
+        <b>How it actually landed.</b> Five existing files carried the work as planned: <code>pages/professional-onboard.jsx</code> (the Add panel gained a <code>workerType: "frontline" | "professional"</code> variant flag branching step 3), <code>pages/remove-worker-panel.jsx</code> (scope lifted from shift-only to <code>shift | engagement | worker</code>, with new lifecycle-mode steps <code>RwStepLifecycle</code> / <code>RwStepLifecycleClose</code> / <code>RwStepLifecycleReview</code>), <code>pages/worker-mobile.jsx</code> (a pool- and status-conditional Onboarding/Offboarding tab via <code>WmOnboardingScreen</code>), <code>pages/workforce.jsx</code> (the <code>WF_STATUS_HUES</code> status enum plus the <code>LifecycleTrackerBody</code> accordion), and <code>pages/settings-config.jsx</code> (renders the two program cards). The one deviation from the original “zero new files” plan: the task catalogs, connector registry, and reader helpers (<code>getOnboardingTasks</code> / <code>getOffboardingTasks</code> / <code>getLifecycleConnectors</code>) were factored into a single new <em>data + config module</em>, <code>pages/lifecycle-config.jsx</code>, rather than duplicated across the five consumers. It registers no route and renders no standalone screen — it exposes the two configuration cards and the shared catalog the other surfaces read. This kept the program definition single-sourced; the alternative (inlining the catalog into <code>settings-config.jsx</code>) would have forced every consumer to reach into the Settings page for data. <b>Net new top-level routes / pages: zero.</b></p>
+      </div>
+
+      <div class="tl-archmap">
+
+        <!-- ADMIN -->
+        <article class="tl-archrole" data-role="admin">
+          <header class="tl-archrole-h">
+            <h3>Admin · configure the lifecycle</h3>
+            <span class="tl-archrole-h-meta">7 shipped · 1 in progress · 2 queued · 0 new pages</span>
+          </header>
+          <table class="tl-arch">
+            <thead>
+              <tr><th>Task</th><th>Lives in</th><th>Reuses</th><th>New architecture</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Professional onboarding task library</span>
+                  <span class="tl-arch-task-sub">configurable task set per role + country</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Pro program card</td>
+                <td data-h="Reuses">SOW &amp; Contractor program-card pattern (already shipped); existing task list on Step 3 of <code>AddProfessionalPanel</code></td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Task catalog object on the existing program-card config blob</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Professional offboarding task library</span>
+                  <span class="tl-arch-task-sub">asset return, access revoke, exit interview, knowledge transfer</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Pro program card</td>
+                <td data-h="Reuses">Same card; mirrored catalog shape to onboarding</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Offboarding catalog field on the same blob</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Frontline onboarding task library (Joined Up)</span>
+                  <span class="tl-arch-task-sub">I-9 / RTW · W-4 / P45 · orientation video · direct deposit · BG check</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Frontline program card</td>
+                <td data-h="Reuses">Same program-card pattern; country lookup from existing <code>countries.jsx</code></td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">New Frontline program card on existing Settings host</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Frontline offboarding workflow library</span>
+                  <span class="tl-arch-task-sub">last-shift handling, deactivation reason, do-not-rehire, final-pay note</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Frontline program card</td>
+                <td data-h="Reuses">Same card; reason codes shared with <code>RW_REASONS</code></td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">Reuses existing reasons enum</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Onboarding approval router</span>
+                  <span class="tl-arch-task-sub">gate above thresholds — BG-check flag, COI miss, country risk</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workflows.jsx</code> · approval router</td>
+                <td data-h="Reuses">SOW + Contractor router model already shipped</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None — adds preset tiers only</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Offboarding approval router</span>
+                  <span class="tl-arch-task-sub">involuntary terminations, severance over threshold, force-majeure</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workflows.jsx</code> · approval router</td>
+                <td data-h="Reuses">Same router; reverse-direction policy preset</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Background-check connector (Checkr · Sterling · HireRight)</span>
+                  <span class="tl-arch-task-sub">launch from onboarding tasks, write outcome back to worker record</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Integrations</td>
+                <td data-h="Reuses">Existing connector-card pattern (from SOW + IC Integrations tabs)</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Connector row only</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Right-to-Work / I-9 connector (E-Verify · Sterling RTW · Trust ID)</span>
+                  <span class="tl-arch-task-sub">country-aware — US E-Verify, UK Sterling RTW, EU eIDAS verifiers</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Integrations</td>
+                <td data-h="Reuses">Same connector-card pattern</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Connector row only</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Document library — NDA · IP · handbook · code of conduct</span>
+                  <span class="tl-arch-task-sub">per role / per country / per worker type — version-controlled</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Documents tab</td>
+                <td data-h="Reuses">Existing template-library pattern (from SOW Templates + IC Templates)</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">DocumentTemplate enum on the existing library</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Asset &amp; system-access task templates</span>
+                  <span class="tl-arch-task-sub">laptop, badge, SSO group, VPN, email — provisioning hooks</span>
+                </td>
+                <td data-h="Lives in"><code>pages/settings-config.jsx</code> · Pro program card</td>
+                <td data-h="Reuses">Same task-catalog object as onboarding library</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">AssetTaskTemplate sub-shape on the catalog</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- MANAGER -->
+        <article class="tl-archrole" data-role="manager">
+          <header class="tl-archrole-h">
+            <h3>Manager · run on-/offboarding</h3>
+            <span class="tl-archrole-h-meta">5 shipped · 1 in progress · 3 queued · 0 new pages</span>
+          </header>
+          <table class="tl-arch">
+            <thead>
+              <tr><th>Task</th><th>Lives in</th><th>Reuses</th><th>New architecture</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Auto-trigger onboarding from interview offer accept</span>
+                  <span class="tl-arch-task-sub">Pro · hand off from accepted offer to Add Professional panel pre-filled</span>
+                </td>
+                <td data-h="Lives in"><code>pages/interview-manager.jsx</code> · accept-offer action</td>
+                <td data-h="Reuses">Existing <code>openAddProfessional()</code> bus emit; <code>Interactions</code> bus pattern</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None — wires existing entry points</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Frontline direct-invite (Joined Up parity)</span>
+                  <span class="tl-arch-task-sub">invite a worker by email · SMS · QR · invite code — no agency</span>
+                </td>
+                <td data-h="Lives in"><code>pages/professional-onboard.jsx</code> · variant flag on Add panel</td>
+                <td data-h="Reuses"><code>AddProfessionalPanel</code> shell, Interactions bus, country picker</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Variant flag (<code>workerType: "frontline" | "professional"</code>) on the existing panel — branches step 3 task set</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Onboarding tracker on worker detail</span>
+                  <span class="tl-arch-task-sub">Pro + Frontline · expandable accordion · per-task status + owner + due</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workforce.jsx</code> · detail page accordions</td>
+                <td data-h="Reuses"><code>WfAccordionCard</code>, <code>MiniTable</code>, existing audit log writer</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">OnboardingTracker accordion (new component, same file)</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">End-engagement (offboard) panel — Professional</span>
+                  <span class="tl-arch-task-sub">scope · reason · effective date · final-pay · backfill</span>
+                </td>
+                <td data-h="Lives in"><code>pages/remove-worker-panel.jsx</code> · scope=<code>engagement</code></td>
+                <td data-h="Reuses">Existing 3-step shell, <code>RW_REASONS</code>, fee-tier helpers (no-op on Pro), audit writer</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Scope enum gains <code>engagement</code> + <code>worker</code> on the existing panel</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">End-assignment (offboard) panel — Frontline direct</span>
+                  <span class="tl-arch-task-sub">last shift handling · do-not-rehire flag · final-pay note</span>
+                </td>
+                <td data-h="Lives in"><code>pages/remove-worker-panel.jsx</code> · scope=<code>worker</code></td>
+                <td data-h="Reuses">Same shell + reasons; existing schedule blocker for last-shift</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None — adds branches on the scope enum above</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Offboard action on Workforce row + detail header</span>
+                  <span class="tl-arch-task-sub">replaces today's row-menu "Remove from booking" when pool ≠ Agency</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workforce.jsx</code> · row menu + detail header</td>
+                <td data-h="Reuses"><code>openRemoveWorker()</code> bus emit with new <code>defaultScope</code> arg</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Last-shift / wind-down handling — Frontline</span>
+                  <span class="tl-arch-task-sub">block new bookings on offboard initiation; honor through-date shifts</span>
+                </td>
+                <td data-h="Lives in"><code>pages/schedule.jsx</code> · booking gate</td>
+                <td data-h="Reuses">Existing per-worker booking gate (already checks credentials, status)</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">Adds <code>Offboarding</code> status to the existing gate</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Bulk offboard from Workforce hub</span>
+                  <span class="tl-arch-task-sub">multi-select rows + queue offboarding · same scope panel</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workforce.jsx</code> · existing bulk action bar</td>
+                <td data-h="Reuses"><code>BulkActions</code> primitive; per-row offboard hook</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Convert agency Frontline &rarr; direct-sourced Frontline</span>
+                  <span class="tl-arch-task-sub">manager promotes a contracted worker into the Internal / Per-diem pool</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workforce.jsx</code> · detail row-menu</td>
+                <td data-h="Reuses">Existing "Convert to employee" pattern from the contractor hub</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Side-panel wizard reusing AddProfessionalPanel shell with Frontline variant</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- WORKER (self-serve) -->
+        <article class="tl-archrole" data-role="worker">
+          <header class="tl-archrole-h">
+            <h3>Worker · self-serve</h3>
+            <span class="tl-archrole-h-meta">7 shipped · 0 in progress · 0 queued · 0 new pages</span>
+          </header>
+          <table class="tl-arch">
+            <thead>
+              <tr><th>Task</th><th>Lives in</th><th>Reuses</th><th>New architecture</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Onboarding tab in worker mobile — Professional</span>
+                  <span class="tl-arch-task-sub">tasks list + per-task drill (e-sign, upload, attest)</span>
+                </td>
+                <td data-h="Lives in"><code>pages/worker-mobile.jsx</code> · pool-conditional tab</td>
+                <td data-h="Reuses">Existing four-tab worker-mobile shell; same tab pattern as the IC portal</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">Onboarding tab visible while worker status = Onboarding</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Onboarding tab in worker mobile — Frontline (Joined Up)</span>
+                  <span class="tl-arch-task-sub">invite code, I-9 / RTW, W-4 / P45, direct deposit, orientation video</span>
+                </td>
+                <td data-h="Lives in"><code>pages/worker-mobile.jsx</code> · same tab</td>
+                <td data-h="Reuses">Same Onboarding tab; task set switches on worker type</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None — task set lookup only</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">I-9 / RTW form completion</span>
+                  <span class="tl-arch-task-sub">section 1 worker, section 2 employer, country-aware</span>
+                </td>
+                <td data-h="Lives in"><code>pages/worker-mobile.jsx</code> · task drill</td>
+                <td data-h="Reuses">Existing form primitives; connector handles the verification call</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">W-4 (US) / P45 (UK) / TD1 (CA) tax form</span>
+                  <span class="tl-arch-task-sub">country-aware on the same task drill</span>
+                </td>
+                <td data-h="Lives in"><code>pages/worker-mobile.jsx</code> · task drill</td>
+                <td data-h="Reuses">Form template per country; localized via existing <code>countries.jsx</code></td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Direct-deposit / banking step</span>
+                  <span class="tl-arch-task-sub">single-bank only for Frontline; multi-split optional for Pro</span>
+                </td>
+                <td data-h="Lives in"><code>pages/worker-mobile.jsx</code> · task drill</td>
+                <td data-h="Reuses">Banking form already shipped on the IC portal</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None — same form, reused</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">E-sign NDA · IP · handbook · code of conduct</span>
+                  <span class="tl-arch-task-sub">tap-to-sign with envelope returned to worker record</span>
+                </td>
+                <td data-h="Lives in"><code>pages/worker-mobile.jsx</code> · task drill</td>
+                <td data-h="Reuses">e-Sig connector already on Integrations (shipped for SOW)</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Exit checklist — worker side</span>
+                  <span class="tl-arch-task-sub">acknowledge final pay, asset return, optional exit-interview link</span>
+                </td>
+                <td data-h="Lives in"><code>pages/worker-mobile.jsx</code> · Onboarding tab repurposed as Offboarding when status = Offboarding</td>
+                <td data-h="Reuses">Same tab shell, different task set</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- SHARED -->
+        <article class="tl-archrole" data-role="shared">
+          <header class="tl-archrole-h">
+            <h3>Shared infrastructure</h3>
+            <span class="tl-archrole-h-meta">2 shipped · 3 in progress · 0 queued · 0 new pages</span>
+          </header>
+          <table class="tl-arch">
+            <thead>
+              <tr><th>Task</th><th>Lives in</th><th>Reuses</th><th>New architecture</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Worker lifecycle status enum extension</span>
+                  <span class="tl-arch-task-sub">add <code>Offboarding</code> + <code>Inactive</code> + <code>Terminated</code> alongside the existing Onboarding / Compliant / Expired</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workforce.jsx</code> · <code>WORKERS_RAW_BASE</code> + chip palette</td>
+                <td data-h="Reuses">Existing status chip primitive; existing booking gate</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">Extends existing enum</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Webhook events for lifecycle transitions</span>
+                  <span class="tl-arch-task-sub"><code>worker.onboarding.started</code> · <code>worker.onboarded</code> · <code>worker.offboarding.started</code> · <code>worker.offboarded</code> · <code>worker.terminated</code></span>
+                </td>
+                <td data-h="Lives in"><code>api-docs-spec-ext-16.js</code> (or next available ext-NN)</td>
+                <td data-h="Reuses">Existing webhook catalog &amp; registration pattern (already adds nine <code>contractor.*</code> events)</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">Event registration only</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Audit-log coverage for lifecycle events</span>
+                  <span class="tl-arch-task-sub">actor · timestamp · payload diff for every task transition</span>
+                </td>
+                <td data-h="Lives in"><code>pages/workforce.jsx</code> · detail audit accordion</td>
+                <td data-h="Reuses"><code>writeAudit</code> already used by SOW + Contractor surfaces</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Roles &amp; permissions for on-/offboarding</span>
+                  <span class="tl-arch-task-sub"><code>wf.onboard</code> + <code>wf.offboard</code> already in catalog — wire the panels to honour them</span>
+                </td>
+                <td data-h="Lives in"><code>pages/roles.jsx</code> · existing perms catalog</td>
+                <td data-h="Reuses">Existing perms; role-conditional rendering pattern from SOW detail</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="none">None — already shipped</span></td>
+              </tr>
+              <tr>
+                <td data-h="Task">
+                  <span class="tl-arch-task">Feature-flag gating</span>
+                  <span class="tl-arch-task-sub">Pro lifecycle on <code>professionalWork</code>; Frontline direct-sourcing on a new <code>frontlineDirect</code> flag (default off)</span>
+                </td>
+                <td data-h="Lives in"><code>pages/feature-flags.jsx</code> · existing flag registry</td>
+                <td data-h="Reuses">Same flag-card pattern as the seven flags already shipped</td>
+                <td data-h="New"><span class="tl-arch-new" data-w="small">One new flag entry (<code>frontlineDirect</code>) on the existing registry</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 04 · ADMIN                                                     -->
+    <!-- ============================================================== -->
+    <section id="admin" class="sr-section">
+      <div>
+        <span class="sr-h2-num">04 · Admin · configure the lifecycle</span>
+        <h2 class="sr-h2">Admin authors the onboarding and offboarding programs once; every downstream surface reads from them.</h2>
+      </div>
+      <p class="sr-lead">An admin's job is to set the contract that on-/offboarding runs under — what tasks ship by default, who has to approve, which connectors handle the I-9 / BG-check / e-Sig call, which documents go out for signature. Every Manager-side and Worker-side surface in section 05 / 06 reads from the Admin config — nothing is hand-rolled per requisition. The work lands in the existing <code>pages/settings-config.jsx</code> Configuration hub, slotted next to the SOW + Contractor program cards already there.</p>
+
+      <div class="tl-role-hero" data-role="admin">
+        <div>
+          <span class="tl-role-tag">Role 01</span>
+          <h3 class="tl-role-name">Admin</h3>
+        </div>
+        <p class="tl-role-sub">Owns the on-/offboarding program — task catalogs, approval router, document library, BG / RTW connectors, asset and access templates. Configures once, every downstream surface reads from here.</p>
+        <div class="tl-role-count">
+          <b>7</b><b>1</b><b>2</b>
+          <span>Shipped</span><span>In progress</span><span>To go</span>
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Task catalogs</h4>
+          <span class="tl-area-sub">What gets done, by whom, in what order — once per program.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Professional onboarding task library</h5>
+              <p class="tl-detail">A configurable task catalog on the new <i>Professional program</i> card — per role, per country, per worker type. Tasks come in three flavours: <b>worker tasks</b> (e-sign NDA, upload ID, complete tax form), <b>employer tasks</b> (provision laptop, grant SSO, run BG check), <b>shared tasks</b> (orientation, kickoff). Each row carries owner role, default due (days from start), required vs optional, and the connector that handles it. Reuses the existing program-card pattern (SOW + Contractor cards already there) so the surface is familiar; no new top-level page.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Professional program · Tasks</span><span>·</span><span>Embedded card</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Professional offboarding task library</h5>
+              <p class="tl-detail">Mirror of the onboarding catalog — asset return (laptop, badge, MFA token), access revocation (SSO group removal, VPN cert revoke, email forwarding), knowledge transfer (final write-up, handover meeting), exit interview, final-pay reconciliation, and the do-not-rehire flag where relevant. Same per-role / per-country / per-worker-type shape as onboarding so the two catalogs share editor and storage. Closes the Fieldglass + VNDLY parity gap on the back end of the lifecycle.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Professional program · Offboarding tasks</span><span>·</span><span>Embedded card</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Frontline onboarding task library (Joined Up parity)</h5>
+              <p class="tl-detail">A second, simpler program card for Frontline direct-sourcing — the Joined Up shape. The canonical task set is short and country-anchored: <b>identity + RTW</b> (I-9 / Share Code RTW / eIDAS), <b>tax form</b> (W-4 / P45 / TD1), <b>direct deposit</b> (single-bank), <b>orientation</b> (handbook acknowledgement + 5-minute video), <b>BG check</b> (Sterling / Checkr, optional by role), <b>shift readiness gate</b> (all required tasks complete = worker may take shifts). One new card on Settings &rarr; Configuration, hosted in <code>pages/settings-config.jsx</code> — no new top-level surface.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Frontline program · Tasks</span><span>·</span><span>Embedded card</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Frontline offboarding workflow library</h5>
+              <p class="tl-detail">Last-shift handling rules (block new bookings on offboard initiation; honor through-date shifts), deactivation reason codes shared with the existing <code>RW_REASONS</code> on <code>pages/remove-worker-panel.jsx</code>, do-not-rehire flag policy (who can set it, who can clear it, retention window), and final-pay note routed to Dayforce payroll. Five fields on the Frontline program card — no new model, no new page, reuses the existing reason enum.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Frontline program · Offboarding</span><span>·</span><span>Embedded card</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Asset &amp; system-access task templates</h5>
+              <p class="tl-detail">Reusable asset rows (laptop model, monitor, badge, MFA token) and access rows (SSO group, VPN cert, Slack workspace, email alias) on the Professional program card. Each carries an owner role, a default due, and an optional integration hook (Okta SCIM, JAMF, AD provisioning). Reuses the existing task-catalog object — adds an <code>AssetTaskTemplate</code> sub-shape on the same storage; no new top-level model.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Professional program · Asset templates</span><span>·</span><span>Embedded card</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="fg">FG</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Approval &amp; policy</h4>
+          <span class="tl-area-sub">Who has to sign off on a hire or a separation, in what order.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="progress">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Onboarding approval router</h5>
+              <p class="tl-detail">Preset tiers on the existing <code>pages/workflows.jsx</code> router — gate new Professional or Frontline invites above a <b>risk threshold</b> (BG check flagged · COI missing · country on the watch list · role above pay band). Same approver-group + parallel-vs-serial + SLA-per-tier shape as the SOW + IC routers already shipped. No new model — preset tiers only.</p>
+              <div class="tl-meta"><span>Settings · Workflows · Onboarding</span><span>·</span><span>Embedded preset</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="fg">FG</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">In progress</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="todo">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Offboarding approval router</h5>
+              <p class="tl-detail">Reverse-direction policy on the same router — gate involuntary terminations, severance over a threshold, force-majeure separations. Honors HR-Legal review where applicable, escalates if no action after SLA. Reuses the same approver-group shape; the router file is unchanged in structure.</p>
+              <div class="tl-meta"><span>Settings · Workflows · Offboarding</span><span>·</span><span>Embedded preset</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="fg">FG</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Not started</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Integrations &amp; documents</h4>
+          <span class="tl-area-sub">e-Sig, RTW / I-9, BG check, document library — wired into existing connector slots.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Background-check connector — Checkr · Sterling · HireRight</h5>
+              <p class="tl-detail">Connector row on the existing Integrations tab — enable + pick provider + map package per role (basic + drug + MVR for drivers, etc.). The Run BG check action on the worker onboarding task drill posts to the chosen target; the result writes back to the worker record. Reuses the existing connector-card pattern from the SOW and IC Integrations tabs.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Integrations · Background checks</span><span>·</span><span>Embedded · connector row</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Right-to-Work / I-9 connector — E-Verify · Sterling RTW · Trust ID</h5>
+              <p class="tl-detail">Country-aware connector. US picks E-Verify; UK picks Sterling RTW or Trust ID Share Code lookup; EU picks an eIDAS-conformant verifier. Wired into the worker-side I-9 / RTW form completion task drill so the verification call fires automatically on submit and writes the outcome back to the worker record. Reuses the same connector card pattern as the BG-check row.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Integrations · Right to Work</span><span>·</span><span>Embedded · connector row</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="todo">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Document library — NDA · IP · handbook · code of conduct</h5>
+              <p class="tl-detail">Version-controlled document store, per role / per country / per worker type, on a new <i>Documents</i> tab inside the Professional and Frontline program cards. Each template carries a version, an effective date, the e-Sig provider it routes through (already configured on the existing SOW Integrations connector), and a status (draft · current · superseded). Reuses the existing template-library pattern from SOW Templates and Contractor Templates — same component, different content.</p>
+              <div class="tl-meta"><span>Settings · Configuration · Program · Documents</span><span>·</span><span>Embedded · template-library variant</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Not started</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 05 · MANAGER                                                   -->
+    <!-- ============================================================== -->
+    <section id="manager" class="sr-section">
+      <div>
+        <span class="sr-h2-num">05 · Manager · run on-/offboarding</span>
+        <h2 class="sr-h2">The Manager initiates, tracks, and closes the lifecycle for the workers they own.</h2>
+      </div>
+      <p class="sr-lead">A Manager opens an onboarding when an interview offer is accepted (Professional) or when they want to bring a direct-sourced Frontline worker on board (Joined Up parity). They watch progress through a single tracker on the worker detail page, then — when the engagement ends — they initiate offboarding with reason, effective date, and (for Frontline) last-shift handling. The work below extends two existing surfaces: <code>pages/workforce.jsx</code> for the row / detail visibility, and <code>pages/remove-worker-panel.jsx</code> for the offboard panel itself — its scope enum lifts from shift-only to <code>shift | engagement | worker</code>.</p>
+
+      <div class="tl-role-hero" data-role="manager">
+        <div>
+          <span class="tl-role-tag">Role 02</span>
+          <h3 class="tl-role-name">Manager</h3>
+        </div>
+        <p class="tl-role-sub">Initiates onboarding from offer-accept or direct-invite, watches progress on the worker detail, and starts offboarding from the row menu when the engagement ends.</p>
+        <div class="tl-role-count">
+          <b>5</b><b>1</b><b>3</b>
+          <span>Shipped</span><span>In progress</span><span>To go</span>
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Bringing a worker in</h4>
+          <span class="tl-area-sub">Trigger onboarding, track it, and know when the worker is shift-ready.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="todo">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Auto-trigger onboarding from interview offer accept (Professional)</h5>
+              <p class="tl-detail">When the candidate clicks <i>Accept offer</i> on <code>pages/interview-worker.jsx</code>, the manager-side <code>pages/interview-manager.jsx</code> moves the offer into the Onboarding queue and fires <code>openAddProfessional({ prefillFromOffer: offerId })</code>. The existing <code>AddProfessionalPanel</code> opens pre-filled with name, country, role, rate, term, and the offer document — manager only confirms the task set and the start date. Reuses the Interactions bus already wired for the panel.</p>
+              <div class="tl-meta"><span>Interview &middot; Manager &middot; Offer accept</span><span>·</span><span>Wired hand-off</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Not started</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Frontline direct-invite — Joined Up parity</h5>
+              <p class="tl-detail">A buyer-initiated invite path for direct-sourced Frontline workers (Internal · Float · Per-diem · Alumni pools) — email · SMS · QR · short invite code. Existing <code>AddProfessionalPanel</code> gains a <code>workerType: "frontline" | "professional"</code> variant flag; Frontline variant swaps the task set on step 3 (RTW + W-4 + direct deposit + orientation, not MSA + SOW + NDA + benefits) and the rate model on step 2 (hourly with classification, not weekly / monthly / annual contract). Same shell, same host pattern, same Interactions bus emit (<code>openAddFrontline()</code> alias on top of the existing wiring). No new file.</p>
+              <div class="tl-meta"><span>professional-onboard.jsx &middot; Add panel · Frontline variant</span><span>·</span><span>Same shell, branched body</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Onboarding tracker on worker detail</h5>
+              <p class="tl-detail">A new accordion at the top of the worker detail page (Professional + Frontline) that lists every onboarding task with status, owner, due date, and a one-tap action (Send reminder · Mark complete · Re-run BG check). The header shows a progress ratio and the days-until-shift-ready countdown. Worker rolls into Compliant status when every required task is complete; the accordion collapses to a single &check; line. Reuses <code>WfAccordionCard</code>, <code>MiniTable</code>, and the audit-log writer — same primitives the SOW Milestones accordion uses.</p>
+              <div class="tl-meta"><span>workforce.jsx &middot; detail accordions</span><span>·</span><span>Embedded · new accordion in same file</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="todo">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Convert agency Frontline &rarr; direct-sourced Frontline</h5>
+              <p class="tl-detail">A row-menu action on the Workforce detail page — when a manager wants to promote a high-performing agency worker into the buyer's own direct pool. Opens the existing Add panel in Frontline variant, prefilled with the worker's identity and country, with a banner explaining the supplier-contract implication (no further hours billed via the agency markup; supplier notified per termination terms). Reuses the "Convert to employee" row-menu pattern from the Contractor hub.</p>
+              <div class="tl-meta"><span>workforce.jsx &middot; row-menu action</span><span>·</span><span>Embedded · same Add-panel host</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="beyond">Beyond</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Not started</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Walking a worker out</h4>
+          <span class="tl-area-sub">End-engagement panel covers Professional + Frontline; shift-only removal still in scope for shift-bookings.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">End-engagement (offboard) panel — Professional</h5>
+              <p class="tl-detail">The existing <code>RemoveWorkerPanel</code> in <code>pages/remove-worker-panel.jsx</code> lifts its scope enum from shift-only to <code>shift | engagement | worker</code>. The new <code>engagement</code> scope handles Professional offboarding — reason, effective date (defaults to next pay period end), final-pay note, NDA / IP attestation acknowledged, exit interview scheduled (optional), backfill suggestion (reads the same talent pool the original requisition pulled from). The fee-tier helpers no-op for Pro; the audit writer fires the same way. No new file, no new model.</p>
+              <div class="tl-meta"><span>remove-worker-panel.jsx &middot; scope=<code>engagement</code></span><span>·</span><span>Same panel, scope enum extension</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">End-assignment (offboard) panel — Frontline direct</h5>
+              <p class="tl-detail">Same panel, scope <code>worker</code>. Frontline-specific fields: last-shift handling (work through-date, end after current shift, end immediately), do-not-rehire flag with policy gate (only certain reasons may set it; HR reviews the highest-stakes ones), final-pay note routed to Dayforce payroll. Reuses <code>RW_REASONS</code> exactly as-is, adds three Frontline-specific reasons (<code>quit_no_notice</code>, <code>end_of_assignment</code>, <code>seasonal_close</code>) to the same enum.</p>
+              <div class="tl-meta"><span>remove-worker-panel.jsx &middot; scope=<code>worker</code></span><span>·</span><span>Same panel, branches the existing scope</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Offboard action on Workforce row + detail header</h5>
+              <p class="tl-detail">The Workforce row menu currently surfaces "Remove from booking" — fine for an Agency Frontline worker on a shift. For Professional and direct-sourced Frontline workers, the same row menu surfaces "Offboard worker" instead, which calls <code>openRemoveWorker({ defaultScope: "engagement" | "worker" })</code>. The detail header gets the same action button. Same panel host, different default scope — no new file.</p>
+              <div class="tl-meta"><span>workforce.jsx &middot; row menu + detail header</span><span>·</span><span>Pool-conditional label / scope</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="progress">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Last-shift / wind-down handling — Frontline</h5>
+              <p class="tl-detail">On offboard initiation, the worker's status flips to <code>Offboarding</code> (new lifecycle state — see Shared 01). The booking gate in <code>pages/schedule.jsx</code> already checks status before allowing a new booking; adding <code>Offboarding</code> to its block list closes future shifts while leaving the worker on their currently-booked through-date shifts. Manager sees a "Last shift on &lt;date&gt;" badge on the worker row until the through-date passes; then status flips to <code>Inactive</code>. No new gate code — extends the existing one.</p>
+              <div class="tl-meta"><span>schedule.jsx &middot; booking gate</span><span>·</span><span>Existing gate, one enum value</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">In progress</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="todo">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Bulk offboard from the Workforce hub</h5>
+              <p class="tl-detail">Multi-select rows in <code>pages/workforce.jsx</code> and route to a single Offboard panel with the queued list. Reuses the existing <code>BulkActions</code> primitive (already drives bulk Activate, Export, Message, Terminate on suppliers and workers); the panel opens once with the queue, the manager picks a shared reason + effective date, and the panel writes one transition per worker. Useful for seasonal-close, RIF, end-of-project cohort exits.</p>
+              <div class="tl-meta"><span>workforce.jsx &middot; bulk action bar</span><span>·</span><span>Embedded · existing primitive</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P2">P2</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Not started</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 06 · WORKER                                                    -->
+    <!-- ============================================================== -->
+    <section id="worker" class="sr-section">
+      <div>
+        <span class="sr-h2-num">06 · Worker · self-serve</span>
+        <h2 class="sr-h2">Worker mobile gains an Onboarding tab on arrival and an Offboarding tab on departure — same tab, different task set.</h2>
+      </div>
+      <p class="sr-lead">The worker side of the lifecycle lives entirely in <code>pages/worker-mobile.jsx</code>, the same shell that hosts the existing four-tab mobile experience (Schedule · Timesheets · Pay · Profile). A new <i>Onboarding</i> tab appears pool-conditionally when the worker's status is <code>Onboarding</code>; the same tab repurposes as <i>Offboarding</i> when the status is <code>Offboarding</code>. The pattern mirrors the four-tab Contractor portal in <code>pages/worker-mobile-ic.jsx</code> shipped on Contractors parity v2.0 — same shell, same nav primitive, different task set keyed off worker type and lifecycle status.</p>
+
+      <div class="tl-role-hero" data-role="worker">
+        <div>
+          <span class="tl-role-tag">Role 03</span>
+          <h3 class="tl-role-name">Worker</h3>
+        </div>
+        <p class="tl-role-sub">Sees the tasks they own — sign, upload, attest, attend orientation, complete the I-9 and tax form, add direct deposit, acknowledge the handbook. Same tab repurposes for exit at the end.</p>
+        <div class="tl-role-count">
+          <b>7</b><b>0</b><b>0</b>
+          <span>Shipped</span><span>In progress</span><span>To go</span>
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Coming on board</h4>
+          <span class="tl-area-sub">One tab, one task list, one route to shift-ready.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Onboarding tab in worker mobile — Professional</h5>
+              <p class="tl-detail">A new tab on the existing worker-mobile shell, visible only while the worker's status is <code>Onboarding</code>. Lists the tasks the worker owns (employer tasks are hidden — the manager owns those), grouped by category, with a progress ratio at the top. Each task drills into a focused screen — e-sign envelope, file upload, attestation, video, banking form. Same shell as the IC portal; no new top-level page.</p>
+              <div class="tl-meta"><span>worker-mobile.jsx &middot; Onboarding tab</span><span>·</span><span>Pool-conditional · status-conditional</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Onboarding tab — Frontline (Joined Up)</h5>
+              <p class="tl-detail">Same tab, Frontline task set — invite code on arrival, RTW / I-9, W-4 / P45, direct deposit, orientation video + handbook acknowledgement, BG check (where required). Branding stays the buyer's (not Joined Up's) but the workflow shape matches: short, mobile-first, "ready for shifts" rather than "ready for project". Picks task set from the Frontline program card the Admin configured.</p>
+              <div class="tl-meta"><span>worker-mobile.jsx &middot; Onboarding tab · Frontline task set</span><span>·</span><span>Same tab, different lookup</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">I-9 / RTW form completion</h5>
+              <p class="tl-detail">Section 1 worker, section 2 employer-confirmed. Country-aware: US uses the I-9 with employer attestation; UK uses the Share Code lookup; EU markets use the eIDAS verifier. The connector configured in Admin 08 handles the verification call; the worker sees a clean form, a status pill, and a clear next step. Reuses existing form primitives — same component family as the Contractor tax-form step.</p>
+              <div class="tl-meta"><span>worker-mobile.jsx &middot; task drill</span><span>·</span><span>Existing form primitives</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Tax form — W-4 (US) · P45 (UK) · TD1 (CA)</h5>
+              <p class="tl-detail">Country-aware tax form on the same task drill. Defaults derived from the worker's country picked at invite; switchable if the worker lives in a different jurisdiction. Submission writes the form back to the worker record and (for Frontline direct, where Dayforce HR is the system of record) pushes the form to Dayforce native payroll via the existing handoff. No new payroll model — same handoff used by the convert-to-employee flow on the Contractor hub.</p>
+              <div class="tl-meta"><span>worker-mobile.jsx &middot; task drill</span><span>·</span><span>Existing payroll handoff</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Direct-deposit / banking step</h5>
+              <p class="tl-detail">Single-bank for Frontline (Joined Up shape — one account, instant validation via micro-deposit or Plaid); multi-split optional for Professional (Fieldglass + VNDLY behaviour — N accounts, percentage or fixed split, primary fallback). Reuses the banking form already shipped on the IC portal — same component, different validator depending on worker type.</p>
+              <div class="tl-meta"><span>worker-mobile.jsx &middot; banking task drill</span><span>·</span><span>Existing form from IC portal</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">E-sign NDA · IP · handbook · code of conduct</h5>
+              <p class="tl-detail">Tap-to-sign envelopes routed through the e-Sig connector configured on Settings &rarr; Integrations (already shipped for SOW). Each envelope's signed PDF lands on the worker record and the audit log; the task auto-completes on envelope return. Worker sees a clean queue: "3 documents to sign &middot; ~4 minutes" with each opening inline. No e-Sig integration code in worker-mobile — the connector handles it.</p>
+              <div class="tl-meta"><span>worker-mobile.jsx &middot; e-sign queue</span><span>·</span><span>Existing connector</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Going off-board</h4>
+          <span class="tl-area-sub">Same tab, repurposed when the worker is in the Offboarding state.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Exit checklist on worker mobile</h5>
+              <p class="tl-detail">When the worker's status flips to <code>Offboarding</code>, the Onboarding tab repurposes — same shell, different task set: acknowledge final-pay total, confirm asset returns received (or schedule courier pickup), optional exit-interview link, COBRA election where applicable (US Pro), final-pay reconciliation note, P45 (UK) / final pay statement (US) download. Tap-to-acknowledge each row; on completion the worker's status flips to <code>Inactive</code> and the tab disappears.</p>
+              <div class="tl-meta"><span>worker-mobile.jsx &middot; Offboarding repurpose</span><span>·</span><span>Same tab · different task set</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">M</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 07 · SHARED                                                    -->
+    <!-- ============================================================== -->
+    <section id="shared" class="sr-section">
+      <div>
+        <span class="sr-h2-num">07 · Shared infrastructure</span>
+        <h2 class="sr-h2">Five pieces of plumbing every role above leans on. None of them are new files.</h2>
+      </div>
+      <p class="sr-lead">The role workbenches in sections 04 / 05 / 06 share a small infrastructure surface — a lifecycle status enum on the worker record, audit-log coverage, webhook events, role permissions, and feature-flag gating. All of it slots into existing files. The largest piece — the new lifecycle states — extends the existing <code>WORKERS_RAW_BASE</code> status enum on <code>pages/workforce.jsx</code>, which today carries <code>Onboarding</code>, <code>Compliant</code>, <code>Expired</code>. We add <code>Offboarding</code>, <code>Inactive</code>, and <code>Terminated</code>; the chip palette and booking gate honor them automatically.</p>
+
+      <div class="tl-role-hero" data-role="shared">
+        <div>
+          <span class="tl-role-tag">Role 04</span>
+          <h3 class="tl-role-name">Shared</h3>
+        </div>
+        <p class="tl-role-sub">Status enum · audit · webhooks · permissions · flag gating. Everything every role above depends on.</p>
+        <div class="tl-role-count">
+          <b>2</b><b>3</b><b>0</b>
+          <span>Shipped</span><span>In progress</span><span>To go</span>
+        </div>
+      </div>
+
+      <div class="tl-area">
+        <div class="tl-area-h">
+          <h4>Plumbing</h4>
+          <span class="tl-area-sub">All five tasks extend existing surfaces.</span>
+        </div>
+        <div class="tl-tasks">
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Worker lifecycle status enum extension</h5>
+              <p class="tl-detail">The existing <code>WORKERS_RAW_BASE</code> status enum on <code>pages/workforce.jsx</code> carries <code>Onboarding</code>, <code>Compliant</code>, <code>Expired</code>. Extend with <code>Offboarding</code> (worker is winding down — bookings blocked, currently-booked shifts honored), <code>Inactive</code> (engagement ended, record retained), and <code>Terminated</code> (involuntary separation with do-not-rehire). The existing chip palette already paints Onboarding warning-toned and Expired error-toned; the new states slot in with matching tokens.</p>
+              <div class="tl-meta"><span>workforce.jsx &middot; WORKERS_RAW_BASE status enum</span><span>·</span><span>Enum extension only</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="progress">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Lifecycle webhook events</h5>
+              <p class="tl-detail">Five new events on the webhook catalog — <code>worker.onboarding.started</code>, <code>worker.onboarded</code>, <code>worker.offboarding.started</code>, <code>worker.offboarded</code>, <code>worker.terminated</code>. Each carries the worker id, worker type, the triggering actor, the reason code where applicable, and the lifecycle task transition payload. Registration mirrors the nine <code>contractor.*</code> events shipped via <code>api-docs-spec-ext-16.js</code>. New file: zero (next available <code>ext-NN</code> slot).</p>
+              <div class="tl-meta"><span>api-docs-spec-ext-NN.js &middot; event registration</span><span>·</span><span>Catalog entry only</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN+JU</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">In progress</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="progress">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Audit-log coverage for lifecycle events</h5>
+              <p class="tl-detail">Every task transition — assigned, started, completed, skipped, failed — writes to the existing audit accordion via the shared <code>writeAudit</code> helper. Same pattern already in production for SOW Milestones, Contractor Agreements, and Frontline shift removals. The accordion gains a new event-type filter chip for "Lifecycle"; nothing else changes structurally.</p>
+              <div class="tl-meta"><span>workforce.jsx &middot; detail audit accordion</span><span>·</span><span>Same writer · new event types</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">In progress</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="progress">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Roles &amp; permissions wired through</h5>
+              <p class="tl-detail">The catalog already carries <code>wf.onboard</code> and <code>wf.offboard</code> on <code>pages/roles.jsx</code>; today they gate nothing because the Add panel checks no permission and the Remove panel uses scope-of-data implicitly. Wire the panels through the same RoleFeature grant model the SOW and Contractor surfaces honour, so a role without <code>wf.offboard</code> sees the row-menu action greyed out with the standard tooltip. No new perms — the existing IDs are correct.</p>
+              <div class="tl-meta"><span>roles.jsx &middot; existing perms catalog</span><span>·</span><span>Wire-through only</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P1">P1</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="both">FG+VN</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">In progress</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+          <div class="tl-task" data-status="done">
+            <div class="tl-check" aria-hidden="true"></div>
+            <div class="tl-body">
+              <h5 class="tl-title">Feature-flag gating</h5>
+              <p class="tl-detail">Professional lifecycle (Admin tasks + Manager flow + Worker tab) gates behind the existing <code>professionalWork</code> flag; nothing new there. Frontline direct-sourcing is the only piece that needs a new flag — <code>frontlineDirect</code>, default off, registered on the existing flag registry. When off, every surface renders byte-identical to today: the Workforce row menu still says "Remove from booking", the Add panel doesn't surface the Frontline variant, the worker-mobile Onboarding tab stays hidden for agency-sourced Frontline workers (whose onboarding belongs to the agency, not us).</p>
+              <div class="tl-meta"><span>feature-flags.jsx &middot; existing registry</span><span>·</span><span>One new flag entry</span></div>
+            </div>
+            <div class="tl-rail">
+              <div class="tl-rail-row"><span class="tl-rail-lab">Priority</span><span class="tl-pri" data-p="P0">P0</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Parity</span><span class="tl-par" data-pp="beyond">Beyond</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Status</span><span class="tl-stat">Shipped</span></div>
+              <div class="tl-rail-row"><span class="tl-rail-lab">Effort</span><span class="tl-eff">S</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 08 · SEQUENCING                                                -->
+    <!-- ============================================================== -->
+    <section id="sequencing" class="sr-section">
+      <div>
+        <span class="sr-h2-num">08 · Sequencing &amp; phased rollout</span>
+        <h2 class="sr-h2">Ship the bookends in three phases: status enum first, then onboarding, then offboarding.</h2>
+      </div>
+      <p class="sr-lead">The work above sequences cleanly into three phases. <b>Phase 1 (foundation)</b> ships the lifecycle status enum, the two program cards in Settings (with task catalogs but stub connectors), and the feature-flag entry — three tasks, all in existing files. <b>Phase 2 (onboarding)</b> closes the front of the lifecycle: Frontline direct-invite variant on the Add panel, the BG-check + RTW connectors, the worker-mobile Onboarding tab for both worker types, the auto-trigger from offer-accept. <b>Phase 3 (offboarding)</b> closes the back: end-engagement panel via the scoped <code>RemoveWorkerPanel</code>, the last-shift gate, the exit checklist, the bulk-offboard pass, the offboarding approval router.</p>
+
+      <div class="tl-seq">
+        <article class="tl-seq-phase" data-phase="1">
+          <header>
+            <span class="tl-seq-num">Phase 1</span>
+            <h3 class="tl-seq-h">Foundation</h3>
+            <p class="tl-seq-sub">Status enum, two program cards, feature flag — every later task reads from these.</p>
+          </header>
+          <ul class="tl-seq-list">
+            <li><b>Shared 01</b> · Worker lifecycle status enum extension</li>
+            <li><b>Shared 05</b> · Feature-flag entry for <code>frontlineDirect</code></li>
+            <li><b>Admin 01–05</b> · Professional + Frontline program cards on <code>settings-config.jsx</code> (task catalogs, offboarding rules, asset templates)</li>
+            <li><b>Admin 08</b> · Document library extension</li>
+          </ul>
+          <footer><span class="tl-seq-foot">7 tasks · zero new files · unblocks Phase 2 and Phase 3</span></footer>
+        </article>
+
+        <article class="tl-seq-phase" data-phase="2">
+          <header>
+            <span class="tl-seq-num">Phase 2</span>
+            <h3 class="tl-seq-h">Onboarding</h3>
+            <p class="tl-seq-sub">Bring workers in for both engagement types — Joined Up parity for Frontline, FG + VN for Pro.</p>
+          </header>
+          <ul class="tl-seq-list">
+            <li><b>Admin 06–07</b> · BG-check + RTW connectors</li>
+            <li><b>Manager 01–04</b> · Auto-trigger from offer-accept, Frontline direct-invite, onboarding tracker, convert-to-direct</li>
+            <li><b>Worker 01–06</b> · Onboarding tab + I-9 + tax form + banking + e-sign + orientation</li>
+            <li><b>Shared 02–04</b> · Webhook events, audit coverage, permissions wire-through</li>
+          </ul>
+          <footer><span class="tl-seq-foot">14 tasks · zero new files · closes the front of the lifecycle</span></footer>
+        </article>
+
+        <article class="tl-seq-phase" data-phase="3">
+          <header>
+            <span class="tl-seq-num">Phase 3</span>
+            <h3 class="tl-seq-h">Offboarding</h3>
+            <p class="tl-seq-sub">Walk workers out — scope the existing remove-worker panel, last-shift gate, exit checklist.</p>
+          </header>
+          <ul class="tl-seq-list">
+            <li><b>Admin 09</b> · Offboarding approval router</li>
+            <li><b>Manager 05–09</b> · End-engagement panel (Pro), end-assignment panel (Frontline), row-menu action, last-shift gate, bulk offboard</li>
+            <li><b>Worker 07</b> · Exit checklist on worker mobile</li>
+          </ul>
+          <footer><span class="tl-seq-foot">7 tasks · zero new files · closes the back of the lifecycle</span></footer>
+        </article>
+      </div>
+
+      <div class="tl-archnote" style="margin-top:32px">
+        <b>Net architectural footprint, as shipped.</b> Five existing files did the heavy lifting — <code>pages/settings-config.jsx</code> (renders the two program cards), <code>pages/professional-onboard.jsx</code> (<code>workerType</code> variant flag on the Add panel), <code>pages/remove-worker-panel.jsx</code> (scope enum lifted from shift-only to <code>shift | engagement | worker</code> with new lifecycle-mode steps), <code>pages/worker-mobile.jsx</code> (one new tab, pool- + status-conditional via <code>WmOnboardingScreen</code>), <code>pages/workforce.jsx</code> (<code>WF_STATUS_HUES</code> enum + <code>LifecycleTrackerBody</code> accordion + row-menu pool-conditional label). <code>pages/feature-flags.jsx</code> gained one new flag entry (<code>frontlineDirect</code>). The single new file is <code>pages/lifecycle-config.jsx</code> — a non-routed data + config module that single-sources the task catalogs and connector registry the five consumers read; it adds no page or route. <b>Still queued:</b> the <code>pages/workflows.jsx</code> router presets (onboarding preset in progress, offboarding queued), the lifecycle webhook events on the next <code>api-docs-spec-ext-NN.js</code> slot (<code>worker.onboarded</code> / <code>worker.offboarded</code> already in <code>ext-2</code>; the three transition events pending), the <code>pages/schedule.jsx</code> last-shift booking gate, and the document library. <b>Net new top-level routes / pages: zero.</b>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!--
+  Local supplements to styles-sow-parity.css — phase-row primitive used
+  only by section 08 ("Sequencing & phased rollout"). Kept inline because
+  no other doc uses this layout shape yet; if a second one wants it we
+  promote it to styles-sow-parity.css.
+-->
+<style>
+  .tl-seq {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+  }
+  @media (max-width: 1080px) {
+    .tl-seq { grid-template-columns: 1fr; }
+  }
+  .tl-seq-phase {
+    border: 1px solid var(--evr-border-decorative-default);
+    border-radius: var(--evr-radius-sm);
+    background: var(--evr-surface-primary-default);
+    padding: 18px 20px 16px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 14px;
+  }
+  .tl-seq-phase[data-phase="1"] { border-top: 4px solid #2A6FDB; }
+  .tl-seq-phase[data-phase="2"] { border-top: 4px solid #1F8A5B; }
+  .tl-seq-phase[data-phase="3"] { border-top: 4px solid #6F3CC4; }
+  .tl-seq-num {
+    font-family: var(--evr-font-text);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--evr-content-primary-lowemp);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .tl-seq-h {
+    font-family: var(--evr-font-display);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    color: var(--evr-content-primary-highemp);
+  }
+  .tl-seq-sub {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--evr-content-primary-default);
+  }
+  .tl-seq-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tl-seq-list li {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--evr-content-primary-default);
+    padding-left: 14px;
+    position: relative;
+  }
+  .tl-seq-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--evr-content-primary-lowemp);
+  }
+  .tl-seq-list code {
+    font-family: var(--evr-font-text);
+    font-size: 12px;
+    background: var(--evr-surface-decorative-default-blue);
+    color: var(--evr-interactive-primary-default);
+    padding: 1px 6px;
+    border-radius: var(--evr-radius-4xs);
+    font-weight: 600;
+  }
+  .tl-seq-foot {
+    font-size: 12px;
+    color: var(--evr-content-primary-lowemp);
+    border-top: 1px solid var(--evr-border-decorative-lowemp);
+    padding-top: 10px;
+    display: block;
+  }
+</style>
+
+</body>
+</html>

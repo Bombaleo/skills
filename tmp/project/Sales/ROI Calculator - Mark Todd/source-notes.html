@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sources & methodology notes · Dayforce Flex Work ROI calculator</title>
+  <!-- Sales track asset. Everest referenced read-only, two levels up. -->
+  <link rel="stylesheet" href="../../tokens.css" />
+  <link rel="stylesheet" href="../../fonts/fonts.css" />
+  <link rel="stylesheet" href="styles-roi.css" />
+  <style>
+    .sn-wrap { max-width: 820px; margin: 0 auto; padding: 48px 24px 80px; }
+    .sn-eyebrow { font: var(--evr-utility1); text-transform: uppercase; letter-spacing: 0.08em; color: var(--evr-content-status-informative-default); margin: 0 0 10px; }
+    .sn-h1 { font: var(--evr-h1); color: var(--evr-content-primary-highemp); margin: 0 0 14px; }
+    .sn-lead { font: var(--evr-body1); color: var(--evr-content-primary-default); max-width: 64ch; text-wrap: pretty; margin: 0 0 8px; }
+    .sn-back { display: inline-flex; align-items: center; gap: 6px; font: var(--evr-button-sm); color: var(--evr-interactive-primary-default); text-decoration: none; margin-bottom: 28px; }
+    .sn-back:hover { text-decoration: underline; }
+    .sn-back svg { width: 16px; height: 16px; }
+    .sn-note {
+      border: 1px solid var(--evr-border-decorative-lowemp);
+      border-radius: var(--evr-radius-2xs);
+      background: var(--evr-surface-primary-default);
+      padding: 22px 24px;
+      margin-top: 18px;
+      scroll-margin-top: 24px;
+    }
+    .sn-note:target { outline: 2px solid var(--evr-interactive-primary-default); outline-offset: 3px; }
+    .sn-access {
+      display: inline-block; font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 3px 8px; border-radius: var(--evr-radius-4xs); margin-bottom: 12px;
+    }
+    .sn-access--members { color: var(--evr-content-status-warning-highemp); background: var(--evr-surface-status-warning-lowemp); }
+    .sn-access--public { color: var(--evr-content-status-success-highemp); background: var(--evr-surface-status-success-lowemp); }
+    .sn-name { font: var(--evr-h4); color: var(--evr-content-primary-highemp); margin: 0 0 4px; }
+    .sn-meta { font: var(--evr-caption); color: var(--evr-content-primary-lowemp); margin: 0 0 16px; }
+    .sn-finding-label { font: var(--evr-utility2); text-transform: uppercase; letter-spacing: 0.06em; color: var(--evr-content-primary-lowemp); margin: 0 0 6px; }
+    .sn-finding {
+      font: var(--evr-body1); color: var(--evr-content-primary-highemp); text-wrap: pretty;
+      border-left: 3px solid var(--evr-interactive-primary-default);
+      padding: 4px 0 4px 16px; margin: 0 0 16px;
+    }
+    .sn-used { font: var(--evr-body2); color: var(--evr-content-primary-default); margin: 0 0 16px; }
+    .sn-used b { color: var(--evr-content-primary-highemp); }
+    .sn-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .sn-link {
+      display: inline-flex; align-items: center; gap: 6px; font: var(--evr-button-sm);
+      text-decoration: none; padding: 8px 14px; border-radius: var(--evr-radius-3xs);
+    }
+    .sn-link--primary { background: var(--evr-interactive-primary-default); color: var(--evr-content-primary-inverse); }
+    .sn-link--primary:hover { background: var(--evr-interactive-primary-hover); }
+    .sn-link--ghost { border: 1px solid var(--evr-border-decorative-default); color: var(--evr-content-primary-default); }
+    .sn-link--ghost:hover { background: var(--evr-surface-secondary-default); }
+    .sn-section-head { font: var(--evr-h3); color: var(--evr-content-primary-highemp); margin: 40px 0 4px; }
+    .sn-section-sub { font: var(--evr-body2); color: var(--evr-content-primary-lowemp); margin: 0 0 4px; }
+  </style>
+</head>
+<body>
+  <div class="roi">
+
+    <nav class="roi-nav">
+      <div class="roi-nav-brand">
+        <img src="../../assets/dayforce-flexwork-logo.svg" alt="Dayforce Flex Work" />
+      </div>
+      <div class="roi-nav-actions">
+        <a class="roi-nav-link" href="ROI Calculator.html">Back to calculator</a>
+      </div>
+    </nav>
+
+    <div class="sn-wrap">
+      <a class="sn-back" href="ROI Calculator.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M14 6l-6 6 6 6"/></svg>
+        Back to the ROI calculator
+      </a>
+
+      <p class="sn-eyebrow">Sources &amp; methodology notes</p>
+      <h1 class="sn-h1">Every cited finding, readable without a login</h1>
+      <p class="sn-lead">
+        The calculator's default assumptions draw on published research from the
+        Staffing Industry Analysts (SIA) and the American Staffing Association (ASA).
+        Most of those articles are free to read and link straight to the original.
+        A few sit behind an SIA or ASA membership wall — so the specific finding the
+        calculator relies on is reproduced here, with attribution and a link to the
+        original for members.
+      </p>
+
+      <h2 class="sn-section-head">Findings behind a membership wall</h2>
+      <p class="sn-section-sub">Reproduced here so the figure is verifiable by anyone, member or not.</p>
+
+      <section class="sn-note" id="sia-share">
+        <span class="sn-access sn-access--members">SIA members only · finding reproduced below</span>
+        <h3 class="sn-name">Contingent workers are roughly a fifth of the workforce</h3>
+        <p class="sn-meta">Staffing Industry Analysts — Workforce Solutions Buyer Survey, Americas · most recent results</p>
+        <p class="sn-finding-label">The finding</p>
+        <p class="sn-finding">
+          Buyers surveyed by SIA report that contingent workers make up a median of about
+          20% — and an average of roughly 22% — of their total workforce.
+        </p>
+        <p class="sn-used">
+          <b>How the calculator uses it:</b> when you don't know your contingent labor spend,
+          the "Estimate it" tab applies a contingent-share benchmark to your headcount to
+          produce a starting figure. This is an illustrative planning value — replace it
+          with the client's actual spend whenever it's known.
+        </p>
+        <div class="sn-links">
+          <a class="sn-link sn-link--ghost" href="https://www.staffingindustry.com/research/research-reports/americas/workforce-solutions-buyer-survey-2025-americas-results" target="_blank" rel="noopener">Original at SIA (members) ↗</a>
+          <a class="sn-link sn-link--ghost" href="http://cwstrategies.staffingindustry.com/benchmarks-workforce-mix-by-industry/" target="_blank" rel="noopener">Public SIA benchmark by industry ↗</a>
+        </div>
+      </section>
+
+      <section class="sn-note" id="asa-markup">
+        <span class="sn-access sn-access--members">ASA members only · finding reproduced below</span>
+        <h3 class="sn-name">What a staffing bill rate is made of</h3>
+        <p class="sn-meta">American Staffing Association — “What goes into your bill rate?”</p>
+        <p class="sn-finding-label">The finding</p>
+        <p class="sn-finding">
+          A staffing agency's bill rate is the worker's pay rate plus a markup that covers
+          employer payroll taxes, workers' compensation and other insurance, statutory
+          benefits, recruiting and overhead, and the agency's margin. Converting a
+          long-tenured temporary worker to a permanent hire removes that recurring markup.
+        </p>
+        <p class="sn-used">
+          <b>How the calculator uses it:</b> it underpins the temp-to-perm conversion driver —
+          the savings from eliminating the recurring agency markup on workers who have
+          effectively become permanent.
+        </p>
+        <div class="sn-links">
+          <a class="sn-link sn-link--ghost" href="https://americanstaffing.net/posts/2020/02/12/when-clients-ask-what-goes-into-your-bill-rate" target="_blank" rel="noopener">Original at ASA (members) ↗</a>
+        </div>
+      </section>
+
+      <h2 class="sn-section-head">Publicly available sources</h2>
+      <p class="sn-section-sub">These link straight to the free, published article.</p>
+
+      <section class="sn-note">
+        <span class="sn-access sn-access--public">Publicly available</span>
+        <h3 class="sn-name">Operational savings from a VMS/MSP</h3>
+        <p class="sn-meta">Staffing Industry Analysts — “Creative cost savings without relying on your suppliers”</p>
+        <p class="sn-used">
+          SIA describes automation, consolidated invoicing and analytics that flag cost
+          outliers and set reasonable bill rates — including one program that refocused two
+          billing specialists after moving to a single consolidated invoice. Backs the
+          soft-dollar admin-time drivers.
+        </p>
+        <div class="sn-links">
+          <a class="sn-link sn-link--primary" href="https://www.staffingindustry.com/editorial/cws-30-contingent-workforce-strategies/creative-cost-savings-without-relying-on-your-suppliers-" target="_blank" rel="noopener">Read the article ↗</a>
+        </div>
+      </section>
+
+      <section class="sn-note">
+        <span class="sn-access sn-access--public">Publicly available</span>
+        <h3 class="sn-name">A VMS replaces ad-hoc, off-contract hiring</h3>
+        <p class="sn-meta">Staffing Industry Analysts — “How to select the best VMS for your organization”</p>
+        <p class="sn-used">
+          SIA frames a VMS as the move from “calling your buddy with a staffing agency” to an
+          official, governed process that manages the contingent workforce transparently and
+          accurately. Supports the governance and visibility drivers.
+        </p>
+        <div class="sn-links">
+          <a class="sn-link sn-link--primary" href="https://www.staffingindustry.com/editorial/cws-30-contingent-workforce-strategies/sponsored-how-to-select-the-best-vms-for-your-organization" target="_blank" rel="noopener">Read the article ↗</a>
+        </div>
+      </section>
+
+      <section class="sn-note">
+        <span class="sn-access sn-access--public">Publicly available</span>
+        <h3 class="sn-name">Identity fraud in contingent programs</h3>
+        <p class="sn-meta">Staffing Industry Analysts — “Benchmarks: Candidate fraud top of mind for contingent workforce programs”</p>
+        <p class="sn-used">
+          SIA reports that 54% of companies experienced some type of identity-related fraud in
+          their contingent program. Supports verified worker identity and approved time capture.
+        </p>
+        <div class="sn-links">
+          <a class="sn-link sn-link--primary" href="https://www.staffingindustry.com/editorial/cws-30-contingent-workforce-strategies/benchmarks-candidate-fraud-top-of-mind-for-contingent-workforce-programs" target="_blank" rel="noopener">Read the article ↗</a>
+        </div>
+      </section>
+
+      <section class="sn-note">
+        <span class="sn-access sn-access--public">Publicly available</span>
+        <h3 class="sn-name">Percentage-of-spend is the dominant VMS pricing model</h3>
+        <p class="sn-meta">Staffing Industry Analysts — “How to evolve your VMS strategy”</p>
+        <p class="sn-used">
+          SIA reports that fee as a percentage of spend remains the dominant VMS pricing model
+          (about 65% of programs), and that VMS adoption among 1,000-plus-employee firms has
+          risen to roughly 79%. Supports the 1.5%-of-spend platform-cost assumption.
+        </p>
+        <div class="sn-links">
+          <a class="sn-link sn-link--primary" href="https://www.staffingindustry.com/editorial/cws-30-contingent-workforce-strategies/how-evolve-your-vms-strategy" target="_blank" rel="noopener">Read the article ↗</a>
+        </div>
+      </section>
+
+      <section class="sn-note">
+        <span class="sn-access sn-access--public">Publicly available</span>
+        <h3 class="sn-name">Contingent share of the workforce, by industry</h3>
+        <p class="sn-meta">Staffing Industry Analysts — “Benchmarks: Workforce mix by industry”</p>
+        <p class="sn-used">
+          SIA benchmarks the contingent share of the workforce by industry, defining contingent
+          workers as agency temps, independent contractors and SOW consultants. Backs the
+          industry-specific estimate in the spend step.
+        </p>
+        <div class="sn-links">
+          <a class="sn-link sn-link--primary" href="http://cwstrategies.staffingindustry.com/benchmarks-workforce-mix-by-industry/" target="_blank" rel="noopener">Read the benchmark ↗</a>
+        </div>
+      </section>
+
+      <p class="roi-disclaimer" style="margin-top:36px">
+        Findings reproduced above are short factual summaries of the cited research, attributed
+        to their publishers and provided so the calculator's assumptions can be verified by
+        anyone. The full reports remain the property of SIA and ASA; please consult the
+        originals (linked) for complete context. All figures are directional planning values,
+        not a guarantee of results.
+      </p>
+    </div>
+
+    <footer class="roi-footer">
+      <div class="roi-footer-inner">
+        <img src="../../assets/dayforce-flexwork-logo.svg" alt="Dayforce Flex Work" />
+        <div class="roi-footer-links">
+          <a href="ROI Calculator.html">ROI calculator</a>
+          <a href="ROI Calculator Changelog.html">Changelog</a>
+          <a href="https://www.dayforce.com/how-we-help/dayforce/flex-work" target="_blank" rel="noopener">About Flex Work</a>
+        </div>
+        <small>Sales asset · directional estimates for discussion</small>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>

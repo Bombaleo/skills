@@ -1,0 +1,525 @@
+/* =====================================================================
+   Flex Work — Configuration (Settings → Configuration tab)
+   Global org config: profile, Dayforce HCM ecosystem, worker-facing
+   brand, regional defaults, operational defaults, and public links.
+   ===================================================================== */
+
+/* ---- Layout: content + sticky right-rail (on-this-page) ------------- */
+.cfg-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 32px;
+  align-items: start;
+  margin: 0 auto;
+  max-width: 1280px;
+  width: 100%;
+}
+@media (max-width: 1080px) {
+  .cfg-layout { grid-template-columns: minmax(0, 1fr); }
+  .cfg-rail { display: none; }
+}
+
+.cfg-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.cfg-rail {
+  position: sticky;
+  top: calc(var(--app-nav-h, 56px) + var(--omni-h, 56px) + 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+}
+.cfg-rail-title {
+  font: var(--evr-utility2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--evr-content-primary-lowemp);
+  padding: 0 12px 8px;
+}
+.cfg-rail-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  cursor: pointer;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: 0 8px 8px 0;
+  margin-left: -2px;
+  transition: background 80ms ease-out, color 80ms ease-out;
+}
+.cfg-rail-link:hover {
+  background: var(--evr-surface-primary-hover);
+  color: var(--evr-content-primary-highemp);
+}
+.cfg-rail-link--active {
+  border-left-color: var(--evr-interactive-primary-default);
+  color: var(--evr-interactive-primary-default);
+  font-weight: var(--evr-fw-demibold);
+}
+
+/* ---- Inside-card row layout ---------------------------------------- */
+.cfg-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+}
+.cfg-grid--single { grid-template-columns: minmax(0, 1fr); }
+.cfg-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.cfg-grid > .cfg-span-2 { grid-column: 1 / -1; }
+@media (max-width: 720px) {
+  .cfg-grid, .cfg-grid--three { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Label-on-top field. Slightly tighter than the standard Field so
+   rows can stack two-up without feeling cramped. */
+.cfg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.cfg-field-label {
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+}
+.cfg-field-hint {
+  font: var(--evr-utility1);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+}
+.cfg-field-mono {
+  font-family: var(--evr-font-mono);
+  font-size: 13px;
+  color: var(--evr-content-primary-default);
+  letter-spacing: -0.005em;
+}
+.cfg-readonly {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  min-height: 40px;
+}
+.cfg-readonly--mono {
+  font-family: var(--evr-font-mono);
+  font-size: 13px;
+}
+.cfg-readonly .cfg-readonly-copy {
+  margin-left: auto;
+  color: var(--evr-content-primary-lowemp);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+.cfg-readonly .cfg-readonly-copy:hover {
+  color: var(--evr-content-primary-highemp);
+  background: var(--evr-surface-primary-hover);
+}
+
+/* ---- Logo uploader (org profile + worker brand) -------------------- */
+.cfg-logoblock {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  background: var(--evr-surface-secondary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+}
+.cfg-logo-preview {
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--evr-surface-primary-default);
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: var(--evr-depth-02);
+}
+.cfg-logo-preview img {
+  max-width: 64px;
+  max-height: 64px;
+  display: block;
+}
+.cfg-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.cfg-logo-name {
+  font: var(--evr-body1);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.cfg-logo-spec {
+  font: var(--evr-utility1);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+}
+.cfg-logo-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---- Brand color swatches ------------------------------------------ */
+.cfg-swatches {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cfg-swatch {
+  --c: #3067DB;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: var(--c);
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  outline-offset: 2px;
+}
+.cfg-swatch:hover { transform: scale(1.05); transition: transform 100ms; }
+.cfg-swatch--active {
+  border-color: var(--evr-surface-primary-default);
+  box-shadow: 0 0 0 2px var(--evr-interactive-primary-default);
+}
+.cfg-swatch--active::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--evr-surface-primary-default);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.cfg-swatch-custom {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px dashed var(--evr-border-decorative-default);
+  background: transparent;
+  color: var(--evr-content-primary-lowemp);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ---- Connection status pill ---------------------------------------- */
+.cfg-conn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--evr-surface-status-success-lowemp);
+  color: var(--evr-content-status-success-highemp);
+  border: 1px solid var(--evr-border-status-success);
+  border-radius: 999px;
+  padding: 4px 10px 4px 8px;
+  font: var(--evr-utility1);
+  font-weight: var(--evr-fw-demibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.cfg-conn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--evr-interactive-success-default);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--evr-interactive-success-default) 30%, transparent);
+}
+
+/* ---- Sync row (rows under Dayforce integration) -------------------- */
+.cfg-sync-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.cfg-sync-row:last-child { border-bottom: none; }
+.cfg-sync-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-decorative-blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cfg-sync-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cfg-sync-title {
+  font: var(--evr-body1);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.cfg-sync-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+}
+.cfg-sync-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font: var(--evr-utility1);
+  color: var(--evr-content-primary-lowemp);
+  white-space: nowrap;
+}
+.cfg-sync-meta-time {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Linked-default row (Operational defaults) --------------------- */
+.cfg-link-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+}
+.cfg-link-row:last-child { border-bottom: none; }
+.cfg-link-title {
+  font: var(--evr-body1);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  margin: 0 0 2px;
+}
+.cfg-link-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+}
+.cfg-link-sub strong {
+  color: var(--evr-content-primary-default);
+  font-weight: var(--evr-fw-demibold);
+}
+.cfg-link-go {
+  background: transparent;
+  border: 1px solid var(--evr-border-primary-default);
+  border-radius: 8px;
+  color: var(--evr-content-primary-highemp);
+  padding: 8px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--evr-body2);
+  font-weight: var(--evr-fw-demibold);
+  white-space: nowrap;
+}
+.cfg-link-go:hover {
+  background: var(--evr-surface-primary-hover);
+  border-color: var(--evr-border-primary-hover);
+}
+
+/* ---- Sticky save footer -------------------------------------------- */
+.cfg-savebar {
+  position: sticky;
+  bottom: 16px;
+  margin-top: 4px;
+  align-self: stretch;
+  background: var(--evr-surface-inverse-primary);
+  color: var(--evr-content-primary-inverse);
+  border-radius: 12px;
+  padding: 10px 12px 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--evr-depth-06);
+  z-index: 5;
+  animation: cfgSlideUp 200ms cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes cfgSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cfg-savebar-text {
+  flex: 1;
+  font: var(--evr-body2);
+}
+.cfg-savebar-text strong { font-weight: var(--evr-fw-demibold); }
+.cfg-savebar .vms-btn--tertiary {
+  color: var(--evr-content-primary-inverse);
+  background: transparent;
+}
+.cfg-savebar .vms-btn--tertiary:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* ---- Small utility rows -------------------------------------------- */
+.cfg-tag-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cfg-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-decorative-blue);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font: var(--evr-utility1);
+  font-weight: var(--evr-fw-demibold);
+}
+.cfg-tag--neutral {
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-default);
+}
+
+/* Custom dropdown / input fixes inside cfg-grid: align selects nicely */
+.cfg-grid .fld-control,
+.cfg-grid .fld-control--input { min-height: 40px; }
+
+/* Help row at top of card — small description sometimes shown */
+.cfg-card-blurb {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0 0 4px;
+  max-width: 64ch;
+}
+
+/* ---- Engagement Types section -------------------------------------- */
+.cfg-engtypes-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--evr-border-decorative-lowemp);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--evr-surface-primary-default);
+}
+.cfg-engtype-row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--evr-border-decorative-lowemp);
+  transition: background-color 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.cfg-engtype-row:last-child { border-bottom: none; }
+.cfg-engtype-row--on {
+  background: linear-gradient(
+    to right,
+    var(--evr-surface-decorative-low-blue) 0%,
+    var(--evr-surface-primary-default) 220px
+  );
+}
+.cfg-engtype-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-default);
+  flex-shrink: 0;
+}
+.cfg-engtype-row--on .cfg-engtype-icon {
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-decorative-blue);
+}
+.cfg-engtype-body { min-width: 0; }
+.cfg-engtype-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+.cfg-engtype-title {
+  font: var(--evr-body1);
+  font-weight: var(--evr-fw-demibold);
+  color: var(--evr-content-primary-highemp);
+  margin: 0;
+}
+.cfg-engtype-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: var(--evr-utility2);
+  font-weight: var(--evr-fw-demibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-lowemp);
+}
+.cfg-engtype-state--on {
+  background: var(--evr-surface-decorative-low-blue);
+  color: var(--evr-content-decorative-blue);
+}
+.cfg-engtype-state--locked {
+  background: var(--evr-surface-secondary-default);
+  color: var(--evr-content-primary-default);
+}
+.cfg-engtype-sub {
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-lowemp);
+  margin: 0;
+  max-width: 72ch;
+}
+.cfg-engtype-aside {
+  display: flex;
+  align-items: center;
+  height: 36px;
+}
+.cfg-engtype-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--evr-surface-secondary-default);
+  font: var(--evr-body2);
+  color: var(--evr-content-primary-default);
+}
+.cfg-engtype-note > span { line-height: 1.4; }

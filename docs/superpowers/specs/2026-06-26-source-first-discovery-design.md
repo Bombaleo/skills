@@ -28,7 +28,7 @@ groups.
 |---|---|
 | Authority for what exists vs. status | **Source maps, walk confirms.** Source is the authority for what EXISTS; the targeted walk confirms reachability. Render-confirmed → **Present**; in-source-but-not-reached → **Partial**; VMS-expected-but-absent-from-source → **Missing**. |
 | Discovery strategy | **Source map → targeted scoped walks** (Approach A). One scoped walk per feature/screen entry-hint, not one blind BFS. |
-| Walker steering | The source map supplies **nav click-path labels** per entry-hint; the existing walker's `--nav`/`--only` consume them. **No new walker capability.** (If a prototype ever used real URL/hash routing instead of click-nav, that's a future walker mode — out of scope here.) |
+| Walker steering | The source map supplies **nav click-path labels** per entry-hint; the existing walker's `--nav`/`--only` consume them. **No new walker capability.** (A minimal `--append` accumulation mode was later added to the walker so successive scoped walks share one /tmp/proto-walk index — this is an accumulation fix, not a new steering/navigation capability.) (If a prototype ever used real URL/hash routing instead of click-nav, that's a future walker mode — out of scope here.) |
 | Source not extractable | **Fallback** to the current walk-first discovery (blind walk → walk-based discovery), carrying an "unmapped — discovered by walk only" caveat. |
 | Feature-list output | **Approach B**: synthesizer assigns each entity a logical group; a deterministic `feature_list.py` renders `features.md` from the report (implemented = present + partial-flagged), grouped by logical entity group. **Markdown now; PDF a future stage.** |
 

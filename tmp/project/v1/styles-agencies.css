@@ -1,0 +1,238 @@
+/* =====================================================================
+   Flex Work V1 — Agencies (WorkWhile detail + agency engine settings)
+   Rebuilt on the V1 design system. Scoped under .proto-app.
+   ===================================================================== */
+
+/* contract-dates bar */
+.proto-contract-bar {
+  display: flex; align-items: center; gap: var(--space-6);
+  padding: 14px 24px;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md);
+}
+.proto-contract-bar .label { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 14px; color: var(--text-0); white-space: nowrap; }
+.proto-contract-tab {
+  display: inline-block;
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 15px; line-height: 1.2;
+  color: var(--primary-0);
+  white-space: nowrap;
+  padding-bottom: 10px;
+  box-shadow: inset 0 -3px 0 0 var(--primary-0);
+}
+.proto-contract-bar .spacer { flex: 1 1 auto; }
+
+/* agency hero */
+.proto-hero {
+  display: flex; align-items: flex-start; gap: var(--space-6);
+  flex-wrap: wrap;
+  padding: 32px;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md);
+}
+.proto-hero-logo {
+  width: 96px; height: 96px; border-radius: 50%;
+  border: 1px solid #eeeeee;
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto; background: #fff;
+}
+.proto-hero-logo svg { width: 60px; height: 60px; }
+/* empty / placeholder avatar — neutral building glyph on a light fill */
+.proto-hero-logo--empty { background: var(--grayscale-4); border-color: #eeeeee; }
+.proto-hero-logo--empty .proto-fa { font-size: 40px; color: var(--grayscale-2); }
+.proto-hero-main { flex: 1 1 280px; min-width: 240px; }
+.proto-hero-main h2 { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 24px; color: var(--text-0); margin: 0 0 8px; letter-spacing: -0.2px; }
+.proto-hero-line { font-family: var(--font-body); font-size: 14px; color: var(--text-1); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.proto-hero-line b { color: var(--text-0); font-weight: 700; }
+.proto-hero-line .mono { font-family: var(--font-body); font-size: 13px; color: var(--text-0); }
+.proto-copy { border: 0; background: transparent; cursor: pointer; color: var(--primary-0); padding: 2px; display: inline-flex; }
+.proto-copy .proto-fa { font-size: 14px; }
+.proto-hero-stats { display: flex; gap: 40px; padding-top: 4px; margin-left: auto; }
+.proto-stat { text-align: center; }
+.proto-stat .v { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 22px; line-height: 1; color: var(--text-0); }
+.proto-stat .l { display: block; margin-top: 6px; font-family: var(--font-body); font-size: 13px; color: var(--text-1); }
+
+/* accordion sections (V1 cards) */
+.proto-acc { display: flex; flex-direction: column; gap: var(--space-3); }
+.proto-acc-item {
+  background: #fff;
+  border: 1px solid #eeeeee;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.proto-acc-head {
+  display: flex; align-items: center; gap: 16px;
+  width: 100%; min-height: 60px; padding: 14px 24px;
+  border: 0; background: transparent; cursor: pointer; text-align: left;
+}
+.proto-acc-head:hover { background: #f9f9f9; }
+.proto-acc-head .proto-ico.lead { width: 24px; height: 24px; flex: 0 0 auto; }
+.proto-acc-head .proto-ico.lead .proto-fa { font-size: 21px; color: #221f20; }
+.proto-acc-title { flex: 1 1 auto; font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 20px; line-height: 1.2; letter-spacing: -0.1px; color: #1f1f23; }
+.proto-acc-chev { width: 18px; height: 18px; transition: transform 160ms cubic-bezier(.4,0,.2,1); }
+.proto-acc-chev .proto-fa { font-size: 15px; color: #707070; }
+.proto-acc-item.is-open .proto-acc-chev { transform: rotate(180deg); }
+.proto-acc-body { padding: 0 24px 24px; display: none; }
+.proto-acc-item.is-open .proto-acc-body { display: block; }
+.proto-acc-body .muted { color: var(--text-1); font-family: var(--font-body); font-size: 14px; line-height: 1.5; }
+
+/* field grid (inside accordions) */
+.proto-fieldgrid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px 40px; border-top: 1px solid #eeeeee; padding-top: 20px; }
+.proto-field .k { font-family: var(--font-body); font-size: 13px; color: var(--text-1); margin-bottom: 3px; }
+.proto-field .vv { font-family: var(--font-body); font-size: 14px; color: var(--text-0); font-weight: 500; }
+
+/* deactivate / link button (pill, blue-on-light-blue) */
+.proto-linkbtn {
+  margin-top: var(--space-3);
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 0; cursor: pointer;
+  background: var(--primary-1);
+  color: var(--primary-0);
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 14px; line-height: 1;
+  padding: 12px 22px; border-radius: 100px; white-space: nowrap;
+  transition: background-color 150ms;
+}
+.proto-linkbtn:hover { background: #dbe7fb; }
+.proto-linkbtn .proto-fa { font-size: 14px; }
+
+/* ---------- Agency-level engine settings ------------------------------ */
+.proto-set-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px 40px; border-top: 1px solid #eeeeee; padding-top: 20px; }
+.proto-set-row { display: flex; flex-direction: column; gap: 8px; }
+.proto-set-row .sr-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.proto-set-row .sr-label { font-family: var(--font-body); font-size: 14px; color: var(--text-0); }
+.proto-set-row .sr-val { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 16px; line-height: 1; color: var(--primary-0); font-variant-numeric: tabular-nums; }
+.proto-set-row .sr-help { font-family: var(--font-body); font-size: 13px; color: var(--text-1); }
+
+.proto-range { width: 100%; height: 4px; -webkit-appearance: none; appearance: none; background: #e8edf1; border-radius: 4px; outline: none; }
+.proto-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--primary-0); cursor: pointer; border: 2px solid #fff; box-shadow: var(--shadow-card); }
+.proto-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--primary-0); cursor: pointer; border: 2px solid #fff; }
+
+/* on-cost toggle list */
+.proto-oncost-list { display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #eeeeee; padding-top: 20px; margin-top: 4px; }
+.proto-oncost-row {
+  display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 24px;
+  padding: 10px 0; border-bottom: 1px solid #eeeeee;
+}
+.proto-oncost-row:last-child { border-bottom: 0; }
+.proto-oncost-row .oc-name { font-family: var(--font-body); font-size: 14px; color: var(--text-0); font-weight: 500; }
+.proto-oncost-row .oc-name .oc-sub { display: block; font-weight: 400; font-size: 13px; color: var(--text-1); margin-top: 2px; }
+.proto-numfield { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--grayscale-3); border-radius: var(--radius-input); padding: 0 10px 0 12px; height: 40px; background: #fff; }
+.proto-numfield input { width: 56px; border: 0; outline: 0; background: transparent; font-family: var(--font-body); font-weight: 600; font-size: 14px; color: var(--text-0); text-align: right; font-variant-numeric: tabular-nums; }
+.proto-numfield .nf-suffix { font-family: var(--font-body); font-size: 13px; color: var(--text-1); }
+.proto-numfield.is-disabled { opacity: 0.45; }
+
+/* toggle switch (V1 green "on") */
+.proto-switch { position: relative; width: 42px; height: 24px; flex: 0 0 auto; cursor: pointer; }
+.proto-switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.proto-switch .sw-track { position: absolute; inset: 0; border-radius: 999px; background: #d9dde2; transition: background 150ms; }
+.proto-switch .sw-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform 150ms cubic-bezier(.4,0,.2,1); box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.proto-switch input:checked + .sw-track { background: var(--success-0); }
+.proto-switch input:checked + .sw-track + .sw-knob { transform: translateX(18px); }
+
+.proto-set-preview {
+  margin-top: 20px; padding: 20px;
+  border-radius: 12px;
+  background: #f9f9f9;
+  border: 1px solid #eeeeee;
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+}
+.proto-set-preview .sp-item { display: flex; flex-direction: column; gap: 3px; }
+.proto-set-preview .sp-k { font-family: var(--font-body); font-size: 13px; color: var(--text-1); }
+.proto-set-preview .sp-v { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 18px; line-height: 1; color: var(--text-0); font-variant-numeric: tabular-nums; }
+.proto-set-preview .sp-arrow .proto-fa { font-size: 15px; color: #908f8f; }
+.proto-set-preview .sp-v.is-charge { color: var(--primary-0); }
+.proto-set-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+
+.proto-set-section-label { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 14px; line-height: 1.3; color: var(--text-0); margin: 20px 0 0; }
+
+/* =====================================================================
+   Rate Cards (rc2-style) — agencies detail accordion
+   ===================================================================== */
+
+.v1rc-section { display: flex; flex-direction: column; }
+
+/* engine section header */
+.v1rc-engine-head {
+  display: flex; align-items: center; gap: 12px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--border-0);
+}
+.v1rc-engine-ico {
+  width: 38px; height: 38px; flex: 0 0 auto; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary-1);
+}
+.v1rc-engine-ico .proto-ico { width: 19px; height: 19px; }
+.v1rc-engine-ico .proto-fa  { font-size: 18px; color: var(--primary-0); }
+.v1rc-engine-id  { flex: 1 1 auto; min-width: 0; }
+.v1rc-engine-name {
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 17px;
+  line-height: 1.2; color: var(--text-0); letter-spacing: -0.2px;
+}
+.v1rc-engine-ver {
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 11px; line-height: 1;
+  color: var(--primary-0); background: var(--primary-1);
+  padding: 3px 8px; border-radius: 100px; margin-left: 6px; vertical-align: middle;
+}
+.v1rc-engine-kicker { font-family: var(--font-body); font-size: 13px; color: var(--text-1); margin-top: 2px; }
+.v1rc-engine-active   { display: flex; flex-direction: column; gap: 3px; text-align: right; flex: 0 0 auto; }
+.v1rc-engine-active-l { font-family: var(--font-body); font-weight: 700; font-size: 11px; color: var(--text-1); text-transform: uppercase; letter-spacing: 0.04em; }
+.v1rc-engine-active-v { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 14px; line-height: 1.2; color: var(--text-0); }
+
+/* card row */
+.v1rc-card-row {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-0); border-top: none;
+  border-radius: 0 0 16px 16px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(43,54,65,.06), 0 1px 2px rgba(43,54,65,.04);
+}
+.v1rc-cr-header { display: flex; align-items: center; gap: 12px; }
+.v1rc-cr-left   { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.v1rc-cr-right  { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; }
+.v1rc-cr-name {
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 17px; line-height: 1.25;
+  color: var(--text-0); letter-spacing: -0.2px; white-space: nowrap;
+}
+.v1rc-cr-meta { font-family: var(--font-body); font-size: 13px; color: var(--text-1); }
+
+/* pay / bill rate boxes */
+.v1rc-cr-body   { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+.v1rc-cr-rate   { display: flex; flex-direction: column; gap: 3px; padding: 10px 16px; border-radius: 12px; background: var(--grayscale-4); min-width: 148px; }
+.v1rc-cr-rate--bill { background: var(--success-bg); }
+.v1rc-cr-rate-l {
+  font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 1.2;
+  color: var(--text-1); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.v1rc-cr-rate-v {
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 18px; line-height: 1;
+  color: var(--text-0); font-variant-numeric: tabular-nums; margin-top: 3px;
+}
+.v1rc-cr-rate--bill .v1rc-cr-rate-v { color: #0a8d57; }
+.v1rc-cr-rate-s { font-family: var(--font-body); font-size: 12px; color: var(--text-1); margin-top: 1px; }
+.v1rc-cr-meta-ext {
+  display: flex; align-items: center; gap: 7px; align-self: flex-end;
+  font-family: var(--font-body); font-size: 13px; color: var(--text-1); padding-left: 2px;
+}
+.v1rc-cr-meta-ext .proto-fa { font-size: 13px; color: var(--text-1); }
+
+/* doc chips (Pay / Bill status) */
+.v1rc-doc {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 11.5px; line-height: 1;
+  padding: 4px 9px; border-radius: 100px; white-space: nowrap;
+}
+.v1rc-doc .proto-ico { width: 13px; height: 13px; }
+.v1rc-doc .proto-fa  { font-size: 12px; }
+.v1rc-doc--ok   { background: var(--success-bg); color: #0a8d57; }
+.v1rc-doc--miss { background: var(--error-2);    color: var(--error-0); }
+
+/* version history */
+.v1rc-history       { padding: 24px 0 4px; }
+.v1rc-history-head  { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.v1rc-history-title { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 16px; line-height: 1.2; color: var(--text-0); }
+.v1rc-history-sub   { margin-top: 4px; font-family: var(--font-body); font-size: 13px; color: var(--text-1); max-width: 52ch; }
+.v1rc-ver-no  { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 15px; line-height: 1; color: var(--text-0); }
+.v1rc-ver-doc { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 13px; color: var(--text-0); white-space: nowrap; }
+.v1rc-ver-doc .proto-ico { width: 15px; height: 15px; flex: 0 0 auto; }
+.v1rc-ver-doc .proto-fa  { font-size: 14px; color: var(--teal-0); }
