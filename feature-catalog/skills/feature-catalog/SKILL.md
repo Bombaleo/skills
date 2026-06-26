@@ -79,13 +79,14 @@ If `CHROME_NOT_FOUND`: stop and tell the user to install Chrome or set `CHROME_P
 
 **Locate this pipeline's scripts:**
 ```bash
-find .claude/skills/feature-catalog/scripts ~/.claude/skills/feature-catalog/scripts \
+SCRIPTS=$(dirname "$(find .claude/skills/feature-catalog/scripts ~/.claude/skills/feature-catalog/scripts \
      feature-catalog/skills/feature-catalog/scripts \
-     -name "walk_prototype.py" 2>/dev/null | head -1
+     -name "walk_prototype.py" 2>/dev/null | head -1)")
+echo "SCRIPTS=$SCRIPTS"
 ```
-If nothing is found, stop: "feature-catalog scripts not found — ensure
+If nothing is found (or `$SCRIPTS` is empty or "."), stop: "feature-catalog scripts not found — ensure
 `skills/feature-catalog/scripts/{walk_prototype.py,extract_bundle.py,compute_coverage.py,feature_list.py}`
-are present." Set `SCRIPTS` to that directory.
+are present."
 
 **Scratch dir:** `mkdir -p .specwork/catalog`
 
@@ -98,8 +99,11 @@ Print one confirmation line, then proceed:
      `curl -L -o /tmp/prototype.html "<url>"`.
    - **Local mode:** resolve a standalone `.html` (prefer `*standalone*.html`, else an HTML
      carrying `__bundler/manifest`, else the largest `.html`, skipping `node_modules`) and copy to
-     `/tmp/prototype.html`. If none exists but unpacked source does, copy that to `/tmp/proto-src`.
-2. Extract source:
+     `/tmp/prototype.html`. If a renderable HTML is found, proceed to step 2 (extract).
+     
+     **Branch: if NO renderable HTML but unpacked source exists** (a project dir with modules/`_template.html`): copy that source to `/tmp/proto-src`, set `unverified=true` ("renders unconfirmed — no walkable HTML"), **SKIP step 2 (extract_bundle) and SKIP Stage 3 (walks)**, but **run Stage 2 source-mapper normally** (map.json stays `unmapped:false`; features cannot be render-confirmed). Carry the caveat into the final report.
+
+2. Extract source (only if a renderable HTML was found):
    ```bash
    python3 "$SCRIPTS/extract_bundle.py" /tmp/prototype.html /tmp/proto-src
    ```
