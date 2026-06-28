@@ -136,6 +136,18 @@ discovered without source" caveat into the final report.
 Read `.specwork/catalog/map.json`. Confirm it is valid JSON with a non-empty `entities` array
 (each entity having `slug`, `name`, `role`, `features`). If empty/invalid, stop and report.
 
+### Stage 2.5 — Normalize entry-hints (deterministic)
+The source-mapper's `entry_hint`s may be descriptive strings (with `→`, wizard annotations,
+`[placeholders]`, action verbs) rather than clickable label arrays. Normalize them before walking:
+```bash
+python3 "$SCRIPTS/normalize_hints.py" .specwork/catalog/map.json
+```
+This adds a clean `entry_path` (clickable nav labels, truncated at the first dynamic segment) to
+each feature and a top-level `walk_targets` (the distinct non-empty paths). Skip this stage in
+fallback (`unmapped: true`) — there are no source entry-hints. Confirm `walk_targets` exists
+(it may be an empty list, in which case Stage 3 has nothing to walk and all render-status
+features stay Partial).
+
 ### Stage 3 — Targeted confirmation walks
 **Skip this stage entirely if `unmapped: true`** (the fallback already walked in Stage 2). 
 
@@ -150,18 +162,17 @@ Start from an empty walk directory:
 rm -rf /tmp/proto-walk
 ```
 
-Collect the distinct `entry_hint` paths from `map.json` (`entities[].features[].entry_hint`),
-dedupe, and drop empties. For each distinct entry-hint, run a **scoped** walk that accumulates
-into `/tmp/proto-walk`:
+Use the `walk_targets` from `map.json` (the normalized, deduped clickable paths from Stage 2.5).
+For each target (a list of nav labels), run a **scoped** walk that accumulates into `/tmp/proto-walk`:
 ```bash
 python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk --append \
-  --nav "<comma-joined entry_hint labels>" --max-screens 40 --depth 4 --per-screen 30
+  --nav "<comma-joined target labels>" --max-screens 40 --depth 4 --per-screen 30
 ```
 (`--append` makes each scoped walk accumulate into the shared `/tmp/proto-walk` index instead of overwriting it; the first walk simply creates it.)
 - A walk whose `--nav` path is not clickable prints an error and exits non-zero — record that
-  entry-hint as **unreached** (its features stay Partial) and continue; do not stop the pipeline.
-- Cap total scoped walks at the number of distinct entry-hints; if that exceeds ~30, walk the 30
-  covering the most features and **log** which entry-hints were skipped.
+  target as **unreached** (its features stay Partial) and continue; do not stop the pipeline.
+- Cap total scoped walks at the number of `walk_targets`; if that exceeds ~30, walk the 30 whose
+  paths cover the most features and **log** which targets were skipped.
 - Confirm `/tmp/proto-walk/index.json` exists with at least one screen after the batch.
 
 ### Stage 4 — Per-entity lifecycle analysis (parallel)
@@ -170,7 +181,7 @@ For each entity in `map.json`, delegate **entity-lifecycle-analyst** (in paralle
 - `entity_name`, `entity_slug`, `role` (from the entity entry)
 - `map_path`: `.specwork/catalog/map.json`
 - `evidence_screens`: the walk `.txt` files relevant to this entity (from `/tmp/proto-walk/index.json`
-  — match by the entity's `entry_hint` paths / titles; pass all if unsure). In a source-only run (no walk), there are no walk files — pass an empty list; the analyst then marks render-status features Partial.
+  — match by the entity's `entry_path` paths / titles; pass all if unsure). In a source-only run (no walk), there are no walk files — pass an empty list; the analyst then marks render-status features Partial.
 - `walk_dir`: `/tmp/proto-walk`
 - `src_dir`: `/tmp/proto-src` (mention if absent)
 - `context_path`: `.specwork/context.md` (mention if absent)
