@@ -232,7 +232,8 @@ After each stage, print a compact progress block:
   <s0>  S0   Pre-flight
   <s1>  S1   Source extracted (<source|no-source fallback>)
   <s2>  S2   Mapped — <N> entities, <F> features
-  <s3>  S3   Confirmation walks <done>/<hints> ✓ | skipped (fallback)
+  <s25> S2.5 Hints normalized — <T> walk targets
+  <s3>  S3   Confirmation walks <done>/<targets> ✓ | skipped (fallback)
   <s4>  S4   Entity analysts <done>/<N> ✓
   <s45> S4.5 Coverage normalized
   <s5>  S5   Synthesized — coverage <present>/<expected_total>
