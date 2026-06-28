@@ -48,8 +48,13 @@ For each domain entity (requisition, worker, supplier, timesheet, invoice, rate 
 - `features`: each a distinct user capability the source implements —
   `{name, category, evidence_source: [file names], entry_hint: [nav labels to reach it]}`.
   `category` ∈ create | read | update | delete | archive | list_search | state_transition | other.
-  The `entry_hint` is your best click-path from the nav structure to where this feature lives; it
-  is what the walker will use to render-confirm the feature.
+  The `entry_hint` MUST be a JSON **array of literal, clickable nav labels** giving the SHORTEST
+  real nav click-path to where this feature lives, e.g. `["Settings","Rate automation","Uploads"]`.
+  Do NOT emit a `→`-joined string, do NOT include `(...)` step annotations, `[placeholder]`
+  segments (like `[version]`/`[agency name]`), or in-page action verbs (Add/Edit/Delete/Apply/
+  Continue/Publish/…). Bad: `"Settings → Rate automation → Uploads (wizard ③ …) → [version] → Delete"`.
+  Good: `["Settings","Rate automation","Uploads"]`. A downstream deterministic step normalizes
+  these, but emit clean arrays so it has the best signal.
 
 Only record what the source actually contains — never invent entities or features.
 
