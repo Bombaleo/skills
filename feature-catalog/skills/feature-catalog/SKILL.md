@@ -166,9 +166,10 @@ Use the `walk_targets` from `map.json` (the normalized, deduped clickable paths 
 For each target (a list of nav labels), run a **scoped** walk that accumulates into `/tmp/proto-walk`:
 ```bash
 python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk --append \
-  --nav "<comma-joined target labels>" --max-screens 40 --depth 4 --per-screen 30
+  --nav '<JSON array of this target's labels, e.g. ["Settings","Rate automation","Uploads"]>' \
+  --max-screens 40 --depth 4 --per-screen 30
 ```
-(`--append` makes each scoped walk accumulate into the shared `/tmp/proto-walk` index instead of overwriting it; the first walk simply creates it.)
+(`--append` makes each scoped walk accumulate into the shared `/tmp/proto-walk` index instead of overwriting it; the first walk simply creates it. Pass each `walk_targets` entry (a list of labels) as a JSON array to `--nav` — the walker parses a JSON array, which safely carries labels containing commas; do not comma-join.)
 - A walk whose `--nav` path is not clickable prints an error and exits non-zero — record that
   target as **unreached** (its features stay Partial) and continue; do not stop the pipeline.
 - Cap total scoped walks at the number of `walk_targets`; if that exceeds ~30, walk the 30 whose

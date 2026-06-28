@@ -56,6 +56,14 @@ class TestAppend(unittest.TestCase):
             walk_prototype.seed_existing(out, w)   # must not raise
             self.assertEqual(w.seen, {})           # no sig -> empty dedup map
 
+    def test_parse_labels_json_array_preserves_comma_labels(self):
+        # JSON-array form must carry a label containing a comma intact (comma-join would split it)
+        self.assertEqual(
+            walk_prototype.parse_labels('["Settings","Rate cards, archived"]'),
+            ["Settings", "Rate cards, archived"])
+        # plain comma string still splits (documented behavior)
+        self.assertEqual(walk_prototype.parse_labels("A,B"), ["A", "B"])
+
 
 if __name__ == "__main__":
     unittest.main()
