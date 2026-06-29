@@ -65,5 +65,26 @@ class TestAppend(unittest.TestCase):
         self.assertEqual(walk_prototype.parse_labels("A,B"), ["A", "B"])
 
 
+class TestPerWalkCap(unittest.TestCase):
+    def _walker(self, max_screens, seed_count, n_screens):
+        import argparse
+        w = walk_prototype.Walker(None, "file:///x.html", None,
+                                  argparse.Namespace(max_screens=max_screens))
+        w.seed_count = seed_count
+        w.screens = [{"id": i} for i in range(n_screens)]
+        return w
+
+    def test_no_seed_caps_on_total(self):
+        self.assertFalse(self._walker(2, 0, 0)._at_cap())
+        self.assertFalse(self._walker(2, 0, 1)._at_cap())
+        self.assertTrue(self._walker(2, 0, 2)._at_cap())
+
+    def test_seeded_screens_do_not_count_against_budget(self):
+        # 40 seeded, max 2: landing capture (1 new) is under budget; 2 new hits cap
+        self.assertFalse(self._walker(2, 40, 40)._at_cap())   # 0 new
+        self.assertFalse(self._walker(2, 40, 41)._at_cap())   # 1 new
+        self.assertTrue(self._walker(2, 40, 42)._at_cap())    # 2 new -> at cap
+
+
 if __name__ == "__main__":
     unittest.main()

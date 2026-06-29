@@ -337,8 +337,14 @@ class Walker:
         self.screens = []   # index.json entries
         self.skipped = []
         self.clicks_spent = 0
+        self.seed_count = 0
         self.aliases = []   # click paths that landed on already-captured screens
         self.chrome_labels = set()  # global chrome; out of scope for --nav walks
+
+    def _at_cap(self):
+        """True when this run has captured its per-walk budget of NEW screens
+        (seeded screens from a prior --append walk do not count)."""
+        return (len(self.screens) - self.seed_count) >= self.args.max_screens
 
     def load(self, path):
         """Fresh page load, then replay click path. Returns False if replay broke."""
@@ -469,10 +475,10 @@ class Walker:
                 sys.exit(f"error: --only labels not found on entry screen: "
                          f"{sorted(unmatched)}. Copy labels exactly from --inventory.")
         queue = [(prefix, root_cands, root_labels)]
-        while queue and len(self.screens) < self.args.max_screens:
+        while queue and not self._at_cap():
             path, cands, labels_here = queue.pop(0)
             for label, n in cands:
-                if len(self.screens) >= self.args.max_screens:
+                if self._at_cap():
                     self.skipped.append({"path": [p[0] for p in path], "label": label,
                                          "why": "max-screens cap"})
                     continue
@@ -518,7 +524,7 @@ def main():
                 deviceScaleFactor=1, mobile=False)
         walker = Walker(cdp, html.as_uri(), out, args)
         if args.append:
-            seed_existing(out, walker)
+            walker.seed_count = seed_existing(out, walker)
         t0 = time.time()
         walker.run(prefix)
         (out / "index.json").write_text(json.dumps(
