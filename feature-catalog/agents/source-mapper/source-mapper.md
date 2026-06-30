@@ -58,6 +58,18 @@ For each domain entity (requisition, worker, supplier, timesheet, invoice, rate 
 
 Only record what the source actually contains — never invent entities or features.
 
+### 3b. Identify configuration / platform areas (entity-less logic)
+Beyond domain entities, the Settings/admin surface carries substantial logic that owns no domain
+object — e.g. **Feature Flags, Policies, Custom Fields, Distribution Rules, Integrations,
+System/MSP settings, Lifecycle configuration, Notification rules**. Capture each such area as a
+**config area** (NOT an entity): a capability surface that configures how the system behaves.
+For each config area record:
+- `slug` (snake_case), `name`, one-line `purpose`.
+- `features`: each `{name, category, evidence_source:[files], entry_hint:[clickable nav labels]}`
+  — same rules and array `entry_hint` contract as entity features. NO `states`/`transitions`.
+Rules: source-grounded (never invent); do NOT duplicate a feature already attached to an entity;
+if a config area's `slug` would collide with an entity `slug`, suffix it `_cfg`.
+
 ### 4. Write map.json
 Write `output_path` exactly:
 
@@ -73,6 +85,14 @@ Write `output_path` exactly:
         { "name": "Upload rate card", "category": "create",
           "evidence_source": ["010_x.js"], "entry_hint": ["Settings","Rate automation","Upload"] }
       ] }
+  ],
+  "config_areas": [
+    { "slug": "feature_flags", "name": "Feature Flags",
+      "purpose": "Toggle gated capabilities per program/tenant.",
+      "features": [
+        { "name": "Toggle a feature flag", "category": "update",
+          "evidence_source": ["NNN_x.js"], "entry_hint": ["Settings","Feature flags"] }
+      ] }
   ]
 }
 ```
@@ -84,4 +104,4 @@ In fallback mode set `"unmapped": true`, base entities on the walk, and use `[]`
 ## Return
 
 Reply with: `output_path`, mode (`source` | `unmapped-fallback`), entity count, total feature
-count, and a one-line list of entity slugs.
+count, and a one-line list of entity slugs, and the config-area count + slugs.
