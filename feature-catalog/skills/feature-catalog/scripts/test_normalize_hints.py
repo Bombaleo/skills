@@ -75,5 +75,43 @@ class TestNormalizeMap(unittest.TestCase):
                              ["Settings", "Rate automation", "Uploads"])
 
 
+class TestNormalizeMapConfigAreas(unittest.TestCase):
+    def _map(self):
+        return {
+            "unmapped": False, "nav": [],
+            "entities": [
+                {"slug": "invoice", "name": "Invoice", "role": "r", "states": [], "transitions": [],
+                 "features": [{"name": "f", "category": "read", "evidence_source": [],
+                               "entry_hint": "Invoices"}]}],
+            "config_areas": [
+                {"slug": "feature_flags", "name": "Feature Flags", "purpose": "p",
+                 "features": [
+                     {"name": "Toggle flag", "category": "update", "evidence_source": [],
+                      "entry_hint": "Settings → Feature flags"},
+                     {"name": "Bad", "category": "update", "evidence_source": [],
+                      "entry_hint": "[tenant] → Toggle"}]}],  # -> empty path
+        }
+
+    def test_config_area_features_get_entry_path(self):
+        out = normalize_map(self._map())
+        ca = out["config_areas"][0]
+        self.assertEqual(ca["features"][0]["entry_path"], ["Settings", "Feature flags"])
+        self.assertEqual(ca["features"][1]["entry_path"], [])  # truncated at placeholder
+
+    def test_config_area_paths_join_walk_targets_deduped(self):
+        out = normalize_map(self._map())
+        # entity path + config-area path, both present, deduped & sorted
+        self.assertIn(["Invoices"], out["walk_targets"])
+        self.assertIn(["Settings", "Feature flags"], out["walk_targets"])
+        self.assertEqual(len(out["walk_targets"]), 2)  # empty config path excluded
+
+    def test_no_config_areas_key_still_works(self):
+        m = {"entities": [{"slug": "x", "name": "X", "role": "r", "features": [
+            {"name": "f", "category": "read", "evidence_source": [], "entry_hint": "Home"}]}]}
+        out = normalize_map(m)
+        self.assertEqual(out["entities"][0]["features"][0]["entry_path"], ["Home"])
+        self.assertEqual(out["walk_targets"], [["Home"]])
+
+
 if __name__ == "__main__":
     unittest.main()

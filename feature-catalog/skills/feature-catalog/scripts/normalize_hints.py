@@ -68,14 +68,19 @@ def normalize_hint(hint) -> list:
 def normalize_map(m: dict) -> dict:
     targets = []
     seen = set()
-    for e in m.get("entities", []):
-        for f in e.get("features", []):
-            path = normalize_hint(f.get("entry_hint"))
-            f["entry_path"] = path
-            key = tuple(path)
-            if path and key not in seen:
-                seen.add(key)
-                targets.append(path)
+
+    def _process(units):
+        for u in units:
+            for f in u.get("features", []):
+                path = normalize_hint(f.get("entry_hint"))
+                f["entry_path"] = path
+                key = tuple(path)
+                if path and key not in seen:
+                    seen.add(key)
+                    targets.append(path)
+
+    _process(m.get("entities", []))
+    _process(m.get("config_areas", []))
     m["walk_targets"] = sorted(targets)
     return m
 
