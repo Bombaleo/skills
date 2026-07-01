@@ -408,7 +408,12 @@ class Walker:
         title = next((l[4:].strip() for l in outline.splitlines()
                       if l.startswith(("H1: ", "H2: "))), "")
         name = f"{sid:03d}_" + slugify(title or " ".join(p[0] for p in path[-2:]), "screen")
-        shot = self.cdp.cmd("Page.captureScreenshot", format="png")
+        clip = screenshot_clip(self.cdp.cmd("Page.getLayoutMetrics"))
+        if clip:
+            shot = self.cdp.cmd("Page.captureScreenshot", format="png",
+                                captureBeyondViewport=True, clip=clip)
+        else:
+            shot = self.cdp.cmd("Page.captureScreenshot", format="png")
         (self.out / f"{name}.png").write_bytes(base64.b64decode(shot["data"]))
         (self.out / f"{name}.txt").write_text(
             "PATH: " + (" > ".join(p[0] for p in path) or "(initial)") + "\n" + outline)
