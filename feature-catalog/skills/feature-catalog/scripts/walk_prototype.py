@@ -317,6 +317,21 @@ def parse_labels(arg):
     return [l.strip() for l in arg.split(",") if l.strip()]
 
 
+def screenshot_clip(metrics: dict, max_px: int = 20000):
+    """Full-page screenshot clip from Page.getLayoutMetrics, or None if unavailable.
+
+    Uses cssContentSize (fallback contentSize). Height is capped at max_px to
+    bound very long pages. Returns None when metrics are missing or zero so the
+    caller falls back to a plain viewport capture.
+    """
+    size = metrics.get("cssContentSize") or metrics.get("contentSize") or {}
+    w = size.get("width") or 0
+    h = size.get("height") or 0
+    if w <= 0 or h <= 0:
+        return None
+    return {"x": 0, "y": 0, "width": round(w), "height": min(round(h), max_px), "scale": 1}
+
+
 def seed_existing(out, walker):
     """When appending, pre-load prior screens so new screen ids continue and the
     final index.json merges old + new. Returns the number of pre-existing screens."""
