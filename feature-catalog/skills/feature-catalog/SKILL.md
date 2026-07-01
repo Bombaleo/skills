@@ -176,11 +176,13 @@ python3 "$SCRIPTS/walk_prototype.py" /tmp/prototype.html --out /tmp/proto-walk -
   paths cover the most features and **log** which targets were skipped.
 - Confirm `/tmp/proto-walk/index.json` exists with at least one screen after the batch.
 
-### Stage 4 — Per-entity lifecycle analysis (parallel)
-Print: `⟳ S4 — <N> entity analysts running in parallel; no live output until all return`.
+### Stage 4 — Per-unit lifecycle analysis (entities + config areas, parallel)
+Print: `⟳ S4 — <N> analysts running in parallel; no live output until all return`. Both domain
+entities and config areas are analyzed by the same worker (config areas capabilities-only).
 For each entity in `map.json`, delegate **entity-lifecycle-analyst** (in parallel) with:
 - `entity_name`, `entity_slug`, `role` (from the entity entry)
 - `map_path`: `.specwork/catalog/map.json`
+- `unit_kind`: `entity`
 - `evidence_screens`: the walk `.txt` files relevant to this entity (from `/tmp/proto-walk/index.json`
   — match by the entity's `entry_path` paths / titles; pass all if unsure). In a source-only run (no walk), there are no walk files — pass an empty list; the analyst then marks render-status features Partial.
 - `walk_dir`: `/tmp/proto-walk`
@@ -188,8 +190,17 @@ For each entity in `map.json`, delegate **entity-lifecycle-analyst** (in paralle
 - `context_path`: `.specwork/context.md` (mention if absent)
 - `output_path`: `.specwork/catalog/ent_<entity_slug>.json`
 
-Wait for all. Confirm each `ent_<slug>.json` exists. If any worker produced nothing, stop and name
-the entity.
+**Also, for each config area in `map.json`'s `config_areas`**, delegate **entity-lifecycle-analyst**
+in the same parallel batch with the same inputs, except:
+- `entity_name`, `entity_slug`, `role` come from the config-area entry (`role` = its `purpose`)
+- `unit_kind`: `config_area`
+- `output_path`: `.specwork/catalog/ent_<config_area_slug>.json`
+- `evidence_screens`: walk `.txt` files whose `path` matches the config area's feature `entry_path`s
+
+Config areas have no `entry_hint`/`entry_path` collisions with entities by construction (the
+source-mapper suffixes a colliding config slug with `_cfg`); if two output paths still collide,
+append `_cfg` to the config area's filename. Wait for ALL analyst dispatches (entities + config
+areas) before continuing; confirm every expected `ent_<slug>.json` exists.
 
 ### Stage 4.5 — Normalize coverage (deterministic)
 ```bash
