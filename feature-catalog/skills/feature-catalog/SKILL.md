@@ -199,7 +199,8 @@ in the same parallel batch with the same inputs, except:
 
 Config areas have no `entry_hint`/`entry_path` collisions with entities by construction (the
 source-mapper suffixes a colliding config slug with `_cfg`); if two output paths still collide,
-append `_cfg` to the config area's filename. Wait for ALL analyst dispatches (entities + config
+append `_cfg` to the config area's slug — both the `entity_slug` passed to the analyst (so its
+internal `slug` stays unique) and the `ent_<slug>.json` filename. Wait for ALL analyst dispatches (entities + config
 areas) before continuing; confirm every expected `ent_<slug>.json` exists.
 
 ### Stage 4.5 — Normalize coverage (deterministic)

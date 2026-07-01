@@ -82,7 +82,8 @@ true, begin the paragraph with "**UNVERIFIED — generated without rendering.**"
 
 For a unit with `kind == config_area`, render it under a top-level "## Configuration & Platform"
 grouping and OMIT the "**Lifecycle states:**" line (config areas have no states) — show only the
-**Capabilities:** list and the **Coverage:** line.
+**Capabilities:** list and the **Coverage:** line. Render the entity groups first, then the
+"## Configuration & Platform" section last.
 
 Use `✅` present, `⚠️` partial, `❌` missing. One line per capability. List entities in the
 chosen order. Behavioral altitude — WHAT not HOW; no file paths/endpoints/schema. English only;
