@@ -227,17 +227,17 @@ window.__walk = (() => {
       const t = (b.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 60);
       if (t) L.push(`BUTTON: ${t}${b.disabled ? ' (disabled)' : ''}`);
     }
-    for (const t of [...document.querySelectorAll('table')].filter(visible).slice(0, 6)) {
+    for (const t of [...document.querySelectorAll('table')].filter(visible).slice(0, 20)) {
       const heads = [...t.querySelectorAll('th')].map(th => th.innerText.trim()).join(' | ');
       const rows = t.querySelectorAll('tbody tr, tr');
       L.push(`TABLE (${rows.length} rows): ${heads.slice(0, 300)}`);
-      for (const r of [...rows].slice(0, 3))
+      for (const r of [...rows].slice(0, 8))
         L.push('  ROW: ' + [...r.querySelectorAll('td')]
           .map(td => td.innerText.trim().replace(/\s+/g, ' ')).join(' | ').slice(0, 300));
     }
     L.push('--- FULL TEXT ---');
-    L.push((document.body.innerText || '').slice(0, 8000));
-    return L.join('\n').slice(0, 16000);
+    L.push((document.body.innerText || '').slice(0, 40000));
+    return L.join('\n').slice(0, 60000);
   };
   const signature = () => {
     const t = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
@@ -250,7 +250,20 @@ window.__walk = (() => {
     return document.readyState === 'complete' && !l &&
            (document.body.innerText || '').trim().length > 0;
   };
-  return {candidates, click, outline, signature, settled};
+  const scrollStep = () => {
+    window.scrollTo(0, document.body.scrollHeight);
+    let n = 0;
+    for (const el of document.querySelectorAll('div,ul,ol,section,main,table,tbody')) {
+      if (n >= 10) break;
+      const st = getComputedStyle(el).overflowY;
+      if ((st === 'auto' || st === 'scroll') && el.scrollHeight > el.clientHeight + 200) {
+        el.scrollTop = el.scrollHeight; n++;
+      }
+    }
+    return document.body.scrollHeight;
+  };
+  const scrollTop = () => { window.scrollTo(0, 0); return true; };
+  return {candidates, click, outline, signature, settled, scrollStep, scrollTop};
 })(); true
 """
 
@@ -386,12 +399,39 @@ class Walker:
             if ok and sig is not None:
                 if sig == last:
                     if stable_since and time.time() - stable_since >= 0.4:
-                        return
+                        break
                     stable_since = stable_since or time.time()
                 else:
                     last, stable_since = sig, None
             time.sleep(0.25)
         # proceed anyway; outline will show whatever rendered
+        self._autoscroll()
+
+    def _autoscroll(self):
+        """Scroll the page (and inner scroll containers) to mount lazy/virtualized
+        content, then return to the top. Python-driven so the sync CDP client can
+        drive it. Bounded to 25 steps; stops when scrollHeight is stable."""
+        if getattr(self.args, "no_autoscroll", False):
+            return
+        last, stable = -1, 0
+        for _ in range(25):
+            try:
+                h = self.cdp.js("window.__walk && window.__walk.scrollStep()")
+            except RuntimeError:
+                break
+            if not h:
+                break
+            if h == last:
+                stable += 1
+                if stable >= 2:
+                    break
+            else:
+                stable, last = 0, h
+            time.sleep(0.15)
+        try:
+            self.cdp.js("window.__walk && window.__walk.scrollTop()")
+        except RuntimeError:
+            pass
 
     def capture(self, path):
         sig = self.cdp.js("window.__walk.signature()")
@@ -527,6 +567,8 @@ def main():
     ap.add_argument("--depth", type=int, default=3)
     ap.add_argument("--per-screen", type=int, default=25)
     ap.add_argument("--timeout", type=int, default=15)
+    ap.add_argument("--no-autoscroll", action="store_true",
+                    help="disable the auto-scroll pass that mounts lazy/below-fold content")
     args = ap.parse_args()
 
     html = Path(args.html).resolve()
