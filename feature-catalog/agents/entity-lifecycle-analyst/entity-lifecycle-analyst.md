@@ -20,6 +20,9 @@ gaps. You walk nothing — you read the existing walk output and source.
 - **role** (required): one-line description of the entity from the source map.
 - **map_path** (required): `.specwork/catalog/map.json`. Find your entity by `entity_slug`; its
   `features`, `states`, and `transitions` are the **authority for what exists** in the prototype.
+- **unit_kind** (optional, default `entity`): `entity` or `config_area`. When `config_area`, your
+  unit is found under `map.json`'s `config_areas` (not `entities`); it is a Settings/admin/platform
+  capability surface with NO lifecycle states.
 - **evidence_screens** (required): `.txt` outline filenames in `walk_dir` that show this entity.
 - **walk_dir** (required): walk output dir (default `/tmp/proto-walk`).
 - **src_dir** (optional): extracted source (default `/tmp/proto-src`). May be absent.
@@ -34,6 +37,13 @@ Read `map_path` and locate your entity (`entity_slug`). Its `features`, `states`
 using your VMS domain knowledge, determine the capabilities a VMS is **commonly expected** to
 support for this entity that are NOT in the source map — those are candidate **missing** items.
 The union (source features + expected-but-absent) is the entity's expected capability set.
+
+**If `unit_kind == config_area`:** locate your unit in `map.json`'s `config_areas` by `entity_slug`.
+It has `features` but no `states`/`transitions`. Do capabilities-only analysis: the existing
+source features are what exists; using VMS domain knowledge, add config capabilities a VMS commonly
+expects for this kind of surface that are absent from source as **missing** (justified). There are
+no lifecycle states to assess — set `states` to `{"observed": [], "expected": [], "missing": []}`
+and `transitions` to `[]`.
 
 ### 2. Gather prototype EVIDENCE
 Read each file in `evidence_screens` from `walk_dir`. If `src_dir` is present, grep it for the
@@ -54,7 +64,7 @@ Write `output_path` exactly:
 
 ```json
 {
-  "slug": "<entity_slug>", "name": "<entity_name>", "role": "<role>",
+  "slug": "<entity_slug>", "name": "<entity_name>", "role": "<role>", "kind": "<entity|config_area>",
   "states": { "observed": ["open","filled"], "expected": ["draft","open","filled","cancelled"],
               "missing": ["draft","cancelled"] },
   "transitions": [
@@ -70,6 +80,9 @@ Write `output_path` exactly:
 }
 ```
 
+- `kind`: `entity` for a domain entity, `config_area` for a configuration/platform area
+  (per `unit_kind`). For a config area, `states.observed/expected/missing` are all `[]` and
+  `transitions` is `[]` — only `capabilities` are analyzed.
 - `states.observed` ⊆ `states.expected`; `states.missing` = `expected` minus `observed`.
 - `capabilities[].category` ∈ create | read | update | delete | archive | list_search |
   state_transition | other.
