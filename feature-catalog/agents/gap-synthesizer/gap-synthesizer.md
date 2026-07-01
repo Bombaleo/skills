@@ -34,6 +34,10 @@ Group related entities into a small set of logical domain groups using their rol
 "Sourcing & Demand", "Workforce & Compliance", "Financials", "Supply", "Configuration". Add a
 `group` string to each entity object. Use 3–6 groups total; keep names short and domain-meaningful.
 
+Each unit carries a `kind` (`entity` or `config_area`; default `entity` if absent). Assign every
+unit with `kind == config_area` the group **"Configuration & Platform"** (do not scatter them into
+domain groups). Carry each unit's `kind` through into `entities-report.json`.
+
 ### 2. Compute overall coverage
 Sum each entity's `coverage` into `overall_coverage` (`present`, `partial`, `missing`,
 `expected_total`). Each entity's `coverage` block has already been normalized deterministically upstream — trust and
@@ -53,7 +57,8 @@ Write `report_json_path`:
                  step 1b), in the chosen order> ] }
 ```
 
-Add a `group` string to each entity object (from step 1b) when writing it into `entities`.
+Add a `group` string and carry the `kind` field on each unit object (from its `ent_*.json`,
+default `entity`) when writing it into `entities`.
 
 ### 5. Write entity-catalog.md
 Write `catalog_md_path`:
@@ -74,6 +79,10 @@ true, begin the paragraph with "**UNVERIFIED — generated without rendering.**"
 - ❌ <name> — missing (<note: why commonly expected>)
 **Coverage:** <present> / <expected_total> present (<partial> partial, <missing> missing)
 ```
+
+For a unit with `kind == config_area`, render it under a top-level "## Configuration & Platform"
+grouping and OMIT the "**Lifecycle states:**" line (config areas have no states) — show only the
+**Capabilities:** list and the **Coverage:** line.
 
 Use `✅` present, `⚠️` partial, `❌` missing. One line per capability. List entities in the
 chosen order. Behavioral altitude — WHAT not HOW; no file paths/endpoints/schema. English only;
