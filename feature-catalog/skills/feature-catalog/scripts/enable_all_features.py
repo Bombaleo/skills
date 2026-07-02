@@ -7,11 +7,14 @@ flag-gated features. Non-destructive: writes a new file.
 
 Stdlib only, Python >= 3.9.
 """
+import argparse
 import base64
 import gzip
 import html as html_mod
 import json
 import re
+import sys
+from pathlib import Path
 
 from extract_bundle import grab_script
 
@@ -141,3 +144,51 @@ def inject_seed(html, seed):
     if m:
         return html[: m.start()] + script + html[m.start():]
     return script + html
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Seed all feature flags ON in a standalone HTML export."
+    )
+    parser.add_argument("html", help="path to the standalone .html export")
+    parser.add_argument("--out", help="output path (default <stem>.all-features.html)")
+    parser.add_argument("--print-seed", action="store_true",
+                        help="print the computed seed JSON and exit (no file written)")
+    args = parser.parse_args(argv)
+
+    src = Path(args.html)
+    if not src.is_file():
+        print(f"error: not a file: {src}", file=sys.stderr)
+        return 1
+
+    html = src.read_text(errors="replace")
+    module = find_flag_module(html)
+    if module is None:
+        print("error: no feature-flag module found (no __bundler/manifest, or "
+              "FEATURE_FLAG_GROUPS absent). Not a supported standalone export.",
+              file=sys.stderr)
+        return 2
+
+    catalog = parse_flag_catalog(module)
+    seed = build_seed(catalog)
+    if not seed:
+        print("error: discovered 0 feature flags — parser found no seedable flags. "
+              "Refusing to write a no-op file.", file=sys.stderr)
+        return 3
+
+    if args.print_seed:
+        print(json.dumps(seed, indent=2))
+        return 0
+
+    out = Path(args.out) if args.out else src.with_suffix(".all-features.html")
+    out.write_text(inject_seed(html, seed))
+    on = sum(1 for v in seed.values() if v)
+    off = [k for k, v in seed.items() if not v]
+    print(f"enabled {on} feature flags -> {out}")
+    if off:
+        print(f"  left OFF (mutual exclusion): {', '.join(off)}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

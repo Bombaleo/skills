@@ -1,6 +1,10 @@
 import base64
 import gzip
 import json
+import os
+import subprocess
+import sys
+import tempfile
 import unittest
 
 import enable_all_features as eaf
@@ -166,6 +170,57 @@ class TestInject(unittest.TestCase):
     def test_fallback_no_script_tag(self):
         out = eaf.inject_seed("<html><head></head><body></body></html>", {"a": True})
         self.assertIn('data-enable-all-features="1"', out)
+
+
+SCRIPT = os.path.join(os.path.dirname(__file__), "enable_all_features.py")
+
+
+class TestCLI(unittest.TestCase):
+    def _run(self, *args):
+        return subprocess.run(
+            [sys.executable, SCRIPT, *args],
+            capture_output=True, text=True,
+        )
+
+    def test_end_to_end_writes_file(self):
+        html = _make_bundle(CATALOG)
+        with tempfile.TemporaryDirectory() as d:
+            src = os.path.join(d, "proto.html")
+            out = os.path.join(d, "proto.all-features.html")
+            with open(src, "w") as f:
+                f.write(html)
+            r = self._run(src)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertTrue(os.path.exists(out))
+            with open(out) as f:
+                content = f.read()
+            self.assertIn('data-enable-all-features="1"', content)
+            self.assertIn("salesTax", content)
+
+    def test_print_seed_writes_nothing(self):
+        html = _make_bundle(CATALOG)
+        with tempfile.TemporaryDirectory() as d:
+            src = os.path.join(d, "proto.html")
+            out = os.path.join(d, "proto.all-features.html")
+            with open(src, "w") as f:
+                f.write(html)
+            r = self._run(src, "--print-seed")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertFalse(os.path.exists(out))
+            self.assertIn("salesTax", r.stdout)
+
+    def test_zero_flags_fails_loud(self):
+        html = _make_bundle("const x = 1; // no FEATURE_FLAG_GROUPS here")
+        with tempfile.TemporaryDirectory() as d:
+            src = os.path.join(d, "proto.html")
+            with open(src, "w") as f:
+                f.write(html)
+            r = self._run(src)
+            self.assertNotEqual(r.returncode, 0)
+
+    def test_missing_file_fails(self):
+        r = self._run("/no/such/file.html")
+        self.assertNotEqual(r.returncode, 0)
 
 
 if __name__ == "__main__":
