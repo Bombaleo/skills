@@ -133,5 +133,40 @@ class TestBuildSeed(unittest.TestCase):
         self.assertEqual(eaf.build_seed({"real_ids": [], "excludes": {}}), {})
 
 
+class TestInject(unittest.TestCase):
+    HTML = (
+        "<html><head><title>x</title>"
+        '<script type="__bundler/manifest">{}</script>'
+        "</head><body></body></html>"
+    )
+
+    def test_inserts_before_first_script(self):
+        out = eaf.inject_seed(self.HTML, {"salesTax": True})
+        self.assertIn('data-enable-all-features="1"', out)
+        seed_pos = out.index("data-enable-all-features")
+        manifest_pos = out.index("__bundler/manifest")
+        self.assertLess(seed_pos, manifest_pos)
+
+    def test_writes_ff_map_and_mirror_keys(self):
+        # The FF map is stored double-encoded (a JSON string inside setItem),
+        # so assert the flag id and its encoded boolean appear, not exact JSON.
+        out = eaf.inject_seed(self.HTML, {"salesTax": True})
+        self.assertIn("flexwork.featureFlags", out)
+        self.assertIn("flexwork.featureFlags.customFields", out)
+        self.assertIn("flexwork.featureFlags.professionalJobTypes", out)
+        self.assertIn("salesTax", out)
+        self.assertIn("true", out)
+
+    def test_idempotent(self):
+        once = eaf.inject_seed(self.HTML, {"salesTax": True})
+        twice = eaf.inject_seed(once, {"salesTax": True, "eor": True})
+        self.assertEqual(twice.count('data-enable-all-features="1"'), 1)
+        self.assertIn("eor", twice)
+
+    def test_fallback_no_script_tag(self):
+        out = eaf.inject_seed("<html><head></head><body></body></html>", {"a": True})
+        self.assertIn('data-enable-all-features="1"', out)
+
+
 if __name__ == "__main__":
     unittest.main()

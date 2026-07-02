@@ -102,3 +102,42 @@ def build_seed(catalog):
             for target in excludes.get(fid, []):
                 seed[target] = False
     return seed
+
+
+FF_STORAGE_KEY = "flexwork.featureFlags"
+MIRROR_KEYS = [
+    "flexwork.featureFlags.customFields",
+    "flexwork.featureFlags.professionalJobTypes",
+]
+
+_SEED_SCRIPT_RE = re.compile(
+    r'<script data-enable-all-features="1">.*?</script>', re.S
+)
+
+
+def _seed_script(seed):
+    ff_json = json.dumps(seed)
+    lines = [
+        '<script data-enable-all-features="1">',
+        "try{",
+        f'localStorage.setItem({json.dumps(FF_STORAGE_KEY)},'
+        f'{json.dumps(ff_json)});',
+    ]
+    for key in MIRROR_KEYS:
+        lines.append(f'localStorage.setItem({json.dumps(key)},"true");')
+    lines.append("}catch(e){}")
+    lines.append("</script>")
+    return "".join(lines)
+
+
+def inject_seed(html, seed):
+    script = _seed_script(seed)
+    if _SEED_SCRIPT_RE.search(html):
+        return _SEED_SCRIPT_RE.sub(lambda _m: script, html, count=1)
+    m = re.search(r"<script\b", html, re.I)
+    if m:
+        return html[: m.start()] + script + html[m.start():]
+    m = re.search(r"</head>", html, re.I)
+    if m:
+        return html[: m.start()] + script + html[m.start():]
+    return script + html
