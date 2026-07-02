@@ -62,5 +62,53 @@ class TestDiscovery(unittest.TestCase):
         self.assertIn("salesTax", eaf.find_flag_module(html))
 
 
+CATALOG = """
+const FEATURE_FLAG_GROUPS = [
+  { id: "engagementType", label: "Engagement Type", hidden: true, flags: [
+    { id: "engAssignment", label: "Assignment", defaultOn: false, tips: [{label:"x", body:"y"}] },
+    { id: "engStatementOfWork", label: "SOW", defaultOn: false },
+  ] },
+  { id: "program", label: "Program", flags: [
+    { id: "dataModelAlignment", label: "DMA", defaultOn: false, excludes: ["vmsEducation"] },
+    { id: "vmsEducation", label: "VMS Edu", defaultOn: false, excludes: ["dataModelAlignment"] },
+    { id: "salesTax", label: "Sales Tax", defaultOn: true },
+  ] },
+];
+const LEGACY_FLAG_DERIVATIONS = {
+  sow: (f) => !!f.engStatementOfWork,
+  contractors: (f) => !!(f.engAssignment && f.independentContractor),
+};
+function FFFlagRow({ flag }) { return null; }
+"""
+
+
+class TestParse(unittest.TestCase):
+    def test_real_ids_only(self):
+        cat = eaf.parse_flag_catalog(CATALOG)
+        self.assertEqual(
+            cat["real_ids"],
+            ["engAssignment", "engStatementOfWork",
+             "dataModelAlignment", "vmsEducation", "salesTax"],
+        )
+
+    def test_group_ids_excluded(self):
+        cat = eaf.parse_flag_catalog(CATALOG)
+        self.assertNotIn("engagementType", cat["real_ids"])
+        self.assertNotIn("program", cat["real_ids"])
+
+    def test_derived_ids_excluded(self):
+        cat = eaf.parse_flag_catalog(CATALOG)
+        self.assertNotIn("sow", cat["real_ids"])
+        self.assertNotIn("contractors", cat["real_ids"])
+
+    def test_excludes_captured(self):
+        cat = eaf.parse_flag_catalog(CATALOG)
+        self.assertEqual(cat["excludes"]["dataModelAlignment"], ["vmsEducation"])
+        self.assertEqual(cat["excludes"]["vmsEducation"], ["dataModelAlignment"])
+
+    def test_empty_source(self):
+        self.assertEqual(eaf.parse_flag_catalog(""), {"real_ids": [], "excludes": {}})
+
+
 if __name__ == "__main__":
     unittest.main()
