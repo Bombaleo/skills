@@ -209,18 +209,46 @@ class TestCLI(unittest.TestCase):
             self.assertFalse(os.path.exists(out))
             self.assertIn("salesTax", r.stdout)
 
-    def test_zero_flags_fails_loud(self):
+    def test_no_flag_module_fails_loud(self):
+        # Module missing: no FEATURE_FLAG_GROUPS, so find_flag_module returns None → exit 2
         html = _make_bundle("const x = 1; // no FEATURE_FLAG_GROUPS here")
         with tempfile.TemporaryDirectory() as d:
             src = os.path.join(d, "proto.html")
             with open(src, "w") as f:
                 f.write(html)
             r = self._run(src)
-            self.assertNotEqual(r.returncode, 0)
+            self.assertEqual(r.returncode, 2)
+            self.assertTrue(r.stderr.strip())
+
+    def test_zero_flags_fails_loud(self):
+        # Module found but yields 0 seedable flags → exit 3
+        html = _make_bundle("const FEATURE_FLAG_GROUPS = []; // defaultOn: never used")
+        with tempfile.TemporaryDirectory() as d:
+            src = os.path.join(d, "proto.html")
+            with open(src, "w") as f:
+                f.write(html)
+            r = self._run(src)
+            self.assertEqual(r.returncode, 3)
+            self.assertTrue(r.stderr.strip())
 
     def test_missing_file_fails(self):
         r = self._run("/no/such/file.html")
-        self.assertNotEqual(r.returncode, 0)
+        self.assertEqual(r.returncode, 1)
+        self.assertTrue(r.stderr.strip())
+
+    def test_out_override_writes_named_file(self):
+        # --out flag should write to custom output path, not default
+        html = _make_bundle(CATALOG)
+        with tempfile.TemporaryDirectory() as d:
+            src = os.path.join(d, "proto.html")
+            custom_out = os.path.join(d, "custom-output.html")
+            default_out = os.path.join(d, "proto.all-features.html")
+            with open(src, "w") as f:
+                f.write(html)
+            r = self._run(src, "--out", custom_out)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertTrue(os.path.exists(custom_out))
+            self.assertFalse(os.path.exists(default_out))
 
 
 if __name__ == "__main__":
