@@ -113,6 +113,31 @@ class TestParse(unittest.TestCase):
     def test_empty_source(self):
         self.assertEqual(eaf.parse_flag_catalog(""), {"real_ids": [], "excludes": {}})
 
+    def test_derived_flag_with_defaulton_excluded(self):
+        # A derived legacy flag ('sow') can ALSO carry a defaultOn catalog
+        # entry (in a hidden legacy group) yet must be excluded from real_ids,
+        # because getFeatureFlag computes it from axis flags and ignores any
+        # stored value. It is identified as a key of LEGACY_FLAG_DERIVATIONS.
+        source = """
+        const FEATURE_FLAG_GROUPS = [
+          { id: "axes", label: "Axes", flags: [
+            { id: "engStatementOfWork", label: "SOW axis", defaultOn: false },
+          ] },
+          { id: "_legacy", label: "Legacy", hidden: true, flags: [
+            { id: "sow", label: "SOW (derived)", defaultOn: false },
+          ] },
+        ];
+        const LEGACY_FLAG_DERIVATIONS = {
+          sow: (f) => !!f.engStatementOfWork,
+        };
+        """
+        cat = eaf.parse_flag_catalog(source)
+        self.assertIn("engStatementOfWork", cat["real_ids"])
+        self.assertNotIn("sow", cat["real_ids"])
+
+    def test_derived_flag_ids_empty_without_block(self):
+        self.assertEqual(eaf.derived_flag_ids("const x = 1;"), set())
+
 
 class TestBuildSeed(unittest.TestCase):
     def test_all_true_when_no_excludes(self):

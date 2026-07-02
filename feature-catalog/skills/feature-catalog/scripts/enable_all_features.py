@@ -23,6 +23,23 @@ _ID_RE = re.compile(r"""\bid\s*:\s*["']([^"']+)["']""")
 _DEFAULT_ON_RE = re.compile(r"\bdefaultOn\s*:")
 _EXCLUDES_RE = re.compile(r"\bexcludes\s*:\s*\[([^\]]*)\]")
 _STR_IN_ARR_RE = re.compile(r"""["']([^"']+)["']""")
+# Derived "legacy" flags are computed from axis flags at read time
+# (getFeatureFlag short-circuits them and ignores any stored value), so they
+# must never be seeded — even though some also carry a `defaultOn` catalog
+# entry in a hidden legacy group. They are the keys of a
+# `LEGACY_FLAG_DERIVATIONS = {…}` object whose values are brace-less arrow
+# expressions (so the object body has no nested `{}`).
+_LEGACY_BLOCK_RE = re.compile(r"LEGACY_FLAG_DERIVATIONS\s*=\s*\{([^}]*)\}", re.S)
+_LEGACY_KEY_RE = re.compile(r"^\s*([A-Za-z_$][\w$]*)\s*:", re.M)
+
+
+def derived_flag_ids(source_text):
+    """Return the set of derived (computed) flag ids — the keys of the
+    LEGACY_FLAG_DERIVATIONS object. Empty when the block is absent."""
+    m = _LEGACY_BLOCK_RE.search(source_text)
+    if not m:
+        return set()
+    return set(_LEGACY_KEY_RE.findall(m.group(1)))
 
 
 def decode_bundle_sources(html):
@@ -64,19 +81,21 @@ def parse_flag_catalog(source_text):
     """Parse a feature-flag catalog and return real flag IDs and their excludes.
 
     Returns dict with:
-    - 'real_ids': list of flag IDs that have a defaultOn field
+    - 'real_ids': list of flag IDs that have a defaultOn field AND are not
+      derived (derived legacy flags are computed from axis flags at read time)
     - 'excludes': dict mapping flag ID to list of excluded flag IDs
     """
     ids = [(m.group(1), m.start()) for m in _ID_RE.finditer(source_text)]
     default_positions = [m.start() for m in _DEFAULT_ON_RE.finditer(source_text)]
     exclude_spans = [(m.start(), m.group(1)) for m in _EXCLUDES_RE.finditer(source_text)]
+    derived = derived_flag_ids(source_text)
 
     real_ids = []
     excludes = {}
     for i, (flag_id, start) in enumerate(ids):
         end = ids[i + 1][1] if i + 1 < len(ids) else len(source_text)
         has_default = any(start < p < end for p in default_positions)
-        if not has_default:
+        if not has_default or flag_id in derived:
             continue
         real_ids.append(flag_id)
         targets = []
