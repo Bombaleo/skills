@@ -103,6 +103,17 @@ Print one confirmation line, then proceed:
      
      **Branch: if NO renderable HTML but unpacked source exists** (a project dir with modules/`_template.html`): copy that source to `/tmp/proto-src`, set `unverified=true` ("renders unconfirmed — no walkable HTML"), **SKIP step 2 (extract_bundle) and SKIP Stage 3 (walks)**, but **run Stage 2 source-mapper normally** (map.json stays `unmapped:false`; features cannot be render-confirmed). Carry the caveat into the final report.
 
+   > **Optional — render flag-gated features.** Many capabilities come back Partial only because
+   > their feature flags default OFF. To have the walk render everything, first produce an
+   > all-flags-ON copy and use it as `/tmp/prototype.html` for the rest of the run:
+   > ```bash
+   > python3 "$SCRIPTS/enable_all_features.py" /tmp/prototype.html --out /tmp/prototype.all.html
+   > cp /tmp/prototype.all.html /tmp/prototype.html   # walk the seeded copy
+   > ```
+   > It injects a pre-boot localStorage seed (feature-flags + the per-org config stores those
+   > flags mirror from); the original file is untouched. Prototype-specific — currently tuned to
+   > the Flex Work VMS store layout. Skip for non-Flex-Work prototypes.
+
 2. Extract source (only if a renderable HTML was found):
    ```bash
    python3 "$SCRIPTS/extract_bundle.py" /tmp/prototype.html /tmp/proto-src
