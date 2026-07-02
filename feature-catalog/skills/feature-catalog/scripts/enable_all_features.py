@@ -85,3 +85,20 @@ def parse_flag_catalog(source_text):
         if targets:
             excludes[flag_id] = targets
     return {"real_ids": real_ids, "excludes": excludes}
+
+
+def build_seed(catalog):
+    """Build the all-ON feature-flag seed map with exclusion resolution.
+
+    Takes a catalog dict from parse_flag_catalog with 'real_ids' and 'excludes'.
+    Returns a dict mapping every flag ID to True, then for each flag (in source order),
+    forces its excludes targets to False (source-order-first wins).
+    """
+    real_ids = catalog.get("real_ids", [])
+    excludes = catalog.get("excludes", {})
+    seed = {fid: True for fid in real_ids}
+    for fid in real_ids:
+        if seed.get(fid):
+            for target in excludes.get(fid, []):
+                seed[target] = False
+    return seed

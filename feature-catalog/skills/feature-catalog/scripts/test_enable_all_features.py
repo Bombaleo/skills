@@ -110,5 +110,28 @@ class TestParse(unittest.TestCase):
         self.assertEqual(eaf.parse_flag_catalog(""), {"real_ids": [], "excludes": {}})
 
 
+class TestBuildSeed(unittest.TestCase):
+    def test_all_true_when_no_excludes(self):
+        seed = eaf.build_seed({"real_ids": ["a", "b", "c"], "excludes": {}})
+        self.assertEqual(seed, {"a": True, "b": True, "c": True})
+
+    def test_exclusion_first_wins(self):
+        seed = eaf.build_seed({
+            "real_ids": ["a", "b", "c"],
+            "excludes": {"a": ["b"], "b": ["a"]},
+        })
+        self.assertEqual(seed, {"a": True, "b": False, "c": True})
+
+    def test_exclusion_respects_source_order(self):
+        seed = eaf.build_seed({
+            "real_ids": ["b", "a", "c"],
+            "excludes": {"a": ["b"], "b": ["a"]},
+        })
+        self.assertEqual(seed, {"b": True, "a": False, "c": True})
+
+    def test_empty_catalog(self):
+        self.assertEqual(eaf.build_seed({"real_ids": [], "excludes": {}}), {})
+
+
 if __name__ == "__main__":
     unittest.main()
