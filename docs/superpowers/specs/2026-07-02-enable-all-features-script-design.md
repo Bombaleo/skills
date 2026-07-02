@@ -26,13 +26,20 @@ render-confirms those features. It must **not** enable features by clicking thro
   `useFeatureFlag`). It resolves the `flexwork.featureFlags` localStorage map first, else the
   flag's `defaultOn` (default `false`). Definition in `pages/feature-flags.jsx`
   (`_ffRead`/`getFeatureFlag`, lines ~970–1022).
-- **Discovery rule:** every flag object with a `defaultOn` field is a real, seedable flag
-  (**21** in this prototype). The 6 "legacy" ids (`contractors`, `sow`, `milestones`,
-  `fixedFee`, `professionalWork`, `v77Axes`) have **no** `defaultOn` — they are **derived** from
-  the 5 axis flags (`engAssignment`, `engProject`, `engStatementOfWork`, `independentContractor`,
-  `eor`) via `LEGACY_FLAG_DERIVATIONS`. `getFeatureFlag` **ignores** any stored value for a
-  derived id. So: seed the real/axis flags true → derived flags light up automatically; never
-  seed a derived id.
+- **Discovery rule:** a flag object with a `defaultOn` field is a candidate seedable flag, but
+  **derived** legacy ids (`timesheets`, `milestones`, `fixedFee`, `professionalWork`, `sow`,
+  `contractors`, `v77Axes`) must be **excluded** — they are the keys of `LEGACY_FLAG_DERIVATIONS`
+  and are computed from the 5 axis flags (`engAssignment`, `engProject`, `engStatementOfWork`,
+  `independentContractor`, `eor`) at read time; `getFeatureFlag` short-circuits them and
+  **ignores** any stored value.
+  **Correction from integration (2026-07-02):** an earlier draft assumed derived ids simply have
+  no `defaultOn`. In the real bundle, several derived ids (`sow`, `contractors`, `milestones`,
+  `fixedFee`, `professionalWork`) ALSO carry a `defaultOn` entry in a hidden `_legacy` group, so
+  the "no defaultOn" test is insufficient. The parser therefore detects derived ids structurally
+  (keys of `LEGACY_FLAG_DERIVATIONS`) and drops them. Net for this prototype: 21 flags with
+  `defaultOn` → **15** seedable after removing 5 derived-with-defaultOn ids and leaving one
+  mutual-exclusion loser off. Seed the real/axis flags true → derived flags light up
+  automatically from the axes; never seed a derived id.
 - **Mutual exclusion:** flags may declare `excludes: [...]`; turning one ON forces those OFF.
   In this prototype there is exactly one pair: `dataModelAlignment` ↔ `vmsEducation`.
 - **Mirror keys:** the feature-flags page also writes boolean mirrors
