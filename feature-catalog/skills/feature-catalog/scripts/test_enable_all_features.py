@@ -51,6 +51,7 @@ class TestDiscovery(unittest.TestCase):
 
     def test_find_flag_module_in_sources(self):
         found = eaf.find_flag_module_in_sources(["nope", FLAG_MODULE, "also nope"])
+        self.assertIsNotNone(found)
         self.assertIn("FEATURE_FLAG_GROUPS", found)
 
     def test_find_flag_module_in_sources_absent(self):

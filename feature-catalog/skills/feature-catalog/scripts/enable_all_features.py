@@ -47,4 +47,5 @@ def find_flag_module_in_sources(sources):
 
 
 def find_flag_module(html):
+    """Decode the bundle and return the feature-flag module text, or None."""
     return find_flag_module_in_sources(decode_bundle_sources(html))
