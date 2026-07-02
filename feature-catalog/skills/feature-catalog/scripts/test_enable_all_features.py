@@ -196,6 +196,59 @@ class TestInject(unittest.TestCase):
         out = eaf.inject_seed("<html><head></head><body></body></html>", {"a": True})
         self.assertIn('data-enable-all-features="1"', out)
 
+    def test_upstream_entries_written(self):
+        upstream = eaf.build_upstream_seed(["energy"])
+        out = eaf.inject_seed(self.HTML, {"salesTax": True}, upstream)
+        self.assertIn("flexwork.engagementTypes.energy", out)
+        self.assertIn("flexwork.supplierTypes.energy", out)
+        self.assertIn("flexwork.customFields.flagAdopted", out)
+
+
+INDUSTRIES_SRC = """
+const INDUSTRIES = {
+  dayforce: {
+    label: "Dayforce",
+    localize: {},
+  },
+  acme: {
+    label: "Acme",
+    localize: { greeting: "hi" },
+  },
+};
+"""
+
+
+class TestUpstream(unittest.TestCase):
+    def test_discover_orgs_parses_top_level_keys(self):
+        orgs = eaf.discover_orgs([INDUSTRIES_SRC])
+        self.assertIn("acme", orgs)        # parsed top-level key
+        self.assertIn("dayforce", orgs)
+        self.assertNotIn("localize", orgs)  # nested key (4-space indent) excluded
+        self.assertIn("manufacturing", orgs)  # unioned from KNOWN_ORGS
+
+    def test_discover_orgs_fallback_without_industries(self):
+        self.assertEqual(eaf.discover_orgs(["const x = 1;"]), sorted(eaf.KNOWN_ORGS))
+
+    def test_build_upstream_seed_shapes(self):
+        up = eaf.build_upstream_seed(["energy", "acme"])
+        self.assertEqual(
+            up["flexwork.engagementTypes.energy"],
+            {"engAssignment": True, "engProject": True, "engStatementOfWork": True},
+        )
+        self.assertEqual(
+            up["flexwork.supplierTypes.acme"],
+            {"independentContractor": True, "eor": True, "float": True},
+        )
+        self.assertEqual(
+            up["flexwork.jobsCategories.energy"],
+            {"frontline": True, "professional": True},
+        )
+        # adoption gate is one org->bool map, not per-org keys
+        self.assertEqual(
+            up["flexwork.customFields.flagAdopted"],
+            {"energy": True, "acme": True},
+        )
+
 
 SCRIPT = os.path.join(os.path.dirname(__file__), "enable_all_features.py")
 

@@ -48,13 +48,29 @@ render-confirms those features. It must **not** enable features by clicking thro
 - **A separate perspective/role guard exists** (`window.isAgencyOrg`, `viewAsRole` =
   admin/agency/manager). It is a mutually-exclusive **mode**, not a feature — out of scope
   (see below).
+- **Upstream per-org config stores (added 2026-07-02 after integration).** Seeding
+  `flexwork.featureFlags` alone flips only the "pure" flags. Three flag families are owned by
+  separate config modules that persist them per-org and **mirror into `flexwork.featureFlags` on
+  every page load**, overwriting a plain FF seed with their (mostly-off) defaults:
+  `flexwork.engagementTypes.{org}` (engAssignment/engProject/engStatementOfWork),
+  `flexwork.supplierTypes.{org}` (independentContractor/eor/float),
+  `flexwork.jobsCategories.{org}` (frontline/professional → mirrors `professionalJobTypes`).
+  `orgId = window.getCurrentIndustryId() || "manufacturing"`. Additionally `customFields` is reset
+  at boot by `custom-fields-config.jsx`'s `syncFlagForCurrentOrg()` UNLESS the org is marked in
+  `flexwork.customFields.flagAdopted` (`{org: true}`), in which case the sync bails and the seeded
+  value survives. **So full coverage requires seeding these upstream stores (for every org) and
+  the adoption gate, not just `flexwork.featureFlags`.** Verified end-to-end via the app's own
+  `window.getFeatureFlag(...)` in headless Chrome: a single load of the seeded file returns every
+  flag true except the mutual-exclusion loser (`vmsEducation`).
 
 ## Decision
 
 Approach **A — pre-boot localStorage seed injected into a copy of the standalone HTML.**
 Prepend a tiny `<script>` to the standalone's `<head>`, **before** the app bundle, that writes
-`flexwork.featureFlags` to an all-ON seed. The app reads the seeded map on first mount, so the
-walk renders every gated feature ON. **Non-destructive:** write a new file, leave the original
+`flexwork.featureFlags` to an all-ON seed **and** seeds the upstream per-org config stores +
+adoption gate (see the upstream-stores fact above) for every org, so the boot-time mirrors copy
+ON into FF instead of clobbering it. The app reads the seeded values on first mount, so the walk
+renders every gated feature ON. **Non-destructive:** write a new file, leave the original
 untouched.
 
 Rejected alternatives:
