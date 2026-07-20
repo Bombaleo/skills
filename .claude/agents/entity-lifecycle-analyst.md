@@ -1,0 +1,1 @@
+../../feature-catalog/agents/entity-lifecycle-analyst/entity-lifecycle-analyst.md
